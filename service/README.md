@@ -1,2 +1,2 @@
 # dermadoc.service
-Service-Layer and Entities
+Service-Layer
