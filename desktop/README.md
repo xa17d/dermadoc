@@ -1,0 +1,2 @@
+# dermadoc.desktop
+Desktop-Application
