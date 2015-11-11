@@ -2,6 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/../dermadoc.iml" filepath="$PROJECT_DIR$/../dermadoc.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../entities/entities.iml" filepath="$PROJECT_DIR$/../entities/entities.iml" />
       <module fileurl="file://$PROJECT_DIR$/server.iml" filepath="$PROJECT_DIR$/server.iml" />
     </modules>
   </component>
