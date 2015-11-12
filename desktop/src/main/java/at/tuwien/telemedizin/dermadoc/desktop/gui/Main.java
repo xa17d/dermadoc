@@ -9,6 +9,10 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+/**
+ * main
+ * launches desktop application
+ */
 public class Main extends Application {
 
     private Parent root;

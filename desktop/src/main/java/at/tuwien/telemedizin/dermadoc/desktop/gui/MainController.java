@@ -10,6 +10,10 @@ import javafx.scene.layout.VBox;
 
 import java.io.InputStream;
 
+/**
+ * main controller
+ * is the link between view and services
+ */
 public class MainController {
 
     @FXML private ImageView imageViewDoctor;
@@ -20,8 +24,6 @@ public class MainController {
 
         imageViewDoctor.setImage(new Image(Main.class.getResourceAsStream("drlucas.jpg")));
 
-        GCPatientList patientList = new GCPatientList(this);
-        tabPatients.setContent(patientList);
-        patientList.updateList();
+        tabPatients.setContent(new GCPatientList(this));
     }
 }
