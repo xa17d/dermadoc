@@ -7,6 +7,7 @@
 <?import javafx.scene.layout.*?>
 
 <!--stylesheets="@dermadoc.css"-->
+
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.tuwien.telemedizin.dermadoc.desktop.gui.MainController">
    <top>
       <GridPane BorderPane.alignment="CENTER">
@@ -52,49 +53,20 @@
                 <Tab fx:id="tabPatients" text="My Patients" />
                 <Tab text="Open Cases">
                      <content>
-                        <VBox>
-                           <children>
-                              <GridPane>
-                                <columnConstraints>
-                                  <ColumnConstraints hgrow="SOMETIMES" />
-                                  <ColumnConstraints hgrow="SOMETIMES" />
-                                </columnConstraints>
-                                <rowConstraints>
-                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                </rowConstraints>
+                        <ScrollPane>
+                           <content>
+                              <AnchorPane>
                                  <children>
-                                    <Button mnemonicParsing="false" text="accept" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowSpan="2147483647" />
-                                    <Label text="Patient 12345 - M 43j" />
-                                    <Label text="Ausschlag im Gesicht" GridPane.rowIndex="1" />
-                                    <Label text="29.10.2015" GridPane.rowIndex="2" />
+                                    <TableView prefHeight="200.0" prefWidth="200.0">
+                                      <columns>
+                                        <TableColumn prefWidth="75.0" text="C1" />
+                                        <TableColumn prefWidth="75.0" text="C2" />
+                                      </columns>
+                                    </TableView>
                                  </children>
-                              </GridPane>
-                              <Separator prefWidth="200.0" />
-                              <GridPane>
-                                 <children>
-                                    <Button mnemonicParsing="false" text="accept" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowSpan="2147483647" />
-                                    <Label text="Patient 14565 - F 23j" />
-                                    <Label text="Rötung" GridPane.rowIndex="1" />
-                                    <Label text="28.10.2015" GridPane.rowIndex="2" />
-                                 </children>
-                                 <columnConstraints>
-                                    <ColumnConstraints hgrow="SOMETIMES" />
-                                    <ColumnConstraints hgrow="SOMETIMES" />
-                                 </columnConstraints>
-                                 <rowConstraints>
-                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                 </rowConstraints>
-                              </GridPane>
-                              <Separator prefWidth="200.0" />
-                           </children>
-                           <padding>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </padding>
-                        </VBox>
+                              </AnchorPane>
+                           </content>
+                        </ScrollPane>
                      </content>
                 </Tab>
               </tabs>
