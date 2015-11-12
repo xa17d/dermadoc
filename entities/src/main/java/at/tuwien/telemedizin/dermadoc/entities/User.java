@@ -1,5 +1,8 @@
 package at.tuwien.telemedizin.dermadoc.entities;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
 /**
  * Abstract User
  */
@@ -16,9 +19,10 @@ public abstract class User {
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
 
-    private String name;
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    private StringProperty name = new SimpleStringProperty();
+    public String getName() { return name.get(); }
+    public void setName(String name) { this.name.set(name); }
+    public StringProperty nameProperty() { return name; }
 
     private GeoLocation location;
     public GeoLocation getLocation() { return location; }
