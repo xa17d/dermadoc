@@ -1,6 +1,5 @@
 package at.tuwien.telemedizin.dermadoc.desktop.gui;
 
-import com.aquafx_project.AquaFx;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -16,7 +15,6 @@ public class Main extends Application {
         primaryStage.setTitle("DermaDoc");
         primaryStage.getIcons().add(new Image(Main.class.getResourceAsStream("icon.jpg")));
         primaryStage.setScene(new Scene(root, 1200, 800));
-        AquaFx.style();
         primaryStage.show();
     }
 
