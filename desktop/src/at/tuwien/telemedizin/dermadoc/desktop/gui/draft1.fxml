@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.tuwien.telemedizin.dermadoc.desktop.gui.Controller">
+   <top>
+      <GridPane BorderPane.alignment="CENTER">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Button mnemonicParsing="false" text="Logout" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.valignment="TOP">
+               <GridPane.margin>
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+               </GridPane.margin>
+            </Button>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <ImageView fx:id="imageViewDoctor" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="SOMETIMES">
+                     <HBox.margin>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </HBox.margin>
+                  </ImageView>
+                  <VBox>
+                     <children>
+                        <Label text="Dr. Lucas Dobler" />
+                        <Label text="more info" />
+                     </children>
+                     <HBox.margin>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </HBox.margin>
+                  </VBox>
+               </children>
+            </HBox>
+         </children>
+      </GridPane>
+   </top>
+   <center>
+      <SplitPane dividerPositions="0.3" BorderPane.alignment="CENTER">
+         <items>
+            <TabPane tabClosingPolicy="UNAVAILABLE" SplitPane.resizableWithParent="false">
+              <tabs>
+                <Tab text="My Patients">
+                     <content>
+                        <VBox prefHeight="200.0" prefWidth="100.0">
+                           <children>
+                              <HBox VBox.vgrow="NEVER">
+                                 <children>
+                                    <Label text="Search:">
+                                       <HBox.margin>
+                                          <Insets bottom="12.0" left="12.0" right="12.0" top="12.0" />
+                                       </HBox.margin>
+                                    </Label>
+                                    <TextField HBox.hgrow="ALWAYS">
+                                       <HBox.margin>
+                                          <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                                       </HBox.margin>
+                                    </TextField>
+                                 </children>
+                              </HBox>
+                              <Separator VBox.vgrow="NEVER" />
+                              <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS">
+                                 <content>
+                                    <VBox>
+                                       <children>
+                                          <TitledPane animated="false" text="Lilly Treml">
+                                             <content>
+                                                <GridPane hgap="5.0" vgap="5.0">
+                                                   <children>
+                                                      <Label text="Ekzem" GridPane.rowIndex="1" />
+                                                      <Label text="12.08.15" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                                                      <Button alignment="CENTER" mnemonicParsing="false" text="open" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
+                                                      <Button alignment="CENTER" mnemonicParsing="false" text="open" GridPane.columnIndex="2" GridPane.halignment="RIGHT" />
+                                                      <Label text="08.11.15" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
+                                                      <Label text="Ausschlag" />
+                                                   </children>
+                                                   <columnConstraints>
+                                                      <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" />
+                                                      <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" />
+                                                      <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" />
+                                                   </columnConstraints>
+                                                   <padding>
+                                                      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                   </padding>
+                                                   <rowConstraints>
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="ALWAYS" />
+                                                   </rowConstraints>
+                                                </GridPane>
+                                             </content>
+                                          </TitledPane>
+                                          <TitledPane animated="false" expanded="false" text="Fabian Filip">
+                                             <content>
+                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                             </content>
+                                          </TitledPane>
+                                       </children>
+                                    </VBox>
+                                 </content>
+                              </ScrollPane>
+                           </children>
+                        </VBox>
+                     </content>
+                </Tab>
+                <Tab text="Open Cases">
+                     <content>
+                        <VBox>
+                           <children>
+                              <GridPane>
+                                <columnConstraints>
+                                  <ColumnConstraints hgrow="SOMETIMES" />
+                                  <ColumnConstraints hgrow="SOMETIMES" />
+                                </columnConstraints>
+                                <rowConstraints>
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                </rowConstraints>
+                                 <children>
+                                    <Button mnemonicParsing="false" text="accept" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowSpan="2147483647" />
+                                    <Label text="Patient 12345 - M 43j" />
+                                    <Label text="Ausschlag im Gesicht" GridPane.rowIndex="1" />
+                                    <Label text="29.10.2015" GridPane.rowIndex="2" />
+                                 </children>
+                              </GridPane>
+                              <Separator prefWidth="200.0" />
+                              <GridPane>
+                                 <children>
+                                    <Button mnemonicParsing="false" text="accept" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowSpan="2147483647" />
+                                    <Label text="Patient 14565 - F 23j" />
+                                    <Label text="Rötung" GridPane.rowIndex="1" />
+                                    <Label text="28.10.2015" GridPane.rowIndex="2" />
+                                 </children>
+                                 <columnConstraints>
+                                    <ColumnConstraints hgrow="SOMETIMES" />
+                                    <ColumnConstraints hgrow="SOMETIMES" />
+                                 </columnConstraints>
+                                 <rowConstraints>
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                 </rowConstraints>
+                              </GridPane>
+                              <Separator prefWidth="200.0" />
+                           </children>
+                           <padding>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </padding>
+                        </VBox>
+                     </content>
+                </Tab>
+              </tabs>
+            </TabPane>
+            <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
+              <tabs>
+                <Tab text="Daniel Gehrer">
+                     <content>
+                        <ScrollPane fitToWidth="true">
+                           <content>
+                              <VBox>
+                                 <children>
+                                    <GridPane>
+                                       <children>
+                                          <Label text="Daniel Gehrer" />
+                                          <Label text="M" GridPane.columnIndex="1" />
+                                          <Label text="3023 18.09.90" GridPane.rowIndex="1" />
+                                          <Label text="Spengergasse 13a" GridPane.rowIndex="2" />
+                                          <Label text="1050 Wien" GridPane.rowIndex="3" />
+                                          <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.hgrow="NEVER" GridPane.rowSpan="3" GridPane.vgrow="NEVER" />
+                                       </children>
+                                       <columnConstraints>
+                                          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                       </columnConstraints>
+                                       <rowConstraints>
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                       </rowConstraints>
+                                    </GridPane>
+                                    <Separator VBox.vgrow="ALWAYS" />
+                                    <GridPane>
+                                      <columnConstraints>
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                      </columnConstraints>
+                                      <rowConstraints>
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                      </rowConstraints>
+                                       <children>
+                                          <Label text="Anfrage von Daniel Gehrer - TODO" />
+                                       </children>
+                                    </GridPane>
+                                    <Separator prefWidth="200.0" />
+                                    <GridPane>
+                                       <children>
+                                          <Label text="Diagnose von Dr. Dobler - TODO" />
+                                       </children>
+                                       <columnConstraints>
+                                          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                       </columnConstraints>
+                                       <rowConstraints>
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                       </rowConstraints>
+                                    </GridPane>
+                                    <Separator prefWidth="200.0" />
+                                    <GridPane>
+                                      <columnConstraints>
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                      </columnConstraints>
+                                      <rowConstraints>
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                      </rowConstraints>
+                                       <children>
+                                          <Button mnemonicParsing="false" prefWidth="200.0" text="new Advice" GridPane.halignment="CENTER" />
+                                          <Button mnemonicParsing="false" prefWidth="200.0" text="new Medication" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
+                                          <Button mnemonicParsing="false" prefWidth="200.0" text="new Diagnosis" GridPane.columnIndex="2" GridPane.halignment="CENTER" />
+                                       </children>
+                                    </GridPane>
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                                 </padding>
+                              </VBox>
+                           </content>
+                        </ScrollPane>
+                     </content>
+                </Tab>
+                  <Tab text="Max Mustermann">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                    </content>
+                  </Tab>
+              </tabs>
+            </TabPane>
+         </items>
+      </SplitPane>
+   </center>
+</BorderPane>
