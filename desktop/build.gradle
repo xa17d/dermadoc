@@ -1,0 +1,35 @@
+group 'at.tuwien.telemedizin.dermadoc'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+
+jar {
+    baseName = 'desktop'
+    version = '0.0.1-SNAPSHOT'
+
+    manifest {
+        attributes 'Implementation-Title': 'dermadoc.entities',
+                'Implementation-Version': version,
+                'Main-Class': 'at.tuwien.telemedizin.dermadoc.desktop.gui.Main'
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+sourceSets {
+    main {
+        resources {
+            srcDirs = ["src/main/java"]
+            includes = ["**/*.fxml", "**/*.jpg", "**/*.png"]
+        }
+    }
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+    compile project(':entities')
+}
