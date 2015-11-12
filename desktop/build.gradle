@@ -1,6 +1,17 @@
 group 'at.tuwien.telemedizin.dermadoc'
 version '1.0-SNAPSHOT'
 
+buildscript {
+    ext {
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        project(':entities')
+    }
+}
+
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
@@ -14,6 +25,9 @@ jar {
                 'Implementation-Version': version,
                 'Main-Class': 'at.tuwien.telemedizin.dermadoc.desktop.gui.Main'
     }
+
+    // include dependencies (create fat jar). Source: http://www.mkyong.com/gradle/gradle-create-a-jar-file-with-dependencies/
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
 }
 
 repositories {
