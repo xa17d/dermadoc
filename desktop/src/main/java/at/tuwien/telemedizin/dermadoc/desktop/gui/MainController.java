@@ -22,8 +22,10 @@ public class MainController {
     @FXML
     public void initialize() {
 
+        //TODO tmp
         imageViewDoctor.setImage(new Image(Main.class.getResourceAsStream("drlucas.jpg")));
 
+        //initialize the patient list
         tabPatients.setContent(new GCPatientList(this));
     }
 }

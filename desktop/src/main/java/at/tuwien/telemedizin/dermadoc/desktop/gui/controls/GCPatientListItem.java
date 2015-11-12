@@ -49,6 +49,7 @@ public class GCPatientListItem extends TitledPane {
         this.setExpanded(false);
 
         Button btOpen = new GCButtonOpen();
+        //TODO eventhandler on click
         GridPane.setHalignment(btOpen, HPos.RIGHT);
 
         //TODO write cases into gridpane

@@ -101,3 +101,6 @@ crashlytics.properties
 crashlytics-build.properties
 fabric.properties
 gradle/wrapper/gradle-wrapper.properties
+
+# local for desktop
+/desktop/.idea/
