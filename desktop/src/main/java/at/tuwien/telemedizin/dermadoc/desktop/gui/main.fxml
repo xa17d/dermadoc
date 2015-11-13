@@ -8,7 +8,7 @@
 
 <!--stylesheets="@dermadoc.css"-->
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.tuwien.telemedizin.dermadoc.desktop.gui.MainController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.tuwien.telemedizin.dermadoc.desktop.gui.Controller">
    <top>
       <GridPane BorderPane.alignment="CENTER">
         <columnConstraints>
@@ -51,27 +51,10 @@
             <TabPane tabClosingPolicy="UNAVAILABLE" SplitPane.resizableWithParent="false">
               <tabs>
                 <Tab fx:id="tabPatients" text="My Patients" />
-                <Tab text="Open Cases">
-                     <content>
-                        <ScrollPane>
-                           <content>
-                              <AnchorPane>
-                                 <children>
-                                    <TableView prefHeight="200.0" prefWidth="200.0">
-                                      <columns>
-                                        <TableColumn prefWidth="75.0" text="C1" />
-                                        <TableColumn prefWidth="75.0" text="C2" />
-                                      </columns>
-                                    </TableView>
-                                 </children>
-                              </AnchorPane>
-                           </content>
-                        </ScrollPane>
-                     </content>
-                </Tab>
+                <Tab fx:id="tabCases" text="Open Cases" />
               </tabs>
             </TabPane>
-            <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
+            <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="ALL_TABS">
               <tabs>
                 <Tab text="Daniel Gehrer">
                      <content>

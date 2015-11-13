@@ -27,7 +27,7 @@ public class Main extends Application {
         }
 
         primaryStage.setTitle("DermaDoc");
-        primaryStage.getIcons().add(new Image(Main.class.getResourceAsStream("icon.jpg")));
+        primaryStage.getIcons().add(new Image(Main.class.getResourceAsStream("dermadoc_icon_c_96.png")));
 
         primaryStage.setScene(new Scene(root, 1200, 800));
         primaryStage.show();

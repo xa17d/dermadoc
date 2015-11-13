@@ -1,6 +1,6 @@
 package at.tuwien.telemedizin.dermadoc.desktop.gui.controls;
 
-import at.tuwien.telemedizin.dermadoc.desktop.gui.MainController;
+import at.tuwien.telemedizin.dermadoc.desktop.gui.Controller;
 import at.tuwien.telemedizin.dermadoc.entities.Case;
 import at.tuwien.telemedizin.dermadoc.entities.Gender;
 import at.tuwien.telemedizin.dermadoc.entities.Patient;
@@ -20,9 +20,9 @@ public class GCPatientList extends VBox {
 
     @FXML private VBox vbPatientList;
 
-    private MainController controller;
+    private Controller controller;
 
-    public GCPatientList(MainController controller) {
+    public GCPatientList(Controller controller) {
 
         this.controller = controller;
 
@@ -60,7 +60,7 @@ public class GCPatientList extends VBox {
 
         for(Patient p : patients) {
 
-            //TODO get cases of patient from controller!
+            //TODO get cases from controller!
             //MOCK
             List<Case> cases = new ArrayList<Case>();
             cases.add(new Case(-1l, p, Calendar.getInstance()));

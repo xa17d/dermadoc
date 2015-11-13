@@ -1,6 +1,6 @@
 package at.tuwien.telemedizin.dermadoc.desktop.gui.controls;
 
-import at.tuwien.telemedizin.dermadoc.desktop.gui.MainController;
+import at.tuwien.telemedizin.dermadoc.desktop.gui.Controller;
 import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.buttons.GCButtonOpen;
 import at.tuwien.telemedizin.dermadoc.entities.Case;
 import at.tuwien.telemedizin.dermadoc.entities.Patient;
@@ -22,11 +22,11 @@ public class GCPatientListItem extends TitledPane {
 
     @FXML private GridPane gpCaseList;
 
-    private MainController controller;
+    private Controller controller;
     private Patient patient;
     private List<Case> cases;
 
-    public GCPatientListItem(MainController controller, Patient patient, List<Case> cases) {
+    public GCPatientListItem(Controller controller, Patient patient, List<Case> cases) {
 
         this.patient = patient;
         this.cases = cases;
