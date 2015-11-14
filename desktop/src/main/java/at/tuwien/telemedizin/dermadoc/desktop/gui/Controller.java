@@ -1,6 +1,7 @@
 package at.tuwien.telemedizin.dermadoc.desktop.gui;
 
 import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.GCCaseList;
+import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.GCMainTab;
 import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.GCPatientList;
 import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.GCPatientListItem;
 import at.tuwien.telemedizin.dermadoc.entities.*;
@@ -11,6 +12,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.ObservableListBase;
 import javafx.fxml.FXML;
 import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
@@ -27,6 +29,7 @@ public class Controller {
     @FXML private ImageView imageViewDoctor;
     @FXML private Tab tabPatients;
     @FXML private Tab tabCases;
+    @FXML private TabPane tpMain;
 
     @FXML
     public void initialize() {
@@ -40,6 +43,7 @@ public class Controller {
         //initialize the case list
 
         //TODO get cases from backend
+        /*
         //MOCK
         ObservableList<Case> mockCases = FXCollections.observableArrayList();
         Thread t = new Thread(new Runnable() {
@@ -72,5 +76,22 @@ public class Controller {
         //-----
 
         tabCases.setContent(new GCCaseList(this, mockCases));
+        */
+
+        //manage open tabs in main window
+
+        //MOCK
+        Patient p1 = new Patient();
+        p1.setName("Daniel Gehrer");
+        p1.setGender(Gender.Male);
+        p1.setBirthTime(new GregorianCalendar(1990, 9, 18));
+        p1.setSvnr("3023");
+        Case mockCase = new Case(0l, p1, new GregorianCalendar(2015, 11, 10));
+        mockCase.setPhysician(new Physician());
+        mockCase.setStatus(CaseStatus.WaitingForAccept);
+        //-----
+
+        ObservableList<Tab> mainTabList = tpMain.getTabs();
+        mainTabList.add(new GCMainTab(this, mockCase));
     }
 }
