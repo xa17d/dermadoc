@@ -10,13 +10,14 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.tuwien.telemedizin.dermadoc.desktop.gui.Controller">
    <top>
-      <GridPane BorderPane.alignment="CENTER">
+      <GridPane fx:id="gpTop" BorderPane.alignment="CENTER">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
         </columnConstraints>
         <rowConstraints>
           <RowConstraints vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
             <Button mnemonicParsing="false" text="Logout" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.valignment="TOP">
@@ -54,7 +55,7 @@
                 <Tab fx:id="tabCases" text="Open Cases" />
               </tabs>
             </TabPane>
-            <TabPane fx:id="tpMain" tabClosingPolicy="ALL_TABS"/>
+            <TabPane fx:id="tpMain" tabClosingPolicy="ALL_TABS" />
          </items>
       </SplitPane>
    </center>

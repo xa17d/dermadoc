@@ -13,6 +13,9 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
+import javafx.scene.web.WebView;
+import org.controlsfx.control.NotificationPane;
 
 import java.util.*;
 
@@ -22,6 +25,7 @@ import java.util.*;
  */
 public class Controller {
 
+    @FXML private GridPane gpTop;
     @FXML private ImageView imageViewDoctor;
     @FXML private Tab tabPatients;
     @FXML private Tab tabCases;
@@ -87,6 +91,8 @@ public class Controller {
 
         //MOCK
         openMainTab(null);
+
+        showErrorMessage();
     }
 
 
@@ -107,5 +113,19 @@ public class Controller {
 
     public EventHandler<javafx.event.ActionEvent> getOpenMainTabHandler() {
         return openMainTabHandler;
+    }
+
+    private void showErrorMessage() {
+
+        WebView webView = new WebView();
+        NotificationPane notificationPane = new NotificationPane(webView);
+        notificationPane.getStyleClass().add(NotificationPane.STYLE_CLASS_DARK);
+        notificationPane.setText("WTF?!");
+        notificationPane.show();
+
+        GridPane.setColumnIndex(notificationPane, 0);
+        GridPane.setRowIndex(notificationPane, 1);
+
+        gpTop.getChildren().add(notificationPane);
     }
 }
