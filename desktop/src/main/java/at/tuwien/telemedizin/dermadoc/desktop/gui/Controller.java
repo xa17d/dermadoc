@@ -3,11 +3,10 @@ package at.tuwien.telemedizin.dermadoc.desktop.gui;
 import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.GCCaseList;
 import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.GCMainTab;
 import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.GCPatientList;
-import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.notifications.OpenMainTabEventHandler;
+import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.handler.OpenMainTabEventHandler;
 import at.tuwien.telemedizin.dermadoc.entities.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Tab;
@@ -15,7 +14,6 @@ import javafx.scene.control.TabPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-import java.awt.event.ActionListener;
 import java.util.*;
 
 /**
