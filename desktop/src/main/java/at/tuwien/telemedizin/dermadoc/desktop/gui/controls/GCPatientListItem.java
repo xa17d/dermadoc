@@ -28,6 +28,7 @@ public class GCPatientListItem extends TitledPane {
 
     public GCPatientListItem(Controller controller, Patient patient, List<Case> cases) {
 
+        this.controller = controller;
         this.patient = patient;
         this.cases = cases;
 
@@ -48,7 +49,7 @@ public class GCPatientListItem extends TitledPane {
         this.setText(patient.getName());
         this.setExpanded(false);
 
-        Button btOpen = new GCButtonOpen();
+        Button btOpen = new GCButtonOpen(cases.get(0), controller.getOpenMainTabHandler());
         //TODO eventhandler on click
         GridPane.setHalignment(btOpen, HPos.RIGHT);
 
@@ -57,15 +58,15 @@ public class GCPatientListItem extends TitledPane {
         //MOCK
         gpCaseList.add(new Label("Rash on Hand"), 0, 0);
         gpCaseList.add(new Label("12.11.2015"), 1, 0);
-        gpCaseList.add(new GCButtonOpen(), 2, 0);
+        gpCaseList.add(new GCButtonOpen(cases.get(0), controller.getOpenMainTabHandler()), 2, 0);
 
         gpCaseList.add(new Label("Rash on Hand"), 0, 1);
         gpCaseList.add(new Label("12.11.2015"), 1, 1);
-        gpCaseList.add(new GCButtonOpen(), 2, 1);
+        gpCaseList.add(new GCButtonOpen(cases.get(0), controller.getOpenMainTabHandler()), 2, 1);
 
         gpCaseList.add(new Label("Rash on Hand"), 0, 2);
         gpCaseList.add(new Label("12.11.2015"), 1, 2);
-        gpCaseList.add(new GCButtonOpen(), 2, 2);
+        gpCaseList.add(new GCButtonOpen(cases.get(0), controller.getOpenMainTabHandler()), 2, 2);
         //-----
     }
 }

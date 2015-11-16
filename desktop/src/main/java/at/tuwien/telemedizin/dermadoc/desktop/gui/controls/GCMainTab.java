@@ -21,12 +21,12 @@ public class GCMainTab extends Tab {
     @FXML private TitledPane tpPatientOverview;
 
     private Controller controller;
-    private Case ccase;
+    private Case aCase;
 
-    public GCMainTab(Controller controller, Case ccase) {
+    public GCMainTab(Controller controller, Case aCase) {
 
         this.controller = controller;
-        this.ccase = ccase;
+        this.aCase = aCase;
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("gc_maintab.fxml"));
         loader.setRoot(this);
@@ -41,8 +41,8 @@ public class GCMainTab extends Tab {
     @FXML
     private void initialize() {
 
-        this.setText(ccase.getPatient().getName());
-        tpPatientOverview.setContent(new GCMainTabOverview(ccase.getPatient()));
+        this.setText(aCase.getPatient().getName());
+        tpPatientOverview.setContent(new GCMainTabOverview(aCase.getPatient()));
     }
 
     @FXML

@@ -3,21 +3,19 @@ package at.tuwien.telemedizin.dermadoc.desktop.gui;
 import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.GCCaseList;
 import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.GCMainTab;
 import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.GCPatientList;
-import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.GCPatientListItem;
+import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.notifications.OpenMainTabEventHandler;
 import at.tuwien.telemedizin.dermadoc.entities.*;
-import javafx.beans.InvalidationListener;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableListBase;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.VBox;
 
-import java.io.InputStream;
+import java.awt.event.ActionListener;
 import java.util.*;
 
 /**
@@ -31,6 +29,14 @@ public class Controller {
     @FXML private Tab tabCases;
     @FXML private TabPane tpMain;
 
+    private EventHandler<javafx.event.ActionEvent> openMainTabHandler;
+
+    private ObservableList<Tab> mainTabList;
+
+    public Controller() {
+        openMainTabHandler = new OpenMainTabEventHandler(this);
+    }
+
     @FXML
     public void initialize() {
 
@@ -43,7 +49,7 @@ public class Controller {
         //initialize the case list
 
         //TODO get cases from backend
-        /*
+        ///*
         //MOCK
         ObservableList<Case> mockCases = FXCollections.observableArrayList();
         Thread t = new Thread(new Runnable() {
@@ -76,10 +82,17 @@ public class Controller {
         //-----
 
         tabCases.setContent(new GCCaseList(this, mockCases));
-        */
+        //*/
 
         //manage open tabs in main window
+        mainTabList = tpMain.getTabs();
 
+        //MOCK
+        openMainTab(null);
+    }
+
+
+    public void openMainTab(Case aCase) {
         //MOCK
         Patient p1 = new Patient();
         p1.setName("Daniel Gehrer");
@@ -91,7 +104,10 @@ public class Controller {
         mockCase.setStatus(CaseStatus.WaitingForAccept);
         //-----
 
-        ObservableList<Tab> mainTabList = tpMain.getTabs();
         mainTabList.add(new GCMainTab(this, mockCase));
+    }
+
+    public EventHandler<javafx.event.ActionEvent> getOpenMainTabHandler() {
+        return openMainTabHandler;
     }
 }

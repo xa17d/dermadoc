@@ -1,12 +1,14 @@
 package at.tuwien.telemedizin.dermadoc.desktop.gui.controls;
 
 import at.tuwien.telemedizin.dermadoc.desktop.gui.Controller;
+import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.buttons.GCButtonAccept;
 import at.tuwien.telemedizin.dermadoc.entities.Case;
+import at.tuwien.telemedizin.dermadoc.entities.Gender;
+import javafx.beans.value.ObservableValueBase;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.ListView;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.control.*;
 
 import java.io.IOException;
 
@@ -15,7 +17,12 @@ import java.io.IOException;
  */
 public class GCCaseList extends ScrollPane {
 
-    @FXML private ListView<Case> lvCases;
+    @FXML private TableView<Case> tvCases;
+    @FXML private TableColumn<Case, String> nameColumn;
+    @FXML private TableColumn<Case, Gender> genderColumn;
+    @FXML private TableColumn<Case, String> caseNameColumn;
+    @FXML private TableColumn<Case, String> dateColumn;
+    @FXML private TableColumn<Case, Button> acceptColumn;
 
     private Controller controller;
     private ObservableList<Case> cases;
@@ -33,11 +40,47 @@ public class GCCaseList extends ScrollPane {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        tvCases.setItems(cases);
     }
 
     @FXML
     private void initialize() {
 
-        lvCases.setItems(cases);
+        //TODO refactor - this is not a very nice hack
+        nameColumn.setCellValueFactory(cellData -> new ObservableValueBase<String>() {
+            @Override
+            public String getValue() {
+                return cellData.getValue().getPatient().getName();
+            }
+        });
+
+        genderColumn.setCellValueFactory(cellData -> new ObservableValueBase<Gender>() {
+            @Override
+            public Gender getValue() {
+                return cellData.getValue().getPatient().getGender();
+            }
+        });
+
+        caseNameColumn.setCellValueFactory(cellData -> new ObservableValueBase<String>() {
+            @Override
+            public String getValue() {
+                return cellData.getValue().getStatus().toString();
+            }
+        });
+
+        dateColumn.setCellValueFactory(cellData -> new ObservableValueBase<String>() {
+            @Override
+            public String getValue() {
+                return cellData.getValue().getCreated().toString();
+            }
+        });
+
+        acceptColumn.setCellValueFactory(cellData -> new ObservableValueBase<Button>() {
+            @Override
+            public Button getValue() {
+                return new GCButtonAccept(cellData.getValue(), controller.getOpenMainTabHandler());
+            }
+        });
     }
 }
