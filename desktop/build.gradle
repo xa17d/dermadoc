@@ -38,7 +38,7 @@ sourceSets {
     main {
         resources {
             srcDirs = ["src/main/java"]
-            includes = ["**/*.fxml", "**/*.jpg", "**/*.png"]
+            includes = ["**/*.fxml", "**/*.jpg", "**/*.png", "**/*.css"]
         }
     }
 }
