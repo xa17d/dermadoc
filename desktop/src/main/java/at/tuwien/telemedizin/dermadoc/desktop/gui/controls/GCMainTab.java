@@ -67,11 +67,11 @@ public class GCMainTab extends Tab {
         spCaseData.setFitToWidth(true);
         vbInput.getChildren().add(spCaseData);
 
-        spCaseData.getStylesheets().add(getClass().getResource("chat.css").toExternalForm());
+        //spCaseData.getStylesheets().add(getClass().getResource("chat.css").toExternalForm());
     }
 
     @FXML
     private void newFreetext() {
-        //pnInput.getChildren().add(new Label("new freetext"));
+        controller.showErrorMessage("ERROR - this button is not implemented yet!");
     }
 }

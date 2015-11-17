@@ -4,6 +4,7 @@ import at.tuwien.telemedizin.dermadoc.entities.casedata.Advice;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
+import javafx.geometry.NodeOrientation;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 

@@ -15,7 +15,7 @@ import java.util.Map;
 public interface ICaseService {
 
     /*
-     * LOAD DATA FROM BACKEND
+     * LOAD DATA
      */
 
     /**
@@ -34,6 +34,15 @@ public interface ICaseService {
 
 
     /**
+     * load cases of the physician, containing the searchText (sorted by the patient)
+     * @param searchText string that can contain patient name, birthdate or case name
+     * @return map containing all cases of selected patients
+     * @throws DermadocException
+     */
+    Map<Patient,List<Case>> getCasesOfPatient(String searchText) throws DermadocException;
+
+
+    /**
      * load all case data of a specific case
      * @param aCase case
      * @return list of case data
@@ -44,7 +53,7 @@ public interface ICaseService {
 
 
     /*
-     * SAVE DATA ON BACKEND
+     * SAVE DATA (ON BACKEND)
      */
 
     /**

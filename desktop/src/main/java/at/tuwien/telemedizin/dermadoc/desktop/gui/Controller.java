@@ -3,20 +3,26 @@ package at.tuwien.telemedizin.dermadoc.desktop.gui;
 import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.GCCaseList;
 import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.GCMainTab;
 import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.GCPatientList;
+import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.error.ErrorPane;
 import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.handler.OpenMainTabEventHandler;
 import at.tuwien.telemedizin.dermadoc.entities.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.web.WebView;
 import org.controlsfx.control.NotificationPane;
+import org.controlsfx.control.action.Action;
 
+import javax.swing.*;
 import java.util.*;
 
 /**
@@ -25,7 +31,7 @@ import java.util.*;
  */
 public class Controller {
 
-    @FXML private GridPane gpTop;
+    @FXML BorderPane bpMain;
     @FXML private ImageView imageViewDoctor;
     @FXML private Tab tabPatients;
     @FXML private Tab tabCases;
@@ -91,8 +97,6 @@ public class Controller {
 
         //MOCK
         openMainTab(null);
-
-        showErrorMessage();
     }
 
 
@@ -115,18 +119,30 @@ public class Controller {
         return openMainTabHandler;
     }
 
-    private void showErrorMessage() {
+    public void showErrorMessage(String errorMessage) {
 
-        //TODO
-        WebView webView = new WebView();
-        NotificationPane notificationPane = new NotificationPane(webView);
-        notificationPane.getStyleClass().add(NotificationPane.STYLE_CLASS_DARK);
-        notificationPane.setText("WTF?!");
-        notificationPane.show();
+        NotificationPane errorPane = new ErrorPane(bpMain, errorMessage);
+        errorPane.setShowFromTop(false);
+        errorPane.getStyleClass().add(NotificationPane.STYLE_CLASS_DARK);
 
-        GridPane.setColumnIndex(notificationPane, 0);
-        GridPane.setRowIndex(notificationPane, 1);
+        //TODO what the fucking fuck???
+        //why is the pane showing, when running in another thread with a short sleep,
+        //but not in the fx thread (also not with a sleep)???
 
-        gpTop.getChildren().add(notificationPane);
+        //errorPane.show();
+
+        Thread t1 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                try {
+                    Thread.sleep(50);
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                }
+                errorPane.show();
+            }
+        });
+        t1.start();
     }
 }
