@@ -1,11 +1,14 @@
 package at.tuwien.telemedizin.dermadoc.desktop.gui.controls.buttons;
 
-import javafx.scene.control.Button;
+import at.tuwien.telemedizin.dermadoc.entities.Case;
+import javafx.event.EventHandler;
 
-/**
- * Created by Lucas on 12.11.2015.
- */
-public class GCButtonAccept extends Button {
+import java.awt.event.ActionEvent;
 
-    //TODO
+public class GCButtonAccept extends GCButton {
+
+    public GCButtonAccept(Case aCase, EventHandler<javafx.event.ActionEvent> listener) {
+        super("Accept", aCase);
+        this.setOnAction(listener);
+    }
 }

@@ -1,6 +1,11 @@
 package at.tuwien.telemedizin.dermadoc.entities;
 
+import javafx.fxml.FXML;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by daniel on 11.11.2015.
@@ -28,4 +33,11 @@ public class Case {
     private CaseStatus status;
     public CaseStatus getStatus() { return status; }
     public void setStatus(CaseStatus status) { this.status = status; }
+
+    DateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+    @Override
+    public String toString() {
+        return "Patient " + patient.getId() + " - " + sdf.format(patient.getBirthTime().getTime()) + " " + patient.getGender() + "\n" +
+                "description";
+    }
 }
