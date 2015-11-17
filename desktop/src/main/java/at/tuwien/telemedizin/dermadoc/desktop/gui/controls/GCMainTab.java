@@ -1,6 +1,8 @@
 package at.tuwien.telemedizin.dermadoc.desktop.gui.controls;
 
 import at.tuwien.telemedizin.dermadoc.desktop.gui.Controller;
+import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.casedata.GCAdvice;
+import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.casedata.GCCaseData;
 import at.tuwien.telemedizin.dermadoc.entities.Case;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -9,6 +11,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 import java.net.URL;
@@ -18,7 +21,7 @@ import java.net.URL;
  */
 public class GCMainTab extends Tab {
 
-    @FXML private Pane pnInput;
+    @FXML private VBox vbInput;
     @FXML private TitledPane tpPatientOverview;
 
     private Controller controller;
@@ -46,26 +49,25 @@ public class GCMainTab extends Tab {
         tpPatientOverview.setContent(new GCMainTabOverview(aCase.getPatient()));
 
         //Chat window
-        GridPane chat = new GridPane();
-        chat.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        GridPane gpCaseDataList = new GridPane();
+        gpCaseDataList.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 
         ColumnConstraints c1 = new ColumnConstraints();
         c1.setPercentWidth(100);
-        chat.getColumnConstraints().add(c1);
+        gpCaseDataList.getColumnConstraints().add(c1);
 
-        for (int i = 0; i < 20; i++) {
-            Label chatMessage = new Label("Hi " + i);
-            String style = (i % 2 == 0 ? "chat-bubblepatient" : "chat-bubblephysician");
-            chatMessage.getStyleClass().add(style);
-            GridPane.setHalignment(chatMessage, i % 2 == 0 ? HPos.LEFT : HPos.RIGHT);
-            chat.addRow(i, chatMessage);
-        }
+        //TODO get all case-data from backend
+        //MOCK
+        GCCaseData gcData = new GCAdvice(null);
+        GridPane.setHalignment(gcData, gcData.getHPos());
+        gpCaseDataList.addRow(0, gcData);
+        //----
 
-        ScrollPane scroll = new ScrollPane(chat);
-        scroll.setFitToWidth(true);
-        pnInput.getChildren().add(scroll);
+        ScrollPane spCaseData = new ScrollPane(gpCaseDataList);
+        spCaseData.setFitToWidth(true);
+        vbInput.getChildren().add(spCaseData);
 
-        scroll.getStylesheets().add(getClass().getResource("chat.css").toExternalForm());
+        spCaseData.getStylesheets().add(getClass().getResource("chat.css").toExternalForm());
     }
 
     @FXML

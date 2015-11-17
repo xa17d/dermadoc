@@ -22,7 +22,7 @@ jar {
     version = '0.0.1-SNAPSHOT'
 
     manifest {
-        attributes 'Implementation-Title': 'dermadoc.entities',
+        attributes 'Implementation-Title': 'dermadoc.desktop',
                 'Implementation-Version': version,
                 'Main-Class': 'at.tuwien.telemedizin.dermadoc.desktop.gui.Main'
     }

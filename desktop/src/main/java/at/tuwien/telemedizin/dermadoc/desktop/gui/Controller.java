@@ -117,6 +117,7 @@ public class Controller {
 
     private void showErrorMessage() {
 
+        //TODO
         WebView webView = new WebView();
         NotificationPane notificationPane = new NotificationPane(webView);
         notificationPane.getStyleClass().add(NotificationPane.STYLE_CLASS_DARK);
