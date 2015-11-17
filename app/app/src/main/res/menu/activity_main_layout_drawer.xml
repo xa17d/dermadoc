@@ -2,22 +2,18 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:checkableBehavior="single">
-        <item android:id="@+id/nav_camara" android:icon="@android:drawable/ic_menu_camera"
-            android:title="Import" />
-        <item android:id="@+id/nav_gallery" android:icon="@android:drawable/ic_menu_gallery"
-            android:title="Gallery" />
-        <item android:id="@+id/nav_slideshow" android:icon="@android:drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
-        <item android:id="@+id/nav_manage" android:icon="@android:drawable/ic_menu_manage"
-            android:title="Tools" />
+        <item android:id="@+id/nav_mycases" android:icon="@android:drawable/ic_menu_gallery"
+            android:title="My Cases" />
+        <item android:id="@+id/nav_settings" android:icon="@android:drawable/ic_menu_manage"
+            android:title="My Account" />
+        <item android:id="@+id/nav_logout" android:icon="@android:drawable/ic_menu_manage"
+            android:title="Logout" />
     </group>
 
-    <item android:title="Communicate">
+    <item android:title="Help">
         <menu>
-            <item android:id="@+id/nav_share" android:icon="@android:drawable/ic_menu_share"
-                android:title="Share" />
-            <item android:id="@+id/nav_send" android:icon="@android:drawable/ic_menu_send"
-                android:title="Send" />
+            <item android:id="@+id/nav_help" android:icon="@android:drawable/ic_menu_manage"
+                android:title="Help" />
         </menu>
     </item>
 
