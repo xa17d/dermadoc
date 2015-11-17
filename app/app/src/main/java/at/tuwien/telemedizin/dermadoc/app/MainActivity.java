@@ -43,6 +43,17 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        // default content is case-list
+        Fragment fragment = MyCasesFragment.newInstance();
+        String title = getString(R.string.nav_my_cases);
+
+        if (fragment != null) {
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.contentFrame,fragment);
+            fragmentTransaction.commit();
+            setTitle(title);
+        }
     }
 
     @Override
@@ -84,17 +95,22 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         Fragment fragment = null;
+        String title = getString(R.string.app_name);
+        CharSequence oldTitle = getTitle();
 
         if (id == R.id.nav_my_cases) {
             fragment = MyCasesFragment.newInstance();
+            title = getString(R.string.nav_my_cases);
 
         } else if (id == R.id.nav_my_account) {
             fragment = DummyContentFragment.newInstance("My Account ... soon"); // TODO replace with real fragment/function
+            title = getString(R.string.nav_my_account);
         } else if (id == R.id.nav_help) {
             fragment = DummyContentFragment.newInstance("Help is on the way ... somewhere ... soon"); // TODO replace with real fragment/function
-
+            title = getString(R.string.nav_help);
         } else if (id == R.id.nav_logout) {
             Toast.makeText(getBaseContext(), "You are not even logged in yet!", Toast.LENGTH_LONG).show(); // TODO replace with real fragment/function
+            title = oldTitle.toString();
         }
 
         // logout does not return a fragment != null
@@ -107,6 +123,9 @@ public class MainActivity extends AppCompatActivity
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
+
+        setTitle(title);
+
         return true;
     }
 }
