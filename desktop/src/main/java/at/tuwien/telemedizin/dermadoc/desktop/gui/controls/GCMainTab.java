@@ -6,15 +6,13 @@ import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.casedata.GCCaseData;
 import at.tuwien.telemedizin.dermadoc.entities.Case;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.HPos;
 import javafx.scene.control.*;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import org.controlsfx.control.PopOver;
 
 import java.io.IOException;
-import java.net.URL;
 
 /**
  * Created by Lucas on 14.11.2015.

@@ -8,19 +8,17 @@ import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.handler.OpenMainTabEv
 import at.tuwien.telemedizin.dermadoc.entities.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.web.WebView;
 import org.controlsfx.control.NotificationPane;
-import org.controlsfx.control.action.Action;
+import org.controlsfx.control.PopOver;
 
 import javax.swing.*;
 import java.util.*;
@@ -36,6 +34,7 @@ public class Controller {
     @FXML private Tab tabPatients;
     @FXML private Tab tabCases;
     @FXML private TabPane tpMain;
+    @FXML private Button btLogout;
 
     private EventHandler<javafx.event.ActionEvent> openMainTabHandler;
 
@@ -144,5 +143,16 @@ public class Controller {
             }
         });
         t1.start();
+    }
+
+    @FXML
+    private void logout() {
+
+        //TODO
+
+        //for testing
+        PopOver popOver = new PopOver(new Label("Sorry, there are no notifications"));
+        popOver.setArrowLocation(PopOver.ArrowLocation.TOP_RIGHT);
+        popOver.show(btLogout);
     }
 }
