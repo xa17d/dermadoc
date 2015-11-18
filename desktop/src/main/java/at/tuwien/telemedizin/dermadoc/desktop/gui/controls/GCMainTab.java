@@ -1,18 +1,23 @@
 package at.tuwien.telemedizin.dermadoc.desktop.gui.controls;
 
 import at.tuwien.telemedizin.dermadoc.desktop.gui.Controller;
-import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.casedata.GCAdvice;
-import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.casedata.GCCaseData;
+import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.casedata.edit.GCAdviceEdit;
+import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.casedata.edit.GCCaseDataEdit;
+import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.casedata.view.GCCaseDataView;
+import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.casedata.view.GCTextMessageView;
 import at.tuwien.telemedizin.dermadoc.entities.Case;
+import at.tuwien.telemedizin.dermadoc.entities.Patient;
+import at.tuwien.telemedizin.dermadoc.entities.Physician;
+import at.tuwien.telemedizin.dermadoc.entities.casedata.TextMessage;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-import org.controlsfx.control.PopOver;
 
 import java.io.IOException;
+import java.util.Calendar;
 
 /**
  * Created by Lucas on 14.11.2015.
@@ -56,9 +61,20 @@ public class GCMainTab extends Tab {
 
         //TODO get all case-data from backend
         //MOCK
-        GCCaseData gcData = new GCAdvice(null);
-        gcData.setAlignment(gcData.getPos());
-        gpCaseDataList.addRow(0, gcData);
+        TextMessage message1 = new TextMessage(-1l, Calendar.getInstance(), new Patient(), "This is a text-message from the patient! ");
+        GCCaseDataView gcData1 = new GCTextMessageView(message1);
+        gpCaseDataList.addRow(0, gcData1);
+
+        TextMessage message2 = new TextMessage(-1l, Calendar.getInstance(), new Physician(), "This is a text-message from the physician! ");
+        GCCaseDataView gcData2 = new GCTextMessageView(message2);
+        gpCaseDataList.addRow(1, gcData2);
+
+        TextMessage message3 = new TextMessage(-1l, Calendar.getInstance(), new Patient(), "This is a text-message from the patient! ");
+        GCCaseDataView gcData3 = new GCTextMessageView(message3);
+        gpCaseDataList.addRow(2, gcData3);
+
+        GCCaseDataEdit gcData4 = new GCAdviceEdit(null);
+        gpCaseDataList.addRow(3, gcData4);
         //----
 
         ScrollPane spCaseData = new ScrollPane(gpCaseDataList);

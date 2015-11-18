@@ -1,4 +1,4 @@
-package at.tuwien.telemedizin.dermadoc.desktop.gui.controls.casedata;
+package at.tuwien.telemedizin.dermadoc.desktop.gui.controls.casedata.edit;
 
 import at.tuwien.telemedizin.dermadoc.entities.casedata.Advice;
 import javafx.fxml.FXML;
@@ -10,16 +10,17 @@ import java.io.IOException;
 /**
  * Created by Lucas on 17.11.2015.
  */
-public class GCAdvice extends GCCaseData {
+public class GCAdviceEdit extends GCCaseDataEdit {
 
     @FXML private TextArea taAdvice;
 
     private Advice advice;
 
-    public GCAdvice(Advice advice) {
+    public GCAdviceEdit(Advice advice) {
 
         this.advice = advice;
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("gc_advice.fxml"));
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("gc_advice_edit.fxml"));
         loader.setRoot(this);
         loader.setController(this);
         try {
@@ -32,7 +33,7 @@ public class GCAdvice extends GCCaseData {
     @FXML
     private void initialize() {
 
-        this.getStyleClass().add(STYLE_PHYSICIAN);
+        this.initStyle();
 
         //MOCK
         taAdvice.setText("this is an Advice of your doctor!!");
