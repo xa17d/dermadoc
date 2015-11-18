@@ -8,15 +8,19 @@ import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.handler.OpenMainTabEv
 import at.tuwien.telemedizin.dermadoc.entities.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
+import javafx.geometry.HPos;
+import javafx.geometry.Pos;
+import javafx.geometry.VPos;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.stage.*;
 import org.controlsfx.control.NotificationPane;
 import org.controlsfx.control.PopOver;
 
@@ -148,11 +152,44 @@ public class Controller {
     @FXML
     private void logout() {
 
-        //TODO
+        //TODO logout on backend
+        Stage mainStage = (Stage) btLogout.getScene().getWindow();
+        mainStage.close();
+        login(mainStage);
 
+        /*
         //for testing
         PopOver popOver = new PopOver(new Label("Sorry, there are no notifications"));
         popOver.setArrowLocation(PopOver.ArrowLocation.TOP_RIGHT);
         popOver.show(btLogout);
+        */
+    }
+
+    protected void login(Stage mainStage) {
+
+        Stage loginStage = new Stage();
+        loginStage.setAlwaysOnTop(true);
+        loginStage.initModality(Modality.APPLICATION_MODAL);
+        loginStage.getIcons().add(new Image(Main.class.getResourceAsStream("dermadoc_icon_c_96.png")));
+        loginStage.initOwner(mainStage);
+
+        //TODO create nice fxml login dialog
+
+        GridPane dialog = new GridPane();
+        dialog.setAlignment(Pos.CENTER);
+        Button btLogin = new Button("LOGIN");
+        btLogin.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                mainStage.show();
+                loginStage.hide();
+            }
+        });
+        GridPane.setHalignment(btLogin, HPos.CENTER);
+        GridPane.setValignment(btLogin, VPos.CENTER);
+        dialog.getChildren().add(btLogin);
+        Scene dialogScene = new Scene(dialog, 300, 200);
+        loginStage.setScene(dialogScene);
+        loginStage.show();
     }
 }
