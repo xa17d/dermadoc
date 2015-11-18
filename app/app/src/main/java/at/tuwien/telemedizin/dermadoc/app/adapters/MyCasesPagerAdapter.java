@@ -1,13 +1,11 @@
-package at.tuwien.telemedizin.dermadoc.app;
+package at.tuwien.telemedizin.dermadoc.app.adapters;
 
 import android.support.v4.app.FragmentManager;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.PagerAdapter;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+
+import at.tuwien.telemedizin.dermadoc.app.activites_fragments.CaseListFragment;
 
 /**
  * Created by FAUser on 17.11.2015.
@@ -26,7 +24,7 @@ public class MyCasesPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return CustomPagerEnum.values().length;
+        return MyCasesPagerEnum.values().length;
     }
 
     @Override
@@ -35,9 +33,9 @@ public class MyCasesPagerAdapter extends FragmentPagerAdapter {
 
         // old list or current list
         if (position == 0) {
-            caseListFragment = CaseListFragment.newInstance("CURRENT"); // TODO set List
+            caseListFragment = CaseListFragment.newInstance("CURRENT", MyCasesPagerEnum.CURRENT.getKey()); // TODO set List
         } else {
-            caseListFragment = CaseListFragment.newInstance("OLD"); // TODO set List
+            caseListFragment = CaseListFragment.newInstance("OLD", MyCasesPagerEnum.OLD.getKey()); // TODO set List
         }
 
         return caseListFragment;
@@ -45,7 +43,7 @@ public class MyCasesPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public String getPageTitle(int position) {
-        return context.getString(CustomPagerEnum.values()[position].getTitleResId());
+        return context.getString(MyCasesPagerEnum.values()[position].getTitleResId());
     }
 
 

@@ -18,4 +18,16 @@
     <!-- my cases list -->
     <string name="tab_header_current">CURRENT</string>
     <string name="tab_header_old">OLD</string>
+
+    <string name="action_synchronize">Synchronize</string>
+
+    <string name="action_sort">Sort</string>
+    <string name="action_sort_name">Name</string>
+    <string name="action_sort_date_of_creation">Date of creation</string>
+    <string name="action_sort_id">ID-number</string>
+    <string name="action_sort_status">Status</string>
+    <string name="action_sort_last_modified">Last modified</string>
+
+
+    <string name="msg_no_physician_info_found">No physician info found</string>
 </resources>

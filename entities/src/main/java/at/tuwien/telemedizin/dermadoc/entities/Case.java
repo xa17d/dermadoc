@@ -1,6 +1,6 @@
 package at.tuwien.telemedizin.dermadoc.entities;
 
-import javafx.fxml.FXML;
+
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;

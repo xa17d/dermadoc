@@ -1,6 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="10dp"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="10dp">
 
-</LinearLayout>
+    <ImageView
+        android:id="@+id/case_item_notification_icon"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_action_flag_red_light_18dp"
+        android:visibility="visible"
+        android:layout_marginLeft="16dp"
+        android:background="@drawable/case_item_notification_icon_shape_2"
+        android:padding="6dp"/>
+        <!--android:duplicateParentState="true"/> &lt;!&ndash; to make use of the selector &ndash;&gt;-->
+
+    <LinearLayout
+        android:id="@+id/case_item_linlayout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop ="true"
+        android:layout_toLeftOf="@id/case_item_notification_icon"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/case_item_name"
+            style="@style/CaseListItemHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="NAME"
+            android:singleLine="true"
+            android:layout_marginBottom="12dp"
+            android:ellipsize="marquee" />
+
+        <TextView
+            android:id="@+id/case_item_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="ID"
+            android:singleLine="true"
+            style="@style/CaseListItemInfo" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/case_item_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="STATUS"
+                android:singleLine="true"
+                style="@style/CaseListItemInfo" />
+
+            <TextView
+                android:id="@+id/case_item_physician"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
+                android:text="DOCTOR"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:gravity="right"
+                android:singleLine="true"
+                style="@style/CaseListItemInfo" />
+        </LinearLayout>
+    </LinearLayout>
+
+
+
+
+</RelativeLayout>

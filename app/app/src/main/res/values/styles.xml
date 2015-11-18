@@ -21,9 +21,22 @@
     </style>
 
     <style name="CustomTabText" parent="TextAppearance.AppCompat.Button">
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">12sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/tab_text</item>
+    </style>
+
+    <style name="CaseListItemHeader">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/case_list_header_text</item>
+        <item name="android:singleLine">true</item> <!-- does not work via styles.xml? -->
+        <item name="android:ellipsize">marquee</item> <!-- does not work via styles.xml? -->
+    </style>
+
+    <style name="CaseListItemInfo">
+        <item name="android:textSize">14sp</item>
+        <item name="android:singleLine">true</item> <!-- does not work via styles.xml? -->
+        <item name="android:ellipsize">marquee</item> <!-- does not work via styles.xml? -->
     </style>
 
 </resources>

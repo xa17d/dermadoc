@@ -1,4 +1,4 @@
-package at.tuwien.telemedizin.dermadoc.app;
+package at.tuwien.telemedizin.dermadoc.app.activites_fragments;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -16,8 +16,25 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import at.tuwien.telemedizin.dermadoc.app.R;
+import at.tuwien.telemedizin.dermadoc.app.adapters.MyCasesPagerEnum;
+import at.tuwien.telemedizin.dermadoc.app.comparators.CaseSortCategory;
+import at.tuwien.telemedizin.dermadoc.entities.Case;
+import at.tuwien.telemedizin.dermadoc.entities.CaseStatus;
+
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, CaseListFragment.OnCaseListEventListener{
+
+    private List<Case> currentCaseList;
+    private List<Case> closedCaseList;
+
+    private CaseSortCategory caseListSortCategory; // set when a sort is executed
+
+    // To hide the sort-menu-item whenever fragments are changed etc.
+    private MenuItem sortMenuItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +71,42 @@ public class MainActivity extends AppCompatActivity
             fragmentTransaction.commit();
             setTitle(title);
         }
+
+        // TODO replace
+        loadCaseLists();
+    }
+
+    /**
+     * loads the case-list(s) from the server
+     * TODO
+     */
+    private void loadCaseLists() {
+        // TODO remove START - for testing purpose ---------------
+        long startNumber = 100000;
+
+        currentCaseList = new ArrayList<Case>();
+        Case testCase1 = new Case(startNumber+2045, null, null);
+        testCase1.setStatus(CaseStatus.Active);
+        currentCaseList.add(testCase1);
+        Case testCase2 = new Case(startNumber+451, null, null);
+        testCase2.setStatus(CaseStatus.LookingForPhysician);
+        currentCaseList.add(testCase2);
+        for (int i = 0; i < 5; i++) {
+            Case testCaseA = new Case((startNumber+10 + i), null, null);
+            testCaseA.setStatus(CaseStatus.values()[i%3]); // 3 because 4 would be closed
+            currentCaseList.add(testCaseA);
+        }
+
+        closedCaseList = new ArrayList<Case>();
+        Case testCase3 = new Case(startNumber+4345, null, null);
+        testCase3.setStatus(CaseStatus.Closed);
+        closedCaseList.add(testCase3);
+        for (int i = 0; i < 5; i++) {
+            Case testCaseB = new Case((startNumber+7645 + i), null, null);
+            testCaseB.setStatus(CaseStatus.values()[i%4]);
+            closedCaseList.add(testCaseB);
+        }
+        // TODO remove END - for testing purpose ---------------
     }
 
     @Override
@@ -70,6 +123,8 @@ public class MainActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main_menu, menu);
+
+        sortMenuItem = menu.findItem(R.id.action_sort);
         return true;
     }
 
@@ -82,11 +137,16 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Toast.makeText(getBaseContext(), "There will be a Settings-activity", Toast.LENGTH_LONG).show(); // TODO replace with real fragment/function
             return true;
+        } else if (id == R.id.action_syncronize) {
+            Toast.makeText(getBaseContext(), "Synchronisation with server coming soon!", Toast.LENGTH_LONG).show(); // TODO replace with real fragment/function
         }
 
         return super.onOptionsItemSelected(item);
     }
+
+
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -101,13 +161,16 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_my_cases) {
             fragment = MyCasesFragment.newInstance();
             title = getString(R.string.nav_my_cases);
+            sortMenuItem.setVisible(true);
 
         } else if (id == R.id.nav_my_account) {
             fragment = DummyContentFragment.newInstance("My Account ... soon"); // TODO replace with real fragment/function
             title = getString(R.string.nav_my_account);
+            sortMenuItem.setVisible(false);
         } else if (id == R.id.nav_help) {
-            fragment = DummyContentFragment.newInstance("Help is on the way ... somewhere ... soon"); // TODO replace with real fragment/function
-            title = getString(R.string.nav_help);
+            Toast.makeText(getBaseContext(), "There will be a Help-activity", Toast.LENGTH_LONG).show();
+            // TODO not as fragment - implement as own activity
+            title = oldTitle.toString();
         } else if (id == R.id.nav_logout) {
             Toast.makeText(getBaseContext(), "You are not even logged in yet!", Toast.LENGTH_LONG).show(); // TODO replace with real fragment/function
             title = oldTitle.toString();
@@ -128,4 +191,27 @@ public class MainActivity extends AppCompatActivity
 
         return true;
     }
+
+    @Override
+    public List<Case> onListRequest(long listKey) {
+        if (listKey == MyCasesPagerEnum.CURRENT.getKey()) {
+            return currentCaseList;
+        } else if (listKey == MyCasesPagerEnum.OLD.getKey()) {
+            return closedCaseList;
+        } else {
+            // nothing matched ...
+            return null;
+        }
+    }
+
+    @Override
+    public CaseSortCategory onCaseSortCategoryRequest() {
+        return caseListSortCategory;
+    }
+
+    @Override
+    public void onSettingNewCaseSortCategory(CaseSortCategory caseSortCategory) {
+        this.caseListSortCategory = caseSortCategory;
+    }
+
 }

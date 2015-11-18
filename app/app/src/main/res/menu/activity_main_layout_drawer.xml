@@ -2,11 +2,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:checkableBehavior="single">
-        <item android:id="@+id/nav_my_cases" android:icon="@drawable/ic_list_white_36dp"
-            android:title="@string/nav_my_cases" />
-        <item android:id="@+id/nav_my_account" android:icon="@drawable/ic_account_circle_white_36dp"
+        <item android:id="@+id/nav_my_cases"
+            android:icon="@drawable/ic_list_white_36dp"
+            android:title="@string/nav_my_cases"
+            android:checked="true"/>
+        <item android:id="@+id/nav_my_account"
+            android:icon="@drawable/ic_account_circle_white_36dp"
             android:title="@string/nav_my_account" />
-        <item android:id="@+id/nav_logout" android:icon="@drawable/ic_exit_to_app_white_36dp"
+        <item android:id="@+id/nav_logout"
+            android:icon="@drawable/ic_exit_to_app_white_36dp"
             android:title="@string/nav_logout" />
     </group>
 
