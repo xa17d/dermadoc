@@ -57,7 +57,7 @@ public class GCMainTab extends Tab {
         //TODO get all case-data from backend
         //MOCK
         GCCaseData gcData = new GCAdvice(null);
-        GridPane.setHalignment(gcData, gcData.getHPos());
+        gcData.setAlignment(gcData.getPos());
         gpCaseDataList.addRow(0, gcData);
         //----
 
@@ -65,7 +65,8 @@ public class GCMainTab extends Tab {
         spCaseData.setFitToWidth(true);
         vbInput.getChildren().add(spCaseData);
 
-        //spCaseData.getStylesheets().add(getClass().getResource("chat.css").toExternalForm());
+        //TODO define style
+        spCaseData.getStylesheets().add(getClass().getResource("chat.css").toExternalForm());
     }
 
     @FXML

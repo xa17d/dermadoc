@@ -31,7 +31,7 @@
          </top>
          <center>
             <!--<ScrollPane fitToWidth="true">-->
-               <VBox fx:id="vbInput"/>
+            <VBox fx:id="vbInput"/>
             <!--</ScrollPane>-->
          </center>
       </BorderPane>
