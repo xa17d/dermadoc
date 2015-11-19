@@ -9,13 +9,12 @@
         <ColumnConstraints hgrow="ALWAYS" maxWidth="400" />
     </columnConstraints>
     <rowConstraints>
-        <RowConstraints maxHeight="-Infinity" minHeight="40.0" prefHeight="150.0" vgrow="ALWAYS" />
-        <RowConstraints maxHeight="-Infinity" vgrow="NEVER" />
+        <RowConstraints maxHeight="-Infinity" minHeight="40.0" vgrow="ALWAYS" />
     </rowConstraints>
     <children>
-        <Label fx:id="lbMessage" wrapText="true" prefHeight="200.0" prefWidth="200.0" maxWidth="400">
+        <Label fx:id="lbMessage" wrapText="true" prefWidth="400.0">
             <GridPane.margin>
-                <Insets bottom="15.0" left="15.0" right="25.0" top="15.0" />
+                <Insets bottom="10.0" left="10.0" right="10.0" top="20.0" />
             </GridPane.margin>
         </Label>
     </children>

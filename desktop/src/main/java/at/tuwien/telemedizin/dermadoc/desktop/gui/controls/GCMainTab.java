@@ -1,7 +1,7 @@
 package at.tuwien.telemedizin.dermadoc.desktop.gui.controls;
 
 import at.tuwien.telemedizin.dermadoc.desktop.gui.Controller;
-import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.casedata.edit.GCAdviceEdit;
+import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.casedata.edit.GCTextMessageEdit;
 import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.casedata.edit.GCCaseDataEdit;
 import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.casedata.view.GCCaseDataView;
 import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.casedata.view.GCTextMessageView;
@@ -14,6 +14,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
@@ -29,6 +30,8 @@ public class GCMainTab extends Tab {
 
     private Controller controller;
     private Case aCase;
+
+    private GridPane gpCaseDataList;
 
     public GCMainTab(Controller controller, Case aCase) {
 
@@ -52,7 +55,7 @@ public class GCMainTab extends Tab {
         tpPatientOverview.setContent(new GCMainTabOverview(aCase.getPatient()));
 
         //Chat window
-        GridPane gpCaseDataList = new GridPane();
+        gpCaseDataList = new GridPane();
         gpCaseDataList.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 
         ColumnConstraints c1 = new ColumnConstraints();
@@ -63,18 +66,18 @@ public class GCMainTab extends Tab {
         //MOCK
         TextMessage message1 = new TextMessage(-1l, Calendar.getInstance(), new Patient(), "This is a text-message from the patient! ");
         GCCaseDataView gcData1 = new GCTextMessageView(message1);
-        gpCaseDataList.addRow(0, gcData1);
+        gpCaseDataList.addRow(gpCaseDataList.getChildren().size(), gcData1);
 
         TextMessage message2 = new TextMessage(-1l, Calendar.getInstance(), new Physician(), "This is a text-message from the physician! ");
         GCCaseDataView gcData2 = new GCTextMessageView(message2);
-        gpCaseDataList.addRow(1, gcData2);
+        gpCaseDataList.addRow(gpCaseDataList.getChildren().size(), gcData2);
 
         TextMessage message3 = new TextMessage(-1l, Calendar.getInstance(), new Patient(), "This is a text-message from the patient! ");
         GCCaseDataView gcData3 = new GCTextMessageView(message3);
-        gpCaseDataList.addRow(2, gcData3);
+        gpCaseDataList.addRow(gpCaseDataList.getChildren().size(), gcData3);
 
-        GCCaseDataEdit gcData4 = new GCAdviceEdit(null);
-        gpCaseDataList.addRow(3, gcData4);
+        GCCaseDataEdit gcData4 = new GCTextMessageEdit(controller, gpCaseDataList);
+        gpCaseDataList.addRow(gpCaseDataList.getChildren().size(), gcData4);
         //----
 
         ScrollPane spCaseData = new ScrollPane(gpCaseDataList);
@@ -87,6 +90,13 @@ public class GCMainTab extends Tab {
 
     @FXML
     private void newFreetext() {
+
+        GCCaseDataEdit newFreetext = new GCTextMessageEdit(controller, gpCaseDataList);
+        gpCaseDataList.addRow(gpCaseDataList.getChildren().size(), newFreetext);
+    }
+
+    @FXML
+    private void newDiagnosis() {
         controller.showErrorMessage("ERROR - this button is not implemented yet!");
     }
 }

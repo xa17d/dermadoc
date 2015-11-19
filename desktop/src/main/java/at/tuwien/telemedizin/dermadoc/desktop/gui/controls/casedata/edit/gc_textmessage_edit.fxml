@@ -13,7 +13,7 @@
         <RowConstraints maxHeight="-Infinity" vgrow="NEVER" />
     </rowConstraints>
     <children>
-        <TextArea fx:id="taAdvice" prefHeight="200.0" prefWidth="200.0" maxWidth="400" />
+        <TextArea fx:id="taTextMessage" prefHeight="200.0" prefWidth="200.0" maxWidth="400" />
         <Button mnemonicParsing="false" onAction="#save" text="Save" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
             <GridPane.margin>
                 <Insets bottom="15.0" left="15.0" right="25.0" top="15.0" />

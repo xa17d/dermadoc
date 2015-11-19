@@ -1,5 +1,6 @@
 package at.tuwien.telemedizin.dermadoc.desktop.gui.controls.casedata.view;
 
+import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.casedata.edit.GCTextMessageEdit;
 import at.tuwien.telemedizin.dermadoc.entities.Physician;
 import at.tuwien.telemedizin.dermadoc.entities.casedata.TextMessage;
 import javafx.fxml.FXML;
@@ -21,7 +22,21 @@ public class GCTextMessageView extends GCCaseDataView {
 
         this.message = message;
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("gc_textmessage.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("gc_textmessage_view.fxml"));
+        loader.setRoot(this);
+        loader.setController(this);
+        try {
+            loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public GCTextMessageView(GCTextMessageEdit gcTextMessage) {
+
+        this.message = gcTextMessage.getTextMessage();
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("gc_textmessage_view.fxml"));
         loader.setRoot(this);
         loader.setController(this);
         try {
@@ -35,12 +50,7 @@ public class GCTextMessageView extends GCCaseDataView {
     private void initialize() {
 
         this.initStyle();
-
-        String msg = message.getMessage();
-        for(int i = 0; i < 3; i++) {
-            msg += msg;
-        }
-        lbMessage.setText(msg);
+        lbMessage.setText(message.getMessage());
     }
 
     @Override
