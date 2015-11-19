@@ -30,4 +30,12 @@
 
 
     <string name="msg_no_physician_info_found">No physician info found</string>
+
+    <string name="label_date_of_creation">Date of creation</string>
+    <string name="label_last_modified">Last modified</string>
+    <string name="label_physician">Physician</string>
+
+    <string name="nav_case_overview">Overview</string>
+    <string name="nav_case_advice">Advice</string>
+    <string name="nav_case_diagnoses">Diganoses</string>
 </resources>

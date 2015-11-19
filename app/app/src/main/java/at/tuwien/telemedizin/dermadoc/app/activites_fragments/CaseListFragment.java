@@ -2,6 +2,7 @@ package at.tuwien.telemedizin.dermadoc.app.activites_fragments;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -9,12 +10,14 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.List;
 
 import at.tuwien.telemedizin.dermadoc.app.R;
+import at.tuwien.telemedizin.dermadoc.app.activites_fragments.case_specific.CaseActivity;
 import at.tuwien.telemedizin.dermadoc.app.adapters.CaseListAdapter;
 import at.tuwien.telemedizin.dermadoc.app.comparators.CaseComparator;
 import at.tuwien.telemedizin.dermadoc.app.comparators.CaseSortCategory;
@@ -91,7 +94,15 @@ public class CaseListFragment extends Fragment {
 
         listValues = ((OnCaseListEventListener)getActivity()).onListRequest(listKey);
         Log.d(LOG_TAG, "listValues -size = " + listValues.size());
-
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // start the CaseActivity and open the selected case
+                Intent intent = new Intent(getContext(), CaseActivity.class);
+                // put extra Case TODO
+                startActivity(intent);
+            }
+        });
 
 
         adapter = new CaseListAdapter(getContext(), listValues);

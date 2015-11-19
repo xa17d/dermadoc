@@ -6,8 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.TableRow;
 import android.widget.TextView;
 
+import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
 
@@ -56,8 +58,11 @@ public class CaseListAdapter extends ArrayAdapter<Case> {
             TextView itemStatus = (TextView) v.findViewById(R.id.case_item_status);
             TextView itemID = (TextView) v.findViewById(R.id.case_item_id);
             TextView itemPhysician = (TextView) v.findViewById(R.id.case_item_physician);
+            TextView itemDateOfCreation = (TextView) v.findViewById(R.id.case_item_date_of_creation);
 
             ImageView itemNotificationIcon = (ImageView) v.findViewById(R.id.case_item_notification_icon);
+
+            TableRow rowPhysician = (TableRow) v.findViewById(R.id.case_item_physician_row);
 
 //            itemName.setText("" + caseItem.getName()); // TODO
             itemName.setText("Test Case - I experience severe pain"); // TODO remove
@@ -68,7 +73,7 @@ public class CaseListAdapter extends ArrayAdapter<Case> {
             itemStatus.setText(status.toString());
             // if the status is "active" or "closed" also show the physician
             if (status == CaseStatus.Active || status == CaseStatus.Closed) {
-                itemPhysician.setVisibility(View.VISIBLE);
+                rowPhysician.setVisibility(View.VISIBLE);
                 Physician physician = caseItem.getPhysician();
                 String physicianInfo = "";
 
@@ -81,14 +86,27 @@ public class CaseListAdapter extends ArrayAdapter<Case> {
 
             } else {
                 // hide textView
-                itemPhysician.setVisibility(View.INVISIBLE);
+                rowPhysician.setVisibility(View.GONE);
             }
+
+            Calendar dateOfCreation = caseItem.getCreated();
+            java.text.DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(context);
+            if (dateOfCreation != null) {
+                String date = dateFormat.format(dateOfCreation.getTime());
+                itemDateOfCreation.setText(date);
+            }
+
+            // TODO datums feld befüllen
 
 //            itemNotificationIcon.setImageResource(R.drawable.case_item_notification_icon_shape);
 
             if (status == CaseStatus.Closed) {
-                itemNotificationIcon.setImageResource(R.drawable.ic_done_black_48dp); // TODO remove
+                itemNotificationIcon.setImageResource(R.drawable.ic_action_lock_closed_black_18dp);
+            } else if (status == CaseStatus.WaitingForAccept) {
+
+                itemNotificationIcon.setImageResource(R.drawable.ic_action_tick_green_18dp);
             }
+
         }
 
 
