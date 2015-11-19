@@ -1,13 +1,8 @@
-package at.tuwien.telemedizin.dermadoc.desktop.gui.controls.notifications;
+package at.tuwien.telemedizin.dermadoc.desktop.gui.controls.handler;
 
 import at.tuwien.telemedizin.dermadoc.desktop.gui.Controller;
 import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.buttons.GCButton;
-import javafx.event.Event;
 import javafx.event.EventHandler;
-
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.Objects;
 
 public class OpenMainTabEventHandler implements EventHandler<javafx.event.ActionEvent> {
 

@@ -8,6 +8,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
+        classpath('org.controlsfx:controlsfx:8.40.9')
         project(':entities')
     }
 }
@@ -21,7 +22,7 @@ jar {
     version = '0.0.1-SNAPSHOT'
 
     manifest {
-        attributes 'Implementation-Title': 'dermadoc.entities',
+        attributes 'Implementation-Title': 'dermadoc.desktop',
                 'Implementation-Version': version,
                 'Main-Class': 'at.tuwien.telemedizin.dermadoc.desktop.gui.Main'
     }
@@ -38,12 +39,13 @@ sourceSets {
     main {
         resources {
             srcDirs = ["src/main/java"]
-            includes = ["**/*.fxml", "**/*.jpg", "**/*.png"]
+            includes = ["**/*.fxml", "**/*.jpg", "**/*.png", "**/*.css"]
         }
     }
 }
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.11'
+    compile 'org.controlsfx:controlsfx:8.40.10'
     compile project(':entities')
 }

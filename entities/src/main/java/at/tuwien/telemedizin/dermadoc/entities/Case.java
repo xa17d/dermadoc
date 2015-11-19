@@ -33,11 +33,4 @@ public class Case {
     private CaseStatus status;
     public CaseStatus getStatus() { return status; }
     public void setStatus(CaseStatus status) { this.status = status; }
-
-    DateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
-    @Override
-    public String toString() {
-        return "Patient " + patient.getId() + " - " + sdf.format(patient.getBirthTime().getTime()) + " " + patient.getGender() + "\n" +
-                "description";
-    }
 }
