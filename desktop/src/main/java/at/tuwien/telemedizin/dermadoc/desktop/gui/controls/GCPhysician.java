@@ -53,8 +53,10 @@ public class GCPhysician extends GridPane {
             }
         });
 
-        popOverNotification = new PopOver(new GCNotification(notificationList));
+        GCNotification gcNotification = new GCNotification(controller, notificationList);
+        popOverNotification = new PopOver(gcNotification);
         popOverNotification.setArrowLocation(PopOver.ArrowLocation.TOP_CENTER);
+        gcNotification.setPopOver(popOverNotification);
     }
 
     @FXML
@@ -70,7 +72,13 @@ public class GCPhysician extends GridPane {
 
     @FXML
     private void openNotificationPane() {
-        popOverNotification.show(btNotification);
+
+        if(popOverNotification.isShowing()) {
+            popOverNotification.hide();
+        }
+        else{
+            popOverNotification.show(btNotification);
+        }
     }
 
     @FXML

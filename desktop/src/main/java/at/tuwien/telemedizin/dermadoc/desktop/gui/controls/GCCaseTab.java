@@ -6,9 +6,11 @@ import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.casedata.edit.GCTextM
 import at.tuwien.telemedizin.dermadoc.entities.Case;
 import at.tuwien.telemedizin.dermadoc.entities.casedata.CaseData;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 
@@ -17,19 +19,22 @@ import java.io.IOException;
 /**
  * Created by Lucas on 14.11.2015.
  */
-public class GCMainTab extends Tab {
+public class GCCaseTab extends Tab {
 
     @FXML private VBox vbInput;
     @FXML private TitledPane tpPatientOverview;
 
     private Controller controller;
+    private TabPane tabPane;
     private Case aCase;
 
     private GCCaseDataList gcCaseDataList;
+    private ScrollPane spCaseData;
 
-    public GCMainTab(Controller controller, Case aCase) {
+    public GCCaseTab(Controller controller, TabPane tabPane, Case aCase) {
 
         this.controller = controller;
+        this.tabPane = tabPane;
         this.aCase = aCase;
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("gc_maintab.fxml"));
@@ -40,6 +45,8 @@ public class GCMainTab extends Tab {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        tabPane.getSelectionModel().select(this);
     }
 
     @FXML
@@ -57,12 +64,24 @@ public class GCMainTab extends Tab {
         gcCaseDataList = new GCCaseDataList(caseDataList);
         gcCaseDataList.mock();
 
-        ScrollPane spCaseData = new ScrollPane(gcCaseDataList);
+        spCaseData = new ScrollPane(gcCaseDataList);
         spCaseData.setFitToWidth(true);
         vbInput.getChildren().add(spCaseData);
 
         //TODO define style
         spCaseData.getStylesheets().add(getClass().getResource("chat.css").toExternalForm());
+
+        gcCaseDataList.getChildren().addListener(new ListChangeListener<Node>() {
+            @Override
+            public void onChanged(Change<? extends Node> c) {
+                scrollToBottom();
+            }
+        });
+    }
+
+    public void scrollToBottom() {
+        //TODO bugfix
+        spCaseData.setVvalue(1);
     }
 
     @FXML

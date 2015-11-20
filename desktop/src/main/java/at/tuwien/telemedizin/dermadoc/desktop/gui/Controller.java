@@ -146,7 +146,7 @@ public class Controller {
         mockCase.setStatus(CaseStatus.WaitingForAccept);
         //-----
 
-        mainTabList.add(new GCMainTab(this, mockCase));
+        mainTabList.add(new GCCaseTab(this, tpMain, mockCase));
     }
 
     public EventHandler<javafx.event.ActionEvent> getOpenMainTabHandler() {
