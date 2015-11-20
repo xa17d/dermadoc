@@ -14,7 +14,7 @@ public abstract class GCCaseData extends GridPane {
     public abstract boolean byPhysician();
 
     final public void initStyle() {
-        //this.getStyleClass().add(this.getCaseStyle());
+        this.getStyleClass().add(this.getCaseStyle());
         this.setAlignment(getPos());
     }
 

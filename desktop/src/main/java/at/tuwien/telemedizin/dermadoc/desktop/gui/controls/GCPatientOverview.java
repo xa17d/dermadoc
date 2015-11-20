@@ -12,7 +12,7 @@ import java.io.IOException;
 /**
  * Created by Lucas on 14.11.2015.
  */
-public class GCMainTabOverview extends GridPane {
+public class GCPatientOverview extends GridPane {
 
     @FXML private Label name;
     @FXML private Label gender;
@@ -20,7 +20,7 @@ public class GCMainTabOverview extends GridPane {
 
     private Patient patient;
 
-    public GCMainTabOverview(Patient patient) {
+    public GCPatientOverview(Patient patient) {
 
         this.patient = patient;
 

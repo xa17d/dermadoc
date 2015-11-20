@@ -2,6 +2,7 @@ package at.tuwien.telemedizin.dermadoc.desktop.gui.controls.casedata.edit;
 
 import at.tuwien.telemedizin.dermadoc.desktop.gui.Controller;
 import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.casedata.view.GCTextMessageView;
+import at.tuwien.telemedizin.dermadoc.desktop.service.CaseDataEventHandler;
 import at.tuwien.telemedizin.dermadoc.entities.Physician;
 import at.tuwien.telemedizin.dermadoc.entities.casedata.TextMessage;
 import javafx.fxml.FXML;
@@ -9,6 +10,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 import java.util.Calendar;
@@ -21,12 +23,11 @@ public class GCTextMessageEdit extends GCCaseDataEdit {
     @FXML private TextArea taTextMessage;
 
     private Controller controller;
-    private GridPane list;
+    private CaseDataEventHandler saveEventHandler;
 
-    public GCTextMessageEdit(Controller controller, GridPane list) {
+    public GCTextMessageEdit(Controller controller, VBox list) {
 
         this.controller = controller;
-        this.list = list;
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("gc_textmessage_edit.fxml"));
         loader.setRoot(this);
@@ -55,12 +56,10 @@ public class GCTextMessageEdit extends GCCaseDataEdit {
         //TODO get id and physician
         textMessage = new TextMessage(-1l, Calendar.getInstance(), new Physician(), taTextMessage.getText());
 
-        //change Edit-Component to View-Component
-        Parent p = this.getParent();
-        list.getChildren().remove(this);
-        int size = list.getChildren().size();
-        list.addRow(size, new GCTextMessageView(this));
-        int i = 0;
+        //notify list
+        if(saveEventHandler != null) {
+            saveEventHandler.onEvent(textMessage);
+        }
     }
 
     private TextMessage textMessage;
@@ -71,5 +70,10 @@ public class GCTextMessageEdit extends GCCaseDataEdit {
     @Override
     public boolean byPhysician() {
         return true;
+    }
+
+    @Override
+    public void setSaveEventHandler(CaseDataEventHandler caseDataEventHandler) {
+        saveEventHandler = caseDataEventHandler;
     }
 }
