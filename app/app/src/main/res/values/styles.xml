@@ -45,4 +45,9 @@
         <item name="android:ellipsize">marquee</item> <!-- does not work via styles.xml? -->
     </style>
 
+    <style name="NavDrawerTextStyle" parent="TextAppearance.AppCompat.Body2">
+        <item name="android:textSize">14sp</item>
+
+    </style>
+
 </resources>

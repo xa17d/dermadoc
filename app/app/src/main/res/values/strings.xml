@@ -14,6 +14,7 @@
     <string name="nav_my_account">My Account</string>
     <string name="nav_logout">Logout</string>
     <string name="nav_help">Help</string>
+    <string name="nav_case">Case</string>
 
     <!-- my cases list -->
     <string name="tab_header_current">CURRENT</string>
@@ -31,11 +32,16 @@
 
     <string name="msg_no_physician_info_found">No physician info found</string>
 
-    <string name="label_date_of_creation">Date of creation</string>
+    <string name="label_date_of_creation">Created</string>
     <string name="label_last_modified">Last modified</string>
     <string name="label_physician">Physician</string>
+    <string name="label_case_status">Status</string>
+    <string name="label_patient">Patient</string>
 
     <string name="nav_case_overview">Overview</string>
     <string name="nav_case_advice">Advice</string>
     <string name="nav_case_diagnoses">Diganoses</string>
+
+    <string name="msg_err_item_not_received">There was an error receiving the selected Item</string>
+    <string name="msg_err_no_status">no status</string>
 </resources>

@@ -21,6 +21,7 @@ import at.tuwien.telemedizin.dermadoc.app.activites_fragments.case_specific.Case
 import at.tuwien.telemedizin.dermadoc.app.adapters.CaseListAdapter;
 import at.tuwien.telemedizin.dermadoc.app.comparators.CaseComparator;
 import at.tuwien.telemedizin.dermadoc.app.comparators.CaseSortCategory;
+import at.tuwien.telemedizin.dermadoc.app.entities.CaseEntity;
 import at.tuwien.telemedizin.dermadoc.entities.Case;
 
 /**
@@ -98,8 +99,10 @@ public class CaseListFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // start the CaseActivity and open the selected case
+
                 Intent intent = new Intent(getContext(), CaseActivity.class);
-                // put extra Case TODO
+
+                intent.putExtra(CaseEntity.INTENT_KEY, new CaseEntity(adapter.getItem(position)));
                 startActivity(intent);
             }
         });

@@ -12,4 +12,6 @@
     <color name="tab_text">#c7ceff</color>
     <color name="tab_text_act">#ffffff</color>
     <color name="case_list_header_text">#000000</color>
+
+    <color name="nav_drawer_text">#ffffff</color>
 </resources>

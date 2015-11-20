@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -25,14 +26,15 @@ import at.tuwien.telemedizin.dermadoc.app.adapters.MyCasesPagerEnum;
 import at.tuwien.telemedizin.dermadoc.app.comparators.CaseSortCategory;
 import at.tuwien.telemedizin.dermadoc.entities.Case;
 import at.tuwien.telemedizin.dermadoc.entities.CaseStatus;
+import at.tuwien.telemedizin.dermadoc.entities.Gender;
+import at.tuwien.telemedizin.dermadoc.entities.GeoLocation;
+import at.tuwien.telemedizin.dermadoc.entities.Patient;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, CaseListFragment.OnCaseListEventListener{
 
     private List<Case> currentCaseList;
     private List<Case> closedCaseList;
-
-    public Case publicCaseForText; // TODO remove
 
     private CaseSortCategory caseListSortCategory; // set when a sort is executed
 
@@ -85,29 +87,40 @@ public class MainActivity extends AppCompatActivity
      */
     private void loadCaseLists() {
         // TODO remove START - for testing purpose ---------------
+
+        Patient patient = new Patient();
+        patient.setId(1l);
+        patient.setMail("mail@mail.at");
+        patient.setPassword("no");
+        patient.setName("Peter Hans Gruber dings Norbert");
+        patient.setLocation(new GeoLocation("hier", 2.0, 2.0));
+
+        patient.setSvnr("1212");
+        patient.setGender(Gender.Female);
+        patient.setBirthTime(Calendar.getInstance());
+
+
         long startNumber = 100000;
 
         currentCaseList = new ArrayList<Case>();
-        Case testCase1 = new Case(startNumber+2045, null, new GregorianCalendar());
+        Case testCase1 = new Case(startNumber+2045, patient, new GregorianCalendar());
         testCase1.setStatus(CaseStatus.Active);
         currentCaseList.add(testCase1);
-        Case testCase2 = new Case(startNumber+451, null, new GregorianCalendar());
+        Case testCase2 = new Case(startNumber+451, patient, new GregorianCalendar());
         testCase2.setStatus(CaseStatus.LookingForPhysician);
         currentCaseList.add(testCase2);
         for (int i = 0; i < 5; i++) {
-            Case testCaseA = new Case((startNumber+10 + i), null, new GregorianCalendar());
+            Case testCaseA = new Case((startNumber+10 + i), patient, new GregorianCalendar());
             testCaseA.setStatus(CaseStatus.values()[i%3]); // 3 because 4 would be closed
             currentCaseList.add(testCaseA);
         }
 
-        publicCaseForText = testCase1;
-
         closedCaseList = new ArrayList<Case>();
-        Case testCase3 = new Case(startNumber+4345, null, new GregorianCalendar());
+        Case testCase3 = new Case(startNumber+4345, patient, new GregorianCalendar());
         testCase3.setStatus(CaseStatus.Closed);
         closedCaseList.add(testCase3);
         for (int i = 0; i < 5; i++) {
-            Case testCaseB = new Case((startNumber+7645 + i), null, new GregorianCalendar());
+            Case testCaseB = new Case((startNumber+7645 + i), patient, new GregorianCalendar());
             testCaseB.setStatus(CaseStatus.values()[i%4]);
             closedCaseList.add(testCaseB);
         }
