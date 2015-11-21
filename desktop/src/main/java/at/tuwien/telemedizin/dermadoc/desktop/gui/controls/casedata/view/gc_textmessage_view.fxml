@@ -6,10 +6,10 @@
 
 <fx:root type="javafx.scene.layout.GridPane" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8">
     <columnConstraints>
-        <ColumnConstraints hgrow="ALWAYS" maxWidth="400" />
+        <ColumnConstraints hgrow="ALWAYS" minWidth="100" maxWidth="400" />
     </columnConstraints>
     <rowConstraints>
-        <RowConstraints maxHeight="-Infinity" minHeight="40.0" vgrow="ALWAYS" />
+        <RowConstraints minHeight="40.0" vgrow="ALWAYS" />
     </rowConstraints>
     <children>
         <Label fx:id="lbMessage" wrapText="true" prefWidth="400.0">

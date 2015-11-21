@@ -24,6 +24,9 @@ public class GCTextMessageView extends GCCaseDataView {
         if(caseData instanceof TextMessage) {
             this.message = (TextMessage) caseData;
         }
+        else {
+            throw new IllegalArgumentException("case data must be a text message!");
+        }
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("gc_textmessage_view.fxml"));
         loader.setRoot(this);
