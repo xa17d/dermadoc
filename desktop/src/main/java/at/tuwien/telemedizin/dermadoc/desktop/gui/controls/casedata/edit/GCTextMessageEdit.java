@@ -1,13 +1,11 @@
 package at.tuwien.telemedizin.dermadoc.desktop.gui.controls.casedata.edit;
 
 import at.tuwien.telemedizin.dermadoc.desktop.gui.Controller;
-import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.casedata.view.GCTextMessageView;
 import at.tuwien.telemedizin.dermadoc.desktop.service.CaseDataEventHandler;
 import at.tuwien.telemedizin.dermadoc.entities.Physician;
 import at.tuwien.telemedizin.dermadoc.entities.casedata.TextMessage;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
@@ -18,8 +16,9 @@ import java.util.Calendar;
 /**
  * Created by Lucas on 17.11.2015.
  */
-public class GCTextMessageEdit extends GCCaseDataEdit {
+public class GCTextMessageEdit extends AGCCaseDataEdit {
 
+    @FXML private GridPane gpCaseData;
     @FXML private TextArea taTextMessage;
 
     private Controller controller;
@@ -42,7 +41,7 @@ public class GCTextMessageEdit extends GCCaseDataEdit {
     @FXML
     private void initialize() {
 
-        this.initStyle();
+        this.initStyle(gpCaseData);
 
         //MOCK
         taTextMessage.setText("here the doctor can write his new Text Message");

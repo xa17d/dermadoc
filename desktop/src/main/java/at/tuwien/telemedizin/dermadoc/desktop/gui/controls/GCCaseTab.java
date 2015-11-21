@@ -2,7 +2,7 @@ package at.tuwien.telemedizin.dermadoc.desktop.gui.controls;
 
 import at.tuwien.telemedizin.dermadoc.desktop.gui.Controller;
 import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.casedata.GCCaseDataList;
-import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.casedata.edit.GCCaseDataEdit;
+import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.casedata.edit.AGCCaseDataEdit;
 import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.casedata.edit.GCTextMessageEdit;
 import at.tuwien.telemedizin.dermadoc.entities.Case;
 import at.tuwien.telemedizin.dermadoc.entities.casedata.CaseData;
@@ -119,7 +119,7 @@ public class GCCaseTab extends Tab {
         FilteredList<Node> filteredList = gcCaseDataList.getChildren().filtered(new Predicate<Node>() {
             @Override
             public boolean test(Node node) {
-                return node instanceof GCCaseDataEdit;
+                return node instanceof AGCCaseDataEdit;
             }
         });
         gcCaseDataList.getChildren().removeAll(filteredList);

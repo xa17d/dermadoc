@@ -1,6 +1,6 @@
 package at.tuwien.telemedizin.dermadoc.desktop.gui.controls.casedata;
 
-import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.casedata.edit.GCCaseDataEdit;
+import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.casedata.edit.AGCCaseDataEdit;
 import at.tuwien.telemedizin.dermadoc.desktop.service.CaseDataEventHandler;
 import at.tuwien.telemedizin.dermadoc.entities.Patient;
 import at.tuwien.telemedizin.dermadoc.entities.Physician;
@@ -8,7 +8,6 @@ import at.tuwien.telemedizin.dermadoc.entities.casedata.CaseData;
 import at.tuwien.telemedizin.dermadoc.entities.casedata.TextMessage;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.util.Calendar;
@@ -33,7 +32,7 @@ public class GCCaseDataList extends VBox {
 
                 while(c.next()) {
                     for (CaseData cd : c.getAddedSubList()) {
-                        GCCaseData gcCaseData = gcFactory.getGC(cd);
+                        AGCCaseData gcCaseData = gcFactory.getGC(cd);
                         cgList.getChildren().add(gcCaseData);
                     }
 
@@ -47,7 +46,7 @@ public class GCCaseDataList extends VBox {
         this.setFillWidth(true);
     }
 
-    public void add(GCCaseDataEdit editComponent) {
+    public void add(AGCCaseDataEdit editComponent) {
 
         GCCaseDataList gcList = this;
         editComponent.setSaveEventHandler(new CaseDataEventHandler() {

@@ -1,8 +1,6 @@
 package at.tuwien.telemedizin.dermadoc.desktop.gui.controls.casedata;
 
-import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.casedata.edit.GCCaseDataEdit;
-import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.casedata.edit.GCTextMessageEdit;
-import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.casedata.view.GCCaseDataView;
+import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.casedata.view.AGCCaseDataView;
 import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.casedata.view.GCTextMessageView;
 import at.tuwien.telemedizin.dermadoc.entities.casedata.CaseData;
 import at.tuwien.telemedizin.dermadoc.entities.casedata.TextMessage;
@@ -16,7 +14,7 @@ import java.util.Map;
  */
 public class GCCaseDataFactory {
 
-    private static Map<Class<? extends CaseData>, Class<? extends GCCaseDataView>> mappingView = new HashMap<>();
+    private static Map<Class<? extends CaseData>, Class<? extends AGCCaseDataView>> mappingView = new HashMap<>();
 
     protected GCCaseDataFactory() {
 
@@ -24,10 +22,10 @@ public class GCCaseDataFactory {
         //TODO add other casedataviews
     }
 
-    protected GCCaseData getGC(CaseData caseData) {
+    protected AGCCaseData getGC(CaseData caseData) {
 
         //TODO handle exceptions
-        GCCaseData result = null;
+        AGCCaseData result = null;
         try {
             result = mappingView.get(caseData.getClass()).getConstructor(CaseData.class).newInstance(caseData);
         } catch (NoSuchMethodException e) {

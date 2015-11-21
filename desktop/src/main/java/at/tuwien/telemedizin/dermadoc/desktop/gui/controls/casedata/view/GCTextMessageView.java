@@ -7,14 +7,16 @@ import at.tuwien.telemedizin.dermadoc.entities.casedata.TextMessage;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
+import javafx.scene.layout.GridPane;
 
 import java.io.IOException;
 
 /**
  * Created by Lucas on 18.11.2015.
  */
-public class GCTextMessageView extends GCCaseDataView {
+public class GCTextMessageView extends AGCCaseDataView {
 
+    @FXML private GridPane gpCaseData;
     @FXML private Label lbMessage;
 
     private TextMessage message;
@@ -55,7 +57,7 @@ public class GCTextMessageView extends GCCaseDataView {
     @FXML
     private void initialize() {
 
-        this.initStyle();
+        this.initStyle(gpCaseData);
         lbMessage.setText(message.getMessage());
     }
 
