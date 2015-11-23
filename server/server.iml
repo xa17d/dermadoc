@@ -55,6 +55,17 @@
     <orderEntry type="library" scope="TEST" name="Gradle: org.springframework:spring-test:4.1.8.RELEASE" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.objenesis:objenesis:2.1" level="project" />
     <orderEntry type="module-library">
+      <library name="Gradle: org.springframework:spring-jdbc:4.1.8.RELEASE">
+        <CLASSES>
+          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-jdbc/4.1.8.RELEASE/d37d078c4e25ccdd482e96ca78fd5c7faa3bfeff/spring-jdbc-4.1.8.RELEASE.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-jdbc/4.1.8.RELEASE/6a135386e2bc0afe02f011e9d3e74152f521110e/spring-jdbc-4.1.8.RELEASE-sources.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
       <library name="Gradle: org.springframework.boot:spring-boot-starter-data-jpa:1.2.7.RELEASE">
         <CLASSES>
           <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-starter-data-jpa/1.2.7.RELEASE/9b88497fe93ca81303353023e863e305832d04ff/spring-boot-starter-data-jpa-1.2.7.RELEASE.jar!/" />
@@ -66,13 +77,13 @@
       </library>
     </orderEntry>
     <orderEntry type="module-library">
-      <library name="Gradle: org.springframework:spring-jdbc:4.1.8.RELEASE">
+      <library name="Gradle: com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.4.6">
         <CLASSES>
-          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-jdbc/4.1.8.RELEASE/d37d078c4e25ccdd482e96ca78fd5c7faa3bfeff/spring-jdbc-4.1.8.RELEASE.jar!/" />
+          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.dataformat/jackson-dataformat-xml/2.4.6/6a5ad4327fac04f993a0b2943dbc94a6ee7e0952/jackson-dataformat-xml-2.4.6.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES>
-          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-jdbc/4.1.8.RELEASE/6a135386e2bc0afe02f011e9d3e74152f521110e/spring-jdbc-4.1.8.RELEASE-sources.jar!/" />
+          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.dataformat/jackson-dataformat-xml/2.4.6/3f9e5886b2c92353476c3fb0b338ec0a6619a43/jackson-dataformat-xml-2.4.6-sources.jar!/" />
         </SOURCES>
       </library>
     </orderEntry>
@@ -88,28 +99,6 @@
       </library>
     </orderEntry>
     <orderEntry type="module-library">
-      <library name="Gradle: org.springframework:spring-tx:4.1.8.RELEASE">
-        <CLASSES>
-          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-tx/4.1.8.RELEASE/e4dd537d67f92ee7cb82d5cfd9dd86269cc78481/spring-tx-4.1.8.RELEASE.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES>
-          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-tx/4.1.8.RELEASE/5d9f895e04ffd2edab00ea24f559044c1da2ced3/spring-tx-4.1.8.RELEASE-sources.jar!/" />
-        </SOURCES>
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library name="Gradle: org.springframework.boot:spring-boot-starter-aop:1.2.7.RELEASE">
-        <CLASSES>
-          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-starter-aop/1.2.7.RELEASE/aeaf809828518baca542c61ffff813276a078999/spring-boot-starter-aop-1.2.7.RELEASE.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES>
-          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-starter-aop/1.2.7.RELEASE/f0073b1f12843f991e2be125e7b4788d67caa1de/spring-boot-starter-aop-1.2.7.RELEASE-sources.jar!/" />
-        </SOURCES>
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
       <library name="Gradle: org.apache.tomcat:tomcat-juli:8.0.28">
         <CLASSES>
           <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-juli/8.0.28/924035c8550867c0ae1f16b3e036be8fd2e3424b/tomcat-juli-8.0.28.jar!/" />
@@ -117,6 +106,17 @@
         <JAVADOC />
         <SOURCES>
           <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-juli/8.0.28/b97f836310bac1b0cfd0af02f95f14a114e3cc9b/tomcat-juli-8.0.28-sources.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Gradle: org.springframework:spring-tx:4.1.8.RELEASE">
+        <CLASSES>
+          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-tx/4.1.8.RELEASE/e4dd537d67f92ee7cb82d5cfd9dd86269cc78481/spring-tx-4.1.8.RELEASE.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-tx/4.1.8.RELEASE/5d9f895e04ffd2edab00ea24f559044c1da2ced3/spring-tx-4.1.8.RELEASE-sources.jar!/" />
         </SOURCES>
       </library>
     </orderEntry>
@@ -148,6 +148,17 @@
         <JAVADOC />
         <SOURCES>
           <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/xml-apis/xml-apis/1.0.b2/d8525661c5a0a05702fa41873d250d135031ec25/xml-apis-1.0.b2-sources.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Gradle: org.springframework.boot:spring-boot-starter-aop:1.2.7.RELEASE">
+        <CLASSES>
+          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-starter-aop/1.2.7.RELEASE/aeaf809828518baca542c61ffff813276a078999/spring-boot-starter-aop-1.2.7.RELEASE.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-starter-aop/1.2.7.RELEASE/f0073b1f12843f991e2be125e7b4788d67caa1de/spring-boot-starter-aop-1.2.7.RELEASE-sources.jar!/" />
         </SOURCES>
       </library>
     </orderEntry>
@@ -291,6 +302,28 @@
         <JAVADOC />
         <SOURCES>
           <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework.data/spring-data-commons/1.9.4.RELEASE/b906dfa890c377c6492f8a826903939b16ba1c01/spring-data-commons-1.9.4.RELEASE-sources.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Gradle: com.fasterxml.jackson.module:jackson-module-jaxb-annotations:2.4.6">
+        <CLASSES>
+          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.module/jackson-module-jaxb-annotations/2.4.6/3f9e547c605eddcd61ab25c5ed1016b24374972a/jackson-module-jaxb-annotations-2.4.6.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.module/jackson-module-jaxb-annotations/2.4.6/d62ce5d933878a2be11c8594fcff021c7f893572/jackson-module-jaxb-annotations-2.4.6-sources.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Gradle: org.codehaus.woodstox:stax2-api:3.1.4">
+        <CLASSES>
+          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.codehaus.woodstox/stax2-api/3.1.4/ac19014b1e6a7c08aad07fe114af792676b685b7/stax2-api-3.1.4.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.codehaus.woodstox/stax2-api/3.1.4/b40604d61c01cc081a4a7bdfc562aa9847ee8857/stax2-api-3.1.4-sources.jar!/" />
         </SOURCES>
       </library>
     </orderEntry>
