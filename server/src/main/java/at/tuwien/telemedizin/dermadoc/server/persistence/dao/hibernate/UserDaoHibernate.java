@@ -14,6 +14,7 @@ import java.util.List;
 /**
  * Created by daniel on 17.11.2015.
  */
+/*
 @Repository
 public class UserDaoHibernate implements UserDao {
 
@@ -46,3 +47,4 @@ public class UserDaoHibernate implements UserDao {
         }
     }
 }
+*/

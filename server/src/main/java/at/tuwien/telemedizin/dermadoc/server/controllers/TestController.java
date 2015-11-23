@@ -4,8 +4,8 @@ import at.tuwien.telemedizin.dermadoc.entities.Gender;
 import at.tuwien.telemedizin.dermadoc.entities.GeoLocation;
 import at.tuwien.telemedizin.dermadoc.entities.Patient;
 import at.tuwien.telemedizin.dermadoc.entities.User;
+import at.tuwien.telemedizin.dermadoc.server.persistence.dao.EntityNotFoundException;
 import at.tuwien.telemedizin.dermadoc.server.persistence.dao.UserDao;
-import at.tuwien.telemedizin.dermadoc.server.persistence.dao.hibernate.UserDaoHibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,12 +40,12 @@ public class TestController {
     }
 
     @RequestMapping(value = "/testdb")
-    public User testDb() {
+    public User testDb() throws EntityNotFoundException {
 
         return userDao.getUserById(0);
 
     }
 
     @Autowired
-    private UserDaoHibernate userDao;
+    private UserDao userDao;
 }
