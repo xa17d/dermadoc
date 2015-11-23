@@ -1,4 +1,4 @@
-package at.tuwien.telemedizin.dermadoc.app.activites_fragments.case_specific;
+package at.tuwien.telemedizin.dermadoc.app.activities_fragments.case_specific;
 
 import at.tuwien.telemedizin.dermadoc.entities.Case;
 

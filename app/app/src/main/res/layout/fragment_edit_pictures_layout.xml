@@ -1,0 +1,92 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context="at.tuwien.telemedizin.dermadoc.app.activities_fragments.create_case.EditSymptomsFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/edit_pictures_help_icon_view"
+                android:src="@drawable/ic_action_help_holo_light_18dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp" />
+
+            <TextView android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/edit_pictures_section_header"
+                android:layout_alignParentLeft="true"
+                android:layout_toLeftOf="@id/edit_pictures_help_icon_view"
+                android:layout_alignParentTop="true"
+                android:text="@string/label_edit_pictures_section_header_description" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/hint_edit_pictures_description"
+                android:layout_below="@+id/edit_pictures_section_header"
+                android:layout_alignParentLeft="true"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:padding="5dp"
+                android:background="@drawable/hint_background"
+                android:textAppearance="@style/HintText"
+                android:id="@+id/edit_pictures_help_hint_text_view"
+                android:visibility="gone"/>
+
+        </RelativeLayout>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/label_add_new_picture"
+            android:id="@+id/add_picture_button"
+            />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/image_view1" />
+
+        <!--<android.support.design.widget.TextInputLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content">-->
+
+            <!--<EditText-->
+                <!--android:id="@+id/edit_symptoms_edit_text"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:inputType="textMultiLine"-->
+                <!--android:hint="@string/label_edit_symptoms_field"/>-->
+        <!--</android.support.design.widget.TextInputLayout>-->
+
+        <!--<TextView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="THE ENTERED SYMPTOMS"-->
+            <!--android:id="@+id/edit_symptoms_text_view"-->
+            <!--android:visibility="gone"/>-->
+    </LinearLayout>
+
+
+
+
+</LinearLayout>

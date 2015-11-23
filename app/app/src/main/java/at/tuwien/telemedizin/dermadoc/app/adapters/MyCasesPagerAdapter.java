@@ -5,7 +5,7 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import at.tuwien.telemedizin.dermadoc.app.activites_fragments.CaseListFragment;
+import at.tuwien.telemedizin.dermadoc.app.activities_fragments.CaseListFragment;
 
 /**
  * Created by FAUser on 17.11.2015.
@@ -32,10 +32,10 @@ public class MyCasesPagerAdapter extends FragmentPagerAdapter {
         CaseListFragment caseListFragment;
 
         // old list or current list
-        if (position == 0) {
-            caseListFragment = CaseListFragment.newInstance("CURRENT", MyCasesPagerEnum.CURRENT.getKey()); // TODO set List
+        if (position == MyCasesPagerEnum.CURRENT.getKey()) {
+            caseListFragment = CaseListFragment.newInstance(MyCasesPagerEnum.CURRENT.getKey()); // TODO set List
         } else {
-            caseListFragment = CaseListFragment.newInstance("OLD", MyCasesPagerEnum.OLD.getKey()); // TODO set List
+            caseListFragment = CaseListFragment.newInstance(MyCasesPagerEnum.OLD.getKey()); // TODO set List
         }
 
         return caseListFragment;
@@ -46,33 +46,5 @@ public class MyCasesPagerAdapter extends FragmentPagerAdapter {
         return context.getString(MyCasesPagerEnum.values()[position].getTitleResId());
     }
 
-
-//    public MyCasesPagerAdapter(Context context) {
-//        this.context = context;
-//    }
-//
-//    @Override
-//    public Object instantiateItem(ViewGroup collection, int position) {
-//        CustomPagerEnum customPagerEnum = CustomPagerEnum.values()[position];
-//        LayoutInflater inflater = LayoutInflater.from(context);
-//        ViewGroup layout = (ViewGroup) inflater.inflate(customPagerEnum.getLayoutResId(), collection, false);
-//        collection.addView(layout);
-//        return layout;
-//    }
-//
-//    @Override
-//    public int getCount() {
-//        return CustomPagerEnum.values().length;
-//    }
-//
-//    @Override
-//    public boolean isViewFromObject(View view, Object object) {
-//        return view == object;
-//    }
-//
-//    @Override
-//    public void destroyItem(ViewGroup collection, int position, Object view) {
-//        collection.removeView((View) view);
-//    }
 
 }

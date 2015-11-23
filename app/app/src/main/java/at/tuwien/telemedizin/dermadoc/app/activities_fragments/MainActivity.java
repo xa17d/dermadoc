@@ -1,8 +1,8 @@
-package at.tuwien.telemedizin.dermadoc.app.activites_fragments;
+package at.tuwien.telemedizin.dermadoc.app.activities_fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
@@ -22,6 +22,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import at.tuwien.telemedizin.dermadoc.app.R;
+import at.tuwien.telemedizin.dermadoc.app.activities_fragments.create_case.NewCaseActivity;
 import at.tuwien.telemedizin.dermadoc.app.adapters.MyCasesPagerEnum;
 import at.tuwien.telemedizin.dermadoc.app.comparators.CaseSortCategory;
 import at.tuwien.telemedizin.dermadoc.entities.Case;
@@ -52,8 +53,12 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+
+                // launch activity to create a new case
+                Intent intent = new Intent(MainActivity.this, NewCaseActivity.class);
+                startActivity(intent);
             }
         });
 

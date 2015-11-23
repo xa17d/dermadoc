@@ -1,4 +1,4 @@
-package at.tuwien.telemedizin.dermadoc.app.activites_fragments;
+package at.tuwien.telemedizin.dermadoc.app.activities_fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

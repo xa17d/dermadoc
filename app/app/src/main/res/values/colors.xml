@@ -14,4 +14,8 @@
     <color name="case_list_header_text">#000000</color>
 
     <color name="nav_drawer_text">#ffffff</color>
+
+    <color name="hint_text_color">#7b7371</color>
+
+    <color name="spinner_background_color">#e4dfde</color>
 </resources>

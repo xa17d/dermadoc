@@ -1,4 +1,4 @@
-package at.tuwien.telemedizin.dermadoc.app.activites_fragments.case_specific;
+package at.tuwien.telemedizin.dermadoc.app.activities_fragments.case_specific;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,7 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import at.tuwien.telemedizin.dermadoc.app.R;
-import at.tuwien.telemedizin.dermadoc.app.activites_fragments.DummyContentFragment;
+import at.tuwien.telemedizin.dermadoc.app.activities_fragments.DummyContentFragment;
 import at.tuwien.telemedizin.dermadoc.app.entities.CaseEntity;
 import at.tuwien.telemedizin.dermadoc.app.helper.FormatHelper;
 import at.tuwien.telemedizin.dermadoc.entities.Case;
@@ -105,6 +105,8 @@ public class CaseActivity extends AppCompatActivity
 
     }
 
+
+
     /**
      * fills the header of the navigation-drawer with data
      */
@@ -175,19 +177,19 @@ public class CaseActivity extends AppCompatActivity
     }
 
 
-
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         Fragment fragment = null;
         String title = "" + caseItem.getId(); // TODO change to name or something
         CharSequence oldTitle = getTitle();
 
         if (id == R.id.nav_case_overview) {
-            fragment = DummyContentFragment.newInstance("Overview"); // TODO replace with real fragment/function
+            fragment = CaseOverviewFragment.newInstance(); //
             title = getString(R.string.nav_case_overview);
 
         } else if (id == R.id.nav_case_advice) {
@@ -202,7 +204,8 @@ public class CaseActivity extends AppCompatActivity
             title = "ETC";
         } else if (id == R.id.nav_back_to_main) {
             // finish this activity
-            this.finish();
+            CaseActivity.this.finish();
+            return true;
         }
         // logout does not return a fragment != null
         if (fragment != null) {
@@ -212,7 +215,7 @@ public class CaseActivity extends AppCompatActivity
         }
 
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
         drawer.closeDrawer(GravityCompat.START);
 
         setTitle(title);

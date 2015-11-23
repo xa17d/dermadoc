@@ -1,6 +1,5 @@
-package at.tuwien.telemedizin.dermadoc.app.activites_fragments;
+package at.tuwien.telemedizin.dermadoc.app.activities_fragments;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,12 +11,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import java.util.List;
 
 import at.tuwien.telemedizin.dermadoc.app.R;
-import at.tuwien.telemedizin.dermadoc.app.activites_fragments.case_specific.CaseActivity;
+import at.tuwien.telemedizin.dermadoc.app.activities_fragments.case_specific.CaseActivity;
 import at.tuwien.telemedizin.dermadoc.app.adapters.CaseListAdapter;
 import at.tuwien.telemedizin.dermadoc.app.comparators.CaseComparator;
 import at.tuwien.telemedizin.dermadoc.app.comparators.CaseSortCategory;
@@ -33,7 +31,6 @@ public class CaseListFragment extends Fragment {
 
     public static final String LOG_TAG = CaseListFragment.class.getSimpleName();
 
-    private static final String ARG_PARAM1 = "param1"; // TODO remove
     String param1;
 
     private static final String ARG_LIST_KEY = "listKey";
@@ -51,14 +48,12 @@ public class CaseListFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 is a param for testing purpose // TODO remove
      * @return A new instance of fragment CaseListFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static CaseListFragment newInstance(String param1, long listKey) {
+    public static CaseListFragment newInstance(long listKey) {
         CaseListFragment fragment = new CaseListFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
         args.putLong(ARG_LIST_KEY, listKey);
         fragment.setArguments(args);
         return fragment;
@@ -75,7 +70,6 @@ public class CaseListFragment extends Fragment {
         setHasOptionsMenu(true);
 
         if (getArguments() != null) {
-            param1 = getArguments().getString(ARG_PARAM1);
             listKey = getArguments().getLong(ARG_LIST_KEY);
         }
 

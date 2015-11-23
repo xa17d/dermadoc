@@ -1,4 +1,4 @@
-package at.tuwien.telemedizin.dermadoc.app.activites_fragments.case_specific;
+package at.tuwien.telemedizin.dermadoc.app.activities_fragments.case_specific;
 
 
 import android.content.Context;
@@ -8,8 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
-import java.util.Calendar;
 
 import at.tuwien.telemedizin.dermadoc.app.R;
 import at.tuwien.telemedizin.dermadoc.app.helper.FormatHelper;

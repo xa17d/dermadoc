@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="at.tuwien.telemedizin.dermadoc.app.activites_fragments.case_specific.CaseOverviewFragment">
+    tools:context="at.tuwien.telemedizin.dermadoc.app.activities_fragments.case_specific.CaseOverviewFragment">
 
     <include layout="@layout/case_overview_info_table"
         android:layout_width="match_parent"

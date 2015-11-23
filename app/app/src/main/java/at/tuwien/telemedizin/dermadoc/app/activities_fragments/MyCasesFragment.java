@@ -1,4 +1,4 @@
-package at.tuwien.telemedizin.dermadoc.app.activites_fragments;
+package at.tuwien.telemedizin.dermadoc.app.activities_fragments;
 
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -8,14 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import at.tuwien.telemedizin.dermadoc.app.R;
 import at.tuwien.telemedizin.dermadoc.app.adapters.MyCasesPagerAdapter;
-import at.tuwien.telemedizin.dermadoc.app.comparators.CaseSortCategory;
-import at.tuwien.telemedizin.dermadoc.entities.Case;
-import at.tuwien.telemedizin.dermadoc.entities.CaseStatus;
 
 
 /**
