@@ -5,16 +5,16 @@ package at.tuwien.telemedizin.dermadoc.entities.rest;
  */
 public class AuthenticationToken {
     public AuthenticationToken() {}
-    public AuthenticationToken(String mail, String password) {
-        setMail(mail);
-        setPassword(password);
+    public AuthenticationToken(String type, String token) {
+        setType(type);
+        setToken(token);
     }
 
-    private String mail;
-    public String getMail() { return mail; }
-    public void setMail(String mail) { this.mail = mail; }
+    private String type;
+    public String getType() { return type; }
+    public void setType(String type) { this.type = type; }
 
-    private String password;
-    public String getPassword() { return password; }
-    public void setPassword(String password) { this.password = password; }
+    private String token;
+    public String getToken() { return token; }
+    public void setToken(String token) { this.token = token; }
 }

@@ -34,7 +34,7 @@ public class UserController {
             throw new AuthenticationInvalidException();
         }
 
-        if (u.getPassword() == authenticationData.getPassword()) {
+        if (u.getPassword().equals(authenticationData.getPassword())) {
             return new AuthenticationToken("uid", Long.toString(u.getId())); // TODO: create session and token
         } else {
             // Password invalid

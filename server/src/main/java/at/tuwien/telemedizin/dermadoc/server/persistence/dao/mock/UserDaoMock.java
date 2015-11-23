@@ -55,7 +55,7 @@ public class UserDaoMock implements UserDao {
     @Override
     public User getUserByMail(String mail) throws EntityNotFoundException {
         for (User u:users) {
-            if (u.getMail().toLowerCase() == mail.toLowerCase()) {
+            if (u.getMail().toLowerCase().equals(mail.toLowerCase())) {
                 return  u;
             }
         }
