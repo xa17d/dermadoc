@@ -1,7 +1,5 @@
 package at.tuwien.telemedizin.dermadoc.desktop.service;
 
-import at.tuwien.telemedizin.dermadoc.entities.Token;
-
 /**
  * interface to access service layer
  * and login and logout the physician
