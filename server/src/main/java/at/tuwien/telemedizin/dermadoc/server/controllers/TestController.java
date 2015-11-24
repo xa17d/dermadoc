@@ -4,7 +4,6 @@ import at.tuwien.telemedizin.dermadoc.entities.Gender;
 import at.tuwien.telemedizin.dermadoc.entities.GeoLocation;
 import at.tuwien.telemedizin.dermadoc.entities.Patient;
 import at.tuwien.telemedizin.dermadoc.entities.User;
-import at.tuwien.telemedizin.dermadoc.entities.casedata.AnamnesisQuestion;
 import at.tuwien.telemedizin.dermadoc.server.persistence.dao.EntityNotFoundException;
 import at.tuwien.telemedizin.dermadoc.server.persistence.dao.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,14 +40,10 @@ public class TestController {
     }
 
     @RequestMapping(value = "/testdb")
-    public AnamnesisQuestion<String> testDb() throws EntityNotFoundException {
+    public User testDb() throws EntityNotFoundException {
 
-        //throw new EntityNotFoundException("blub");
+        throw new EntityNotFoundException("blub");
         //return userDao.getUserById(0);
-        AnamnesisQuestion<String> q = new AnamnesisQuestion<>();
-        q.setQuestion("blabla?");
-        q.setAnswer("answer");
-        return q;
 
     }
 
