@@ -3,7 +3,6 @@ package at.tuwien.telemedizin.dermadoc.desktop.gui.controls.buttons;
 import at.tuwien.telemedizin.dermadoc.entities.Case;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.control.Button;
 
 public class GCButtonOpen extends GCButton {
 

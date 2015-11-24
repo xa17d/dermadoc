@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<fx:root type="javafx.scene.layout.HBox" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8">
+    <GridPane fx:id="gpCaseData">
+        <columnConstraints>
+            <ColumnConstraints hgrow="ALWAYS" minWidth="100" maxWidth="400" />
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints minHeight="40.0" vgrow="ALWAYS" />
+        </rowConstraints>
+        <children>
+            <Label fx:id="lbMessage" wrapText="true" prefWidth="400.0">
+                <GridPane.margin>
+                    <Insets bottom="10.0" left="10.0" right="10.0" top="20.0" />
+                </GridPane.margin>
+            </Label>
+        </children>
+    </GridPane>
+</fx:root>

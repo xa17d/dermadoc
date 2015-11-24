@@ -1,5 +1,6 @@
 package at.tuwien.telemedizin.dermadoc.desktop.gui.controls;
 
+import at.tuwien.telemedizin.dermadoc.desktop.util.UtilFormat;
 import at.tuwien.telemedizin.dermadoc.entities.Patient;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -7,22 +8,19 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 
 /**
  * Created by Lucas on 14.11.2015.
  */
-public class GCMainTabOverview extends GridPane {
+public class GCPatientOverview extends GridPane {
 
     @FXML private Label name;
     @FXML private Label gender;
     @FXML private Label svnr;
 
     private Patient patient;
-    private DateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
 
-    public GCMainTabOverview(Patient patient) {
+    public GCPatientOverview(Patient patient) {
 
         this.patient = patient;
 
@@ -41,6 +39,6 @@ public class GCMainTabOverview extends GridPane {
 
         name.setText(patient.getName());
         gender.setText(patient.getGender().toString());
-        svnr.setText(patient.getSvnr() + " " + sdf.format(patient.getBirthTime().getTime()));
+        svnr.setText(patient.getSvnr() + " " + UtilFormat.formatDate(patient.getBirthTime().getTime()));
     }
 }

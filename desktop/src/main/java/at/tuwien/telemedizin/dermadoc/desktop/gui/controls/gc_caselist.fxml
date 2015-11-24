@@ -5,14 +5,14 @@
 <?import javafx.scene.layout.*?>
 
 <fx:root fitToHeight="true" fitToWidth="true" type="javafx.scene.control.ScrollPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
-   <content>
-       <TableView fx:id="tvCases">
-         <columns>
-            <TableColumn fx:id="nameColumn" editable="false" prefWidth="75.0" sortable="false" text="Name" />
-            <TableColumn fx:id="genderColumn" editable="false" prefWidth="75.0" sortable="false" text="Gender" />
-            <TableColumn fx:id="caseNameColumn" editable="false" prefWidth="75.0" sortable="false" text="Case" />
-            <TableColumn fx:id="dateColumn" editable="false" prefWidth="75.0" text="Date" />
-            <TableColumn fx:id="acceptColumn" editable="false" prefWidth="75.0" sortable="false" />
-         </columns></TableView>
-   </content>
+    <content>
+        <TableView fx:id="tvCases">
+            <columns>
+                <TableColumn fx:id="nameColumn" editable="false" prefWidth="75.0" sortable="false" text="Name" />
+                <TableColumn fx:id="genderColumn" editable="false" prefWidth="75.0" sortable="false" text="Gender" />
+                <TableColumn fx:id="caseNameColumn" editable="false" prefWidth="75.0" sortable="false" text="Case" />
+                <TableColumn fx:id="dateColumn" editable="false" prefWidth="75.0" text="Date" />
+                <TableColumn fx:id="acceptColumn" editable="false" prefWidth="75.0" sortable="false" />
+            </columns></TableView>
+    </content>
 </fx:root>
