@@ -1,6 +1,6 @@
 package at.tuwien.telemedizin.dermadoc.desktop.gui.controls;
 
-import at.tuwien.telemedizin.dermadoc.desktop.util.UtilFormat;
+import at.tuwien.telemedizin.dermadoc.service.util.UtilFormat;
 import at.tuwien.telemedizin.dermadoc.entities.Patient;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,7 +12,7 @@ import java.io.IOException;
 /**
  * Created by Lucas on 14.11.2015.
  */
-public class GCMainTabOverview extends GridPane {
+public class GCPatientOverview extends GridPane {
 
     @FXML private Label name;
     @FXML private Label gender;
@@ -20,7 +20,7 @@ public class GCMainTabOverview extends GridPane {
 
     private Patient patient;
 
-    public GCMainTabOverview(Patient patient) {
+    public GCPatientOverview(Patient patient) {
 
         this.patient = patient;
 

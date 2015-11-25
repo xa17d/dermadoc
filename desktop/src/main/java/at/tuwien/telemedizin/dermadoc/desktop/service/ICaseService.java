@@ -1,12 +1,13 @@
 package at.tuwien.telemedizin.dermadoc.desktop.service;
 
 import at.tuwien.telemedizin.dermadoc.desktop.exception.DermadocException;
+import at.tuwien.telemedizin.dermadoc.desktop.service.handler.DermadocNotificationHandler;
 import at.tuwien.telemedizin.dermadoc.entities.Case;
+import at.tuwien.telemedizin.dermadoc.entities.Notification;
 import at.tuwien.telemedizin.dermadoc.entities.Patient;
 import at.tuwien.telemedizin.dermadoc.entities.casedata.CaseData;
-
-import java.util.List;
-import java.util.Map;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 
 /**
  * interface for gui-model to access service layer
@@ -19,36 +20,37 @@ public interface ICaseService {
      */
 
     /**
-     * load all open cases from backend
+     * load an observable list of all open cases
      * @return list of all open cases
      * @throws DermadocException
      */
-    List<Case> getOpenCases() throws DermadocException;
+    ObservableList<Case> getOpenCases() throws DermadocException;
 
     /**
      * load all cases of the physician sorted by the patient
      * @return map containing all cases of each patient
      * @throws DermadocException
      */
-    Map<Patient,List<Case>> getAllCases() throws DermadocException;
+    ObservableMap<Patient,ObservableList<Case>> getAllCases() throws DermadocException;
 
 
     /**
-     * load cases of the physician, containing the searchText (sorted by the patient)
+     * load a observable map of all cases of the physician,
+     * containing the searchText (in case or patient name, sorted by the patient)
      * @param searchText string that can contain patient name, birthdate or case name
      * @return map containing all cases of selected patients
      * @throws DermadocException
      */
-    Map<Patient,List<Case>> getCasesOfPatient(String searchText) throws DermadocException;
+    ObservableMap<Patient,ObservableList<Case>> getCasesOfPatient(String searchText) throws DermadocException;
 
 
     /**
-     * load all case data of a specific case
+     * load an observable list of all case data of a specific case
      * @param aCase case
      * @return list of case data
      * @throws DermadocException
      */
-    List<CaseData> getCaseData(Case aCase) throws DermadocException;
+    ObservableList<CaseData> getCaseData(Case aCase) throws DermadocException;
 
 
 
@@ -66,9 +68,11 @@ public interface ICaseService {
     /**
      * save new case data of a case to the backend
      * @param aCase case
+     * @param caseData case data
+     * @return the saved case (this time containing a valid id
      * @throws DermadocException
      */
-    void saveCase(Case aCase) throws DermadocException;
+    CaseData saveCaseData(Case aCase, CaseData caseData) throws DermadocException;
 
 
 
@@ -77,9 +81,18 @@ public interface ICaseService {
      */
 
     /**
+     * get an observable list of notifications
+     * notification is added to list, as soon as it gest registered
+     * @return notification list
+     * @throws DermadocException
+     */
+    ObservableList<Notification> getNotificationList() throws DermadocException;
+
+    //TODO refactor to service project
+    /**
      * set a notification listerner that gets called when a new
      * notification is available
      * @param listener notification listener
      */
-    void setNotificationListener(DermadocNotificationListener listener);
+    //void setNotificationListener(DermadocNotificationHandler listener);
 }

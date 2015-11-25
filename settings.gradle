@@ -1,3 +1,5 @@
 rootProject.name = 'dermadoc'
 include ':entities', ':server', ':desktop', ':app'
+include 'service'
+
 

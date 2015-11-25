@@ -33,4 +33,8 @@ public class Case {
     private CaseStatus status;
     public CaseStatus getStatus() { return status; }
     public void setStatus(CaseStatus status) { this.status = status; }
+
+    private String name;
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
 }

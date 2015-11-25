@@ -2,7 +2,7 @@ package at.tuwien.telemedizin.dermadoc.desktop.gui.controls;
 
 import at.tuwien.telemedizin.dermadoc.desktop.gui.Controller;
 import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.buttons.GCButtonAccept;
-import at.tuwien.telemedizin.dermadoc.desktop.util.UtilFormat;
+import at.tuwien.telemedizin.dermadoc.service.util.UtilFormat;
 import at.tuwien.telemedizin.dermadoc.entities.Case;
 import at.tuwien.telemedizin.dermadoc.entities.Gender;
 import javafx.beans.value.ObservableValueBase;
@@ -80,7 +80,7 @@ public class GCCaseList extends ScrollPane {
         acceptColumn.setCellValueFactory(cellData -> new ObservableValueBase<Button>() {
             @Override
             public Button getValue() {
-                return new GCButtonAccept(cellData.getValue(), controller.getOpenMainTabHandler());
+                return new GCButtonAccept(cellData.getValue(), controller.getAcceptCaseAndOpenMainTabHandler(cellData.getValue()));
             }
         });
     }
