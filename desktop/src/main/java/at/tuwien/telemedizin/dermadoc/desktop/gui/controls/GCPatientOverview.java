@@ -1,6 +1,6 @@
 package at.tuwien.telemedizin.dermadoc.desktop.gui.controls;
 
-import at.tuwien.telemedizin.dermadoc.desktop.util.UtilFormat;
+import at.tuwien.telemedizin.dermadoc.service.util.UtilFormat;
 import at.tuwien.telemedizin.dermadoc.entities.Patient;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

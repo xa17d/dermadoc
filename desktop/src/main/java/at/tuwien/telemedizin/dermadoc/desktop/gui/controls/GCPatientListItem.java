@@ -2,7 +2,7 @@ package at.tuwien.telemedizin.dermadoc.desktop.gui.controls;
 
 import at.tuwien.telemedizin.dermadoc.desktop.gui.Controller;
 import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.buttons.GCButtonOpen;
-import at.tuwien.telemedizin.dermadoc.desktop.util.UtilFormat;
+import at.tuwien.telemedizin.dermadoc.service.util.UtilFormat;
 import at.tuwien.telemedizin.dermadoc.entities.Case;
 import at.tuwien.telemedizin.dermadoc.entities.Patient;
 import javafx.collections.ObservableList;
