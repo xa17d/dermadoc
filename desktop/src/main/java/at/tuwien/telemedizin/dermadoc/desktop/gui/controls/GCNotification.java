@@ -48,9 +48,7 @@ public class GCNotification extends AnchorPane {
             @Override
             public void changed(ObservableValue<? extends Notification> observable, Notification oldValue, Notification newValue) {
 
-                //TODO get case from backend
-                Case notificationCase = new Case(observable.getValue().getCaseId(), new Patient(), Calendar.getInstance());
-                controller.openMainTab(notificationCase);
+                controller.openMainTab(controller.getCaseById(observable.getValue().getCaseId()));
                 popOver.hide();
             }
         });

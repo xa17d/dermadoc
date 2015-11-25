@@ -4,8 +4,13 @@ import at.tuwien.telemedizin.dermadoc.desktop.gui.Controller;
 import at.tuwien.telemedizin.dermadoc.entities.Case;
 import at.tuwien.telemedizin.dermadoc.entities.Gender;
 import at.tuwien.telemedizin.dermadoc.entities.Patient;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableListBase;
+import javafx.collections.ObservableMap;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
@@ -19,12 +24,15 @@ import java.util.List;
 public class GCPatientList extends VBox {
 
     @FXML private VBox vbPatientList;
+    @FXML private TextField tfSearch;
 
     private Controller controller;
+    private ObservableMap<Patient, ObservableList<Case>> patientCaseMap;
 
-    public GCPatientList(Controller controller) {
+    public GCPatientList(Controller controller, ObservableMap<Patient, ObservableList<Case>> patientCaseMap) {
 
         this.controller = controller;
+        this.patientCaseMap = patientCaseMap;
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("gc_patientlist.fxml"));
         loader.setRoot(this);
@@ -48,25 +56,22 @@ public class GCPatientList extends VBox {
     @FXML
     private void updateList() {
 
-        //TODO load patients from backend
-        //MOCK
-        Patient p1 = new Patient();
-        p1.setName("Daniel Gehrer");
-        p1.setGender(Gender.Male);
+        ObservableMap<Patient, ObservableList<Case>> actualPatientCaseMap;
+        ObservableList<Patient> actualPatientList;
 
-        List<Patient> patients = new ArrayList<Patient>();
-        patients.add(p1);
-        //----
+        if(tfSearch.getText().equals("")) {
+            actualPatientCaseMap = patientCaseMap;
+        }
+        else {
+            actualPatientCaseMap = controller.searchPatientCaseMap(tfSearch.getText());
+        }
+        //TODO bugfix search overloading
+        actualPatientList = FXCollections.observableArrayList(actualPatientCaseMap.keySet());
 
-        for(Patient p : patients) {
+        //TODO sort patients
 
-            //TODO get cases from controller!
-            //MOCK
-            List<Case> cases = new ArrayList<Case>();
-            cases.add(new Case(-1l, p, Calendar.getInstance()));
-            //-----
-
-            vbPatientList.getChildren().add(new GCPatientListItem(controller, p, cases));
+        for(Patient p : actualPatientList) {
+            vbPatientList.getChildren().add(new GCPatientListItem(controller, p, actualPatientCaseMap.get(p)));
         }
     }
 }

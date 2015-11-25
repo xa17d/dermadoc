@@ -1,7 +1,7 @@
 package at.tuwien.telemedizin.dermadoc.desktop.gui.controls.casedata;
 
 import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.casedata.edit.AGCCaseDataEdit;
-import at.tuwien.telemedizin.dermadoc.desktop.service.CaseDataEventHandler;
+import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.handler.CaseDataEventHandler;
 import at.tuwien.telemedizin.dermadoc.entities.Patient;
 import at.tuwien.telemedizin.dermadoc.entities.Physician;
 import at.tuwien.telemedizin.dermadoc.entities.casedata.CaseData;
@@ -26,6 +26,11 @@ public class GCCaseDataList extends VBox {
         GCCaseDataList cgList = this;
 
         this.caseDataList = caseDataList;
+
+        for(CaseData cd : caseDataList) {
+            this.getChildren().add(gcFactory.getGC(cd));
+        }
+
         this.caseDataList.addListener(new ListChangeListener<CaseData>() {
             @Override
             public void onChanged(Change<? extends CaseData> c) {
@@ -57,18 +62,5 @@ public class GCCaseDataList extends VBox {
             }
         });
         this.getChildren().add(editComponent);
-    }
-
-    //TODO remove
-    public void mock() {
-
-        //MOCK
-        TextMessage message1 = new TextMessage(-1l, Calendar.getInstance(), new Patient(), "This is a text-message from the patient! ");
-        TextMessage message2 = new TextMessage(-1l, Calendar.getInstance(), new Physician(), "This is a text-message from the physician! ");
-        TextMessage message3 = new TextMessage(-1l, Calendar.getInstance(), new Patient(), "This is a text-message from the patient! ");
-
-        caseDataList.add(message1);
-        caseDataList.add(message2);
-        caseDataList.add(message3);
     }
 }

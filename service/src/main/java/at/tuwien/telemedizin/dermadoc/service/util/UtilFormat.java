@@ -1,4 +1,4 @@
-package at.tuwien.telemedizin.dermadoc.desktop.util;
+package at.tuwien.telemedizin.dermadoc.service.util;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
