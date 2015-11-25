@@ -1,12 +1,20 @@
 package at.tuwien.telemedizin.dermadoc.desktop.gui;
 
+import at.tuwien.telemedizin.dermadoc.desktop.exception.DermadocException;
 import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.*;
 import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.error.ErrorPane;
 import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.handler.OpenMainTabEventHandler;
+import at.tuwien.telemedizin.dermadoc.desktop.service.CaseServiceMock;
+import at.tuwien.telemedizin.dermadoc.desktop.service.ICaseService;
+import at.tuwien.telemedizin.dermadoc.desktop.service.ILoginService;
+import at.tuwien.telemedizin.dermadoc.desktop.service.LoginServiceMock;
 import at.tuwien.telemedizin.dermadoc.entities.*;
+import at.tuwien.telemedizin.dermadoc.entities.rest.AuthenticationData;
+import at.tuwien.telemedizin.dermadoc.entities.rest.AuthenticationToken;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -29,7 +37,11 @@ import java.util.*;
  */
 public class Controller {
 
-    @FXML BorderPane bpMain;
+    private ICaseService caseService;
+    private ILoginService loginService;
+    private AuthenticationToken token;
+
+    @FXML private BorderPane bpMain;
     @FXML private TabPane tpMain;
     @FXML private Tab tabPatients;
     @FXML private Tab tabCases;
@@ -37,6 +49,7 @@ public class Controller {
     private EventHandler<javafx.event.ActionEvent> openMainTabHandler;
 
     private ObservableList<Tab> mainTabList;
+    private ObservableMap<Patient, ObservableList<Case>> patientCaseMap;
 
     public Controller() {
         openMainTabHandler = new OpenMainTabEventHandler(this);
@@ -45,108 +58,43 @@ public class Controller {
     @FXML
     public void initialize() {
 
+        //initialize service layer
+        loginService = new LoginServiceMock();
+        token = loginService.login(new AuthenticationData("email", "password"));
+        Physician physician = loginService.getPhysician(token);
+        caseService = new CaseServiceMock(token);
+
         //initialize physician view on top
-
-        //TODO get logged in physicians data
-        //TODO get notification listener to update notificationList
-        //MOCK
-        Physician physician = new Physician();
-        physician.setName("Lucas Dobler");
-        physician.setMail("lucas@ldob.eu");
-
-        ObservableList<Notification> notificationMockList = FXCollections.observableArrayList();
-        Thread t1 = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                for (int i = 0; i < 5; i++) {
-                    try {
-                        Thread.sleep(5000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            Notification notification = new Notification();
-                            notification.setText("Daniel Gehrer sent you a new message!");
-
-                            //exception thrown here doesn't matter at the moment, this is just a mock for testing ui components
-                            notificationMockList.add(notification);
-                        }
-                    });
-                }
-            }
-        });
-        t1.start();
-        //----
-
-        bpMain.setTop(new GCPhysician(this, physician, notificationMockList));
+        try {
+            bpMain.setTop(new GCPhysician(this, physician, caseService.getNotificationList()));
+        }
+        catch (DermadocException e) {
+            showErrorMessage(e.getMessage());
+        }
 
         //initialize the patient list
-        tabPatients.setContent(new GCPatientList(this));
+        patientCaseMap = FXCollections.emptyObservableMap();
+        try {
+            patientCaseMap = caseService.getAllCases();
+        } catch (DermadocException e) {
+            showErrorMessage(e.getMessage());
+        }
+        tabPatients.setContent(new GCPatientList(this, patientCaseMap));
 
         //initialize the case list
-
-        //TODO get cases from backend
-        ///*
-        //MOCK
-        ObservableList<Case> mockCases = FXCollections.observableArrayList();
-        Thread t2 = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                for (int i = 0; i < 20; i++) {
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-
-                            Patient p1 = new Patient();
-                            p1.setName("Daniel Gehrer");
-                            p1.setGender(Gender.Male);
-                            p1.setBirthTime(new GregorianCalendar(1990, 9, 18));
-                            Case mockCase = new Case(-1l, p1, new GregorianCalendar(2015, 11, 10));
-                            mockCase.setPhysician(new Physician());
-                            mockCase.setStatus(CaseStatus.WaitingForAccept);
-
-                            //exception thrown here doesn't matter at the moment, this is just a mock for testing ui components
-                            mockCases.add(mockCase);
-                        }
-                    });
-                }
-            }
-        });
-        t2.start();
-        //-----
-
-        tabCases.setContent(new GCCaseList(this, mockCases));
-        //*/
+        try {
+            tabCases.setContent(new GCCaseList(this, caseService.getOpenCases()));
+        } catch (DermadocException e) {
+            showErrorMessage(e.getMessage());
+        }
 
         //manage open tabs in main window
         mainTabList = tpMain.getTabs();
-
-        //MOCK
-        openMainTab(null);
     }
 
 
     public void openMainTab(Case aCase) {
-        //MOCK
-        Patient p1 = new Patient();
-        p1.setName("Daniel Gehrer");
-        p1.setGender(Gender.Male);
-        p1.setBirthTime(new GregorianCalendar(1990, 9, 18));
-        p1.setSvnr("3023");
-        Case mockCase = new Case(0l, p1, new GregorianCalendar(2015, 11, 10));
-        mockCase.setPhysician(new Physician());
-        mockCase.setStatus(CaseStatus.WaitingForAccept);
-        //-----
-
-        mainTabList.add(new GCCaseTab(this, tpMain, mockCase));
+        mainTabList.add(new GCCaseTab(this, tpMain, aCase));
     }
 
     public EventHandler<javafx.event.ActionEvent> getOpenMainTabHandler() {
@@ -180,9 +128,25 @@ public class Controller {
         t1.start();
     }
 
+    public ObservableMap<Patient, ObservableList<Case>> searchPatientCaseMap(String searchText) {
+        try {
+            return caseService.getCasesOfPatient(searchText);
+        } catch (DermadocException e) {
+            showErrorMessage(e.getMessage());
+        }
+        return patientCaseMap;
+    }
+
+    public Case getCaseById(long id) {
+
+        //TODO get cases from backend or from observable list???
+        //caseService.getCaseById();
+        return new Case(id, new Patient(), Calendar.getInstance());
+    }
+
     public void logout() {
 
-        //TODO logout on backend
+        loginService.logout(token);
         Stage mainStage = (Stage) bpMain.getScene().getWindow();
         mainStage.close();
         login(mainStage);

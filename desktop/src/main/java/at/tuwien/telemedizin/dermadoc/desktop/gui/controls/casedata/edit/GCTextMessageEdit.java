@@ -1,7 +1,7 @@
 package at.tuwien.telemedizin.dermadoc.desktop.gui.controls.casedata.edit;
 
 import at.tuwien.telemedizin.dermadoc.desktop.gui.Controller;
-import at.tuwien.telemedizin.dermadoc.desktop.service.CaseDataEventHandler;
+import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.handler.CaseDataEventHandler;
 import at.tuwien.telemedizin.dermadoc.entities.Physician;
 import at.tuwien.telemedizin.dermadoc.entities.casedata.TextMessage;
 import javafx.fxml.FXML;
@@ -56,9 +56,11 @@ public class GCTextMessageEdit extends AGCCaseDataEdit {
         textMessage = new TextMessage(-1l, Calendar.getInstance(), new Physician(), taTextMessage.getText());
 
         //notify list
+        /*
         if(saveEventHandler != null) {
             saveEventHandler.onEvent(textMessage);
         }
+        */
     }
 
     private TextMessage textMessage;

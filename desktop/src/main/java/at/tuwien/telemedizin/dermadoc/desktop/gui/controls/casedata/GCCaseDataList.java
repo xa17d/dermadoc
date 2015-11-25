@@ -1,7 +1,7 @@
 package at.tuwien.telemedizin.dermadoc.desktop.gui.controls.casedata;
 
 import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.casedata.edit.AGCCaseDataEdit;
-import at.tuwien.telemedizin.dermadoc.desktop.service.CaseDataEventHandler;
+import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.handler.CaseDataEventHandler;
 import at.tuwien.telemedizin.dermadoc.entities.Patient;
 import at.tuwien.telemedizin.dermadoc.entities.Physician;
 import at.tuwien.telemedizin.dermadoc.entities.casedata.CaseData;

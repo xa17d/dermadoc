@@ -2,8 +2,10 @@ package at.tuwien.telemedizin.dermadoc.desktop.gui.controls;
 
 import at.tuwien.telemedizin.dermadoc.desktop.gui.Controller;
 import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.buttons.GCButtonOpen;
+import at.tuwien.telemedizin.dermadoc.desktop.util.UtilFormat;
 import at.tuwien.telemedizin.dermadoc.entities.Case;
 import at.tuwien.telemedizin.dermadoc.entities.Patient;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
@@ -26,7 +28,7 @@ public class GCPatientListItem extends TitledPane {
     private Patient patient;
     private List<Case> cases;
 
-    public GCPatientListItem(Controller controller, Patient patient, List<Case> cases) {
+    public GCPatientListItem(Controller controller, Patient patient, ObservableList<Case> cases) {
 
         this.controller = controller;
         this.patient = patient;
@@ -45,27 +47,20 @@ public class GCPatientListItem extends TitledPane {
     @FXML
     public void initialize() {
 
-        //TODO just MOCKing - get data from patient object
         this.setText(patient.getName());
         this.setExpanded(false);
 
-        Button btOpen = new GCButtonOpen(cases.get(0), controller.getOpenMainTabHandler());
-        GridPane.setHalignment(btOpen, HPos.RIGHT);
+        int i = 0;
+        for(Case c : cases) {
 
-        //TODO write cases into gridpane
+            gpCaseList.add(new Label(c.getName()), 0, i);
+            gpCaseList.add(new Label(UtilFormat.formatDate(c.getCreated())), 1, i);
 
-        //MOCK
-        gpCaseList.add(new Label("Rash on Hand"), 0, 0);
-        gpCaseList.add(new Label("12.11.2015"), 1, 0);
-        gpCaseList.add(new GCButtonOpen(cases.get(0), controller.getOpenMainTabHandler()), 2, 0);
+            Button btOpen = new GCButtonOpen(c, controller.getOpenMainTabHandler());
+            GridPane.setHalignment(btOpen, HPos.RIGHT);
+            gpCaseList.add(btOpen, 2, i);
 
-        gpCaseList.add(new Label("Rash on Hand"), 0, 1);
-        gpCaseList.add(new Label("12.11.2015"), 1, 1);
-        gpCaseList.add(new GCButtonOpen(cases.get(0), controller.getOpenMainTabHandler()), 2, 1);
-
-        gpCaseList.add(new Label("Rash on Hand"), 0, 2);
-        gpCaseList.add(new Label("12.11.2015"), 1, 2);
-        gpCaseList.add(new GCButtonOpen(cases.get(0), controller.getOpenMainTabHandler()), 2, 2);
-        //-----
+            i++;
+        }
     }
 }
