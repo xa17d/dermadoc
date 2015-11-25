@@ -63,14 +63,10 @@ public class GCCaseTab extends Tab {
         //patient overview
         tpPatientOverview.setContent(new GCPatientOverview(aCase.getPatient()));
 
-        //case list
+        //load case data list
+        gcCaseDataList = new GCCaseDataList(controller.getCaseData(aCase));
 
-
-        //TODO get all case-data from backend
-        ObservableList<CaseData> caseDataList = FXCollections.observableArrayList();
-        gcCaseDataList = new GCCaseDataList(caseDataList);
-        gcCaseDataList.mock();
-
+        //show case data list in scroll pane
         spCaseData = new ScrollPane(gcCaseDataList);
         spCaseData.setFitToWidth(true);
         vbInput.getChildren().add(spCaseData);
@@ -108,7 +104,7 @@ public class GCCaseTab extends Tab {
     private void newFreetext() {
 
         checkForOpenEditsAndRemove();
-        gcCaseDataList.add(new GCTextMessageEdit(controller, gcCaseDataList));
+        gcCaseDataList.add(new GCTextMessageEdit(controller, aCase));
     }
 
     @FXML

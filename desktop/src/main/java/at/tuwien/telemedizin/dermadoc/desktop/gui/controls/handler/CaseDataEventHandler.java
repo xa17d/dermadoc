@@ -8,6 +8,5 @@ import at.tuwien.telemedizin.dermadoc.entities.casedata.CaseData;
  */
 public interface CaseDataEventHandler {
 
-    //TODO necessary???
     void onEvent(CaseData caseData);
 }

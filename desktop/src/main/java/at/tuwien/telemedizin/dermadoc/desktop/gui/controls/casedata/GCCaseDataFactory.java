@@ -2,6 +2,7 @@ package at.tuwien.telemedizin.dermadoc.desktop.gui.controls.casedata;
 
 import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.casedata.view.AGCCaseDataView;
 import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.casedata.view.GCTextMessageView;
+import at.tuwien.telemedizin.dermadoc.entities.casedata.Anamnesis;
 import at.tuwien.telemedizin.dermadoc.entities.casedata.CaseData;
 import at.tuwien.telemedizin.dermadoc.entities.casedata.TextMessage;
 

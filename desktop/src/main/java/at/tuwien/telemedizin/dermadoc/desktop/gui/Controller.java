@@ -9,6 +9,7 @@ import at.tuwien.telemedizin.dermadoc.desktop.service.ICaseService;
 import at.tuwien.telemedizin.dermadoc.desktop.service.ILoginService;
 import at.tuwien.telemedizin.dermadoc.desktop.service.LoginServiceMock;
 import at.tuwien.telemedizin.dermadoc.entities.*;
+import at.tuwien.telemedizin.dermadoc.entities.casedata.CaseData;
 import at.tuwien.telemedizin.dermadoc.entities.rest.AuthenticationData;
 import at.tuwien.telemedizin.dermadoc.entities.rest.AuthenticationToken;
 import javafx.application.Platform;
@@ -40,6 +41,7 @@ public class Controller {
     private ICaseService caseService;
     private ILoginService loginService;
     private AuthenticationToken token;
+    private Physician physician;
 
     @FXML private BorderPane bpMain;
     @FXML private TabPane tpMain;
@@ -61,7 +63,7 @@ public class Controller {
         //initialize service layer
         loginService = new LoginServiceMock();
         token = loginService.login(new AuthenticationData("email", "password"));
-        Physician physician = loginService.getPhysician(token);
+        physician = loginService.getPhysician(token);
         caseService = new CaseServiceMock(token);
 
         //initialize physician view on top
@@ -95,6 +97,16 @@ public class Controller {
 
     public void openMainTab(Case aCase) {
         mainTabList.add(new GCCaseTab(this, tpMain, aCase));
+    }
+
+    public EventHandler<javafx.event.ActionEvent> getAcceptCaseAndOpenMainTabHandler(Case aCase) {
+        try {
+            caseService.acceptCase(aCase);
+            return getOpenMainTabHandler();
+        } catch (DermadocException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public EventHandler<javafx.event.ActionEvent> getOpenMainTabHandler() {
@@ -142,6 +154,29 @@ public class Controller {
         //TODO get cases from backend or from observable list???
         //caseService.getCaseById();
         return new Case(id, new Patient(), Calendar.getInstance());
+    }
+
+    public ObservableList<CaseData> getCaseData(Case aCase) {
+        try {
+            return caseService.getCaseData(aCase);
+        } catch (DermadocException e) {
+            showErrorMessage(e.getMessage());
+        }
+        return FXCollections.observableArrayList();
+    }
+
+    public CaseData saveCaseData(Case aCase, CaseData caseData) {
+
+        try {
+            return caseService.saveCaseData(aCase, caseData);
+        } catch (DermadocException e) {
+            showErrorMessage(e.getMessage());
+        }
+        return caseData;
+    }
+
+    public Physician getPhysician() {
+        return physician;
     }
 
     public void logout() {

@@ -2,18 +2,15 @@ package at.tuwien.telemedizin.dermadoc.desktop.service;
 
 import at.tuwien.telemedizin.dermadoc.desktop.exception.DermadocException;
 import at.tuwien.telemedizin.dermadoc.desktop.exception.DermadocNotImplementedException;
-import at.tuwien.telemedizin.dermadoc.desktop.service.handler.DermadocNotificationHandler;
 import at.tuwien.telemedizin.dermadoc.entities.*;
-import at.tuwien.telemedizin.dermadoc.entities.casedata.CaseData;
+import at.tuwien.telemedizin.dermadoc.entities.casedata.*;
 import at.tuwien.telemedizin.dermadoc.entities.rest.AuthenticationToken;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.List;
+import java.util.*;
 
 /**
  * MOCK!!!
@@ -21,10 +18,10 @@ import java.util.List;
 public class CaseServiceMock implements ICaseService {
 
     private ObservableList<Case> obsOpenCaseList = FXCollections.observableArrayList();
-    private ObservableList<Patient> obsPatientList = FXCollections.observableArrayList();
     private ObservableList<Notification> obsNotificationList = FXCollections.observableArrayList();
     private ObservableMap<Patient, ObservableList<Case>> obsPatientCaseMap = FXCollections.observableHashMap();
 
+    private ObservableList<CaseData> obsCaseDataList = FXCollections.observableArrayList();
 
     public CaseServiceMock(AuthenticationToken token) {
 
@@ -76,6 +73,23 @@ public class CaseServiceMock implements ICaseService {
         obsPatientCaseMap.put(p1, p1Cases);
         obsPatientCaseMap.put(p2, p2Cases);
         obsPatientCaseMap.put(p3, p3Cases);
+
+        //-------------
+
+        Anamnesis anamnesis = new Anamnesis(-1l, Calendar.getInstance(), p1, "message", new ArrayList<>(Arrays.asList(new Medication[]{ new Medication("Medication 1") })));
+        TextMessage textMessage1 = new TextMessage(-2l, Calendar.getInstance(), p1, "Dear Mister Doc, i really need your help!");
+        TextMessage textMessage2 = new TextMessage(-3l, Calendar.getInstance(), new Physician(), "Please send me som images");
+        TextMessage textMessage3 = new TextMessage(-4l, Calendar.getInstance(), p1, "Sorry, my phone doesn't have a cam... :/");
+        Diagnosis diagnosis = new Diagnosis(-5l, Calendar.getInstance(), new Physician(), "R12.1");
+        Advice advice = new Advice(-6l, Calendar.getInstance(), new Physician(), "i'll prescribe you a cream for your rush... if it's not getting smaller in the next 3 weeks, please contact me again.", new ArrayList<>(Arrays.asList(new Medication[]{ new Medication("Medication 1") })));
+
+        //TODO add more
+        //obsCaseDataList.add(anamnesis);
+        obsCaseDataList.add(textMessage1);
+        obsCaseDataList.add(textMessage2);
+        obsCaseDataList.add(textMessage3);
+        //obsCaseDataList.add(diagnosis);
+        //obsCaseDataList.add(advice);
     }
 
     @Override
@@ -128,17 +142,17 @@ public class CaseServiceMock implements ICaseService {
 
     @Override
     public ObservableList<CaseData> getCaseData(Case aCase) throws DermadocException {
-        return null;
+        return obsCaseDataList;
     }
 
     @Override
     public void acceptCase(Case aCase) throws DermadocException {
-
+        //do nothing
     }
 
     @Override
-    public Case saveCase(Case aCase) throws DermadocException {
-        return null;
+    public CaseData saveCaseData(Case aCase, CaseData caseData) throws DermadocException {
+        return caseData;
     }
 
     @Override

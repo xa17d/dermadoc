@@ -2,6 +2,7 @@ package at.tuwien.telemedizin.dermadoc.desktop.gui.controls.casedata.edit;
 
 import at.tuwien.telemedizin.dermadoc.desktop.gui.Controller;
 import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.handler.CaseDataEventHandler;
+import at.tuwien.telemedizin.dermadoc.entities.Case;
 import at.tuwien.telemedizin.dermadoc.entities.Physician;
 import at.tuwien.telemedizin.dermadoc.entities.casedata.TextMessage;
 import javafx.fxml.FXML;
@@ -22,11 +23,13 @@ public class GCTextMessageEdit extends AGCCaseDataEdit {
     @FXML private TextArea taTextMessage;
 
     private Controller controller;
+    private Case aCase;
     private CaseDataEventHandler saveEventHandler;
 
-    public GCTextMessageEdit(Controller controller, VBox list) {
+    public GCTextMessageEdit(Controller controller, Case aCase) {
 
         this.controller = controller;
+        this.aCase = aCase;
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("gc_textmessage_edit.fxml"));
         loader.setRoot(this);
@@ -51,16 +54,14 @@ public class GCTextMessageEdit extends AGCCaseDataEdit {
     private void save() {
 
         //send to backend
-        //TODO send to backend
-        //TODO get id and physician
-        textMessage = new TextMessage(-1l, Calendar.getInstance(), new Physician(), taTextMessage.getText());
+        textMessage = new TextMessage(-1l, Calendar.getInstance(), controller.getPhysician(), taTextMessage.getText());
+        textMessage = (TextMessage) controller.saveCaseData(aCase, textMessage);
 
+        //TODO necessary???
         //notify list
-        /*
         if(saveEventHandler != null) {
             saveEventHandler.onEvent(textMessage);
         }
-        */
     }
 
     private TextMessage textMessage;

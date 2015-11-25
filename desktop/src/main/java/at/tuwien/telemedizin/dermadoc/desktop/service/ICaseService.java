@@ -68,10 +68,11 @@ public interface ICaseService {
     /**
      * save new case data of a case to the backend
      * @param aCase case
+     * @param caseData case data
      * @return the saved case (this time containing a valid id
      * @throws DermadocException
      */
-    Case saveCase(Case aCase) throws DermadocException;
+    CaseData saveCaseData(Case aCase, CaseData caseData) throws DermadocException;
 
 
 
