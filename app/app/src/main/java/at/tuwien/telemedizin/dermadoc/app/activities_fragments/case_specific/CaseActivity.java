@@ -28,6 +28,7 @@ import at.tuwien.telemedizin.dermadoc.entities.Case;
 import at.tuwien.telemedizin.dermadoc.entities.Patient;
 import at.tuwien.telemedizin.dermadoc.entities.Physician;
 
+
 public class CaseActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, CaseDataCallbackInterface {
 

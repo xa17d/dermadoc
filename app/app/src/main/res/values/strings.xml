@@ -66,7 +66,7 @@
     <string name="tab_header_history">History</string>
     <string name="tab_header_physician">Physician</string>
 
-    <string name="label_edit_symptoms_field">Textual description:</string>
+    <string name="label_edit_symptoms_field">Textual description</string>
     <string name="label_symptoms_section_header_description">Describe your symptoms here:</string>
     <string name="hint_symptoms_description">Please describe the characteristics of the affected area: How does it look like? How does it feel? Do you experience pain? How did you experience its progress?</string>
     <string name="label_pain_assessment">Pain Assesment</string>
@@ -92,4 +92,13 @@
     <string name="option_choose_from_library">Choose from Library</string>
     <string name="option_cancel">Cancel</string>
     <string name="title_choose_photo_source_dialog">Add Photo</string>
+
+    <string name="msg_confirm_picture_deletion_dialog">Do you really want to delte this picture?</string>
+    <string name="title_picture_deletion_dialog">Delete Picture</string>
+    <string name="label_picture_deletion_dialog_positive">Yes</string>
+    <string name="label_picture_deletion_dialog_cancel">Cancel</string>
+
+    <string name="title_picture_list">Your Pictures:</string>
+
+    <string name="hint_no_results">No Results</string>
 </resources>

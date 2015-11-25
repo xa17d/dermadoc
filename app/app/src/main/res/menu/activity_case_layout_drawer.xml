@@ -6,9 +6,10 @@
         android:title="Back to Main"
         android:checkable="false"/>
 
+    <group android:checkableBehavior="single">
     <item android:title="Case A">
         <menu>
-            <group android:checkableBehavior="single">
+
                 <item android:id="@+id/nav_case_overview"
                     android:icon="@drawable/ic_assignment_grey_36dp"
                     android:title="Overview"
@@ -22,9 +23,9 @@
                 <item android:id="@+id/nav_case_etc"
                     android:icon="@drawable/ic_speaker_notes_grey_36dp"
                     android:title="etc..." />
-            </group>
+
         </menu>
     </item>
-
+    </group>
 
 </menu>

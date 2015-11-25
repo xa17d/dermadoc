@@ -1,7 +1,6 @@
 package at.tuwien.telemedizin.dermadoc.app.activities_fragments.create_case;
 
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -19,9 +18,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import at.tuwien.telemedizin.dermadoc.app.R;
+import at.tuwien.telemedizin.dermadoc.app.adapters.CasePictureListAdapter;
+import at.tuwien.telemedizin.dermadoc.app.adapters.EmbedableListViewUtility;
 import at.tuwien.telemedizin.dermadoc.app.entities.PictureHelperEntity;
 
 /**
@@ -39,13 +44,16 @@ public class EditPicturesFragment extends Fragment implements PictureReceiver {
     private boolean newCase; // if it is a new case, no symptom information has to be loaded and the layout switches into edit-mode
     private boolean addPicturesHintIsVisible;
 
-    private OnNewPictureAvailableInterface pictureAccessInterface;
 
     private ImageView addPicturesHelpIcon;
     private TextView addPicturesHelpText;
     private ImageView imageView; // TODO remove - only for testing
 
     private Button addPictureButton;
+
+    private ListView pictureList;
+    private CasePictureListAdapter pictureListAdapter;
+    private List<PictureHelperEntity> testPictures; // TODO remove - take the list from the case-object instead
 
     /**
      * Use this factory method to create a new instance of
@@ -73,28 +81,15 @@ public class EditPicturesFragment extends Fragment implements PictureReceiver {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             newCase = getArguments().getBoolean(ARG_NEW_CASE);
+            // TODO remove - START - test data
+            testPictures = new ArrayList<>();
+            PictureHelperEntity testPicture1 = new PictureHelperEntity();
+            testPicture1.setDescription("Test Picture!");
+            // TODO remove - END
         }
+
     }
 
-//    @Override
-//    public void onAttach(Context context) {
-//        super.onAttach(context);
-//        try {
-//            pictureAccessInterface = (OnNewPictureAvailableInterface) context;
-//        } catch (ClassCastException e) {
-//            throw new ClassCastException(context.toString() + " must implement " + OnNewPictureAvailableInterface.class.getSimpleName());
-//        }
-//
-//    }
-
-    /**
-     * this method is called by the OnNewPictureAvailableInterface
-     * the Fragment will than ask the interface for the picture
-     */
-//    public void newPictureAvailable() {
-//        PictureHelperEntity pictureHE = pictureAccessInterface.getNewPicture();
-//        imageView.setImageBitmap(pictureHE.getThumbnail());
-//    }
 
     /**
      * receive the newly taken/selected picture
@@ -141,6 +136,17 @@ public class EditPicturesFragment extends Fragment implements PictureReceiver {
 
 
         imageView = (ImageView) v.findViewById(R.id.image_view1);
+
+        pictureList = (ListView) v.findViewById(R.id.case_picture_list);
+        pictureList.setEmptyView(v.findViewById(android.R.id.empty));
+
+
+
+        pictureListAdapter = new CasePictureListAdapter(getContext(), testPictures);
+
+        pictureList.setAdapter(pictureListAdapter);
+        EmbedableListViewUtility.setListViewHeightBasedOnChildren(pictureList);
+
 
         return v;
     }
@@ -236,7 +242,8 @@ public class EditPicturesFragment extends Fragment implements PictureReceiver {
 //                }
                 PictureHelperEntity newPicture = new PictureHelperEntity();
                 newPicture.setThumbnail(thumbnail);
-                imageView.setImageBitmap(thumbnail);
+//                imageView.setImageBitmap(thumbnail);
+                addNewPicture(newPicture); // add the new PictureEntity to the List-data-set
                 // TODO
 //                ivImage.setImageBitmap(thumbnail);
 
@@ -267,13 +274,18 @@ public class EditPicturesFragment extends Fragment implements PictureReceiver {
 
                 PictureHelperEntity newPicture = new PictureHelperEntity();
                 newPicture.setThumbnail(bm);
-                imageView.setImageBitmap(bm);
+                addNewPicture(newPicture); // add the new PictureEntity to the List-data-set
+//                imageView.setImageBitmap(bm);
                 // TODO
 //                ivImage.setImageBitmap(bm);
             }
         }
     }
 
-
+    private void addNewPicture(PictureHelperEntity newPicture) {
+        testPictures.add(newPicture);
+        EmbedableListViewUtility.setListViewHeightBasedOnChildren(pictureList);
+        pictureListAdapter.notifyDataSetChanged();
+    }
 
 }
