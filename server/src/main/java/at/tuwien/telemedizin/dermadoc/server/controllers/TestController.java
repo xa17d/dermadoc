@@ -7,6 +7,7 @@ import at.tuwien.telemedizin.dermadoc.entities.User;
 import at.tuwien.telemedizin.dermadoc.server.persistence.dao.EntityNotFoundException;
 import at.tuwien.telemedizin.dermadoc.server.persistence.dao.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,6 +17,7 @@ import java.util.Calendar;
  * Created by daniel on 11.11.2015.
  */
 @RestController
+//@PreAuthorize("hasAuthority('ROLE_DOMAIN_USER')")
 public class TestController {
     @RequestMapping(value = "/")
     public String helloWorld() {
