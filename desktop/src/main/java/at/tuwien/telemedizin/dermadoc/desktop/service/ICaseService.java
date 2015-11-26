@@ -21,6 +21,7 @@ public interface ICaseService {
 
     /**
      * load an observable list of all open cases
+     *
      * @return list of all open cases
      * @throws DermadocException
      */
@@ -28,6 +29,7 @@ public interface ICaseService {
 
     /**
      * load all cases of the physician sorted by the patient
+     *
      * @return map containing all cases of each patient
      * @throws DermadocException
      */
@@ -37,6 +39,7 @@ public interface ICaseService {
     /**
      * load a observable map of all cases of the physician,
      * containing the searchText (in case or patient name, sorted by the patient)
+     *
      * @param searchText string that can contain patient name, birthdate or case name
      * @return map containing all cases of selected patients
      * @throws DermadocException
@@ -46,6 +49,7 @@ public interface ICaseService {
 
     /**
      * load an observable list of all case data of a specific case
+     *
      * @param aCase case
      * @return list of case data
      * @throws DermadocException
@@ -60,6 +64,7 @@ public interface ICaseService {
 
     /**
      * signalize that the physician wants to accept the case
+     *
      * @param aCase case
      * @throws DermadocException
      */
@@ -67,7 +72,8 @@ public interface ICaseService {
 
     /**
      * save new case data of a case to the backend
-     * @param aCase case
+     *
+     * @param aCase    case
      * @param caseData case data
      * @return the saved case (this time containing a valid id
      * @throws DermadocException
@@ -83,16 +89,9 @@ public interface ICaseService {
     /**
      * get an observable list of notifications
      * notification is added to list, as soon as it gest registered
+     *
      * @return notification list
      * @throws DermadocException
      */
     ObservableList<Notification> getNotificationList() throws DermadocException;
-
-    //TODO refactor to service project
-    /**
-     * set a notification listerner that gets called when a new
-     * notification is available
-     * @param listener notification listener
-     */
-    //void setNotificationListener(DermadocNotificationHandler listener);
 }

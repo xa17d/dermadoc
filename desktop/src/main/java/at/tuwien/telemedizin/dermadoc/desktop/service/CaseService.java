@@ -1,8 +1,8 @@
 package at.tuwien.telemedizin.dermadoc.desktop.service;
 
 import at.tuwien.telemedizin.dermadoc.desktop.exception.DermadocException;
-import at.tuwien.telemedizin.dermadoc.desktop.exception.DermadocNotImplementedException;
 import at.tuwien.telemedizin.dermadoc.desktop.service.dto.PatientCaseMap;
+import at.tuwien.telemedizin.dermadoc.service.rest.listener.DermadocNotificationHandler;
 import at.tuwien.telemedizin.dermadoc.entities.Case;
 import at.tuwien.telemedizin.dermadoc.entities.Notification;
 import at.tuwien.telemedizin.dermadoc.entities.Patient;
@@ -12,9 +12,9 @@ import at.tuwien.telemedizin.dermadoc.service.rest.IRestCaseService;
 import at.tuwien.telemedizin.dermadoc.service.rest.RestCaseServiceMock;
 import at.tuwien.telemedizin.dermadoc.service.rest.listener.RestListener;
 import at.tuwien.telemedizin.dermadoc.service.util.UtilCompare;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
 
 import java.util.List;
 import java.util.Set;
@@ -91,17 +91,19 @@ public class CaseService implements ICaseService {
     @Override
     public ObservableList<Notification> getNotificationList() throws DermadocException {
 
-        /*
-        //TODO
-        Thread t = new Thread(new Runnable() {
+        DermadocNotificationHandler notificationHandler = new DermadocNotificationHandler() {
             @Override
-            public void run() {
-                rest.checkForNotification();
+            public void onNewNotifications(List<Notification> notifications) {
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        obsNotificationList.addAll(notifications);
+                    }
+                });
             }
-        });
-        t.start;
-        */
+        };
 
+        rest.setNotificationHandler(notificationHandler);
         return obsNotificationList;
     }
 

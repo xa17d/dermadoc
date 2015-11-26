@@ -6,7 +6,6 @@ import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.error.ErrorPane;
 import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.handler.OpenMainTabEventHandler;
 import at.tuwien.telemedizin.dermadoc.desktop.service.*;
 import at.tuwien.telemedizin.dermadoc.desktop.service.dto.PatientCaseMap;
-import at.tuwien.telemedizin.dermadoc.desktop.service.mock.CaseServiceMock;
 import at.tuwien.telemedizin.dermadoc.desktop.service.mock.LoginServiceMock;
 import at.tuwien.telemedizin.dermadoc.entities.*;
 import at.tuwien.telemedizin.dermadoc.entities.casedata.CaseData;
@@ -14,7 +13,6 @@ import at.tuwien.telemedizin.dermadoc.entities.rest.AuthenticationData;
 import at.tuwien.telemedizin.dermadoc.entities.rest.AuthenticationToken;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -47,10 +45,11 @@ public class Controller {
     @FXML private Tab tabPatients;
     @FXML private Tab tabCases;
 
-    private EventHandler<javafx.event.ActionEvent> openMainTabHandler;
+    private EventHandler<ActionEvent> openMainTabHandler;
 
     private ObservableList<Tab> mainTabList;
     private PatientCaseMap patientCaseMap;
+    private ObservableList<Case> openCaseList;
 
     public Controller() {
         openMainTabHandler = new OpenMainTabEventHandler(this);
@@ -60,6 +59,7 @@ public class Controller {
     public void initialize() {
 
         //initialize service layer
+        //TODO remove mock
         loginService = new LoginServiceMock();
         token = loginService.login(new AuthenticationData("email", "password"));
         physician = loginService.getPhysician(token);
@@ -84,7 +84,8 @@ public class Controller {
 
         //initialize the case list
         try {
-            tabCases.setContent(new GCCaseList(this, caseService.getOpenCases()));
+            openCaseList = caseService.getOpenCases();
+            tabCases.setContent(new GCOpenCaseList(this, openCaseList));
         } catch (DermadocException e) {
             showErrorMessage(e.getMessage());
         }
@@ -176,6 +177,10 @@ public class Controller {
 
     public Physician getPhysician() {
         return physician;
+    }
+
+    public ObservableList<Case> getOpenCaseList() {
+        return openCaseList;
     }
 
     public void logout() {

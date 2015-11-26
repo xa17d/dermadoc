@@ -4,6 +4,7 @@ import at.tuwien.telemedizin.dermadoc.entities.*;
 import at.tuwien.telemedizin.dermadoc.entities.casedata.*;
 import at.tuwien.telemedizin.dermadoc.entities.rest.AuthenticationData;
 import at.tuwien.telemedizin.dermadoc.entities.rest.AuthenticationToken;
+import at.tuwien.telemedizin.dermadoc.service.rest.listener.DermadocNotificationHandler;
 import at.tuwien.telemedizin.dermadoc.service.rest.listener.RestListener;
 import javafx.application.Platform;
 
@@ -86,10 +87,11 @@ public class RestCaseServiceMock implements IRestCaseService {
         for (int i = 0; i < 20; i++) {
 
             Patient p = new Patient();
-            p.setName("Patient " + i);
+            p.setId(142 + i * (i % 5 ) * 2 + (i % 2) + (i * i % 8) + 5 * i);
+            p.setName("abc");
             p.setGender(Gender.Male);
             p.setBirthTime(new GregorianCalendar(1990, 9, 18));
-            Case mockCase = new Case(-1l, p1, new GregorianCalendar(2015, 11, 10));
+            Case mockCase = new Case(-1l, p, new GregorianCalendar(2015, 11, (int)Math.floor(i / 2) + 10));
             mockCase.setName("case " + i);
             mockCase.setStatus(CaseStatus.WaitingForAccept);
 
@@ -123,6 +125,36 @@ public class RestCaseServiceMock implements IRestCaseService {
     }
 
     @Override
+    public void setNotificationHandler(DermadocNotificationHandler handler) {
+
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for (int i = 0; i < 3; i++) {
+                    try {
+                        Thread.sleep(8000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                    Notification n1 = new Notification();
+                    n1.setText("Daniel Gehrer sent you a new message!");
+                    Notification n2 = new Notification();
+                    n2.setText("Lilly Treml sent you a new message!");
+
+                    List<Notification> list = new ArrayList<>();
+                    list.add(n1);
+                    if(i % 2 == 0)
+                        list.add(n2);
+
+                    handler.onNewNotifications(list);
+                }
+            }
+        });
+        t.start();
+    }
+
+    @Override
     public void postAcceptCase(RestListener<Void> listener, Case aCase) {
 
         listener.onRequestComplete(null);
@@ -131,7 +163,7 @@ public class RestCaseServiceMock implements IRestCaseService {
     @Override
     public void postCaseData(RestListener<CaseData> listener, Case aCase, CaseData caseData) {
 
-        caseDataList.add(caseData);
+        //caseDataList.add(caseData);
         listener.onRequestComplete(caseData);
     }
 

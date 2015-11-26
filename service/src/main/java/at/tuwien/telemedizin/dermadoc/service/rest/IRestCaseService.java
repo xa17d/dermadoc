@@ -5,6 +5,7 @@ import at.tuwien.telemedizin.dermadoc.entities.User;
 import at.tuwien.telemedizin.dermadoc.entities.casedata.CaseData;
 import at.tuwien.telemedizin.dermadoc.entities.rest.AuthenticationData;
 import at.tuwien.telemedizin.dermadoc.entities.rest.AuthenticationToken;
+import at.tuwien.telemedizin.dermadoc.service.rest.listener.DermadocNotificationHandler;
 import at.tuwien.telemedizin.dermadoc.service.rest.listener.RestListener;
 
 import java.util.List;
@@ -26,6 +27,13 @@ public interface IRestCaseService {
 
     //TODO
     void getUser(RestListener<User> listener);
+
+    /**
+     * set a notification listerner that gets called when a new
+     * notification is available
+     * @param handler notification handler
+     */
+    void setNotificationHandler(DermadocNotificationHandler handler);
 
 
     /*

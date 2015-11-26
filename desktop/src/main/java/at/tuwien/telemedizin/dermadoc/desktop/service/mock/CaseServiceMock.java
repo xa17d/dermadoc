@@ -17,6 +17,7 @@ import java.util.*;
 /**
  * MOCK!!!
  */
+@Deprecated
 public class CaseServiceMock implements ICaseService {
 
     private ObservableList<Case> obsOpenCaseList = FXCollections.observableArrayList();
