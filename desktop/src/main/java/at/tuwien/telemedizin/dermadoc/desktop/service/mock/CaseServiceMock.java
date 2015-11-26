@@ -1,7 +1,9 @@
-package at.tuwien.telemedizin.dermadoc.desktop.service;
+package at.tuwien.telemedizin.dermadoc.desktop.service.mock;
 
 import at.tuwien.telemedizin.dermadoc.desktop.exception.DermadocException;
 import at.tuwien.telemedizin.dermadoc.desktop.exception.DermadocNotImplementedException;
+import at.tuwien.telemedizin.dermadoc.desktop.service.ICaseService;
+import at.tuwien.telemedizin.dermadoc.desktop.service.dto.PatientCaseMap;
 import at.tuwien.telemedizin.dermadoc.entities.*;
 import at.tuwien.telemedizin.dermadoc.entities.casedata.*;
 import at.tuwien.telemedizin.dermadoc.entities.rest.AuthenticationToken;
@@ -19,8 +21,7 @@ public class CaseServiceMock implements ICaseService {
 
     private ObservableList<Case> obsOpenCaseList = FXCollections.observableArrayList();
     private ObservableList<Notification> obsNotificationList = FXCollections.observableArrayList();
-    private ObservableMap<Patient, ObservableList<Case>> obsPatientCaseMap = FXCollections.observableHashMap();
-
+    private PatientCaseMap obsPatientCaseMap = new PatientCaseMap();
     private ObservableList<CaseData> obsCaseDataList = FXCollections.observableArrayList();
 
     public CaseServiceMock(AuthenticationToken token) {
@@ -70,9 +71,9 @@ public class CaseServiceMock implements ICaseService {
         ObservableList<Case> p3Cases = FXCollections.observableArrayList();
         p3Cases.add(c31);
 
-        obsPatientCaseMap.put(p1, p1Cases);
-        obsPatientCaseMap.put(p2, p2Cases);
-        obsPatientCaseMap.put(p3, p3Cases);
+        obsPatientCaseMap.putAll(p1Cases);
+        obsPatientCaseMap.putAll(p2Cases);
+        obsPatientCaseMap.putAll(p3Cases);
 
         //-------------
 
@@ -131,12 +132,12 @@ public class CaseServiceMock implements ICaseService {
     }
 
     @Override
-    public ObservableMap<Patient, ObservableList<Case>> getAllCases() throws DermadocException {
+    public PatientCaseMap getAllCases() throws DermadocException {
         return obsPatientCaseMap;
     }
 
     @Override
-    public ObservableMap<Patient, ObservableList<Case>> getCasesOfPatient(String searchText) throws DermadocException {
+    public PatientCaseMap searchCases(String searchText) throws DermadocException {
         throw new DermadocNotImplementedException();
     }
 
@@ -151,8 +152,8 @@ public class CaseServiceMock implements ICaseService {
     }
 
     @Override
-    public CaseData saveCaseData(Case aCase, CaseData caseData) throws DermadocException {
-        return caseData;
+    public void saveCaseData(Case aCase, CaseData caseData) throws DermadocException {
+        //do nothing
     }
 
     @Override

@@ -1,5 +1,6 @@
-package at.tuwien.telemedizin.dermadoc.desktop.service;
+package at.tuwien.telemedizin.dermadoc.desktop.service.mock;
 
+import at.tuwien.telemedizin.dermadoc.desktop.service.ILoginService;
 import at.tuwien.telemedizin.dermadoc.entities.Physician;
 import at.tuwien.telemedizin.dermadoc.entities.rest.AuthenticationData;
 import at.tuwien.telemedizin.dermadoc.entities.rest.AuthenticationToken;

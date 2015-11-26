@@ -1,7 +1,7 @@
 package at.tuwien.telemedizin.dermadoc.desktop.service;
 
 import at.tuwien.telemedizin.dermadoc.desktop.exception.DermadocException;
-import at.tuwien.telemedizin.dermadoc.desktop.service.handler.DermadocNotificationHandler;
+import at.tuwien.telemedizin.dermadoc.desktop.service.dto.PatientCaseMap;
 import at.tuwien.telemedizin.dermadoc.entities.Case;
 import at.tuwien.telemedizin.dermadoc.entities.Notification;
 import at.tuwien.telemedizin.dermadoc.entities.Patient;
@@ -31,7 +31,7 @@ public interface ICaseService {
      * @return map containing all cases of each patient
      * @throws DermadocException
      */
-    ObservableMap<Patient,ObservableList<Case>> getAllCases() throws DermadocException;
+    PatientCaseMap getAllCases() throws DermadocException;
 
 
     /**
@@ -41,7 +41,7 @@ public interface ICaseService {
      * @return map containing all cases of selected patients
      * @throws DermadocException
      */
-    ObservableMap<Patient,ObservableList<Case>> getCasesOfPatient(String searchText) throws DermadocException;
+    PatientCaseMap searchCases(String searchText) throws DermadocException;
 
 
     /**
@@ -72,7 +72,7 @@ public interface ICaseService {
      * @return the saved case (this time containing a valid id
      * @throws DermadocException
      */
-    CaseData saveCaseData(Case aCase, CaseData caseData) throws DermadocException;
+    void saveCaseData(Case aCase, CaseData caseData) throws DermadocException;
 
 
 

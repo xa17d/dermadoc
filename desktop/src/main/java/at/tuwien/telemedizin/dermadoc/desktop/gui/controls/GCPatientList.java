@@ -1,6 +1,7 @@
 package at.tuwien.telemedizin.dermadoc.desktop.gui.controls;
 
 import at.tuwien.telemedizin.dermadoc.desktop.gui.Controller;
+import at.tuwien.telemedizin.dermadoc.desktop.service.dto.PatientCaseMap;
 import at.tuwien.telemedizin.dermadoc.entities.Case;
 import at.tuwien.telemedizin.dermadoc.entities.Gender;
 import at.tuwien.telemedizin.dermadoc.entities.Patient;
@@ -27,9 +28,9 @@ public class GCPatientList extends VBox {
     @FXML private TextField tfSearch;
 
     private Controller controller;
-    private ObservableMap<Patient, ObservableList<Case>> patientCaseMap;
+    private PatientCaseMap patientCaseMap;
 
-    public GCPatientList(Controller controller, ObservableMap<Patient, ObservableList<Case>> patientCaseMap) {
+    public GCPatientList(Controller controller, PatientCaseMap patientCaseMap) {
 
         this.controller = controller;
         this.patientCaseMap = patientCaseMap;
@@ -56,22 +57,12 @@ public class GCPatientList extends VBox {
     @FXML
     private void updateList() {
 
-        ObservableMap<Patient, ObservableList<Case>> actualPatientCaseMap;
-        ObservableList<Patient> actualPatientList;
+        patientCaseMap = controller.searchPatientCaseMap(tfSearch.getText());
+        ObservableList<Patient> patientList = FXCollections.observableArrayList(patientCaseMap.keySet());
 
-        if(tfSearch.getText().equals("")) {
-            actualPatientCaseMap = patientCaseMap;
-        }
-        else {
-            actualPatientCaseMap = controller.searchPatientCaseMap(tfSearch.getText());
-        }
-        //TODO bugfix search overloading
-        actualPatientList = FXCollections.observableArrayList(actualPatientCaseMap.keySet());
-
-        //TODO sort patients
-
-        for(Patient p : actualPatientList) {
-            vbPatientList.getChildren().add(new GCPatientListItem(controller, p, actualPatientCaseMap.get(p)));
+        vbPatientList.getChildren().clear();
+        for(Patient p : patientList) {
+            vbPatientList.getChildren().add(new GCPatientListItem(controller, p, patientCaseMap.get(p)));
         }
     }
 }

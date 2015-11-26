@@ -4,15 +4,14 @@ import at.tuwien.telemedizin.dermadoc.desktop.exception.DermadocException;
 import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.*;
 import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.error.ErrorPane;
 import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.handler.OpenMainTabEventHandler;
-import at.tuwien.telemedizin.dermadoc.desktop.service.CaseServiceMock;
-import at.tuwien.telemedizin.dermadoc.desktop.service.ICaseService;
-import at.tuwien.telemedizin.dermadoc.desktop.service.ILoginService;
-import at.tuwien.telemedizin.dermadoc.desktop.service.LoginServiceMock;
+import at.tuwien.telemedizin.dermadoc.desktop.service.*;
+import at.tuwien.telemedizin.dermadoc.desktop.service.dto.PatientCaseMap;
+import at.tuwien.telemedizin.dermadoc.desktop.service.mock.CaseServiceMock;
+import at.tuwien.telemedizin.dermadoc.desktop.service.mock.LoginServiceMock;
 import at.tuwien.telemedizin.dermadoc.entities.*;
 import at.tuwien.telemedizin.dermadoc.entities.casedata.CaseData;
 import at.tuwien.telemedizin.dermadoc.entities.rest.AuthenticationData;
 import at.tuwien.telemedizin.dermadoc.entities.rest.AuthenticationToken;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
@@ -51,7 +50,7 @@ public class Controller {
     private EventHandler<javafx.event.ActionEvent> openMainTabHandler;
 
     private ObservableList<Tab> mainTabList;
-    private ObservableMap<Patient, ObservableList<Case>> patientCaseMap;
+    private PatientCaseMap patientCaseMap;
 
     public Controller() {
         openMainTabHandler = new OpenMainTabEventHandler(this);
@@ -64,7 +63,7 @@ public class Controller {
         loginService = new LoginServiceMock();
         token = loginService.login(new AuthenticationData("email", "password"));
         physician = loginService.getPhysician(token);
-        caseService = new CaseServiceMock(token);
+        caseService = new CaseService(token);
 
         //initialize physician view on top
         try {
@@ -75,7 +74,7 @@ public class Controller {
         }
 
         //initialize the patient list
-        patientCaseMap = FXCollections.emptyObservableMap();
+        patientCaseMap = new PatientCaseMap();
         try {
             patientCaseMap = caseService.getAllCases();
         } catch (DermadocException e) {
@@ -97,16 +96,6 @@ public class Controller {
 
     public void openMainTab(Case aCase) {
         mainTabList.add(new GCCaseTab(this, tpMain, aCase));
-    }
-
-    public EventHandler<javafx.event.ActionEvent> getAcceptCaseAndOpenMainTabHandler(Case aCase) {
-        try {
-            caseService.acceptCase(aCase);
-            return getOpenMainTabHandler();
-        } catch (DermadocException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
     public EventHandler<javafx.event.ActionEvent> getOpenMainTabHandler() {
@@ -140,9 +129,9 @@ public class Controller {
         t1.start();
     }
 
-    public ObservableMap<Patient, ObservableList<Case>> searchPatientCaseMap(String searchText) {
+    public PatientCaseMap searchPatientCaseMap(String searchText) {
         try {
-            return caseService.getCasesOfPatient(searchText);
+            return caseService.searchCases(searchText);
         } catch (DermadocException e) {
             showErrorMessage(e.getMessage());
         }
@@ -165,14 +154,24 @@ public class Controller {
         return FXCollections.observableArrayList();
     }
 
-    public CaseData saveCaseData(Case aCase, CaseData caseData) {
+    public void saveCaseData(Case aCase, CaseData caseData) {
 
         try {
-            return caseService.saveCaseData(aCase, caseData);
+            caseService.saveCaseData(aCase, caseData);
         } catch (DermadocException e) {
             showErrorMessage(e.getMessage());
         }
-        return caseData;
+        //return caseData;
+    }
+
+    public void acceptCase(Case aCase) {
+
+        try {
+            //TODO fix waiting time
+            caseService.acceptCase(aCase);
+        } catch (DermadocException e) {
+            showErrorMessage(e.getMessage());
+        }
     }
 
     public Physician getPhysician() {

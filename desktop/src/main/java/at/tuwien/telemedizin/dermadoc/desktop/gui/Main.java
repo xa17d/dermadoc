@@ -46,7 +46,7 @@ public class Main extends Application {
             mainStage.setMinWidth(720);
             mainStage.setMinHeight(540);
 
-            Scene scene = new Scene(root, 1200, 800);
+            Scene scene = new Scene(root, 1400, 700);
             //scene.getStylesheets().add(getClass().getResource("dermadoc.css").toExternalForm());
             mainStage.setScene(scene);
 

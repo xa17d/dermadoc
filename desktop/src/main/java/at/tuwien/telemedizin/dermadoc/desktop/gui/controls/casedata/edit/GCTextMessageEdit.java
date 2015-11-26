@@ -55,7 +55,8 @@ public class GCTextMessageEdit extends AGCCaseDataEdit {
 
         //send to backend
         textMessage = new TextMessage(-1l, Calendar.getInstance(), controller.getPhysician(), taTextMessage.getText());
-        textMessage = (TextMessage) controller.saveCaseData(aCase, textMessage);
+        //textMessage = (TextMessage) controller.saveCaseData(aCase, textMessage);
+        controller.saveCaseData(aCase, textMessage);
 
         //TODO necessary???
         //notify list

@@ -80,7 +80,7 @@ public class GCCaseList extends ScrollPane {
         acceptColumn.setCellValueFactory(cellData -> new ObservableValueBase<Button>() {
             @Override
             public Button getValue() {
-                return new GCButtonAccept(cellData.getValue(), controller.getAcceptCaseAndOpenMainTabHandler(cellData.getValue()));
+                return new GCButtonAccept(cellData.getValue(), controller.getOpenMainTabHandler());
             }
         });
     }

@@ -5,6 +5,8 @@ package at.tuwien.telemedizin.dermadoc.entities;
  */
 public class GeoLocation {
 
+    public GeoLocation() {  }
+
     public GeoLocation(String name, double latitude, double longitude) {
         this.name = name;
         this.latitude = latitude;
