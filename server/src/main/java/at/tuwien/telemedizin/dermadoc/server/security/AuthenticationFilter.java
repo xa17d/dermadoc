@@ -6,7 +6,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.GenericFilterBean;
 import org.springframework.web.util.UrlPathHelper;
@@ -24,13 +24,12 @@ import java.io.IOException;
  */
 public class AuthenticationFilter extends GenericFilterBean {
 
-    public AuthenticationFilter(AuthenticationManager authenticationManager) {
+    public AuthenticationFilter(AuthenticationManager authenticationManager, TokenService tokenService) {
         this.authenticationManager = authenticationManager;
+        this.tokenService = tokenService;
     }
 
     private AuthenticationManager authenticationManager;
-
-    @Autowired
     private TokenService tokenService;
 
     @Override
@@ -43,8 +42,8 @@ public class AuthenticationFilter extends GenericFilterBean {
         String token = httpRequest.getHeader("Authorization");
 
         if (!StringUtils.isEmpty(token)) {
-            if (!tokenService.contains(token)) {
-                tryToAuthenticate(new PreAuthenticatedAuthenticationToken(token, null));
+            if (tokenService.contains(token)) {
+                tryToAuthenticate(new SecurityToken(token));
             }
         }
 
@@ -56,6 +55,7 @@ public class AuthenticationFilter extends GenericFilterBean {
         if (responseAuthentication == null || !responseAuthentication.isAuthenticated()) {
             throw new InternalAuthenticationServiceException("Unable to authenticate Domain User for provided credentials");
         }
+        SecurityContextHolder.getContext().setAuthentication(responseAuthentication);
         logger.debug("User successfully authenticated");
         return responseAuthentication;
     }

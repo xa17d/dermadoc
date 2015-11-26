@@ -1,11 +1,14 @@
 package at.tuwien.telemedizin.dermadoc.server.services;
 
+import at.tuwien.telemedizin.dermadoc.entities.Patient;
+import at.tuwien.telemedizin.dermadoc.server.security.SecurityToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -17,10 +20,13 @@ import java.util.UUID;
 @Service
 public class TokenService {
 
+    private TokenService() {
+        tokens.put("test", new SecurityToken("test", new Patient(), "blub", AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_USER,ROLE_PATIENT"))); // TODO remove
+    }
+
     private static final Logger logger = LoggerFactory.getLogger(TokenService.class);
     public static final int HALF_AN_HOUR_IN_MILLISECONDS = 30 * 60 * 1000;
     private HashMap<String, Authentication> tokens = new HashMap<>();
-
 
     @Scheduled(fixedRate = HALF_AN_HOUR_IN_MILLISECONDS)
     public void evictExpiredTokens() {
