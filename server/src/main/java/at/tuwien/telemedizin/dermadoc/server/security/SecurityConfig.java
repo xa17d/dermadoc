@@ -4,6 +4,7 @@ import at.tuwien.telemedizin.dermadoc.server.services.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -19,6 +20,10 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * Created by daniel on 26.11.2015.
+ *
+ * Security inspired by:
+ * https://www.future-processing.pl/blog/exploring-spring-boot-and-spring-security-custom-token-based-authentication-of-rest-services-with-spring-security-and-pinch-of-spring-java-configuration-and-spring-integration-testing/
+ * https://github.com/FutureProcessing/spring-boot-security-example/tree/master/src/main/java/com/futureprocessing/spring/infrastructure/security
  */
 @Configuration
 @EnableWebMvcSecurity
@@ -30,9 +35,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.
                 csrf().disable().
                 sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).
-                //and().
-                //authorizeRequests().
-                //anyRequest().authenticated().
+                and().
+                authorizeRequests().
+                antMatchers(HttpMethod.GET, "/").anonymous().
+                antMatchers(HttpMethod.POST, "/login").anonymous().
+                anyRequest().authenticated().
                 and().
                 //anonymous().disable().
                 exceptionHandling().authenticationEntryPoint(unauthorizedEntryPoint());
