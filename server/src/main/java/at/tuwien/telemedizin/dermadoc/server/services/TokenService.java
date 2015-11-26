@@ -1,6 +1,7 @@
 package at.tuwien.telemedizin.dermadoc.server.services;
 
 import at.tuwien.telemedizin.dermadoc.entities.Patient;
+import at.tuwien.telemedizin.dermadoc.entities.Physician;
 import at.tuwien.telemedizin.dermadoc.server.security.SecurityToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +23,7 @@ public class TokenService {
 
     private TokenService() {
         tokens.put("test", new SecurityToken("test", new Patient(), "blub", AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_USER,ROLE_PATIENT"))); // TODO remove
+        tokens.put("test2", new SecurityToken("test2", new Physician(), "blub", AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_USER,ROLE_PHYSICIAN"))); // TODO remove
     }
 
     private static final Logger logger = LoggerFactory.getLogger(TokenService.class);

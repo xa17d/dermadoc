@@ -6,8 +6,11 @@ import at.tuwien.telemedizin.dermadoc.entities.rest.AuthenticationToken;
 import at.tuwien.telemedizin.dermadoc.server.exceptions.AuthenticationInvalidException;
 import at.tuwien.telemedizin.dermadoc.server.persistence.dao.EntityNotFoundException;
 import at.tuwien.telemedizin.dermadoc.server.persistence.dao.UserDao;
+import at.tuwien.telemedizin.dermadoc.server.security.AccessUser;
+import at.tuwien.telemedizin.dermadoc.server.security.CurrentUser;
 import org.apache.tomcat.util.net.jsse.openssl.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -40,5 +43,11 @@ public class UserController {
             // Password invalid
             throw new AuthenticationInvalidException();
         }
+    }
+
+    @RequestMapping(value = "/user", method = RequestMethod.GET)
+    @AccessUser
+    public User user(@CurrentUser User user) {
+        return user;
     }
 }
