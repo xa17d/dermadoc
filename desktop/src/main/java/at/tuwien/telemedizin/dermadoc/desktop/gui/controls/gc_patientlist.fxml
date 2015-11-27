@@ -14,7 +14,7 @@
                   <Insets bottom="12.0" left="12.0" right="12.0" top="12.0" />
                </HBox.margin>
             </Label>
-            <TextField onKeyReleased="#updateList" HBox.hgrow="ALWAYS">
+            <TextField fx:id="tfSearch" onKeyReleased="#updateList" HBox.hgrow="ALWAYS">
                <HBox.margin>
                   <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
                </HBox.margin>

@@ -7,6 +7,9 @@ public class GCButtonAccept extends GCButton {
 
     public GCButtonAccept(Case aCase, EventHandler<javafx.event.ActionEvent> listener) {
         super("Accept", aCase);
-        this.setOnAction(listener);
+
+        if(listener != null) {
+            this.setOnAction(listener);
+        }
     }
 }

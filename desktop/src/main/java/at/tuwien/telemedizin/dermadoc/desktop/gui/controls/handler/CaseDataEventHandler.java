@@ -1,4 +1,4 @@
-package at.tuwien.telemedizin.dermadoc.desktop.service;
+package at.tuwien.telemedizin.dermadoc.desktop.gui.controls.handler;
 
 import at.tuwien.telemedizin.dermadoc.entities.casedata.CaseData;
 
