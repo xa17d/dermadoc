@@ -8,13 +8,9 @@ import at.tuwien.telemedizin.dermadoc.server.persistence.dao.CaseDao;
 import at.tuwien.telemedizin.dermadoc.server.persistence.dao.EntityNotFoundException;
 import at.tuwien.telemedizin.dermadoc.server.security.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister;
-import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.web.bind.annotation.*;
-import sun.plugin.dom.exception.InvalidStateException;
 
 import java.util.GregorianCalendar;
-import java.util.List;
 
 /**
  * Created by daniel on 27.11.2015.
