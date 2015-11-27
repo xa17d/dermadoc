@@ -39,11 +39,18 @@ public class AuthenticationFilter extends GenericFilterBean {
 
         String resourcePath = new UrlPathHelper().getPathWithinApplication(httpRequest);
 
-        String token = httpRequest.getHeader("Authorization");
+        String authorizationHeader = httpRequest.getHeader("Authorization");
 
-        if (!StringUtils.isEmpty(token)) {
-            if (tokenService.contains(token)) {
-                tryToAuthenticate(new SecurityToken(token));
+        if (!StringUtils.isEmpty(authorizationHeader)) {
+
+            String[] parts = authorizationHeader.split(" ", 2);
+
+            if (parts.length == 2) {
+                String tokenType = parts[0];
+                if (SecurityConfig.TokenType.equals(tokenType)) {
+                    String token = parts[1];
+                    tryToAuthenticate(new SecurityToken(token));
+                }
             }
         }
 

@@ -65,4 +65,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new TokenAuthenticationProvider(tokenService);
     }
 
+    public static final String TokenType = "Bearer";
+
 }

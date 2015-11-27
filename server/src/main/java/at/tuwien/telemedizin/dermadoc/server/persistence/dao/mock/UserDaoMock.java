@@ -19,15 +19,23 @@ import java.util.GregorianCalendar;
 public class UserDaoMock implements UserDao {
     public UserDaoMock() {
         // create initial mocked data
+        users.add(createMockPhysician());
+        users.add(createMockPatient());
+    }
 
+    private ArrayList<User> users = new ArrayList<>();
+
+    public static User createMockPhysician() {
         Physician p1 = new Physician();
         p1.setName("Dr. Acula");
         p1.setPassword("a");
         p1.setMail("a");
         p1.setId(0);
         p1.setLocation(new GeoLocation("Transsilvanien", 45.7340837, 21.1990513));
-        users.add(p1);
+        return p1;
+    }
 
+    public static User createMockPatient() {
         Patient p2 = new Patient();
         p2.setName("Rainer Zufall");
         p2.setGender(Gender.Male);
@@ -38,10 +46,8 @@ public class UserDaoMock implements UserDao {
         p2.setMail("p");
         p2.setPassword("p");
         p2.setId(1);
-        users.add(p2);
+        return p2;
     }
-
-    private ArrayList<User> users = new ArrayList<>();
 
 
     @Override

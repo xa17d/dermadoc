@@ -8,6 +8,9 @@ import at.tuwien.telemedizin.dermadoc.server.persistence.dao.EntityNotFoundExcep
 import at.tuwien.telemedizin.dermadoc.server.persistence.dao.UserDao;
 import at.tuwien.telemedizin.dermadoc.server.security.AccessUser;
 import at.tuwien.telemedizin.dermadoc.server.security.CurrentUser;
+import at.tuwien.telemedizin.dermadoc.server.security.SecurityConfig;
+import at.tuwien.telemedizin.dermadoc.server.security.SecurityToken;
+import at.tuwien.telemedizin.dermadoc.server.services.TokenService;
 import org.apache.tomcat.util.net.jsse.openssl.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -25,20 +28,27 @@ public class UserController {
     @Autowired
     private UserDao userDao;
 
+    @Autowired
+    private TokenService tokenService;
+
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public AuthenticationToken login(@RequestBody AuthenticationData authenticationData) throws AuthenticationInvalidException {
-        User u;
+        User user;
 
         try {
-            u = userDao.getUserByMail(authenticationData.getMail());
+            user = userDao.getUserByMail(authenticationData.getMail());
         }
         catch (EntityNotFoundException e) {
             // User not found
             throw new AuthenticationInvalidException();
         }
 
-        if (u.getPassword().equals(authenticationData.getPassword())) {
-            return new AuthenticationToken("uid", Long.toString(u.getId())); // TODO: create session and token
+        if (user.getPassword().equals(authenticationData.getPassword())) {
+            // Login successful
+            SecurityToken token = tokenService.generateNewToken(user);
+            tokenService.store(token);
+
+            return new AuthenticationToken(SecurityConfig.TokenType, token.getToken()); // TODO: create session and token
         } else {
             // Password invalid
             throw new AuthenticationInvalidException();

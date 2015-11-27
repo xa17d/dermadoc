@@ -2,17 +2,25 @@ package at.tuwien.telemedizin.dermadoc.server.services;
 
 import at.tuwien.telemedizin.dermadoc.entities.Patient;
 import at.tuwien.telemedizin.dermadoc.entities.Physician;
+import at.tuwien.telemedizin.dermadoc.entities.User;
+import at.tuwien.telemedizin.dermadoc.server.exceptions.InvalidUserTypeException;
+import at.tuwien.telemedizin.dermadoc.server.persistence.dao.EntityNotFoundException;
+import at.tuwien.telemedizin.dermadoc.server.persistence.dao.UserDao;
+import at.tuwien.telemedizin.dermadoc.server.persistence.dao.mock.UserDaoMock;
 import at.tuwien.telemedizin.dermadoc.server.security.SecurityToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -22,8 +30,8 @@ import java.util.UUID;
 public class TokenService {
 
     private TokenService() {
-        tokens.put("test", new SecurityToken("test", new Patient(), "blub", AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_USER,ROLE_PATIENT"))); // TODO remove
-        tokens.put("test2", new SecurityToken("test2", new Physician(), "blub", AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_USER,ROLE_PHYSICIAN"))); // TODO remove
+        store(generateNewToken(UserDaoMock.createMockPhysician(), "test"));
+        store(generateNewToken(UserDaoMock.createMockPatient(), "test2"));
     }
 
     private static final Logger logger = LoggerFactory.getLogger(TokenService.class);
@@ -36,12 +44,30 @@ public class TokenService {
         // TODO delete expired tokens
     }
 
-    public String generateNewToken() {
-        return UUID.randomUUID().toString();
+    public SecurityToken generateNewToken(User user) {
+        String tokenId = UUID.randomUUID().toString();
+        return generateNewToken(user, tokenId);
     }
 
-    public void store(String token, Authentication authentication) {
-        tokens.put(token, authentication);
+    public SecurityToken generateNewToken(User user, String tokenId) {
+        List<GrantedAuthority> authorities;
+
+        if (user instanceof Patient) {
+            authorities = AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_USER,ROLE_PATIENT");
+        }
+        else if (user instanceof Physician) {
+            authorities = AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_USER,ROLE_PHYSICIAN");
+        }
+        else {
+            throw new InvalidUserTypeException(user.getClass());
+        }
+
+        SecurityToken token = new SecurityToken(tokenId, user, null, authorities);
+        return token;
+    }
+
+    public void store(SecurityToken token) {
+        tokens.put(token.getToken(), token);
     }
 
     public boolean contains(String token) {
