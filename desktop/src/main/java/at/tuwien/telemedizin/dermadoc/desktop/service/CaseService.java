@@ -1,15 +1,16 @@
 package at.tuwien.telemedizin.dermadoc.desktop.service;
 
 import at.tuwien.telemedizin.dermadoc.desktop.exception.DermadocException;
+import at.tuwien.telemedizin.dermadoc.desktop.exception.DermadocNotImplementedException;
+import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.handler.GeneralEventHandler;
 import at.tuwien.telemedizin.dermadoc.desktop.service.dto.PatientCaseMap;
+import at.tuwien.telemedizin.dermadoc.entities.*;
+import at.tuwien.telemedizin.dermadoc.entities.rest.CaseList;
+import at.tuwien.telemedizin.dermadoc.service.rest.RestCaseService;
 import at.tuwien.telemedizin.dermadoc.service.rest.listener.DermadocNotificationHandler;
-import at.tuwien.telemedizin.dermadoc.entities.Case;
-import at.tuwien.telemedizin.dermadoc.entities.Notification;
-import at.tuwien.telemedizin.dermadoc.entities.Patient;
 import at.tuwien.telemedizin.dermadoc.entities.casedata.CaseData;
 import at.tuwien.telemedizin.dermadoc.entities.rest.AuthenticationToken;
 import at.tuwien.telemedizin.dermadoc.service.rest.IRestCaseService;
-import at.tuwien.telemedizin.dermadoc.service.rest.RestCaseServiceMock;
 import at.tuwien.telemedizin.dermadoc.service.rest.listener.RestListener;
 import at.tuwien.telemedizin.dermadoc.service.util.UtilCompare;
 import javafx.application.Platform;
@@ -18,6 +19,7 @@ import javafx.collections.ObservableList;
 
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.*;
 
 /**
  * Created by Lucas on 26.11.2015.
@@ -32,7 +34,7 @@ public class CaseService implements ICaseService {
 
     public CaseService(AuthenticationToken token) {
 
-        rest = new RestCaseServiceMock(token);
+        rest = new RestCaseService(token);
     }
 
 
@@ -73,6 +75,52 @@ public class CaseService implements ICaseService {
 
         rest.getCaseData(listener, aCase);
         return obsCaseDataList;
+    }
+
+    @Override
+    public Physician getPhysician() throws DermadocException {
+
+        //TODO oher solution?
+        final ExecutorService service;
+        final Future<Physician> task;
+
+        service = Executors.newFixedThreadPool(1);
+        task = service.submit(new Callable<Physician>() {
+            Physician physician = null;
+            @Override
+            public Physician call() throws Exception {
+                rest.getUser(new RestListener<User>() {
+                    @Override
+                    public void onRequestComplete(User requestResult) {
+                        if(requestResult instanceof Physician)
+                            physician = (Physician) requestResult;
+                        else
+                            onError(new Error("You are not logged in as a Physician"));
+                    }
+
+                    @Override
+                    public void onError(Error error) {
+
+                    }
+                });
+
+                while(physician == null) { Thread.sleep(50); }
+                return physician;
+            }
+        });
+
+        try {
+            return task.get();
+        } catch(final InterruptedException ex) {
+            //TODO
+            ex.printStackTrace();
+        } catch(final ExecutionException ex) {
+            //TODO
+            ex.printStackTrace();
+        }
+
+        service.shutdownNow();
+        return null;
     }
 
     @Override
@@ -119,10 +167,10 @@ public class CaseService implements ICaseService {
      * LISTENER
      */
 
-    private RestListener<List<Case>> openCasesListener = new RestListener<List<Case>>() {
+    private RestListener<CaseList> openCasesListener = new RestListener<CaseList>() {
         @Override
-        public void onRequestComplete(List<Case> requestResult) {
-            obsOpenCaseList = FXCollections.observableArrayList(requestResult);
+        public void onRequestComplete(CaseList requestResult) {
+            obsOpenCaseList.addAll(requestResult);
         }
 
         @Override
@@ -131,9 +179,9 @@ public class CaseService implements ICaseService {
         }
     };
 
-    private RestListener<List<Case>> allCasesListener = new RestListener<List<Case>>() {
+    private RestListener<CaseList> allCasesListener = new RestListener<CaseList>() {
         @Override
-        public void onRequestComplete(List<Case> requestResult) {
+        public void onRequestComplete(CaseList requestResult) {
 
             obsPatientCaseMap.putAll(requestResult);
             obsPatientCaseMap.sort();
@@ -178,6 +226,8 @@ public class CaseService implements ICaseService {
     @Override
     public PatientCaseMap searchCases(String searchText) throws DermadocException {
 
+        //TODO
+        /*
         if(searchText.length() >= 3) {
 
             PatientCaseMap resultMap = new PatientCaseMap();
@@ -192,6 +242,7 @@ public class CaseService implements ICaseService {
 
             return resultMap;
         }
+        */
 
         return obsPatientCaseMap;
     }

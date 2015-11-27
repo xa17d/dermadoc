@@ -3,6 +3,7 @@ package at.tuwien.telemedizin.dermadoc.desktop.gui;
 import at.tuwien.telemedizin.dermadoc.desktop.exception.DermadocException;
 import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.*;
 import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.error.ErrorPane;
+import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.handler.GeneralEventHandler;
 import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.handler.OpenMainTabEventHandler;
 import at.tuwien.telemedizin.dermadoc.desktop.service.*;
 import at.tuwien.telemedizin.dermadoc.desktop.service.dto.PatientCaseMap;
@@ -62,8 +63,12 @@ public class Controller {
         //TODO remove mock
         loginService = new LoginServiceMock();
         token = loginService.login(new AuthenticationData("email", "password"));
-        physician = loginService.getPhysician(token);
         caseService = new CaseService(token);
+        try {
+            physician = caseService.getPhysician();
+        } catch (DermadocException e) {
+            showErrorMessage(e.getMessage());
+        }
 
         //initialize physician view on top
         try {

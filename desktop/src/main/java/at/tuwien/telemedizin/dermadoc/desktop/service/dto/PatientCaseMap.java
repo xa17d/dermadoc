@@ -2,9 +2,7 @@ package at.tuwien.telemedizin.dermadoc.desktop.service.dto;
 
 import at.tuwien.telemedizin.dermadoc.entities.Case;
 import at.tuwien.telemedizin.dermadoc.entities.Patient;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
+import javafx.collections.*;
 
 import java.util.List;
 import java.util.Set;
@@ -45,6 +43,16 @@ public class PatientCaseMap {
 
     public Set<Patient> keySet() {
         return map.keySet();
+    }
+
+    public void addMapListener(MapChangeListener<Patient, ObservableList<Case>> listener) {
+        map.addListener(listener);
+    }
+
+    public void addListListener(ListChangeListener<Case> listener) {
+        for(Patient p : map.keySet()) {
+            map.get(p).addListener(listener);
+        }
     }
 
 

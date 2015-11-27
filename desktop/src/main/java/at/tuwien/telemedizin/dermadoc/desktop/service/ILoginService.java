@@ -23,6 +23,4 @@ public interface ILoginService {
      * @param token token
      */
     void logout(AuthenticationToken token);
-
-    Physician getPhysician(AuthenticationToken token);
 }

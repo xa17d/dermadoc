@@ -5,6 +5,7 @@ import at.tuwien.telemedizin.dermadoc.entities.User;
 import at.tuwien.telemedizin.dermadoc.entities.casedata.CaseData;
 import at.tuwien.telemedizin.dermadoc.entities.rest.AuthenticationData;
 import at.tuwien.telemedizin.dermadoc.entities.rest.AuthenticationToken;
+import at.tuwien.telemedizin.dermadoc.entities.rest.CaseList;
 import at.tuwien.telemedizin.dermadoc.service.rest.listener.DermadocNotificationHandler;
 import at.tuwien.telemedizin.dermadoc.service.rest.listener.RestListener;
 
@@ -19,9 +20,9 @@ public interface IRestCaseService {
      * GET
      */
 
-    void getOpenCases(RestListener<List<Case>> listener);
+    void getOpenCases(RestListener<CaseList> listener);
 
-    void getAllCases(RestListener<List<Case>> listener);
+    void getAllCases(RestListener<CaseList> listener);
 
     void getCaseData(RestListener<List<CaseData>> listener, Case aCase);
 

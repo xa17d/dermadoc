@@ -5,10 +5,7 @@ import at.tuwien.telemedizin.dermadoc.desktop.service.dto.PatientCaseMap;
 import at.tuwien.telemedizin.dermadoc.entities.Case;
 import at.tuwien.telemedizin.dermadoc.entities.Gender;
 import at.tuwien.telemedizin.dermadoc.entities.Patient;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.collections.ObservableListBase;
-import javafx.collections.ObservableMap;
+import javafx.collections.*;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.TextField;
@@ -43,6 +40,27 @@ public class GCPatientList extends VBox {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        /*
+        this.patientCaseMap.addListListener(new ListChangeListener<Case>() {
+            @Override
+            public void onChanged(Change<? extends Case> c) {
+                updateList();
+            }
+        });
+        */
+        this.patientCaseMap.addMapListener(new MapChangeListener<Patient, ObservableList<Case>>() {
+            @Override
+            public void onChanged(Change<? extends Patient, ? extends ObservableList<Case>> change) {
+                updateList();
+                change.getValueAdded().addListener(new ListChangeListener<Case>() {
+                    @Override
+                    public void onChanged(Change<? extends Case> c) {
+                        updateList();
+                    }
+                });
+            }
+        });
     }
 
     @FXML

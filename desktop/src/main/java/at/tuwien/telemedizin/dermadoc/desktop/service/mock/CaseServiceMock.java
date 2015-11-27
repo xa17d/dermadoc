@@ -2,6 +2,7 @@ package at.tuwien.telemedizin.dermadoc.desktop.service.mock;
 
 import at.tuwien.telemedizin.dermadoc.desktop.exception.DermadocException;
 import at.tuwien.telemedizin.dermadoc.desktop.exception.DermadocNotImplementedException;
+import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.handler.GeneralEventHandler;
 import at.tuwien.telemedizin.dermadoc.desktop.service.ICaseService;
 import at.tuwien.telemedizin.dermadoc.desktop.service.dto.PatientCaseMap;
 import at.tuwien.telemedizin.dermadoc.entities.*;
@@ -145,6 +146,16 @@ public class CaseServiceMock implements ICaseService {
     @Override
     public ObservableList<CaseData> getCaseData(Case aCase) throws DermadocException {
         return obsCaseDataList;
+    }
+
+    @Override
+    public Physician getPhysician() throws DermadocException {
+
+        Physician physician = new Physician();
+        physician.setName("Lucas Dobler");
+        physician.setMail("lucas@ldob.eu");
+
+        return physician;
     }
 
     @Override

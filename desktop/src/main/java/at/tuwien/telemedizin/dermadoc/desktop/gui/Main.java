@@ -57,7 +57,8 @@ public class Main extends Application {
                     controller.login(mainStage);
                 }
             });
-            controller.login(mainStage);
+
+            mainStage.show();
 
         } catch (IOException e) {
             e.printStackTrace();

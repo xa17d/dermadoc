@@ -2,7 +2,11 @@ package at.tuwien.telemedizin.dermadoc.service.rest.test;
 
 import at.tuwien.telemedizin.dermadoc.entities.Case;
 import at.tuwien.telemedizin.dermadoc.entities.Patient;
+import at.tuwien.telemedizin.dermadoc.entities.Physician;
+import at.tuwien.telemedizin.dermadoc.entities.User;
+import at.tuwien.telemedizin.dermadoc.entities.rest.CaseList;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,11 +20,12 @@ import java.net.URL;
  */
 public class RestServiceTest implements IRestServiceTest {
 
-    private static final String ID = "cases";
+    //private static final String ID = "cases";
+    private static final String ID = "user";
 
     public void getTestPatient() {
 
-        final ObjectMapper mapper = new ObjectMapper();
+        final XmlMapper mapper = new XmlMapper();
 
         Thread t = new Thread(new Runnable() {
             public void run() {
@@ -38,17 +43,8 @@ public class RestServiceTest implements IRestServiceTest {
                     }
 
                     BufferedReader reader = new BufferedReader(new InputStreamReader((conn.getInputStream())));
-
-                    StringBuilder builder = new StringBuilder();
-                    String aux = "";
-
-                    while ((aux = reader.readLine()) != null) {
-                        builder.append(aux);
-                    }
-
-                    String text = builder.toString();
-
-                    //Case aCase = (Case) mapper.readValue(reader, Case.class);
+                    Physician user = (Physician) mapper.readValue(reader, Physician.class);
+                    //CaseList caselist = (CaseList) mapper.readValue(reader, CaseList.class);
 
                     conn.disconnect();
 

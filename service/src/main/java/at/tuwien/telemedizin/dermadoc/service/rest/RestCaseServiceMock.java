@@ -4,6 +4,7 @@ import at.tuwien.telemedizin.dermadoc.entities.*;
 import at.tuwien.telemedizin.dermadoc.entities.casedata.*;
 import at.tuwien.telemedizin.dermadoc.entities.rest.AuthenticationData;
 import at.tuwien.telemedizin.dermadoc.entities.rest.AuthenticationToken;
+import at.tuwien.telemedizin.dermadoc.entities.rest.CaseList;
 import at.tuwien.telemedizin.dermadoc.service.rest.listener.DermadocNotificationHandler;
 import at.tuwien.telemedizin.dermadoc.service.rest.listener.RestListener;
 import javafx.application.Platform;
@@ -15,8 +16,8 @@ import java.util.*;
  */
 public class RestCaseServiceMock implements IRestCaseService {
 
-    private List<Case> openCaseList = new ArrayList<>();
-    private List<Case> caseList = new ArrayList<>();
+    private CaseList openCaseList = new CaseList();
+    private CaseList caseList = new CaseList();
     private List<CaseData> caseDataList = new ArrayList<>();
     private Physician physician;
 
@@ -101,13 +102,13 @@ public class RestCaseServiceMock implements IRestCaseService {
 
 
     @Override
-    public void getOpenCases(RestListener<List<Case>> listener) {
+    public void getOpenCases(RestListener<CaseList> listener) {
 
         listener.onRequestComplete(openCaseList);
     }
 
     @Override
-    public void getAllCases(RestListener<List<Case>> listener) {
+    public void getAllCases(RestListener<CaseList> listener) {
 
         listener.onRequestComplete(caseList);
     }

@@ -19,14 +19,4 @@ public class LoginServiceMock implements ILoginService {
     @Override
     public void logout(AuthenticationToken token) {
     }
-
-    @Override
-    public Physician getPhysician(AuthenticationToken token) {
-
-        Physician physician = new Physician();
-        physician.setName("Lucas Dobler");
-        physician.setMail("lucas@ldob.eu");
-
-        return physician;
-    }
 }

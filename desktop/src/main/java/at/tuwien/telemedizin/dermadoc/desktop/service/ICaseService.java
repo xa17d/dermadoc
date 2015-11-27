@@ -1,10 +1,12 @@
 package at.tuwien.telemedizin.dermadoc.desktop.service;
 
 import at.tuwien.telemedizin.dermadoc.desktop.exception.DermadocException;
+import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.handler.GeneralEventHandler;
 import at.tuwien.telemedizin.dermadoc.desktop.service.dto.PatientCaseMap;
 import at.tuwien.telemedizin.dermadoc.entities.Case;
 import at.tuwien.telemedizin.dermadoc.entities.Notification;
 import at.tuwien.telemedizin.dermadoc.entities.Patient;
+import at.tuwien.telemedizin.dermadoc.entities.Physician;
 import at.tuwien.telemedizin.dermadoc.entities.casedata.CaseData;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
@@ -55,6 +57,15 @@ public interface ICaseService {
      * @throws DermadocException
      */
     ObservableList<CaseData> getCaseData(Case aCase) throws DermadocException;
+
+
+    /**
+     * load the logged in physician from backend
+     *
+     * @return physician
+     * @throws DermadocException
+     */
+    Physician getPhysician() throws DermadocException;
 
 
 
