@@ -16,7 +16,7 @@ import java.io.IOException;
 /**
  * Created by Lucas on 13.11.2015.
  */
-public class GCCaseList extends ScrollPane {
+public class GCOpenCaseList extends ScrollPane {
 
     @FXML private TableView<Case> tvCases;
     @FXML private TableColumn<Case, String> nameColumn;
@@ -28,12 +28,12 @@ public class GCCaseList extends ScrollPane {
     private Controller controller;
     private ObservableList<Case> cases;
 
-    public GCCaseList(Controller controller, ObservableList<Case> cases) {
+    public GCOpenCaseList(Controller controller, ObservableList<Case> cases) {
 
         this.controller = controller;
         this.cases = cases;
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("gc_caselist.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("gc_opencaselist.fxml"));
         loader.setRoot(this);
         loader.setController(this);
         try {
@@ -42,7 +42,7 @@ public class GCCaseList extends ScrollPane {
             e.printStackTrace();
         }
 
-        tvCases.setItems(cases);
+        tvCases.setItems(this.cases);
     }
 
     @FXML
@@ -52,7 +52,7 @@ public class GCCaseList extends ScrollPane {
         nameColumn.setCellValueFactory(cellData -> new ObservableValueBase<String>() {
             @Override
             public String getValue() {
-                return cellData.getValue().getPatient().getName();
+                return "Patient " + cellData.getValue().getPatient().getId();
             }
         });
 
@@ -66,7 +66,7 @@ public class GCCaseList extends ScrollPane {
         caseNameColumn.setCellValueFactory(cellData -> new ObservableValueBase<String>() {
             @Override
             public String getValue() {
-                return cellData.getValue().getStatus().toString();
+                return cellData.getValue().getName();
             }
         });
 
@@ -80,7 +80,7 @@ public class GCCaseList extends ScrollPane {
         acceptColumn.setCellValueFactory(cellData -> new ObservableValueBase<Button>() {
             @Override
             public Button getValue() {
-                return new GCButtonAccept(cellData.getValue(), controller.getAcceptCaseAndOpenMainTabHandler(cellData.getValue()));
+                return new GCButtonAccept(cellData.getValue(), controller.getOpenMainTabHandler());
             }
         });
     }

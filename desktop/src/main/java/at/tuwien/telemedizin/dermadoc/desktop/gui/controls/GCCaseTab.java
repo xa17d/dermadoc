@@ -5,11 +5,8 @@ import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.casedata.GCCaseDataLi
 import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.casedata.edit.AGCCaseDataEdit;
 import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.casedata.edit.GCTextMessageEdit;
 import at.tuwien.telemedizin.dermadoc.entities.Case;
-import at.tuwien.telemedizin.dermadoc.entities.casedata.CaseData;
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -41,7 +38,7 @@ public class GCCaseTab extends Tab {
         this.tabPane = tabPane;
         this.aCase = aCase;
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("gc_maintab.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("gc_casetab.fxml"));
         loader.setRoot(this);
         loader.setController(this);
         try {
@@ -50,8 +47,8 @@ public class GCCaseTab extends Tab {
             e.printStackTrace();
         }
 
-        //TODO what???
-        //tabPane.getSelectionModel().select(this);
+        //set new tab as selected tab
+        tabPane.getSelectionModel().select(this);
     }
 
     @FXML

@@ -2,6 +2,7 @@ package at.tuwien.telemedizin.dermadoc.desktop.gui.controls.handler;
 
 import at.tuwien.telemedizin.dermadoc.desktop.gui.Controller;
 import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.buttons.GCButton;
+import at.tuwien.telemedizin.dermadoc.desktop.gui.controls.buttons.GCButtonAccept;
 import javafx.event.EventHandler;
 
 public class OpenMainTabEventHandler implements EventHandler<javafx.event.ActionEvent> {
@@ -21,6 +22,12 @@ public class OpenMainTabEventHandler implements EventHandler<javafx.event.Action
         }
 
         GCButton button = (GCButton) source;
+
+        if(button instanceof GCButtonAccept) {
+            controller.acceptCase(button.getCase());
+            controller.getOpenCaseList().remove(button.getCase());
+        }
+
         controller.openMainTab(button.getCase());
     }
 }
