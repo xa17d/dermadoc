@@ -1,0 +1,112 @@
+package at.tuwien.telemedizin.dermadoc.server.controllers;
+
+import at.tuwien.telemedizin.dermadoc.entities.*;
+import at.tuwien.telemedizin.dermadoc.entities.rest.CaseList;
+import at.tuwien.telemedizin.dermadoc.server.exceptions.InvalidCaseStatusException;
+import at.tuwien.telemedizin.dermadoc.server.exceptions.InvalidUserTypeException;
+import at.tuwien.telemedizin.dermadoc.server.persistence.dao.CaseDao;
+import at.tuwien.telemedizin.dermadoc.server.persistence.dao.EntityNotFoundException;
+import at.tuwien.telemedizin.dermadoc.server.security.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.web.bind.annotation.*;
+import sun.plugin.dom.exception.InvalidStateException;
+
+import java.util.GregorianCalendar;
+import java.util.List;
+
+/**
+ * Created by daniel on 27.11.2015.
+ */
+@RestController
+public class CaseController {
+
+    @Autowired
+    private CaseDao caseDao;
+
+    @RequestMapping(value = "/cases", method = RequestMethod.GET)
+    @AccessUser
+    public CaseList listCases(@CurrentUser User user) {
+
+        if (user instanceof Patient) {
+            return new CaseList(caseDao.listByPatient(user.getId()));
+        }
+        else if (user instanceof Physician) {
+            return new CaseList(caseDao.listByPhysician(user.getId()));
+        }
+        else {
+            throw new InvalidUserTypeException(user.getClass());
+        }
+    }
+
+    @RequestMapping(value = "/cases/open", method = RequestMethod.GET)
+    @AccessPhysician
+    public CaseList listOpenCases()
+    {
+        return new CaseList(caseDao.listOpenCases());
+    }
+
+    @RequestMapping(value = "/cases/{caseId}", method = RequestMethod.GET)
+    @AccessUser
+    public Case listCases(@CurrentUser User user, @PathVariable long caseId) {
+
+        Case c = caseDao.getCaseById(caseId);
+
+        if (Access.canAccess(user, c)) {
+            return c;
+        }
+        else {
+            throw new EntityNotFoundException("user has no access");
+        }
+    }
+
+    @RequestMapping(value = "/cases/{caseId}/accept", method = RequestMethod.POST)
+    @AccessPhysician
+    public Case acceptCase(@CurrentUser User user, @PathVariable long caseId) {
+
+        Case c = caseDao.getCaseById(caseId);
+
+        if (Access.canAccess(user, c)) {
+
+            Physician physician = (Physician)user;
+            if (c.getStatus() == CaseStatus.LookingForPhysician) {
+                c.setStatus(CaseStatus.Active);
+                c.setPhysician(physician);
+                caseDao.update(c);
+
+                return c;
+            }
+            else {
+                throw new InvalidCaseStatusException(c);
+            }
+        }
+        else {
+            throw new EntityNotFoundException("user has no access");
+        }
+    }
+
+    @RequestMapping(value = "/cases", method = RequestMethod.POST)
+    @AccessPatient
+    public Case addCase(@CurrentUser User user, @RequestBody Case newCase)
+    {
+        Patient patient = (Patient)user;
+
+        newCase.setPatient(patient); // just to be sure the user doesn't fake this property
+        newCase.setCreated(GregorianCalendar.getInstance()); // set to now
+
+        // set correct status
+        if (newCase.getPhysician() == null) {
+            newCase.setStatus(CaseStatus.LookingForPhysician);
+        }
+        else {
+            newCase.setStatus(CaseStatus.WaitingForAccept);
+        }
+
+        // insert to db and get the id assigned
+        caseDao.insert(newCase);
+
+        // return added case with the id
+        return newCase;
+    }
+}

@@ -17,11 +17,11 @@ import java.util.Calendar;
  * Created by daniel on 11.11.2015.
  */
 @RestController
-//@PreAuthorize("hasAuthority('ROLE_DOMAIN_USER')")
 public class TestController {
     @RequestMapping(value = "/")
     public String helloWorld() {
-        return "Hello Derma Doc";
+
+        return "<html><h1>Hello Derma Doc</h1></html>";
     }
 
     @RequestMapping(value = "/testpatient")

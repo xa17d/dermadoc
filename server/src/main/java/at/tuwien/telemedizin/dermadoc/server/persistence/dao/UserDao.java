@@ -7,8 +7,8 @@ import at.tuwien.telemedizin.dermadoc.entities.User;
  */
 public interface UserDao {
 
-    public User getUserById(long id) throws EntityNotFoundException;
+    User getUserById(long id) throws EntityNotFoundException;
 
-    public User getUserByMail(String mail) throws EntityNotFoundException;
+    User getUserByMail(String mail) throws EntityNotFoundException;
 
 }

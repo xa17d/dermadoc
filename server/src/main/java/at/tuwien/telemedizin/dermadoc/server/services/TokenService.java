@@ -6,6 +6,7 @@ import at.tuwien.telemedizin.dermadoc.entities.User;
 import at.tuwien.telemedizin.dermadoc.server.exceptions.InvalidUserTypeException;
 import at.tuwien.telemedizin.dermadoc.server.persistence.dao.EntityNotFoundException;
 import at.tuwien.telemedizin.dermadoc.server.persistence.dao.UserDao;
+import at.tuwien.telemedizin.dermadoc.server.persistence.dao.mock.MockData;
 import at.tuwien.telemedizin.dermadoc.server.persistence.dao.mock.UserDaoMock;
 import at.tuwien.telemedizin.dermadoc.server.security.SecurityToken;
 import org.slf4j.Logger;
@@ -30,8 +31,8 @@ import java.util.UUID;
 public class TokenService {
 
     private TokenService() {
-        store(generateNewToken(UserDaoMock.createMockPhysician(), "test"));
-        store(generateNewToken(UserDaoMock.createMockPatient(), "test2"));
+        store(generateNewToken(MockData.users.get(0), "test"));
+        store(generateNewToken(MockData.users.get(1), "test2"));
     }
 
     private static final Logger logger = LoggerFactory.getLogger(TokenService.class);
