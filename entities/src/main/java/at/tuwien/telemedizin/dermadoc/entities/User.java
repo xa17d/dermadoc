@@ -25,4 +25,26 @@ public abstract class User {
     private GeoLocation location;
     public GeoLocation getLocation() { return location; }
     public void setLocation(GeoLocation location) { this.location = location; }
+
+
+    @Override
+    public int hashCode() {
+        return (int)this.getId();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+
+        if(o == null)
+            return false;
+
+        if(this.hashCode() != o.hashCode())
+            return false;
+
+        if(this.getClass() != o.getClass())
+            return false;
+
+        User u = (User) o;
+        return this.getId() == u.getId();
+    }
 }

@@ -24,9 +24,10 @@ public interface IRestCaseService {
 
     void getAllCases(RestListener<CaseList> listener);
 
+    void getCaseById(RestListener<Case> listener, long caseId);
+
     void getCaseData(RestListener<List<CaseData>> listener, Case aCase);
 
-    //TODO
     void getUser(RestListener<User> listener);
 
     /**

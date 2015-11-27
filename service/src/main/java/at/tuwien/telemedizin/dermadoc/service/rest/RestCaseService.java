@@ -8,9 +8,7 @@ import at.tuwien.telemedizin.dermadoc.entities.rest.AuthenticationToken;
 import at.tuwien.telemedizin.dermadoc.entities.rest.CaseList;
 import at.tuwien.telemedizin.dermadoc.service.rest.listener.DermadocNotificationHandler;
 import at.tuwien.telemedizin.dermadoc.service.rest.listener.RestListener;
-import at.tuwien.telemedizin.dermadoc.service.rest.requests.GetRequest;
 
-import java.net.URL;
 import java.util.List;
 
 /**
@@ -44,6 +42,11 @@ public class RestCaseService implements IRestCaseService {
     }
 
     @Override
+    public void getCaseById(RestListener<Case> listener, long caseId) {
+        new Thread(new GetCase(token, listener, caseId)).start();
+    }
+
+    @Override
     public void getCaseData(RestListener<List<CaseData>> listener, Case aCase) {
 
     }
@@ -70,7 +73,7 @@ public class RestCaseService implements IRestCaseService {
 
     @Override
     public void postNewCase(RestListener<Case> listener, Case aCase) {
-
+        new Thread(new PostNewCase(token, listener, aCase)).start();
     }
 
 
@@ -79,7 +82,7 @@ public class RestCaseService implements IRestCaseService {
      * RUNNABLES
      */
 
-    public class GetOpenCases implements Runnable {
+    private class GetOpenCases implements Runnable {
 
         private AuthenticationToken token;
         private RestListener<CaseList> listener;
@@ -95,7 +98,7 @@ public class RestCaseService implements IRestCaseService {
         }
     }
 
-    public class GetAllCases implements Runnable {
+    private class GetAllCases implements Runnable {
 
         private AuthenticationToken token;
         private RestListener<CaseList> listener;
@@ -111,7 +114,7 @@ public class RestCaseService implements IRestCaseService {
         }
     }
 
-    public class GetUser implements Runnable {
+    private class GetUser implements Runnable {
 
         private AuthenticationToken token;
         private RestListener<User> listener;
@@ -125,6 +128,44 @@ public class RestCaseService implements IRestCaseService {
             //TODO also for patient!!
             GetRequest<User> rest = new GetRequest<>(token, Physician.class);
             rest.get(URL_ + USER, listener);
+        }
+    }
+
+    private class GetCase implements Runnable {
+
+        private AuthenticationToken token;
+        private RestListener<Case> listener;
+        private long caseId;
+        public GetCase(AuthenticationToken token, RestListener<Case> listener, long caseId) {
+            this.token = token;
+            this.listener = listener;
+            this.caseId = caseId;
+        }
+
+        @Override
+        public void run() {
+            GetRequest<Case> rest = new GetRequest<>(token, Case.class);
+            rest.get(URL_ + CASES + "/" + String.valueOf(caseId), listener);
+        }
+    }
+
+
+
+    private class PostNewCase implements Runnable {
+
+        private AuthenticationToken token;
+        private RestListener<Case> listener;
+        private Case aCase;
+        public PostNewCase(AuthenticationToken token, RestListener<Case> listener, Case aCase) {
+            this.token = token;
+            this.listener = listener;
+            this.aCase = aCase;
+        }
+
+        @Override
+        public void run() {
+            PostRequest<Case, Case> rest = new PostRequest<>(token, Case.class);
+            rest.post(URL_ + CASES, listener, aCase);
         }
     }
 }

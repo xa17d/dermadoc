@@ -26,6 +26,7 @@ public class OpenMainTabEventHandler implements EventHandler<javafx.event.Action
         if(button instanceof GCButtonAccept) {
             controller.acceptCase(button.getCase());
             controller.getOpenCaseList().remove(button.getCase());
+            controller.getPatientCaseMap().put(button.getCase());
         }
 
         controller.openMainTab(button.getCase());

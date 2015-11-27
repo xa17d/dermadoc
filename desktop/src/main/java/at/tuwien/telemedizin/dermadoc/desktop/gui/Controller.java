@@ -188,6 +188,10 @@ public class Controller {
         return openCaseList;
     }
 
+    public PatientCaseMap getPatientCaseMap() {
+        return patientCaseMap;
+    }
+
     public void logout() {
 
         loginService.logout(token);

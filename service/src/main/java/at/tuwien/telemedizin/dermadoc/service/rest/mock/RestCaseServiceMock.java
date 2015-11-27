@@ -1,10 +1,11 @@
-package at.tuwien.telemedizin.dermadoc.service.rest;
+package at.tuwien.telemedizin.dermadoc.service.rest.mock;
 
 import at.tuwien.telemedizin.dermadoc.entities.*;
 import at.tuwien.telemedizin.dermadoc.entities.casedata.*;
 import at.tuwien.telemedizin.dermadoc.entities.rest.AuthenticationData;
 import at.tuwien.telemedizin.dermadoc.entities.rest.AuthenticationToken;
 import at.tuwien.telemedizin.dermadoc.entities.rest.CaseList;
+import at.tuwien.telemedizin.dermadoc.service.rest.IRestCaseService;
 import at.tuwien.telemedizin.dermadoc.service.rest.listener.DermadocNotificationHandler;
 import at.tuwien.telemedizin.dermadoc.service.rest.listener.RestListener;
 import javafx.application.Platform;
@@ -111,6 +112,11 @@ public class RestCaseServiceMock implements IRestCaseService {
     public void getAllCases(RestListener<CaseList> listener) {
 
         listener.onRequestComplete(caseList);
+    }
+
+    @Override
+    public void getCaseById(RestListener<Case> listener, long caseId) {
+
     }
 
     @Override
