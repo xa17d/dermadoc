@@ -139,12 +139,33 @@ public class RestCaseServiceMock implements IRestCaseService {
 
                     Notification n1 = new Notification();
                     n1.setText("Daniel Gehrer sent you a new message!");
+                    n1.setCaseId(1000l);
                     Notification n2 = new Notification();
                     n2.setText("Lilly Treml sent you a new message!");
+                    n2.setCaseId(1001l);
+
+                    Patient p1 = new Patient();
+                    p1.setName("Daniel Gehrer");
+                    p1.setGender(Gender.Male);
+                    p1.setBirthTime(Calendar.getInstance());
+                    p1.setSvnr("1234");
+                    Case c1 = new Case(1000l, p1, Calendar.getInstance());
+                    c1.setName("a new case!!");
+                    caseList.add(c1);
+
+                    Patient p2 = new Patient();
+                    p2.setName("Lilly Treml");
+                    p2.setGender(Gender.Male);
+                    p2.setBirthTime(Calendar.getInstance());
+                    p2.setSvnr("1234");
+                    Case c2 = new Case(1001l, p2, Calendar.getInstance());
+                    c2.setName("oh lala!!");
+                    caseList.add(c2);
 
                     List<Notification> list = new ArrayList<>();
-                    list.add(n1);
                     if(i % 2 == 0)
+                        list.add(n1);
+                    else
                         list.add(n2);
 
                     handler.onNewNotifications(list);

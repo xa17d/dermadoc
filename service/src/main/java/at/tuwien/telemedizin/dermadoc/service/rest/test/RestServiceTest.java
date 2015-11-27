@@ -1,5 +1,6 @@
 package at.tuwien.telemedizin.dermadoc.service.rest.test;
 
+import at.tuwien.telemedizin.dermadoc.entities.Case;
 import at.tuwien.telemedizin.dermadoc.entities.Patient;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -15,6 +16,8 @@ import java.net.URL;
  */
 public class RestServiceTest implements IRestServiceTest {
 
+    private static final String ID = "cases";
+
     public void getTestPatient() {
 
         final ObjectMapper mapper = new ObjectMapper();
@@ -24,8 +27,9 @@ public class RestServiceTest implements IRestServiceTest {
 
                 try {
 
-                    URL url = new URL("http://localhost:8080/testpatient");
+                    URL url = new URL(" http://dermadoc.xa1.at:82/" + ID);
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    conn.setRequestProperty ("Authorization", "Bearer test");
                     conn.setRequestMethod("GET");
                     //conn.setRequestProperty("Accept", "application/json");
 
@@ -33,8 +37,18 @@ public class RestServiceTest implements IRestServiceTest {
                         throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
                     }
 
-                    BufferedReader buffer = new BufferedReader(new InputStreamReader((conn.getInputStream())));
-                    Patient patient = (Patient) mapper.readValue(buffer, Patient.class);
+                    BufferedReader reader = new BufferedReader(new InputStreamReader((conn.getInputStream())));
+
+                    StringBuilder builder = new StringBuilder();
+                    String aux = "";
+
+                    while ((aux = reader.readLine()) != null) {
+                        builder.append(aux);
+                    }
+
+                    String text = builder.toString();
+
+                    //Case aCase = (Case) mapper.readValue(reader, Case.class);
 
                     conn.disconnect();
 

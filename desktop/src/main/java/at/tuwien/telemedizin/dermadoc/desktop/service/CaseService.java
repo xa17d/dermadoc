@@ -98,6 +98,7 @@ public class CaseService implements ICaseService {
                     @Override
                     public void run() {
                         obsNotificationList.addAll(notifications);
+                        updatePatientCaseList();
                     }
                 });
             }
@@ -105,6 +106,13 @@ public class CaseService implements ICaseService {
 
         rest.setNotificationHandler(notificationHandler);
         return obsNotificationList;
+    }
+
+    private void updatePatientCaseList() {
+
+        //TODO not very elegant
+        //obsPatientCaseMap = new PatientCaseMap();
+        //rest.getAllCases(openCasesListener);
     }
 
     /*
@@ -127,9 +135,7 @@ public class CaseService implements ICaseService {
         @Override
         public void onRequestComplete(List<Case> requestResult) {
 
-            for(Case c : requestResult) {
-                obsPatientCaseMap.put(c);
-            }
+            obsPatientCaseMap.putAll(requestResult);
             obsPatientCaseMap.sort();
         }
 
