@@ -32,10 +32,10 @@ public class PostRequest<Trequest, Tresponse> {
             URL url = new URL(urlString);
             HttpURLConnection httpConnection = (HttpURLConnection) url.openConnection();
             if(token != null) {
-                httpConnection.setRequestProperty("Authorization", token.getToken());
+                httpConnection.setRequestProperty("Authorization", token.toString());
             }
             httpConnection.setRequestMethod("POST");
-            httpConnection.setRequestProperty("Accept-Charset", "UTF-8");
+            httpConnection.setRequestProperty("Content-Type", "text/xml");
             httpConnection.setDoInput(true);
             httpConnection.setDoOutput(true);
 
@@ -48,18 +48,21 @@ public class PostRequest<Trequest, Tresponse> {
 
                 BufferedReader reader = new BufferedReader(new InputStreamReader(httpConnection.getInputStream()));
 
-                String temp = null;
-                StringBuffer text = new StringBuffer();
-                while ((temp = reader.readLine()) != null) {
-                    text.append(temp + "\n");
+                /*
+                String tmp = null;
+                StringBuilder sb = new StringBuilder();
+
+                while((tmp = reader.readLine()) != null) {
+                    sb.append(tmp);
                 }
+                */
 
                 Tresponse response = mapper.readValue(reader, typeParameterClassResponse);
 
                 listener.onRequestComplete(response);
             }
             else {
-                httpConnection.setRequestProperty("Authorization", "Bearer test");
+                listener.onError(new Error(httpConnection.getResponseCode() + " - " + httpConnection.getResponseMessage()));
             }
 
             httpConnection.disconnect();

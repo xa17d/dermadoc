@@ -6,7 +6,7 @@ import at.tuwien.telemedizin.dermadoc.entities.rest.AuthenticationToken;
 
 /**
  * interface to access service layer
- * and login and logout the physician
+ * to login and logout the physician
  */
 public interface ILoginService {
 

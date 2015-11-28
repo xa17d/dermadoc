@@ -36,7 +36,7 @@ public class GetRequest<Tvalue> {
             URL url = new URL(urlString);
             HttpURLConnection httpConnection = (HttpURLConnection) url.openConnection();
             //TODO insert token
-            httpConnection.setRequestProperty ("Authorization", "Bearer test");
+            httpConnection.setRequestProperty ("Authorization", token.toString());
             httpConnection.setRequestMethod("GET");
 
             if (httpConnection.getResponseCode() >= 200 || httpConnection.getResponseCode() < 300 ) {
