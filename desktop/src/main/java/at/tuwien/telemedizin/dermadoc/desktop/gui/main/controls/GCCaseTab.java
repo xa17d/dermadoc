@@ -58,7 +58,7 @@ public class GCCaseTab extends Tab {
         this.setText(aCase.getPatient().getName() + " - " + aCase.getName());
 
         //patient overview
-        tpPatientOverview.setContent(new GCPatientOverview(aCase.getPatient()));
+        tpPatientOverview.setContent(new GCCaseTabPatientOverview(aCase.getPatient()));
 
         //load case data list
         gcCaseDataList = new GCCaseDataList(controller.getCaseData(aCase));
@@ -96,6 +96,8 @@ public class GCCaseTab extends Tab {
             }
         });
     }
+
+    public Case getCase() { return aCase; }
 
     @FXML
     private void newFreetext() {

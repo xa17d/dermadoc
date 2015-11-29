@@ -91,6 +91,20 @@ public class Controller {
 
 
     public void openMainTab(Case aCase) {
+
+        for(Tab t : mainTabList){
+            if(t instanceof GCCaseTab) {
+                GCCaseTab ct = (GCCaseTab) t;
+
+                if(ct.getCase().equals(aCase)) {
+                    //tab with this case already exists
+                    tpMain.getSelectionModel().select(ct);
+                    return;
+                }
+            }
+        }
+
+        //case in non of the open tabs --> open tab with case
         mainTabList.add(new GCCaseTab(this, tpMain, aCase));
     }
 

@@ -15,9 +15,9 @@
                   <Button maxWidth="-Infinity" mnemonicParsing="false" onAction="#newFreetext" prefWidth="140.0" text="Freetext" GridPane.columnIndex="2" GridPane.halignment="CENTER" />
                </children>
                <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="30.0" percentWidth="25.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="30.0" percentWidth="25.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="30.0" percentWidth="25.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="30.0" percentWidth="33.3" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="30.0" percentWidth="33.3" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="30.0" percentWidth="33.4" />
                </columnConstraints>
                <rowConstraints>
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />

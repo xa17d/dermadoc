@@ -12,7 +12,7 @@ import java.io.IOException;
 /**
  * Created by Lucas on 14.11.2015.
  */
-public class GCPatientOverview extends GridPane {
+public class GCCaseTabPatientOverview extends GridPane {
 
     @FXML private Label name;
     @FXML private Label gender;
@@ -20,11 +20,11 @@ public class GCPatientOverview extends GridPane {
 
     private Patient patient;
 
-    public GCPatientOverview(Patient patient) {
+    public GCCaseTabPatientOverview(Patient patient) {
 
         this.patient = patient;
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("gc_maintab_overview.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("gc_casetab_patientoverview.fxml"));
         loader.setRoot(this);
         loader.setController(this);
         try {
