@@ -114,7 +114,7 @@ public class CaseActivity extends AppCompatActivity
     private void setUpNavigationViewHeader() {
         navHeaderMainTextView = (TextView)
                 navigationView.getHeaderView(0).findViewById(R.id.case_nav_header_primary_text);
-        navHeaderMainTextView.setText(getString(R.string.nav_case) + ": " + caseItem.getId()); // TODO name or so
+        navHeaderMainTextView.setText(getString(R.string.nav_case) + ": " + caseItem.getName());
 
         // TODO patient info is less interesting for the patient -> remove
         navHeaderPatientTextView = (TextView)

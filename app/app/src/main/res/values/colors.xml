@@ -20,4 +20,21 @@
     <color name="spinner_background_color">#e4dfde</color>
 
     <color name="msg_red">#e43d40</color>
+
+    <color name="next_button_text">#ffffff</color>
+
+    <color name="tab_header_selected_text_color">#ffffff</color>
+    <color name="tab_header_text_color">#dfdfdf</color>
+
+
+    <!-- colors for the clickable-areas in location-image-fragment -->
+    <color name="location_area_head">#009eff</color>
+    <color name="location_area_torso">#fcff00</color>
+    <color name="location_area_arm_left">#ff7900</color>
+    <color name="location_area_arm_right">#00ff54</color>
+    <color name="location_area_legs">#ff0048</color>
+    <color name="location_area_back">#ff00f0</color>
+
+
+
 </resources>

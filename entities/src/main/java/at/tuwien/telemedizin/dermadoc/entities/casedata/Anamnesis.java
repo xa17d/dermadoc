@@ -1,7 +1,5 @@
 package at.tuwien.telemedizin.dermadoc.entities.casedata;
 
-import at.tuwien.telemedizin.dermadoc.entities.Case;
-import at.tuwien.telemedizin.dermadoc.entities.Medication;
 import at.tuwien.telemedizin.dermadoc.entities.User;
 
 import java.util.Calendar;
@@ -12,16 +10,16 @@ import java.util.List;
  */
 public class Anamnesis extends CaseData {
 
-    public Anamnesis(long id, Calendar created, User author, String message, List<Medication> medications) {
+    public Anamnesis(long id, Calendar created, User author, String message, List<AnamnesisQuestion> medications) {
         super(id, created, author);
 
         this.message = message;
-        this.medications = medications;
+        this.questions = medications;
     }
 
     private String message;
     public String getMessage() { return message; }
 
-    private List<Medication> medications;
-    public List<Medication> getMedications() { return medications; }
+    private List<AnamnesisQuestion> questions;
+    public List<AnamnesisQuestion> getQuestions() { return questions; }
 }

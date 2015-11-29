@@ -64,8 +64,8 @@ public class CaseListAdapter extends ArrayAdapter<Case> {
 
             TableRow rowPhysician = (TableRow) v.findViewById(R.id.case_item_physician_row);
 
-//            itemName.setText("" + caseItem.getName()); // TODO
-            itemName.setText("Test Case - I experience severe pain"); // TODO remove
+            itemName.setText(caseItem.getName());
+
 
             CaseStatus status = caseItem.getStatus();
 

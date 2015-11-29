@@ -1,6 +1,7 @@
 package at.tuwien.telemedizin.dermadoc.app.activities_fragments.create_case;
 
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -38,6 +39,8 @@ public class EditPicturesFragment extends Fragment implements PictureReceiver {
 
     public static final String LOG_TAG = EditPicturesFragment.class.getSimpleName();
 
+    private OnTabChangedInFragmentInterface tabChangeInterface;
+
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_NEW_CASE = "newCase";
 
@@ -74,6 +77,17 @@ public class EditPicturesFragment extends Fragment implements PictureReceiver {
 
     public EditPicturesFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            tabChangeInterface = (OnTabChangedInFragmentInterface) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString() + " must implement " + OnTabChangedInFragmentInterface.class.getSimpleName());
+        }
+
     }
 
     @Override
@@ -147,6 +161,15 @@ public class EditPicturesFragment extends Fragment implements PictureReceiver {
         pictureList.setAdapter(pictureListAdapter);
         EmbedableListViewUtility.setListViewHeightBasedOnChildren(pictureList);
 
+        // button to get to the next part
+        Button nextButton = (Button) v.findViewById(R.id.next_section_button);
+        nextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // go to the next section
+                tabChangeInterface.switchToTheNextTab();
+            }
+        });
 
         return v;
     }

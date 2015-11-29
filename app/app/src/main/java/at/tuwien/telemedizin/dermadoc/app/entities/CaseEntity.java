@@ -30,7 +30,8 @@ public class CaseEntity extends Case implements Parcelable {
         super(caseObject.getId(), caseObject.getPatient(), caseObject.getCreated());
         super.setPhysician(caseObject.getPhysician());
         super.setStatus(caseObject.getStatus());
-        // TODO expand if necessary
+        super.setName(caseObject.getName());
+        // TODO
     }
 
     @Override
@@ -40,7 +41,7 @@ public class CaseEntity extends Case implements Parcelable {
 
     public static CaseEntity createCaseEntity(Parcel in) {
         long id = in.readLong();
-
+        String name = in.readString();
         long createdTimeInMillis = in.readLong();
         Calendar created = ParcelableHelper.longToCalendar(createdTimeInMillis);
 
@@ -61,6 +62,7 @@ public class CaseEntity extends Case implements Parcelable {
         if (statusStr != null) {
             caseEntity.setStatus(CaseStatus.valueOf(statusStr));
         }
+        caseEntity.setName(name);
         caseEntity.setPhysician(pPhysician);
         return caseEntity;
     }
@@ -68,7 +70,7 @@ public class CaseEntity extends Case implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(super.getId());
-
+        dest.writeString(super.getName());
         long createdTimeInMillis = -1;
         Calendar createdTime = super.getCreated();
         if (createdTime != null) { // avoid nullpointer erxception

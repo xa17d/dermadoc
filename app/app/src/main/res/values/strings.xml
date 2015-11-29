@@ -61,10 +61,12 @@
     <string name="title_activity_create_case">Create new Case</string>
     <string name="section_format">Hello World from section: %1$d</string>
 
-    <string name="tab_header_symptoms">Symptoms</string>
-    <string name="tab_header_pictures">Pictures</string>
-    <string name="tab_header_history">History</string>
-    <string name="tab_header_physician">Physician</string>
+    <string name="tab_header_symptoms">1. Symptoms</string>
+    <string name="tab_header_pictures">2. Pictures</string>
+    <string name="tab_header_location">3. Location</string>
+    <string name="tab_header_anamnesis">4. Anamnesis</string>
+    <string name="tab_header_physician">5. Physician</string>
+    <string name="tab_header_finish_editing">6. Finish</string>
 
     <string name="label_edit_symptoms_field">Textual description</string>
     <string name="label_symptoms_section_header_description">Describe your symptoms here:</string>
@@ -84,6 +86,7 @@
 
 
     <string name="label_next_page">Next</string>
+    <string name="label_finish_editing">Finish</string>
 
     <string name="label_edit_pictures_section_header_description">Add pictures here:</string>
     <string name="hint_edit_pictures_description">Please add pictures of the affected area(s) and short descriptions of their location (e.g. left arm).</string>
@@ -101,4 +104,24 @@
     <string name="title_picture_list">Your Pictures:</string>
 
     <string name="hint_no_results">No Results</string>
+    <string name="hint_no_questions">No Questions</string>
+
+    <string name="label_edit_anamnesis_section_header_description">Anamnesis Form:</string>
+    <string name="hint_edit_anamnesis_description">Please fill out this form containing questions related to your health-status. This information can help your doctor to make a diagnosis.</string>
+
+    <string name="label_physician_selection_section_header">Physician Selection:</string>
+    <string name="hint_edit_physician_description">You can select a physician in your area from the list below. If you do not select a specific physician, your case will be taken by the first physician available.</string>
+    <string name="label_nearby_physicians">Physicians near your area:</string>
+    <string name="option_next_available_physician">No Preferences. Give this case to the next physician available.</string>
+
+    <string name="label_finish_editing_section_header">Finish and save this case:</string>
+    <string name="hint_finish_editing">Cases are only saved and uploaded, when you finish the creation/editing process. You can do this by ... TODO </string>
+    <string name="label_case_name_header">Choose a Case Name</string>
+    <string name="hint_case_name_description">The case name is primarily utilised to ease case-management for the user. Therefore, please select a name you find clear and appropriate.</string>
+
+    <string name="label_edit_case_name_field">Name</string>
+
+    <string name="label_edit_location_section_header_description">Specify Location(s):</string>
+    <string name="hint_edit_location_description">Specify the position where the symptoms occur.</string>
+
 </resources>

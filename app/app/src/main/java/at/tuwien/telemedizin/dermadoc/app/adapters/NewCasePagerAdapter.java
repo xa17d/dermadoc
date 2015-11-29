@@ -6,12 +6,16 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
-import at.tuwien.telemedizin.dermadoc.app.activities_fragments.CaseListFragment;
 import at.tuwien.telemedizin.dermadoc.app.activities_fragments.DummyContentFragment;
+import at.tuwien.telemedizin.dermadoc.app.activities_fragments.create_case.EditAnamnesisFragment;
+import at.tuwien.telemedizin.dermadoc.app.activities_fragments.create_case.EditLocationFragment;
 import at.tuwien.telemedizin.dermadoc.app.activities_fragments.create_case.EditPicturesFragment;
 import at.tuwien.telemedizin.dermadoc.app.activities_fragments.create_case.EditSymptomsFragment;
+import at.tuwien.telemedizin.dermadoc.app.activities_fragments.create_case.FinishEditingFragment;
+import at.tuwien.telemedizin.dermadoc.app.activities_fragments.create_case.PhysicianSelectionFragment;
 import at.tuwien.telemedizin.dermadoc.app.activities_fragments.create_case.PictureReceiver;
 
 /**
@@ -22,6 +26,8 @@ import at.tuwien.telemedizin.dermadoc.app.activities_fragments.create_case.Pictu
  */
 public class NewCasePagerAdapter extends FragmentPagerAdapter {
 
+    private HashMap<NewCasePagerEnum, Integer> categoryToIndexMap; // maps Pager-Enum category to list-index
+
     private Context context;
     private List<Fragment> fragmentList = new ArrayList<>();
     private List<String> titleList = new ArrayList<>();
@@ -29,6 +35,7 @@ public class NewCasePagerAdapter extends FragmentPagerAdapter {
     public NewCasePagerAdapter(Context context, FragmentManager manager) {
         super(manager);
         this.context = context;
+        this.categoryToIndexMap = new HashMap<>();
     }
 
     public PictureReceiver addStandardFragments() {
@@ -39,13 +46,28 @@ public class NewCasePagerAdapter extends FragmentPagerAdapter {
         EditPicturesFragment pictureReceiver = EditPicturesFragment.newInstance(true);
         fragmentList.add(pictureReceiver);
         titleList.add(context.getString(NewCasePagerEnum.PICTURE.getTitleResId()));
-        fragmentList.add(DummyContentFragment.newInstance(NewCasePagerEnum.HISTORY.name()));
-        titleList.add(context.getString(NewCasePagerEnum.HISTORY.getTitleResId()));
-        fragmentList.add(DummyContentFragment.newInstance(NewCasePagerEnum.PHYSICIAN.name()));
+
+        fragmentList.add(EditLocationFragment.newInstance(true));
+        titleList.add(context.getString(NewCasePagerEnum.LOCATION.getTitleResId()));
+
+        fragmentList.add(EditAnamnesisFragment.newInstance());
+        titleList.add(context.getString(NewCasePagerEnum.ANAMNESIS.getTitleResId()));
+
+        fragmentList.add(PhysicianSelectionFragment.newInstance());
         titleList.add(context.getString(NewCasePagerEnum.PHYSICIAN.getTitleResId()));
 
+        fragmentList.add(FinishEditingFragment.newInstance(true));
+        titleList.add(context.getString(NewCasePagerEnum.FINISH_EDITING.getTitleResId()));
         return pictureReceiver;
     }
+
+//    public Fragment getFragment(NewCasePagerEnum category) {
+//        switch(category) {
+//            case SYMPTOMS:
+//            break;
+//
+//        }
+//    }
 
     public void addFragments(List<Fragment> fragments) {
         for (Fragment f : fragments) {

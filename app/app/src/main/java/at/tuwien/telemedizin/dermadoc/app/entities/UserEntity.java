@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import at.tuwien.telemedizin.dermadoc.entities.GeoLocation;
+import at.tuwien.telemedizin.dermadoc.entities.Patient;
 import at.tuwien.telemedizin.dermadoc.entities.User;
 
 /**
@@ -13,6 +14,7 @@ public class UserEntity extends User implements Parcelable {
 
     public UserEntity(User user) {
         this(user.getId(), user.getMail(), user.getPassword(), user.getName(), user.getLocation());
+
     }
 
     public UserEntity(Parcel in) {

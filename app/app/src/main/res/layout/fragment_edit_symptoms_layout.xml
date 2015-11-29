@@ -1,11 +1,12 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/scrollView"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:fillViewport="true"
+    android:layout_height="match_parent">
 
     <LinearLayout xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="16dp"
         tools:context="at.tuwien.telemedizin.dermadoc.app.activities_fragments.create_case.EditSymptomsFragment">
@@ -46,7 +47,8 @@
                            android:layout_alignParentLeft="true"
                            android:layout_alignParentTop="true"
                            android:layout_toLeftOf="@id/symptoms_help_icon_view"
-                           android:text="@string/label_symptoms_section_header_description" />
+                           android:text="@string/label_symptoms_section_header_description"
+                           style="@style/NewCaseMainHeaderText" />
 
                        <TextView
                            android:id="@+id/symptoms_help_hint_text_view"
@@ -98,7 +100,7 @@
 
                <LinearLayout
                    android:layout_width="match_parent"
-                   android:layout_height="match_parent"
+                   android:layout_height="wrap_content"
                    android:layout_marginTop="20dp"
                    android:orientation="vertical">
 
@@ -161,16 +163,18 @@
             android:layout_width="match_parent"
             android:layout_height="20dp" />
 
-        <Button
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/label_next_page"
-            android:id="@+id/next_section_button" />
+            android:layout_height="match_parent">
+            <Button
+                android:id="@+id/next_section_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:text="@string/label_next_page"
+                style="@style/EditCaseNextButton" />
 
-        <!-- space to avoid losing the button behind the main-navigation buttons -->
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="80dp" />
+        </RelativeLayout>
 
 
     </LinearLayout>

@@ -13,13 +13,13 @@ import at.tuwien.telemedizin.dermadoc.entities.PainIntensity;
  */
 public class PainIntensityMapper {
 
-    public static PainIntensity[] getPainIntensitiesForGUI() {
-        PainIntensity[] intensities = new PainIntensity[PainIntensity.values().length -1]; // Element "undefined" will not be shown
-        for(int i = 0; i < PainIntensity.values().length - 1; i++) {
-            intensities[i] = PainIntensity.values()[i + 1];
-        }
-        return intensities;
-    }
+//    public static PainIntensity[] getPainIntensitiesForGUI() {
+//        PainIntensity[] intensities = new PainIntensity[PainIntensity.values().length -1]; // Element "undefined" will not be shown
+//        for(int i = 0; i < PainIntensity.values().length - 1; i++) {
+//            intensities[i] = PainIntensity.values()[i + 1];
+//        }
+//        return intensities;
+//    }
 
     public static int getIconResource(PainIntensity intensity) {
 

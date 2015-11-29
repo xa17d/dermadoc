@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    android:fillViewport="true"
     android:nestedScrollingEnabled="true">
 
 <LinearLayout
@@ -46,7 +47,8 @@
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentTop="true"
                     android:layout_toLeftOf="@id/edit_pictures_help_icon_view"
-                    android:text="@string/label_edit_pictures_section_header_description" />
+                    android:text="@string/label_edit_pictures_section_header_description"
+                    style="@style/NewCaseMainHeaderText" />
 
                 <TextView
                     android:id="@+id/edit_pictures_help_hint_text_view"
@@ -97,7 +99,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingTop="15dp">
 
@@ -109,7 +111,7 @@
             <ListView
                 android:id="@+id/case_picture_list"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:nestedScrollingEnabled="false"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
@@ -124,7 +126,19 @@
                 android:visibility="gone" />
         </LinearLayout>
 
-        <!-- textView visible when the list is empty -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/next_section_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:text="@string/label_next_page"
+            style="@style/EditCaseNextButton" />
+
+    </RelativeLayout>
 
 
     </LinearLayout>
