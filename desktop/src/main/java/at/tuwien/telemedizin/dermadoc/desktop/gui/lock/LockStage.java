@@ -45,9 +45,9 @@ public class LockStage extends Stage {
             this.setMaxWidth(340);
             this.setMaxHeight(440);
 
-            Scene dialogScene = new Scene(root, 340, 440);
-            //scene.getStylesheets().add(getClass().getResource("dermadoc.css").toExternalForm());
-            this.setScene(dialogScene);
+            Scene scene = new Scene(root, 340, 440);
+            scene.getStylesheets().add(DesktopApplication.class.getResource("lock.css").toExternalForm());
+            this.setScene(scene);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -95,8 +95,14 @@ public class LockStage extends Stage {
         }
 
         public void add(char c) { codeString += c; update(); }
-        public void delete() { codeString = codeString.substring(0, codeString.length()-1); update(); }
         public void clear() { codeString = ""; update(); }
+        public void delete() {
+
+            if(codeString.length() > 0) {
+                codeString = codeString.substring(0, codeString.length() - 1);
+                update();
+            }
+        }
 
         private int length() { return codeString.length(); }
         private void update() {

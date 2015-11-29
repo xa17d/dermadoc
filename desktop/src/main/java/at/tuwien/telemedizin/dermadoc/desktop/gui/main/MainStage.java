@@ -36,7 +36,7 @@ public class MainStage extends Stage {
             this.setMinHeight(540);
 
             Scene scene = new Scene(root, 1400, 700);
-            //scene.getStylesheets().add(getClass().getResource("dermadoc.css").toExternalForm());
+            scene.getStylesheets().add(DesktopApplication.class.getResource("style.css").toExternalForm());
             this.setScene(scene);
 
         } catch (IOException e) {

@@ -28,9 +28,11 @@ public class LoginStage extends Stage {
 
             this.setMinWidth(500);
             this.setMinHeight(300);
+            this.setMaxWidth(500);
+            this.setMaxHeight(300);
 
             Scene scene = new Scene(root, 500, 300);
-            //scene.getStylesheets().add(getClass().getResource("dermadoc.css").toExternalForm());
+            scene.getStylesheets().add(DesktopApplication.class.getResource("style.css").toExternalForm());
             this.setScene(scene);
 
         } catch (IOException e) {
