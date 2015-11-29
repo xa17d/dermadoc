@@ -17,7 +17,6 @@ import java.util.List;
 public class RestCaseService implements IRestCaseService {
 
     private static final String URL_ = "http://dermadoc.xa1.at:82/";
-    private static final String USER = "user";
     private static final String CASES = "cases";
     private static final String CASES_OPEN = "cases/open";
     private static final String _ACCEPT = "/accept";
@@ -49,11 +48,6 @@ public class RestCaseService implements IRestCaseService {
     @Override
     public void getCaseData(RestListener<List<CaseData>> listener, Case aCase) {
 
-    }
-
-    @Override
-    public void getUser(RestListener<User> listener) {
-        new Thread(new GetUser(token, listener)).start();
     }
 
     @Override
@@ -111,23 +105,6 @@ public class RestCaseService implements IRestCaseService {
         public void run() {
             GetRequest<CaseList> rest = new GetRequest<>(token, CaseList.class);
             rest.get(URL_ + CASES, listener);
-        }
-    }
-
-    private class GetUser implements Runnable {
-
-        private AuthenticationToken token;
-        private RestListener<User> listener;
-        public GetUser(AuthenticationToken token, RestListener<User> listener) {
-            this.token = token;
-            this.listener = listener;
-        }
-
-        @Override
-        public void run() {
-            //TODO also for patient!!
-            GetRequest<User> rest = new GetRequest<>(token, Physician.class);
-            rest.get(URL_ + USER, listener);
         }
     }
 

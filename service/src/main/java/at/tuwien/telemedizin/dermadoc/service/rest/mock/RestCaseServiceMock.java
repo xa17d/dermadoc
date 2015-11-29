@@ -15,6 +15,7 @@ import java.util.*;
 /**
  * Created by Lucas on 26.11.2015.
  */
+@Deprecated
 public class RestCaseServiceMock implements IRestCaseService {
 
     private CaseList openCaseList = new CaseList();
@@ -123,12 +124,6 @@ public class RestCaseServiceMock implements IRestCaseService {
     public void getCaseData(RestListener<List<CaseData>> listener, Case aCase) {
 
         listener.onRequestComplete(caseDataList);
-    }
-
-    @Override
-    public void getUser(RestListener<User> listener) {
-
-        listener.onRequestComplete(physician);
     }
 
     @Override

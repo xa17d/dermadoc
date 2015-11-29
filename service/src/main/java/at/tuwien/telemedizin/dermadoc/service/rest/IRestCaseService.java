@@ -28,8 +28,6 @@ public interface IRestCaseService {
 
     void getCaseData(RestListener<List<CaseData>> listener, Case aCase);
 
-    void getUser(RestListener<User> listener);
-
     /**
      * set a notification listerner that gets called when a new
      * notification is available

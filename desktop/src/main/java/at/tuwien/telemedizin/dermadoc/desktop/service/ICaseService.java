@@ -56,16 +56,6 @@ public interface ICaseService {
     ObservableList<CaseData> getCaseData(Case aCase) throws DermadocException;
 
 
-    /**
-     * load the logged in physician from backend
-     *
-     * @return physician
-     * @throws DermadocException
-     */
-    Physician getPhysician() throws DermadocException;
-
-
-
     /*
      * SAVE DATA (ON BACKEND)
      */

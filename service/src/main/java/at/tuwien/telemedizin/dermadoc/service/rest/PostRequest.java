@@ -1,6 +1,7 @@
 package at.tuwien.telemedizin.dermadoc.service.rest;
 
 import at.tuwien.telemedizin.dermadoc.entities.rest.AuthenticationToken;
+import at.tuwien.telemedizin.dermadoc.entities.rest.Error;
 import at.tuwien.telemedizin.dermadoc.service.rest.listener.RestListener;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
