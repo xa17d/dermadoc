@@ -33,6 +33,10 @@ public abstract class User {
     public GeoLocation getLocation() { return location; }
     public void setLocation(GeoLocation location) { this.location = location; }
 
+    @Override
+    public String toString() {
+        return getName();
+    }
 
     @Override
     public int hashCode() {

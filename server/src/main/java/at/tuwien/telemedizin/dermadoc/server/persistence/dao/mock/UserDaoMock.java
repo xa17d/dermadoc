@@ -1,16 +1,11 @@
 package at.tuwien.telemedizin.dermadoc.server.persistence.dao.mock;
 
 import at.tuwien.telemedizin.dermadoc.entities.*;
-import at.tuwien.telemedizin.dermadoc.server.persistence.dao.EntityNotFoundException;
+import at.tuwien.telemedizin.dermadoc.server.exceptions.EntityNotFoundException;
 import at.tuwien.telemedizin.dermadoc.server.persistence.dao.UserDao;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 
 /**
  * Created by daniel on 23.11.2015.

@@ -1,0 +1,127 @@
+<resources>
+    <string name="app_name">Derma Doc</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- navigation drawer main - strings -->
+    <string name="nav_my_cases">My Cases</string>
+    <string name="nav_my_account">My Account</string>
+    <string name="nav_logout">Logout</string>
+    <string name="nav_help">Help</string>
+    <string name="nav_case">Case</string>
+
+    <!-- my cases list -->
+    <string name="tab_header_current">CURRENT</string>
+    <string name="tab_header_old">OLD</string>
+
+    <string name="action_synchronize">Synchronize</string>
+
+    <string name="action_sort">Sort</string>
+    <string name="action_sort_name">Name</string>
+    <string name="action_sort_date_of_creation">Date of creation</string>
+    <string name="action_sort_id">ID-number</string>
+    <string name="action_sort_status">Status</string>
+    <string name="action_sort_last_modified">Last modified</string>
+
+
+    <string name="msg_no_physician_info_found">No physician info found</string>
+
+    <string name="label_date_of_creation">Created</string>
+    <string name="label_last_modified">Last modified</string>
+    <string name="label_physician">Physician</string>
+    <string name="label_case_status">Status</string>
+    <string name="label_patient">Patient</string>
+
+    <string name="nav_case_overview">Overview</string>
+    <string name="nav_case_advice">Advice</string>
+    <string name="nav_case_diagnoses">Diganoses</string>
+
+    <string name="msg_err_item_not_received">There was an error receiving the selected Item</string>
+    <string name="msg_err_no_status">no status</string>
+    <string name="title_activity_login">Sign in</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password (optional)</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+    <string name="title_activity_create_case">Create new Case</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+
+    <string name="tab_header_symptoms">1. Symptoms</string>
+    <string name="tab_header_pictures">2. Pictures</string>
+    <string name="tab_header_location">3. Location</string>
+    <string name="tab_header_anamnesis">4. Anamnesis</string>
+    <string name="tab_header_physician">5. Physician</string>
+    <string name="tab_header_finish_editing">6. Finish</string>
+
+    <string name="label_edit_symptoms_field">Textual description</string>
+    <string name="label_symptoms_section_header_description">Describe your symptoms here:</string>
+    <string name="hint_symptoms_description">Please describe the characteristics of the affected area: How does it look like? How does it feel? Do you experience pain? How did you experience its progress?</string>
+    <string name="label_pain_assessment">Pain Assesment</string>
+    <string name="hint_pain_assessment_description">Please select the image picturing the pain you experience best.</string>
+
+    <!-- pain scale -->#
+        <string name="pain_undefined">undefined</string>
+        <string name="pain_no_pain">no pain</string>
+        <string name="pain_mild">mild</string>
+        <string name="pain_moderate">moderate</string>
+        <string name="pain_severe">severe</string>
+        <string name="pain_very_severe">very severe</string>
+        <string name="pain_worst_pain_possible">worst pain possible</string>
+
+
+
+    <string name="label_next_page">Next</string>
+    <string name="label_finish_editing">Finish</string>
+
+    <string name="label_edit_pictures_section_header_description">Add pictures here:</string>
+    <string name="hint_edit_pictures_description">Please add pictures of the affected area(s) and short descriptions of their location (e.g. left arm).</string>
+    <string name="label_add_new_picture">Add new Picture</string>
+    <string name="option_take_photo">Take Photo</string>
+    <string name="option_choose_from_library">Choose from Library</string>
+    <string name="option_cancel">Cancel</string>
+    <string name="title_choose_photo_source_dialog">Add Photo</string>
+
+    <string name="msg_confirm_picture_deletion_dialog">Do you really want to delte this picture?</string>
+    <string name="title_picture_deletion_dialog">Delete Picture</string>
+    <string name="label_picture_deletion_dialog_positive">Yes</string>
+    <string name="label_picture_deletion_dialog_cancel">Cancel</string>
+
+    <string name="title_picture_list">Your Pictures:</string>
+
+    <string name="hint_no_results">No Results</string>
+    <string name="hint_no_questions">No Questions</string>
+
+    <string name="label_edit_anamnesis_section_header_description">Anamnesis Form:</string>
+    <string name="hint_edit_anamnesis_description">Please fill out this form containing questions related to your health-status. This information can help your doctor to make a diagnosis.</string>
+
+    <string name="label_physician_selection_section_header">Physician Selection:</string>
+    <string name="hint_edit_physician_description">You can select a physician in your area from the list below. If you do not select a specific physician, your case will be taken by the first physician available.</string>
+    <string name="label_nearby_physicians">Physicians near your area:</string>
+    <string name="option_next_available_physician">No Preferences. Give this case to the next physician available.</string>
+
+    <string name="label_finish_editing_section_header">Finish and save this case:</string>
+    <string name="hint_finish_editing">Cases are only saved and uploaded, when you finish the creation/editing process. You can do this by ... TODO </string>
+    <string name="label_case_name_header">Choose a Case Name</string>
+    <string name="hint_case_name_description">The case name is primarily utilised to ease case-management for the user. Therefore, please select a name you find clear and appropriate.</string>
+
+    <string name="label_edit_case_name_field">Name</string>
+
+    <string name="label_edit_location_section_header_description">Specify Location(s):</string>
+    <string name="hint_edit_location_description">Specify the position where the symptoms occur.</string>
+
+</resources>

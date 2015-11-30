@@ -1,2 +1,0 @@
-# dermadoc.app
-Android App

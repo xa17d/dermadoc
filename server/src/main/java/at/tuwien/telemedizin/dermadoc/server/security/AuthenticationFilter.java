@@ -1,8 +1,12 @@
 package at.tuwien.telemedizin.dermadoc.server.security;
 
+import at.tuwien.telemedizin.dermadoc.entities.rest.Error;
 import at.tuwien.telemedizin.dermadoc.server.services.TokenService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -49,7 +53,15 @@ public class AuthenticationFilter extends GenericFilterBean {
                 String tokenType = parts[0];
                 if (SecurityConfig.TokenType.equals(tokenType)) {
                     String token = parts[1];
-                    tryToAuthenticate(new SecurityToken(token));
+                    try {
+                        tryToAuthenticate(new SecurityToken(token));
+                    }
+                    catch (BadCredentialsException badCredentialsException) {
+                        httpResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                        XmlMapper mapper = new XmlMapper();
+                        mapper.writeValue(httpResponse.getOutputStream(), new Error(badCredentialsException));
+                        return; // return to not process next filters
+                    }
                 }
             }
         }
