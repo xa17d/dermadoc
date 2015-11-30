@@ -36,8 +36,9 @@ public class GetRequest<Tvalue> {
         try {
             URL url = new URL(urlString);
             HttpURLConnection httpConnection = (HttpURLConnection) url.openConnection();
-            //TODO insert token
-            httpConnection.setRequestProperty ("Authorization", token.toString());
+            if(token != null) {
+                httpConnection.setRequestProperty("Authorization", token.toString());
+            }
             httpConnection.setRequestMethod("GET");
 
             if (httpConnection.getResponseCode() >= 200 || httpConnection.getResponseCode() < 300 ) {
