@@ -64,8 +64,7 @@ public class RestLoginService implements IRestLoginService {
 
         @Override
         public void run() {
-            //TODO also for patient!!
-            GetRequest<User> rest = new GetRequest<>(token, Physician.class);
+            GetRequest<User> rest = new GetRequest<>(token, User.class);
             rest.get(URL_ + USER, listener);
         }
     }
