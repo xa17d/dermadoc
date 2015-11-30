@@ -5,7 +5,7 @@ import at.tuwien.telemedizin.dermadoc.entities.rest.CaseList;
 import at.tuwien.telemedizin.dermadoc.server.exceptions.InvalidCaseStatusException;
 import at.tuwien.telemedizin.dermadoc.server.exceptions.InvalidUserTypeException;
 import at.tuwien.telemedizin.dermadoc.server.persistence.dao.CaseDao;
-import at.tuwien.telemedizin.dermadoc.server.persistence.dao.EntityNotFoundException;
+import at.tuwien.telemedizin.dermadoc.server.exceptions.EntityNotFoundException;
 import at.tuwien.telemedizin.dermadoc.server.security.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

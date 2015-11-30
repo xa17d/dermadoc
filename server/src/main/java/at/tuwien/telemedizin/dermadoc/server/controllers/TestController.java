@@ -4,10 +4,9 @@ import at.tuwien.telemedizin.dermadoc.entities.Gender;
 import at.tuwien.telemedizin.dermadoc.entities.GeoLocation;
 import at.tuwien.telemedizin.dermadoc.entities.Patient;
 import at.tuwien.telemedizin.dermadoc.entities.User;
-import at.tuwien.telemedizin.dermadoc.server.persistence.dao.EntityNotFoundException;
+import at.tuwien.telemedizin.dermadoc.server.exceptions.EntityNotFoundException;
 import at.tuwien.telemedizin.dermadoc.server.persistence.dao.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 

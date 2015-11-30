@@ -2,9 +2,8 @@ package at.tuwien.telemedizin.dermadoc.server.persistence.dao.mock;
 
 import at.tuwien.telemedizin.dermadoc.entities.Case;
 import at.tuwien.telemedizin.dermadoc.entities.CaseStatus;
-import at.tuwien.telemedizin.dermadoc.entities.User;
 import at.tuwien.telemedizin.dermadoc.server.persistence.dao.CaseDao;
-import at.tuwien.telemedizin.dermadoc.server.persistence.dao.EntityNotFoundException;
+import at.tuwien.telemedizin.dermadoc.server.exceptions.EntityNotFoundException;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
