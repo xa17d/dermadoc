@@ -4,8 +4,13 @@ package at.tuwien.telemedizin.dermadoc.entities.rest;
  * Created by daniel on 24.11.2015.
  */
 public class Error {
+
     public Error(Exception exception) {
         setMessage(exception.getMessage());
+    }
+
+    public Error(String message) {
+        setMessage(message);
     }
 
     public Error() { }

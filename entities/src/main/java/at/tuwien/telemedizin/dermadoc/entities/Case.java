@@ -40,4 +40,26 @@ public class Case {
     private String name;
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
+
+
+    @Override
+    public int hashCode() {
+        return (int)this.getId();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+
+        if(o == null)
+            return false;
+
+        if(this.hashCode() != o.hashCode())
+            return false;
+
+        if(!(o instanceof Case))
+            return false;
+
+        Case c = (Case) o;
+        return this.getId() == c.getId();
+    }
 }

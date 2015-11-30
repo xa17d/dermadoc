@@ -10,7 +10,6 @@ import at.tuwien.telemedizin.dermadoc.entities.rest.AuthenticationToken;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
 
 import java.util.*;
 

@@ -1,5 +1,7 @@
 package at.tuwien.telemedizin.dermadoc.service.rest.listener;
 
+import at.tuwien.telemedizin.dermadoc.entities.rest.Error;
+
 /**
  * TODO
  */

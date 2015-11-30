@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<fx:root type="javafx.scene.control.Tab" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <content>
+      <BorderPane maxHeight="Infinity" maxWidth="Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="200.0" >
+         <bottom>
+            <GridPane>
+               <children>
+                  <Button maxWidth="-Infinity" mnemonicParsing="false" onAction="#newDiagnosis" prefWidth="140.0" text="Advice" GridPane.halignment="CENTER" />
+                  <Button maxWidth="-Infinity" mnemonicParsing="false" onAction="#newDiagnosis" prefWidth="140.0" text="Diagnosis" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
+                  <Button maxWidth="-Infinity" mnemonicParsing="false" onAction="#newFreetext" prefWidth="140.0" text="Freetext" GridPane.columnIndex="2" GridPane.halignment="CENTER" />
+               </children>
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="30.0" percentWidth="33.3" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="30.0" percentWidth="33.3" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="30.0" percentWidth="33.4" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+            </GridPane>
+         </bottom>
+         <top>
+            <TitledPane fx:id="tpPatientOverview" animated="true" text="Overview" BorderPane.alignment="CENTER" />
+         </top>
+         <center>
+            <!--<ScrollPane fitToWidth="true">-->
+            <VBox fx:id="vbInput"/>
+            <!--</ScrollPane>-->
+         </center>
+      </BorderPane>
+   </content>
+</fx:root>

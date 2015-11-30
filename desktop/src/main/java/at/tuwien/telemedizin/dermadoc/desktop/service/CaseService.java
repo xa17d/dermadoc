@@ -2,22 +2,21 @@ package at.tuwien.telemedizin.dermadoc.desktop.service;
 
 import at.tuwien.telemedizin.dermadoc.desktop.exception.DermadocException;
 import at.tuwien.telemedizin.dermadoc.desktop.service.dto.PatientCaseMap;
+import at.tuwien.telemedizin.dermadoc.entities.*;
+import at.tuwien.telemedizin.dermadoc.entities.rest.CaseList;
+import at.tuwien.telemedizin.dermadoc.entities.rest.Error;
+import at.tuwien.telemedizin.dermadoc.service.rest.RestCaseService;
 import at.tuwien.telemedizin.dermadoc.service.rest.listener.DermadocNotificationHandler;
-import at.tuwien.telemedizin.dermadoc.entities.Case;
-import at.tuwien.telemedizin.dermadoc.entities.Notification;
-import at.tuwien.telemedizin.dermadoc.entities.Patient;
 import at.tuwien.telemedizin.dermadoc.entities.casedata.CaseData;
 import at.tuwien.telemedizin.dermadoc.entities.rest.AuthenticationToken;
 import at.tuwien.telemedizin.dermadoc.service.rest.IRestCaseService;
-import at.tuwien.telemedizin.dermadoc.service.rest.RestCaseServiceMock;
 import at.tuwien.telemedizin.dermadoc.service.rest.listener.RestListener;
-import at.tuwien.telemedizin.dermadoc.service.util.UtilCompare;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.util.List;
-import java.util.Set;
+import java.util.concurrent.*;
 
 /**
  * Created by Lucas on 26.11.2015.
@@ -32,7 +31,7 @@ public class CaseService implements ICaseService {
 
     public CaseService(AuthenticationToken token) {
 
-        rest = new RestCaseServiceMock(token);
+        rest = new RestCaseService(token);
     }
 
 
@@ -77,14 +76,11 @@ public class CaseService implements ICaseService {
 
     @Override
     public void acceptCase(Case aCase) throws DermadocException {
-
-        //TODO bugfix
         rest.postAcceptCase(acceptCaseListener, aCase);
     }
 
     @Override
     public void saveCaseData(Case aCase, CaseData caseData) throws DermadocException {
-
         rest.postCaseData(caseDataListener, aCase, caseData);
     }
 
@@ -98,6 +94,7 @@ public class CaseService implements ICaseService {
                     @Override
                     public void run() {
                         obsNotificationList.addAll(notifications);
+                        updatePatientCaseList();
                     }
                 });
             }
@@ -107,14 +104,21 @@ public class CaseService implements ICaseService {
         return obsNotificationList;
     }
 
+    private void updatePatientCaseList() {
+
+        //TODO not very elegant
+        //obsPatientCaseMap = new PatientCaseMap();
+        //rest.getAllCases(openCasesListener);
+    }
+
     /*
      * LISTENER
      */
 
-    private RestListener<List<Case>> openCasesListener = new RestListener<List<Case>>() {
+    private RestListener<CaseList> openCasesListener = new RestListener<CaseList>() {
         @Override
-        public void onRequestComplete(List<Case> requestResult) {
-            obsOpenCaseList = FXCollections.observableArrayList(requestResult);
+        public void onRequestComplete(CaseList requestResult) {
+            obsOpenCaseList.addAll(requestResult);
         }
 
         @Override
@@ -123,13 +127,11 @@ public class CaseService implements ICaseService {
         }
     };
 
-    private RestListener<List<Case>> allCasesListener = new RestListener<List<Case>>() {
+    private RestListener<CaseList> allCasesListener = new RestListener<CaseList>() {
         @Override
-        public void onRequestComplete(List<Case> requestResult) {
+        public void onRequestComplete(CaseList requestResult) {
 
-            for(Case c : requestResult) {
-                obsPatientCaseMap.put(c);
-            }
+            obsPatientCaseMap.putAll(requestResult);
             obsPatientCaseMap.sort();
         }
 
@@ -172,6 +174,8 @@ public class CaseService implements ICaseService {
     @Override
     public PatientCaseMap searchCases(String searchText) throws DermadocException {
 
+        //TODO
+        /*
         if(searchText.length() >= 3) {
 
             PatientCaseMap resultMap = new PatientCaseMap();
@@ -186,6 +190,7 @@ public class CaseService implements ICaseService {
 
             return resultMap;
         }
+        */
 
         return obsPatientCaseMap;
     }
