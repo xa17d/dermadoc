@@ -15,6 +15,8 @@ public class TextMessage extends CaseData {
         this.message = message;
     }
 
+    public TextMessage() { }
+
     private String message;
     public String getMessage() { return message; }
     public void setMessage(String message) { this.message = message; }
