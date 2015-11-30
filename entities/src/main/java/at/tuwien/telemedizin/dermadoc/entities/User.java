@@ -1,10 +1,17 @@
 package at.tuwien.telemedizin.dermadoc.entities;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
 /**
  * Abstract User
  */
 //TODO maybe necessary to check if patient or physician
-//@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "@class")
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = Patient.class),
+        @JsonSubTypes.Type(value = Physician.class)
+})
 public abstract class User {
     private long id;
     public long getId() { return id; }
