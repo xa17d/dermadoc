@@ -15,6 +15,8 @@ public class Diagnosis extends CaseData {
         this.message = message;
     }
 
+    public Diagnosis() { }
+
     private String message;
     public String getMessage() { return message; }
 }

@@ -1,6 +1,10 @@
 package at.tuwien.telemedizin.dermadoc.entities.casedata;
 
+import at.tuwien.telemedizin.dermadoc.entities.Patient;
+import at.tuwien.telemedizin.dermadoc.entities.Physician;
 import at.tuwien.telemedizin.dermadoc.entities.User;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import java.util.Calendar;
 
@@ -8,6 +12,15 @@ import java.util.Calendar;
  * Abstract CaseData.
  * A case can have multiple CaseData elements.
  */
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "@class")
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = Advice.class),
+        @JsonSubTypes.Type(value = Anamnesis.class),
+        @JsonSubTypes.Type(value = CaseInfo.class),
+        @JsonSubTypes.Type(value = Diagnosis.class),
+        @JsonSubTypes.Type(value = PhotoMessage.class),
+        @JsonSubTypes.Type(value = TextMessage.class)
+})
 public abstract class CaseData {
 
     public CaseData(long id, Calendar created, User author) {

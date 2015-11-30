@@ -48,6 +48,11 @@ public class CaseDataDaoMock implements CaseDataDao {
         }
     }
 
+    @Override
+    public void insert(long caseId, CaseData caseData) {
+        generalInsert(caseId, caseData);
+    }
+
     private void generalInsert(long caseId, CaseData data) {
         // get List
         ArrayList<CaseData> caseDataList = caseData.getOrDefault(caseId, null);
@@ -74,33 +79,4 @@ public class CaseDataDaoMock implements CaseDataDao {
         caseDataList.add(data);
     }
 
-    @Override
-    public void insert(long caseId, Advice advice) {
-        generalInsert(caseId, advice);
-    }
-
-    @Override
-    public void insert(long caseId, Anamnesis anamnesis) {
-        generalInsert(caseId, anamnesis);
-    }
-
-    @Override
-    public void insert(long caseId, CaseInfo caseInfo) {
-        generalInsert(caseId, caseInfo);
-    }
-
-    @Override
-    public void insert(long caseId, Diagnosis diagnosis) {
-        generalInsert(caseId, diagnosis);
-    }
-
-    @Override
-    public void insert(long caseId, PhotoMessage photoMessage) {
-        generalInsert(caseId, photoMessage);
-    }
-
-    @Override
-    public void insert(long caseId, TextMessage textMessage) {
-        generalInsert(caseId, textMessage);
-    }
 }

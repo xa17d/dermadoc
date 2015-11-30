@@ -49,13 +49,13 @@ public class CaseDataController {
         return new CaseDataList(caseDataDao.listCaseDataByUserAndCase(caseId, user.getId()));
     }
 
-    @RequestMapping(value = "/cases/{caseId}/data/text", method = RequestMethod.POST)
+    @RequestMapping(value = "/cases/{caseId}/data", method = RequestMethod.POST)
     @AccessUser
-    public TextMessage insertCaseDataText(@CurrentUser User user, @PathVariable long caseId, @RequestBody TextMessage textMessage) {
+    public CaseData insertCaseDataText(@CurrentUser User user, @PathVariable long caseId, @RequestBody CaseData caseData) {
         checkAccess(user, caseId);
-        prepareInsert(user, textMessage);
-        caseDataDao.insert(caseId, textMessage);
-        return textMessage;
+        prepareInsert(user, caseData);
+        caseDataDao.insert(caseId, caseData);
+        return caseData;
     }
 
 }
