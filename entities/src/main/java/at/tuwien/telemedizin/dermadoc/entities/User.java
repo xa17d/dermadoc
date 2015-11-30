@@ -6,8 +6,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 /**
  * Abstract User
  */
-//TODO maybe necessary to check if patient or physician
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "@class")
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "class")
 @JsonSubTypes({
         @JsonSubTypes.Type(value = Patient.class),
         @JsonSubTypes.Type(value = Physician.class)

@@ -3,6 +3,7 @@ package at.tuwien.telemedizin.dermadoc.desktop.gui.main.controls.casedata;
 import at.tuwien.telemedizin.dermadoc.desktop.gui.main.controls.casedata.edit.AGCCaseDataEdit;
 import at.tuwien.telemedizin.dermadoc.desktop.gui.main.controls.handler.CaseDataEventHandler;
 import at.tuwien.telemedizin.dermadoc.entities.casedata.CaseData;
+import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.layout.VBox;
@@ -30,16 +31,21 @@ public class GCCaseDataList extends VBox {
             @Override
             public void onChanged(Change<? extends CaseData> c) {
 
-                while(c.next()) {
-                    for (CaseData cd : c.getAddedSubList()) {
-                        AGCCaseData gcCaseData = gcFactory.getGC(cd);
-                        cgList.getChildren().add(gcCaseData);
-                    }
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        while(c.next()) {
+                            for (CaseData cd : c.getAddedSubList()) {
+                                AGCCaseData gcCaseData = gcFactory.getGC(cd);
+                                cgList.getChildren().add(gcCaseData);
+                            }
 
-                    for (CaseData cd : c.getRemoved()) {
-                        cgList.getChildren().remove(cd);
+                            for (CaseData cd : c.getRemoved()) {
+                                cgList.getChildren().remove(cd);
+                            }
+                        }
                     }
-                }
+                });
             }
         });
 

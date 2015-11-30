@@ -3,6 +3,7 @@ package at.tuwien.telemedizin.dermadoc.desktop.service;
 import at.tuwien.telemedizin.dermadoc.desktop.exception.DermadocException;
 import at.tuwien.telemedizin.dermadoc.desktop.service.dto.PatientCaseMap;
 import at.tuwien.telemedizin.dermadoc.entities.*;
+import at.tuwien.telemedizin.dermadoc.entities.rest.CaseDataList;
 import at.tuwien.telemedizin.dermadoc.entities.rest.CaseList;
 import at.tuwien.telemedizin.dermadoc.entities.rest.Error;
 import at.tuwien.telemedizin.dermadoc.service.rest.RestCaseService;
@@ -15,6 +16,7 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.*;
 
@@ -28,6 +30,8 @@ public class CaseService implements ICaseService {
     private ObservableList<Case> obsOpenCaseList = FXCollections.observableArrayList();
     private ObservableList<Notification> obsNotificationList = FXCollections.observableArrayList();
     private PatientCaseMap obsPatientCaseMap = new PatientCaseMap();
+
+    private HashMap<Case, ObservableList<CaseData>> caseCaseDataMap= new HashMap<>();
 
     public CaseService(AuthenticationToken token) {
 
@@ -56,11 +60,17 @@ public class CaseService implements ICaseService {
     @Override
     public ObservableList<CaseData> getCaseData(Case aCase) throws DermadocException {
 
-        ObservableList<CaseData> obsCaseDataList = FXCollections.observableArrayList();
+        ObservableList<CaseData> obsCaseDataList;
+        if(caseCaseDataMap.containsKey(aCase)) {
+            obsCaseDataList = caseCaseDataMap.get(aCase);
+        }
+        else {
+            obsCaseDataList = FXCollections.observableArrayList();
+        }
 
-        RestListener<List<CaseData>> listener = new RestListener<List<CaseData>>() {
+        RestListener<CaseDataList> listener = new RestListener<CaseDataList>() {
             @Override
-            public void onRequestComplete(List<CaseData> requestResult) {
+            public void onRequestComplete(CaseDataList requestResult) {
                 obsCaseDataList.addAll(requestResult);
             }
 

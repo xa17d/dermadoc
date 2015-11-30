@@ -1,9 +1,7 @@
 package at.tuwien.telemedizin.dermadoc.desktop.gui.main.controls.casedata;
 
-import at.tuwien.telemedizin.dermadoc.desktop.gui.main.controls.casedata.view.AGCCaseDataView;
-import at.tuwien.telemedizin.dermadoc.desktop.gui.main.controls.casedata.view.GCTextMessageView;
-import at.tuwien.telemedizin.dermadoc.entities.casedata.CaseData;
-import at.tuwien.telemedizin.dermadoc.entities.casedata.TextMessage;
+import at.tuwien.telemedizin.dermadoc.desktop.gui.main.controls.casedata.view.*;
+import at.tuwien.telemedizin.dermadoc.entities.casedata.*;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
@@ -19,7 +17,11 @@ public class GCCaseDataFactory {
     protected GCCaseDataFactory() {
 
         mappingView.put(TextMessage.class, GCTextMessageView.class);
-        //TODO add other casedataviews
+        mappingView.put(PhotoMessage.class, GCPhotoMessageView.class);
+        mappingView.put(CaseInfo.class, GCCaseInfoView.class);
+        mappingView.put(Anamnesis.class, GCAnamnesisView.class);
+        mappingView.put(Diagnosis.class, GCDiagnosisView.class);
+        mappingView.put(Advice.class, GCAdviceView.class);
     }
 
     protected AGCCaseData getGC(CaseData caseData) {
