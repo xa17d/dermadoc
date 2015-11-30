@@ -17,4 +17,9 @@ public class Patient extends User {
     private Gender gender;
     public Gender getGender() { return gender; }
     public void setGender(Gender gender) { this.gender = gender; }
+
+    @Override
+    public String toString() {
+        return "[Patient] "+super.toString();
+    }
 }

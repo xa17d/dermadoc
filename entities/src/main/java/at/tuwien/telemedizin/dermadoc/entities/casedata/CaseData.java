@@ -18,12 +18,15 @@ public abstract class CaseData {
 
     private long id;
     public long getId() { return id; }
+    public void setId(long id) { this.id = id; }
 
     private Calendar created;
     public Calendar getCreated() { return created; }
+    public void setCreated(Calendar created) { this.created = created; }
 
     private User author;
     public User getAuthor() { return author; }
+    public void setAuthor(User author) { this.author = author; }
 
     private boolean isPrivate;
     public boolean getPrivate() { return isPrivate; }
