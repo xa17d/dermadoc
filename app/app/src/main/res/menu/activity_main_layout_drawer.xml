@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item android:id="@+id/nav_my_cases"
+            android:icon="@drawable/ic_list_white_36dp"
+            android:title="@string/nav_my_cases"
+            android:checked="true"/>
+        <item android:id="@+id/nav_my_account"
+            android:icon="@drawable/ic_account_circle_white_36dp"
+            android:title="@string/nav_my_account" />
+        <item android:id="@+id/nav_logout"
+            android:icon="@drawable/ic_exit_to_app_white_36dp"
+            android:title="@string/nav_logout" />
+    </group>
+
+    <item android:title="@string/nav_help">
+        <menu>
+            <item android:id="@+id/nav_help" android:icon="@drawable/ic_help_white_36dp"
+                android:title="@string/nav_help" />
+        </menu>
+    </item>
+
+</menu>
