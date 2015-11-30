@@ -60,7 +60,7 @@ public class AuthenticationFilter extends GenericFilterBean {
                         httpResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                         XmlMapper mapper = new XmlMapper();
                         mapper.writeValue(httpResponse.getOutputStream(), new Error(badCredentialsException));
-                        return;
+                        return; // return to not process next filters
                     }
                 }
             }
