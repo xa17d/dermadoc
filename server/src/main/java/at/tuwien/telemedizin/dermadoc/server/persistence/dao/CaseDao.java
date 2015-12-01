@@ -11,7 +11,7 @@ import java.util.List;
 public interface CaseDao {
 
     List<Case> listByPatient(long patientId);
-    List<Case> listByPhysician(long patientId);
+    List<Case> listByPhysician(long physicianId);
     List<Case> listOpenCases();
     void insert(Case newCase);
     Case getCaseById(long caseId);

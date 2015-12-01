@@ -9,7 +9,7 @@ import java.util.Collection;
 /**
  * Created by daniel on 30.11.2015.
  */
-public class CaseDataList  extends ArrayList<CaseData> {
+public class CaseDataList extends ArrayList<CaseData> {
 
     public CaseDataList() {}
     public CaseDataList(Collection<CaseData> original) {

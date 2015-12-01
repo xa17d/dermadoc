@@ -6,6 +6,7 @@ import at.tuwien.telemedizin.dermadoc.server.persistence.dao.UserDao;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by daniel on 23.11.2015.
@@ -20,22 +21,35 @@ public class UserDaoMock implements UserDao {
 
 
     @Override
-    public User getUserById(long id) throws EntityNotFoundException {
-        for (User u:users) {
-            if (u.getId() == id) {
-                return  u;
+    public User getUserById(long userId) {
+        for (User u : users) {
+            if (u.getId() == userId) {
+                return u;
             }
         }
-        throw new EntityNotFoundException("id="+id);
+        throw new EntityNotFoundException("id="+userId);
     }
 
     @Override
-    public User getUserByMail(String mail) throws EntityNotFoundException {
-        for (User u:users) {
+    public User getUserByMail(String mail) {
+        for (User u : users) {
             if (u.getMail().toLowerCase().equals(mail.toLowerCase())) {
-                return  u;
+                return u;
             }
         }
         throw new EntityNotFoundException("mail="+mail);
+    }
+
+    @Override
+    public List<Physician> listPhysicians() {
+        ArrayList<Physician> result = new ArrayList<>();
+
+        for (User u : users) {
+            if (u instanceof Physician) {
+                result.add((Physician)u);
+            }
+        }
+
+        return result;
     }
 }

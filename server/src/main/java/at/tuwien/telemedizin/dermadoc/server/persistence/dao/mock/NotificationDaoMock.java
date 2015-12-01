@@ -3,6 +3,7 @@ package at.tuwien.telemedizin.dermadoc.server.persistence.dao.mock;
 import at.tuwien.telemedizin.dermadoc.entities.Case;
 import at.tuwien.telemedizin.dermadoc.entities.CaseStatus;
 import at.tuwien.telemedizin.dermadoc.entities.Notification;
+import at.tuwien.telemedizin.dermadoc.server.exceptions.EntityNotFoundException;
 import at.tuwien.telemedizin.dermadoc.server.persistence.dao.NotificationDao;
 import org.springframework.stereotype.Repository;
 
@@ -20,6 +21,16 @@ public class NotificationDaoMock implements NotificationDao {
     }
 
     private ArrayList<Notification> notifications;
+
+    @Override
+    public Notification getNotificationById(long notificationId) {
+        for (Notification n : notifications) {
+            if (n.getId() == notificationId) {
+                return n;
+            }
+        }
+        throw new EntityNotFoundException("id="+notificationId);
+    }
 
     @Override
     public void insert(Notification notification) {

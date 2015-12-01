@@ -7,6 +7,7 @@ import at.tuwien.telemedizin.dermadoc.server.exceptions.InvalidUserTypeException
 import at.tuwien.telemedizin.dermadoc.server.persistence.dao.CaseDao;
 import at.tuwien.telemedizin.dermadoc.server.exceptions.EntityNotFoundException;
 import at.tuwien.telemedizin.dermadoc.server.security.*;
+import at.tuwien.telemedizin.dermadoc.server.services.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +21,9 @@ public class CaseController {
 
     @Autowired
     private CaseDao caseDao;
+
+    @Autowired
+    private NotificationService notificationService;
 
     @RequestMapping(value = "/cases", method = RequestMethod.GET)
     @AccessUser
@@ -67,9 +71,13 @@ public class CaseController {
 
             Physician physician = (Physician)user;
             if (c.getStatus() == CaseStatus.LookingForPhysician) {
+                // update case
                 c.setStatus(CaseStatus.Active);
                 c.setPhysician(physician);
                 caseDao.update(c);
+
+                // send notification
+                notificationService.notifyCase(c, user, user.getName()+" accepted your case");
 
                 return c;
             }
@@ -101,6 +109,9 @@ public class CaseController {
 
         // insert to db and get the id assigned
         caseDao.insert(newCase);
+
+        // send notification
+        notificationService.notifyNewCase(newCase);
 
         // return added case with the id
         return newCase;

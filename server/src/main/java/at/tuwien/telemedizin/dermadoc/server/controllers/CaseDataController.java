@@ -10,6 +10,7 @@ import at.tuwien.telemedizin.dermadoc.server.exceptions.EntityNotFoundException;
 import at.tuwien.telemedizin.dermadoc.server.security.Access;
 import at.tuwien.telemedizin.dermadoc.server.security.AccessUser;
 import at.tuwien.telemedizin.dermadoc.server.security.CurrentUser;
+import at.tuwien.telemedizin.dermadoc.server.services.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,9 +28,11 @@ public class CaseDataController {
     @Autowired
     private CaseDao caseDao;
 
-    private void checkAccess(User user, long caseId) {
-        Case c = caseDao.getCaseById(caseId);
-        if (Access.canAccess(user, c)) {
+    @Autowired
+    private NotificationService notificationService;
+
+    private void checkAccess(User user, Case theCase) {
+        if (Access.canAccess(user, theCase)) {
             return;
         }
         else {
@@ -45,16 +48,22 @@ public class CaseDataController {
     @RequestMapping(value = "/cases/{caseId}/data", method = RequestMethod.GET)
     @AccessUser
     public CaseDataList getCaseData(@CurrentUser User user, @PathVariable long caseId) {
-        checkAccess(user, caseId);
+        Case c = caseDao.getCaseById(caseId);
+        checkAccess(user, c);
         return new CaseDataList(caseDataDao.listCaseDataByUserAndCase(caseId, user.getId()));
     }
 
     @RequestMapping(value = "/cases/{caseId}/data", method = RequestMethod.POST)
     @AccessUser
-    public CaseData insertCaseDataText(@CurrentUser User user, @PathVariable long caseId, @RequestBody CaseData caseData) {
-        checkAccess(user, caseId);
+    public CaseData insertCaseData(@CurrentUser User user, @PathVariable long caseId, @RequestBody CaseData caseData) {
+        Case c = caseDao.getCaseById(caseId);
+        checkAccess(user, c);
         prepareInsert(user, caseData);
         caseDataDao.insert(caseId, caseData);
+
+        // send notification
+        notificationService.notifyCase(c, user, user.getName()+" posted in \""+c.getName()+"\"");
+
         return caseData;
     }
 
