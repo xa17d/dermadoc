@@ -14,6 +14,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TitledPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 
@@ -28,6 +29,7 @@ public class GCDiagnosisView extends AGCCaseDataView {
 
     @FXML private VBox vbCaseData;
     @FXML private Label lbMessage;
+    @FXML private TitledPane tpDiagnosis;
     @FXML private ListView<Icd10Diagnosis> lvDiagnosis;
 
     private Diagnosis data;
@@ -78,5 +80,10 @@ public class GCDiagnosisView extends AGCCaseDataView {
     @Override
     public boolean byPhysician() {
         return true;
+    }
+
+    @Override
+    public void expand(boolean expand) {
+        tpDiagnosis.setExpanded(expand);
     }
 }

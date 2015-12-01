@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TitledPane;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
@@ -20,6 +21,7 @@ public class GCAnamnesisView  extends AGCCaseDataView {
 
     @FXML private VBox vbCaseData;
     @FXML private Label lbMessage;
+    @FXML private TitledPane tpAnamnesis;
     @FXML private ListView<AnamnesisQuestion> lvAnamnesis;
 
     private Anamnesis data;
@@ -56,5 +58,10 @@ public class GCAnamnesisView  extends AGCCaseDataView {
     @Override
     public boolean byPhysician() {
         return false;
+    }
+
+    @Override
+    public void expand(boolean expand) {
+        tpAnamnesis.setExpanded(expand);
     }
 }

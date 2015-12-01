@@ -54,26 +54,6 @@
     -fx-text-fill: orange;
 }
 
-/*
-.text-input {
-    -fx-highlight-fill: derive(-fx-control-inner-background,-20%);
-    -fx-highlight-text-fill: -fx-text-inner-color;
-    -fx-prompt-text-fill: derive(-fx-control-inner-background,-30%);
-    -fx-background-insets: 0, 1;
-    -fx-background-radius: 3, 2;
-}
-
-.text-input:focused {
-    -fx-highlight-fill: -fx-accent;
-    -fx-highlight-text-fill: white;
-    -fx-background-insets: -0.2, 1, -1.4, 3;
-    -fx-background-radius: 3, 2, 4, 0;
-    -fx-prompt-text-fill: transparent;
-}
-*/
-
-
-
 .text-field  {
     -fx-border-width: 2;
     -fx-border-color: rgb(255, 255, 255);
@@ -87,4 +67,8 @@
 
 .text-field:focused{
     -fx-border-color: rgb(255, 255, 255);
+}
+
+#caseTabBottom {
+    -fx-background-color: -fx-box-border, linear-gradient(to right, derive(-fx-color,15%) 0%, derive(-fx-color,65%) 15%, derive(-fx-color,15%) 30%, derive(-fx-color,65%) 45%, derive(-fx-color,15%) 60%, derive(-fx-color,65%) 75%, derive(-fx-color,15%) 90%, derive(-fx-color,15%) 100%);
 }

@@ -14,7 +14,7 @@
                   <Insets bottom="10.0" left="5.0" right="5.0" top="5.0" />
                </VBox.margin>
             </Label>
-            <TitledPane text="Anamnesis" VBox.vgrow="ALWAYS">
+            <TitledPane fx:id="tpAnamnesis" text="Anamnesis" VBox.vgrow="ALWAYS">
               <content>
                 <AnchorPane>
                      <children>

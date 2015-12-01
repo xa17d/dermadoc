@@ -1,12 +1,15 @@
 package at.tuwien.telemedizin.dermadoc.desktop.gui.main.controls.casedata;
 
 import at.tuwien.telemedizin.dermadoc.desktop.gui.main.controls.casedata.edit.AGCCaseDataEdit;
+import at.tuwien.telemedizin.dermadoc.desktop.gui.main.controls.casedata.view.AGCCaseDataView;
 import at.tuwien.telemedizin.dermadoc.desktop.gui.main.controls.handler.CaseDataEventHandler;
 import at.tuwien.telemedizin.dermadoc.entities.*;
 import at.tuwien.telemedizin.dermadoc.entities.casedata.*;
 import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.scene.Node;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
@@ -128,5 +131,15 @@ public class GCCaseDataList extends VBox {
             }
         });
         this.getChildren().add(editComponent);
+    }
+
+    public void expand(boolean expand) {
+
+        for(Node n : this.getChildren()) {
+            if(n instanceof AGCCaseDataView) {
+                AGCCaseDataView cdv = (AGCCaseDataView) n;
+                cdv.expand(expand);
+            }
+        }
     }
 }

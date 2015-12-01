@@ -65,4 +65,9 @@ public class GCTextMessageView extends AGCCaseDataView {
     public boolean byPhysician() {
         return (message.getAuthor() instanceof Physician);
     }
+
+    @Override
+    public void expand(boolean expand) {
+        //do nothing
+    }
 }

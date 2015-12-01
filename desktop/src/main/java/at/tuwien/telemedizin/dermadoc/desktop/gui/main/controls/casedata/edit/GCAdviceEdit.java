@@ -44,6 +44,8 @@ public class GCAdviceEdit  extends AGCCaseDataEdit {
         //add medication list
         gcMedicationList = new GCMedicationList();
         gpCaseData.add(gcMedicationList, 0, 1);
+
+        gcMedicationList.getStyleClass().add(this.getCaseStyle());
     }
 
     @FXML
