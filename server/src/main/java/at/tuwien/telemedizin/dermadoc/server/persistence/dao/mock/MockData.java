@@ -20,6 +20,7 @@ public class MockData {
         users = new ArrayList<>();
         cases = new ArrayList<>();
         caseData = new HashMap<>();
+        notifications = new ArrayList<>();
 
         Physician drAcula = new Physician();
         drAcula.setName("Dr. Acula");
@@ -63,6 +64,7 @@ public class MockData {
     public static ArrayList<User> users;
     public static ArrayList<Case> cases;
     public static HashMap<Long, ArrayList<CaseData>> caseData;
+    public static ArrayList<Notification> notifications;
 
     static {
         createMockData();
