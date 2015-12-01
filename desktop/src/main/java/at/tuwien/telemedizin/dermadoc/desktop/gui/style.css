@@ -3,6 +3,8 @@
     -fx-base: rgb(70, 70, 70);
     -fx-background: rgb(50, 50, 50);
     -fx-control-inner-background:  rgb(30, 30, 30);
+
+    -fx-accent: rgb(210, 210, 210);
 }
 
 .tab-pane:focused > .tab-header-area > .headers-region > .tab:selected .focus-indicator {
@@ -76,7 +78,6 @@
     -fx-border-width: 2;
     -fx-border-color: rgb(255, 255, 255);
     -fx-background: rgb(0, 0, 0);
-    -fx-accent: rgb(210, 210, 210);
     -fx-highlight-text-fill: rgb(20, 20, 20);
 }
 

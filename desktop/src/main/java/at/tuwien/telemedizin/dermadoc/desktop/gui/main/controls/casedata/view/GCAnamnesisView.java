@@ -1,23 +1,26 @@
 package at.tuwien.telemedizin.dermadoc.desktop.gui.main.controls.casedata.view;
 
-import at.tuwien.telemedizin.dermadoc.desktop.gui.main.controls.casedata.edit.GCTextMessageEdit;
-import at.tuwien.telemedizin.dermadoc.entities.Physician;
-import at.tuwien.telemedizin.dermadoc.entities.casedata.Anamnesis;
-import at.tuwien.telemedizin.dermadoc.entities.casedata.CaseData;
-import at.tuwien.telemedizin.dermadoc.entities.casedata.CaseInfo;
-import at.tuwien.telemedizin.dermadoc.entities.casedata.Diagnosis;
+import at.tuwien.telemedizin.dermadoc.entities.Medication;
+import at.tuwien.telemedizin.dermadoc.entities.casedata.*;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.layout.GridPane;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 
 /**
  * view of an anamnesis
  */
-public class GCAnamnesisView extends AGCCaseDataView {
+public class GCAnamnesisView  extends AGCCaseDataView {
 
-    @FXML private GridPane gpCaseData;
+    private static final int ROW_HEIGHT = 24;
+
+    @FXML private VBox vbCaseData;
+    @FXML private Label lbMessage;
+    @FXML private ListView<AnamnesisQuestion> lvAnamnesis;
 
     private Anamnesis data;
 
@@ -30,7 +33,7 @@ public class GCAnamnesisView extends AGCCaseDataView {
             throw new IllegalArgumentException("case data must be an anamnesis!");
         }
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("gc_textmessage_view.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("gc_anamnesis_view.fxml"));
         loader.setRoot(this);
         loader.setController(this);
         try {
@@ -38,33 +41,20 @@ public class GCAnamnesisView extends AGCCaseDataView {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public GCAnamnesisView(GCTextMessageEdit gcTextMessage) {
-
-        /*TODO
-        this.data = gcTextMessage.getTextMessage();
-
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("gc_textmessage_view.fxml"));
-        loader.setRoot(this);
-        loader.setController(this);
-        try {
-            loader.load();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        */
     }
 
     @FXML
     private void initialize() {
 
-        this.initStyle(gpCaseData);
-        //TODO
+        this.initStyle(vbCaseData);
+
+        lbMessage.setText(data.getMessage());
+        lvAnamnesis.setItems(FXCollections.observableArrayList(data.getQuestions()));
+        lvAnamnesis.setPrefHeight((data.getQuestions().size()+1) * ROW_HEIGHT + 2);
     }
 
     @Override
     public boolean byPhysician() {
-        return (data.getAuthor() instanceof Physician);
+        return false;
     }
 }
