@@ -3,6 +3,7 @@ package at.tuwien.telemedizin.dermadoc.desktop.gui.main.controls;
 import at.tuwien.telemedizin.dermadoc.desktop.gui.main.Controller;
 import at.tuwien.telemedizin.dermadoc.desktop.gui.main.controls.casedata.GCCaseDataList;
 import at.tuwien.telemedizin.dermadoc.desktop.gui.main.controls.casedata.edit.AGCCaseDataEdit;
+import at.tuwien.telemedizin.dermadoc.desktop.gui.main.controls.casedata.edit.GCAdviceEdit;
 import at.tuwien.telemedizin.dermadoc.desktop.gui.main.controls.casedata.edit.GCTextMessageEdit;
 import at.tuwien.telemedizin.dermadoc.entities.Case;
 import javafx.application.Platform;
@@ -109,6 +110,13 @@ public class GCCaseTab extends Tab {
     @FXML
     private void newDiagnosis() {
         controller.showErrorMessage("ERROR - this button is not implemented yet!");
+    }
+
+    @FXML
+    private void newAdvice() {
+
+        checkForOpenEditsAndRemove();
+        gcCaseDataList.add(new GCAdviceEdit(controller, aCase));
     }
 
     private void checkForOpenEditsAndRemove() {

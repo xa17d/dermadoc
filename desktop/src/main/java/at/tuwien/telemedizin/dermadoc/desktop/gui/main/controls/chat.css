@@ -21,7 +21,7 @@
 .titled-pane {
     -fx-base: -fx-base-1;
     -fx-background-color: -fx-base-2;
-    -fx-control-inner-background:  -fx-base-3;
+    -fx-control-inner-background: -fx-base-3;
 }
 
 .titled-pane:focused {

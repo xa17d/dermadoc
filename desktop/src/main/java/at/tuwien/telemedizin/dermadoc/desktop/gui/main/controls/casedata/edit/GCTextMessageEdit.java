@@ -43,9 +43,6 @@ public class GCTextMessageEdit extends AGCCaseDataEdit {
     private void initialize() {
 
         this.initStyle(gpCaseData);
-
-        //MOCK
-        taTextMessage.setText("here the doctor can write his new Text Message");
     }
 
     @FXML
@@ -53,10 +50,8 @@ public class GCTextMessageEdit extends AGCCaseDataEdit {
 
         //send to backend
         textMessage = new TextMessage(-1l, Calendar.getInstance(), controller.getPhysician(), taTextMessage.getText());
-        //textMessage = (TextMessage) controller.saveCaseData(aCase, textMessage);
         controller.saveCaseData(aCase, textMessage);
 
-        //TODO necessary???
         //notify list
         if(saveEventHandler != null) {
             saveEventHandler.onEvent(textMessage);

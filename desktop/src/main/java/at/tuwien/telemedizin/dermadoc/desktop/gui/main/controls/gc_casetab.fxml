@@ -10,7 +10,7 @@
          <bottom>
             <GridPane>
                <children>
-                  <Button maxWidth="-Infinity" mnemonicParsing="false" onAction="#newDiagnosis" prefWidth="140.0" text="Advice" GridPane.halignment="CENTER" />
+                  <Button maxWidth="-Infinity" mnemonicParsing="false" onAction="#newAdvice" prefWidth="140.0" text="Advice" GridPane.halignment="CENTER" />
                   <Button maxWidth="-Infinity" mnemonicParsing="false" onAction="#newDiagnosis" prefWidth="140.0" text="Diagnosis" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
                   <Button maxWidth="-Infinity" mnemonicParsing="false" onAction="#newFreetext" prefWidth="140.0" text="Freetext" GridPane.columnIndex="2" GridPane.halignment="CENTER" />
                </children>
