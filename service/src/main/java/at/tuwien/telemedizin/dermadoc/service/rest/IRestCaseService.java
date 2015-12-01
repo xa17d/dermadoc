@@ -5,6 +5,7 @@ import at.tuwien.telemedizin.dermadoc.entities.User;
 import at.tuwien.telemedizin.dermadoc.entities.casedata.CaseData;
 import at.tuwien.telemedizin.dermadoc.entities.rest.AuthenticationData;
 import at.tuwien.telemedizin.dermadoc.entities.rest.AuthenticationToken;
+import at.tuwien.telemedizin.dermadoc.entities.rest.CaseDataList;
 import at.tuwien.telemedizin.dermadoc.entities.rest.CaseList;
 import at.tuwien.telemedizin.dermadoc.service.rest.listener.DermadocNotificationHandler;
 import at.tuwien.telemedizin.dermadoc.service.rest.listener.RestListener;
@@ -26,7 +27,7 @@ public interface IRestCaseService {
 
     void getCaseById(RestListener<Case> listener, long caseId);
 
-    void getCaseData(RestListener<List<CaseData>> listener, Case aCase);
+    void getCaseData(RestListener<CaseDataList> listener, Case aCase);
 
     /**
      * set a notification listerner that gets called when a new

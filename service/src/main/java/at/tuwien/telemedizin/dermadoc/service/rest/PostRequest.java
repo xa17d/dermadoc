@@ -48,16 +48,6 @@ public class PostRequest<Trequest, Tresponse> {
             if (httpConnection.getResponseCode() >= 200 || httpConnection.getResponseCode() < 300 ) {
 
                 BufferedReader reader = new BufferedReader(new InputStreamReader(httpConnection.getInputStream()));
-
-                /*
-                String tmp = null;
-                StringBuilder sb = new StringBuilder();
-
-                while((tmp = reader.readLine()) != null) {
-                    sb.append(tmp);
-                }
-                */
-
                 Tresponse response = mapper.readValue(reader, typeParameterClassResponse);
 
                 listener.onRequestComplete(response);
