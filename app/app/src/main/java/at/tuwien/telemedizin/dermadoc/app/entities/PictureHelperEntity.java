@@ -36,4 +36,19 @@ public class PictureHelperEntity {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof PictureHelperEntity)) return false;
+
+        PictureHelperEntity that = (PictureHelperEntity) o;
+
+        if (picture != null ? !picture.equals(that.picture) : that.picture != null) return false;
+        if (thumbnail != null ? !thumbnail.equals(that.thumbnail) : that.thumbnail != null)
+            return false;
+        return !(description != null ? !description.equals(that.description) : that.description != null);
+
+    }
+
 }

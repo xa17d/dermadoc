@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.CursorLoader;
 import android.support.v7.app.AlertDialog;
@@ -35,7 +36,7 @@ import at.tuwien.telemedizin.dermadoc.app.entities.PictureHelperEntity;
  * Use the {@link EditPicturesFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class EditPicturesFragment extends Fragment implements PictureReceiver {
+public class EditPicturesFragment extends Fragment implements PictureReceiver, CasePictureListAdapter.CasePictureClickedHandler {
 
     public static final String LOG_TAG = EditPicturesFragment.class.getSimpleName();
 
@@ -43,6 +44,7 @@ public class EditPicturesFragment extends Fragment implements PictureReceiver {
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_NEW_CASE = "newCase";
+    private PictureHelperEntity activePicture;
 
     private boolean newCase; // if it is a new case, no symptom information has to be loaded and the layout switches into edit-mode
     private boolean addPicturesHintIsVisible;
@@ -109,10 +111,23 @@ public class EditPicturesFragment extends Fragment implements PictureReceiver {
      * receive the newly taken/selected picture
      * @param pictureHE
      */
+    @Override
     public void receiveNewPicture(PictureHelperEntity pictureHE) {
         imageView.setImageBitmap(pictureHE.getThumbnail());
         // TODO implement
     }
+
+    @Override
+    public void modifyDescriptionOfPicture(PictureHelperEntity pictureToBeModified, String description) {
+        // replace the description
+        int index = testPictures.indexOf(pictureToBeModified);
+        testPictures.remove(index);
+        pictureToBeModified.setDescription(description);
+        testPictures.add(index, pictureToBeModified);
+//        testPictures.get(index).setDescription(description);
+        pictureListAdapter.notifyDataSetChanged();
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -156,7 +171,7 @@ public class EditPicturesFragment extends Fragment implements PictureReceiver {
 
 
 
-        pictureListAdapter = new CasePictureListAdapter(getContext(), testPictures);
+        pictureListAdapter = new CasePictureListAdapter(getContext(), testPictures, this);
 
         pictureList.setAdapter(pictureListAdapter);
         EmbedableListViewUtility.setListViewHeightBasedOnChildren(pictureList);
@@ -265,6 +280,7 @@ public class EditPicturesFragment extends Fragment implements PictureReceiver {
 //                }
                 PictureHelperEntity newPicture = new PictureHelperEntity();
                 newPicture.setThumbnail(thumbnail);
+                newPicture.setPicture(thumbnail);
 //                imageView.setImageBitmap(thumbnail);
                 addNewPicture(newPicture); // add the new PictureEntity to the List-data-set
                 // TODO
@@ -297,6 +313,7 @@ public class EditPicturesFragment extends Fragment implements PictureReceiver {
 
                 PictureHelperEntity newPicture = new PictureHelperEntity();
                 newPicture.setThumbnail(bm);
+                newPicture.setPicture(bm);
                 addNewPicture(newPicture); // add the new PictureEntity to the List-data-set
 //                imageView.setImageBitmap(bm);
                 // TODO
@@ -309,6 +326,23 @@ public class EditPicturesFragment extends Fragment implements PictureReceiver {
         testPictures.add(newPicture);
         EmbedableListViewUtility.setListViewHeightBasedOnChildren(pictureList);
         pictureListAdapter.notifyDataSetChanged();
+
+        // open dialog to request picture-description
+        showPictureDescriptionDialog(newPicture);
+
     }
 
+    private void showPictureDescriptionDialog(PictureHelperEntity picture) {
+//      activePicture = picture; // for later modification (result of the dialog fragment)
+        EditPictureDescriptionFragment newFragment = EditPictureDescriptionFragment.newInstance(picture.getDescription());
+        newFragment.setPicture(picture);
+        newFragment.show(getFragmentManager(), "dialog");
+    }
+
+
+    @Override
+    public void casePictureClicked(PictureHelperEntity picture) {
+        // open a dialog for editing the picture description
+        showPictureDescriptionDialog(picture);
+    }
 }

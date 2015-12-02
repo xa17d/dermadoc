@@ -1,0 +1,78 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    tools:context="at.tuwien.telemedizin.dermadoc.app.activities_fragments.create_case.EditPictureDescriptionFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="8dp"
+        android:id="@+id/header_layout">
+
+        <ImageView
+            android:id="@+id/edit_picture_description_help_icon_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/ic_action_help_holo_light_18dp" />
+
+        <TextView
+            android:id="@+id/edit_picture_description_section_header"
+            style="@style/NewCaseMainHeaderText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@id/edit_picture_description_help_icon_view"
+            android:text="@string/label_edit_picture_description_section_header_description" />
+
+        <TextView
+            android:id="@+id/picture_description_help_hint_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/edit_picture_description_section_header"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/hint_background"
+            android:padding="5dp"
+            android:text="@string/hint_edit_picture_description_description"
+            android:textAppearance="@style/HintText"
+            android:visibility="gone" />
+
+    </RelativeLayout>
+
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/bottom_layout">
+
+
+    <EditText
+            android:id="@+id/description_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textMultiLine|textAutoCorrect"
+            android:lines="6"
+            android:hint="@string/label_edit_picture_description_field"
+        android:gravity="top" />
+    </android.support.design.widget.TextInputLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/picture_image_view"
+        android:scaleType="fitCenter"
+        android:layout_below="@id/header_layout"
+        android:layout_above="@id/bottom_layout"
+        />
+
+</RelativeLayout>

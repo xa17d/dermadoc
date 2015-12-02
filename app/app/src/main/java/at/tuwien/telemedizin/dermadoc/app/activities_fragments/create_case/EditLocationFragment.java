@@ -19,7 +19,6 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,7 +38,7 @@ import at.tuwien.telemedizin.dermadoc.entities.BodyLocalization;
  *
  * implementation of clickable areas following: https://blahti.wordpress.com/2012/06/26/images-with-clickable-areas/
  */
-public class EditLocationFragment extends Fragment implements View.OnTouchListener {
+public class EditLocationFragment extends Fragment {
 
     public static final String LOG_TAG = EditLocationFragment.class.getSimpleName();
 
@@ -52,7 +51,6 @@ public class EditLocationFragment extends Fragment implements View.OnTouchListen
     private boolean addPicturesHintIsVisible;
 
     private FrameLayout locationImagesFrameLayout;
-    private FrameLayout zoomedLocationImagesFrameLayout;
 
     private ImageView addLocationsHelpIcon;
     private TextView addLocationsHelpText;
@@ -122,9 +120,10 @@ public class EditLocationFragment extends Fragment implements View.OnTouchListen
 
         locationImagesFrameLayout = (FrameLayout) v.findViewById(R.id.location_image_frame_layout);
         ImageView mainLocationFrontImage = (ImageView) v.findViewById(R.id.main_location_picture_image_view);
-        mainLocationFrontImage.setOnTouchListener(this);
 
-        zoomedLocationImagesFrameLayout = (FrameLayout) v.findViewById(R.id.location_zoomed_frame_layout);
+        LocationImageTouchListener mainListener =
+                new LocationImageTouchListener(R.id.location_helper_image_view, R.id.location_details_helper_image_view);
+        mainLocationFrontImage.setOnTouchListener(mainListener);
 
         // button to get to the next part
         Button nextButton = (Button) v.findViewById(R.id.next_section_button);
@@ -192,14 +191,13 @@ public class EditLocationFragment extends Fragment implements View.OnTouchListen
      * @param localization
      */
     private void addImageViewsForSelectedBodyPart(BodyLocalization localization) {
-        int[] imageMaskResources = BodyLocalizationMapper.getImageResource(localization);
+        int[] imageMaskResources = BodyLocalizationMapper.getImageMasksResource(localization);
         // multiple images (front + back) can be associated with one localization
         List<ImageView> imageMaskList = new ArrayList<>();
         for (int i = 0; i < imageMaskResources.length; i++) {
-            // add image-view with the image-resource
+            // add image-view with the image-resource for the full-body-image
             ImageView imageView = new ImageView(getContext());
             imageView.setImageResource(imageMaskResources[i]);
-
 
             imageMaskList.add(imageView);
             locationImagesFrameLayout.addView(imageView);
@@ -304,103 +302,325 @@ public class EditLocationFragment extends Fragment implements View.OnTouchListen
     }
 
 
-    @Override
-    public boolean onTouch(View v, MotionEvent event) {
-        Log.d(LOG_TAG, "onTouch() " + v.toString());
+    /**
+     * this touch-listener uses two helper-images to detect which body-localization was selected
+     *
+     * The coordinated of the touch on the main-picture are used to retreive the pixel-colors
+     * of the underneath helper-images. The first helper image splits the image into the main
+     * Areas (6 at most because of color variations). The detailed-helper-image splits each of the
+     * main areas into more detailed ares, using the above mentioned 6 colors.
+     *
+     * First, the color of the pixel given by the touch-event on the this main-helper-image
+     * is retrieved. Second, the color of the pixel on the detailed-helper-image are retrieved.
+     * Third, the body-localization is calculated by using the combination of both colors.
+     *
+     * e.g.: Color for main-area "right-arm" is blue, colors for the detailed areas are:
+     * "hand" - green, "forearm" - red, etc.
+     * Touch -> first color is blue, second color is green -> must be the right hand
+     *
+     *
+     *
+     */
+    private class LocationImageTouchListener implements View.OnTouchListener {
 
-        final int action = event.getAction();
-        // (1)
-        final int evX = (int) event.getX();
-        final int evY = (int) event.getY();
-        switch (action) {
-            case MotionEvent.ACTION_DOWN :
+        private int locationHelperImageResourceId; // the image with the colored-areas
+        private int locationHelperDetailedImageResourceId; // the image with the colored-areas for detailed detection
 
-                break;
-            case MotionEvent.ACTION_UP :
-                Log.d(LOG_TAG, "MotionEvent=ACTION_UP" );
+        private BodyLocalizationZoomHelper bodyArea; // if null: full body
 
-                handleBodyAreaTouchActionUP(evX, evY);
-
-                break;
-        } // end switch
-
-        return true;
-    }
-
-    private void handleBodyAreaTouchActionUP(int evX, int evY) {
-        // On the UP, we do the click action.
-        // The hidden image (image_areas) has 4 different hotspots on it.
-        // The colors are blue, green, yellow, orange, red
-        // Use image_areas to determine which region the user touched.
-        // (2)
-        int touchColor = getHotspotColor (R.id.location_helper_image_view, evX, evY);
-        // Compare the touchColor to the expected values.
-        // Switch to a different image, depending on what color was touched.
-        // Note that we use a Color Tool object to test whether the
-        // observed color is close enough to the real color to
-        // count as a match. We do this because colors on the screen do
-        // not match the map exactly because of scaling and
-        // varying pixel density.
-        ColorTool ct = new ColorTool ();
-        int tolerance = 25;
-
-        BodyLocalizationZoomHelper touchedBodyArea = null;
-
-        // (3)
-        if (ct.closeMatch (ContextCompat.getColor(getContext(), R.color.location_area_head), touchColor, tolerance)) { // TODO
-            // Do the action associated with the head-area
-//            Toast.makeText(getContext(), "HEAD CLICKED", Toast.LENGTH_LONG).show(); // TODO replace with real fragment/function
-            touchedBodyArea = BodyLocalizationZoomHelper.HEAD;
-
-        } else if (ct.closeMatch (ContextCompat.getColor(getContext(), R.color.location_area_legs), touchColor, tolerance)) { // TODO
-            // Do the action associated with the leg-area
-//            Toast.makeText(getContext(), "LEGS CLICKED", Toast.LENGTH_LONG).show(); // TODO replace with real fragment/function
-            touchedBodyArea = BodyLocalizationZoomHelper.LEGS;
-
-        } else if (ct.closeMatch (ContextCompat.getColor(getContext(), R.color.location_area_arm_left), touchColor, tolerance)) { // TODO
-            // Do the action associated with the arm-left-area
-//            Toast.makeText(getContext(), "ARM LEFT CLICKED", Toast.LENGTH_LONG).show(); // TODO replace with real fragment/function
-            touchedBodyArea = BodyLocalizationZoomHelper.ARM_LEFT;
-
-        } else if (ct.closeMatch (ContextCompat.getColor(getContext(), R.color.location_area_arm_right), touchColor, tolerance)) { // TODO
-            // Do the action associated with the arm-right-area
-//            Toast.makeText(getContext(), "ARM RIGHT CLICKED", Toast.LENGTH_LONG).show(); // TODO replace with real fragment/function
-            touchedBodyArea = BodyLocalizationZoomHelper.ARM_RIGHT;
-
-        } else if (ct.closeMatch (ContextCompat.getColor(getContext(), R.color.location_area_torso), touchColor, tolerance)) { // TODO
-            // Do the action associated with the torso-area
-//            Toast.makeText(getContext(), "TORSO CLICKED", Toast.LENGTH_LONG).show(); // TODO replace with real fragment/function
-            touchedBodyArea = BodyLocalizationZoomHelper.TORSO;
-
-        } else if (ct.closeMatch (ContextCompat.getColor(getContext(), R.color.location_area_back), touchColor, tolerance)) { // TODO
-            // Do the action associated with the back-area
-//            Toast.makeText(getContext(), "BACK CLICKED", Toast.LENGTH_LONG).show(); // TODO replace with real fragment/function
-            touchedBodyArea = BodyLocalizationZoomHelper.BACK;
-
-        }else {
-            //...
-            Log.d(LOG_TAG, "ColorTool: No match" );
+        /**
+         *
+         * @param locationHelperImageResourceId the id of the image-helper resource in this layout (the image with the colored areas)
+         * @param locationHelperDetailedImageResourceId the id of the image helper resource for detailed detection
+         *
+         */
+        public LocationImageTouchListener(int locationHelperImageResourceId,
+                                          int locationHelperDetailedImageResourceId) {
+            this.locationHelperImageResourceId = locationHelperImageResourceId;
+            this.locationHelperDetailedImageResourceId = locationHelperDetailedImageResourceId;
         }
 
-        // TODO: show a zoomed picture of the selected areas
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            Log.d(LOG_TAG, "onTouch() " + v.toString());
 
-        // TEST: select body-parts from the main view
-        // TODO remove Start
-        if (touchedBodyArea != null) {
-            List<BodyLocalization> selectedBodyLocations =
-                    BodyLocalizationMapper.getBodyLocalizations(touchedBodyArea);
-            for (BodyLocalization bL : selectedBodyLocations) {
-                handleClickOnBodyLocalization(bL);
+            final int action = event.getAction();
+            // (1)
+            final int evX = (int) event.getX();
+            final int evY = (int) event.getY();
+            switch (action) {
+                case MotionEvent.ACTION_DOWN :
+
+                    break;
+                case MotionEvent.ACTION_UP :
+                    Log.d(LOG_TAG, "MotionEvent=ACTION_UP" );
+
+                    handleBodyAreaTouchActionUP(evX, evY);
+
+                    break;
+            } // end switch
+
+            return true;
+        }
+
+        private void handleBodyAreaTouchActionUP(int evX, int evY) {
+            // On the UP, we do the click action.
+            // The hidden image (image_areas) has 4 different hotspots on it.
+            // The colors are blue, green, yellow, orange, red
+            // Use image_areas to determine which region the user touched.
+            // (2)
+            int touchColor = getHotspotColor (locationHelperImageResourceId, evX, evY);
+            int touchColorDetails = getHotspotColor (locationHelperDetailedImageResourceId, evX, evY);
+            // Compare the touchColor to the expected values.
+            // Switch to a different image, depending on what color was touched.
+            // Note that we use a Color Tool object to test whether the
+            // observed color is close enough to the real color to
+            // count as a match. We do this because colors on the screen do
+            // not match the map exactly because of scaling and
+            // varying pixel density.
+            ColorTool ct = new ColorTool ();
+            int tolerance = 25;
+            // full body
+            BodyLocalizationZoomHelper mainBodyLocation = handleFullBodyArea(touchColor, tolerance, ct);
+
+            if (mainBodyLocation != null) {
+                // now get the detailed body-location
+                BodyLocalization bodyLocalization = null;
+
+                switch (mainBodyLocation) {
+                    case HEAD:
+                        bodyLocalization = handleHeadBodyArea(touchColorDetails, tolerance, ct);
+                        break;
+                    case TORSO:
+                        bodyLocalization = handleTorsoBodyArea(touchColorDetails, tolerance, ct);
+                        break;
+                    case ARM_LEFT:
+                        bodyLocalization = handleArmBodyArea(touchColorDetails, tolerance, ct, true);
+                        break;
+                    case ARM_RIGHT:
+                        bodyLocalization = handleArmBodyArea(touchColorDetails, tolerance, ct, false);
+                        break;
+                    case BACK:
+                        bodyLocalization = handleBackBodyArea(touchColorDetails, tolerance, ct);
+                        break;
+                    case LEGS:
+                        bodyLocalization = handleLegBodyArea(touchColorDetails, tolerance, ct);
+                        break;
+                }
+
+                // check if something was selected
+                if (bodyLocalization != null) {
+                    handleClickOnBodyLocalization(bodyLocalization);
+                } else {
+                    Log.d(LOG_TAG, "No body localization found");
+                }
+
+            } else {
+                // nothing selected - touch was somewhere else
+                return;
             }
-        }
-        // TODO remove END
-    }
 
-    public int getHotspotColor (int hotspotId, int x, int y) {
-        ImageView img = (ImageView) locationImagesFrameLayout.findViewById(hotspotId);
-        img.setDrawingCacheEnabled(true);
-        Bitmap hotspots = Bitmap.createBitmap(img.getDrawingCache());
-        img.setDrawingCacheEnabled(false);
-        return hotspots.getPixel(x, y);
+
+        }
+
+        private BodyLocalizationZoomHelper handleFullBodyArea(int touchColor, int tolerance, ColorTool ct) {
+            BodyLocalizationZoomHelper touchedBodyArea = null;
+
+            // (3)
+            if (ct.closeMatch (ContextCompat.getColor(getContext(), R.color.location_area_1), touchColor, tolerance)) {
+                // Do the action associated with the head-area
+//            Toast.makeText(getContext(), "HEAD CLICKED", Toast.LENGTH_LONG).show();
+                touchedBodyArea = BodyLocalizationZoomHelper.HEAD;
+
+            } else if (ct.closeMatch (ContextCompat.getColor(getContext(), R.color.location_area_5), touchColor, tolerance)) {
+                // Do the action associated with the leg-area
+//            Toast.makeText(getContext(), "LEGS CLICKED", Toast.LENGTH_LONG).show();
+                touchedBodyArea = BodyLocalizationZoomHelper.LEGS;
+
+            } else if (ct.closeMatch (ContextCompat.getColor(getContext(), R.color.location_area_3), touchColor, tolerance)) {
+                // Do the action associated with the arm-left-area
+//            Toast.makeText(getContext(), "ARM LEFT CLICKED", Toast.LENGTH_LONG).show();
+                touchedBodyArea = BodyLocalizationZoomHelper.ARM_LEFT;
+
+            } else if (ct.closeMatch (ContextCompat.getColor(getContext(), R.color.location_area_4), touchColor, tolerance)) {
+                // Do the action associated with the arm-right-area
+//            Toast.makeText(getContext(), "ARM RIGHT CLICKED", Toast.LENGTH_LONG).show();
+                touchedBodyArea = BodyLocalizationZoomHelper.ARM_RIGHT;
+
+            } else if (ct.closeMatch (ContextCompat.getColor(getContext(), R.color.location_area_2), touchColor, tolerance)) {
+                // Do the action associated with the torso-area
+//            Toast.makeText(getContext(), "TORSO CLICKED", Toast.LENGTH_LONG).show();
+                touchedBodyArea = BodyLocalizationZoomHelper.TORSO;
+
+            } else if (ct.closeMatch (ContextCompat.getColor(getContext(), R.color.location_area_6), touchColor, tolerance)) {
+                // Do the action associated with the back-area
+//            Toast.makeText(getContext(), "BACK CLICKED", Toast.LENGTH_LONG).show();
+                touchedBodyArea = BodyLocalizationZoomHelper.BACK;
+
+            } else {
+                //...
+                Log.d(LOG_TAG, "ColorTool: No match" );
+            }
+
+            // TODO: show a zoomed picture of the selected areas
+
+            return touchedBodyArea;
+        }
+
+        private BodyLocalization handleHeadBodyArea(int touchColor, int tolerance, ColorTool ct) {
+            BodyLocalization touchedBodyArea = null;
+
+           // head does only provide one area
+            touchedBodyArea = BodyLocalization.HEAD;
+
+            return touchedBodyArea;
+        }
+
+        private BodyLocalization handleTorsoBodyArea(int touchColor, int tolerance, ColorTool ct) {
+            BodyLocalization touchedBodyArea = null;
+
+            if (ct.closeMatch (ContextCompat.getColor(getContext(), R.color.location_area_2), touchColor, tolerance)) {
+                // front neck
+                touchedBodyArea = BodyLocalization.NECK_FRONT;
+
+            } else if (ct.closeMatch (ContextCompat.getColor(getContext(), R.color.location_area_1), touchColor, tolerance)) {
+                // chest
+                touchedBodyArea = BodyLocalization.THORAX;
+
+            } else if (ct.closeMatch (ContextCompat.getColor(getContext(), R.color.location_area_4), touchColor, tolerance)) {
+                // abdomen
+                touchedBodyArea = BodyLocalization.ABDOMEN;
+
+            } else if (ct.closeMatch (ContextCompat.getColor(getContext(), R.color.location_area_3), touchColor, tolerance)) {
+                // pelivis
+                touchedBodyArea = BodyLocalization.PELVIS;
+
+            } else {
+                //...
+                Log.d(LOG_TAG, "ColorTool: No match" );
+            }
+
+            return touchedBodyArea;
+        }
+
+        private BodyLocalization handleBackBodyArea(int touchColor, int tolerance, ColorTool ct) {
+            BodyLocalization touchedBodyArea = null;
+
+            if (ct.closeMatch (ContextCompat.getColor(getContext(), R.color.location_area_6), touchColor, tolerance)) {
+                // front neck
+                touchedBodyArea = BodyLocalization.NECK;
+
+            } else if (ct.closeMatch (ContextCompat.getColor(getContext(), R.color.location_area_5), touchColor, tolerance)) {
+                // chest
+                touchedBodyArea = BodyLocalization.UPPER_BACK;
+
+            } else if (ct.closeMatch (ContextCompat.getColor(getContext(), R.color.location_area_1), touchColor, tolerance)) {
+                // abdomen
+                touchedBodyArea = BodyLocalization.LOWER_BACK;
+
+            } else if (ct.closeMatch (ContextCompat.getColor(getContext(), R.color.location_area_2), touchColor, tolerance)) {
+                // pelivis
+                touchedBodyArea = BodyLocalization.PELVIS_BACK;
+
+            } else {
+                //...
+                Log.d(LOG_TAG, "ColorTool: No match" );
+            }
+
+            return touchedBodyArea;
+        }
+
+        /**
+         *
+         * @param touchColor
+         * @param tolerance
+         * @param ct
+         * @param left - is it the left arm? if false it is automatically assumed to be the right arm
+         * @return
+         */
+        private BodyLocalization handleArmBodyArea(int touchColor, int tolerance, ColorTool ct, boolean left) {
+            BodyLocalization touchedBodyArea = null;
+
+            if (ct.closeMatch (ContextCompat.getColor(getContext(), R.color.location_area_4), touchColor, tolerance)) {
+                if (left) {
+                    touchedBodyArea = BodyLocalization.SHOULDER_LEFT;
+                } else {
+                    touchedBodyArea = BodyLocalization.SHOULDER_RIGHT;
+                }
+
+
+            } else if (ct.closeMatch (ContextCompat.getColor(getContext(), R.color.location_area_3), touchColor, tolerance)) {
+                if (left) {
+                    touchedBodyArea = BodyLocalization.UPPER_ARM_LEFT;
+                } else {
+                    touchedBodyArea = BodyLocalization.UPPER_ARM_RIGHT;
+                }
+
+            } else if (ct.closeMatch (ContextCompat.getColor(getContext(), R.color.location_area_5), touchColor, tolerance)) {
+                if (left) {
+                    touchedBodyArea = BodyLocalization.FOREARM_LEFT;
+                } else {
+                    touchedBodyArea = BodyLocalization.FOREARM_RIGHT;
+                }
+
+            } else if (ct.closeMatch (ContextCompat.getColor(getContext(), R.color.location_area_1), touchColor, tolerance)) {
+                if (left) {
+                    touchedBodyArea = BodyLocalization.HAND_LEFT;
+                } else {
+                    touchedBodyArea = BodyLocalization.HAND_RIGHT;
+                }
+
+            } else {
+                //...
+                Log.d(LOG_TAG, "ColorTool: No match" );
+            }
+
+            return touchedBodyArea;
+        }
+
+        /**
+         *
+         * @param touchColor
+         * @param tolerance
+         * @param ct
+         * @return
+         */
+        private BodyLocalization handleLegBodyArea(int touchColor, int tolerance, ColorTool ct) {
+            BodyLocalization touchedBodyArea = null;
+
+            if (ct.closeMatch (ContextCompat.getColor(getContext(), R.color.location_area_5), touchColor, tolerance)) {
+                touchedBodyArea = BodyLocalization.THIGH_RIGHT;
+
+
+            } else if (ct.closeMatch (ContextCompat.getColor(getContext(), R.color.location_area_4), touchColor, tolerance)) {
+                touchedBodyArea = BodyLocalization.LOWER_LEG_RIGHT;
+
+            } else if (ct.closeMatch (ContextCompat.getColor(getContext(), R.color.location_area_2), touchColor, tolerance)) {
+                touchedBodyArea = BodyLocalization.FOOT_RIGHT;
+
+            } else if (ct.closeMatch (ContextCompat.getColor(getContext(), R.color.location_area_1), touchColor, tolerance)) {
+                touchedBodyArea = BodyLocalization.THIGH_LEFT;
+
+            } else if (ct.closeMatch (ContextCompat.getColor(getContext(), R.color.location_area_3), touchColor, tolerance)) {
+                touchedBodyArea = BodyLocalization.LOWER_LEG_LEFT;
+
+            } else if (ct.closeMatch (ContextCompat.getColor(getContext(), R.color.location_area_6), touchColor, tolerance)) {
+                touchedBodyArea = BodyLocalization.FOOT_LEFT;
+
+            } else {
+                //...
+                Log.d(LOG_TAG, "ColorTool: No match" );
+            }
+
+            return touchedBodyArea;
+        }
+
+        public int getHotspotColor (int hotspotId, int x, int y) {
+            ImageView img = (ImageView) locationImagesFrameLayout.findViewById(hotspotId);
+            img.setDrawingCacheEnabled(true);
+            Bitmap hotspots = Bitmap.createBitmap(img.getDrawingCache());
+            img.setDrawingCacheEnabled(false);
+            return hotspots.getPixel(x, y);
+        }
     }
 }

@@ -75,8 +75,17 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="fitCenter"
+                    android:id="@+id/location_details_helper_image_view"
+                    android:src="@drawable/location_areas_detailed_front_and_back_b"
+                    android:layout_gravity="center_horizontal"
+                    android:visibility="invisible" />
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitCenter"
                     android:id="@+id/location_helper_image_view"
-                    android:src="@drawable/location_areas_front_and_back"
+                    android:src="@drawable/location_areas_front_and_back_b"
                     android:layout_gravity="center_horizontal"
                     android:visibility="invisible" />
 
@@ -87,14 +96,6 @@
                     android:id="@+id/main_location_picture_image_view"
                     android:src="@drawable/location_main_front_and_back3"
                     android:layout_gravity="center_horizontal" />
-
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:id="@+id/location_zoomed_frame_layout"
-                    android:visibility="gone">
-
-                </FrameLayout>
 
             </FrameLayout>
 

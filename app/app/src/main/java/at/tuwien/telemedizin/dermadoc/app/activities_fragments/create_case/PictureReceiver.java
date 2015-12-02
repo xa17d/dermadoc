@@ -8,4 +8,6 @@ import at.tuwien.telemedizin.dermadoc.app.entities.PictureHelperEntity;
 public interface PictureReceiver {
 
     public void receiveNewPicture(PictureHelperEntity pictureHE);
+
+    public void modifyDescriptionOfPicture(PictureHelperEntity pictureToBeModified, String description);
 }
