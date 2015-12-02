@@ -7,10 +7,11 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.CursorLoader;
 import android.support.v7.app.AlertDialog;
@@ -23,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,7 +46,6 @@ public class EditPicturesFragment extends Fragment implements PictureReceiver, C
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_NEW_CASE = "newCase";
-    private PictureHelperEntity activePicture;
 
     private boolean newCase; // if it is a new case, no symptom information has to be loaded and the layout switches into edit-mode
     private boolean addPicturesHintIsVisible;
@@ -58,7 +59,7 @@ public class EditPicturesFragment extends Fragment implements PictureReceiver, C
 
     private ListView pictureList;
     private CasePictureListAdapter pictureListAdapter;
-    private List<PictureHelperEntity> testPictures; // TODO remove - take the list from the case-object instead
+    private List<PictureHelperEntity> pictures; // TODO remove - take the list from the case-object instead
 
     /**
      * Use this factory method to create a new instance of
@@ -98,7 +99,7 @@ public class EditPicturesFragment extends Fragment implements PictureReceiver, C
         if (getArguments() != null) {
             newCase = getArguments().getBoolean(ARG_NEW_CASE);
             // TODO remove - START - test data
-            testPictures = new ArrayList<>();
+            pictures = new ArrayList<>();
             PictureHelperEntity testPicture1 = new PictureHelperEntity();
             testPicture1.setDescription("Test Picture!");
             // TODO remove - END
@@ -120,11 +121,10 @@ public class EditPicturesFragment extends Fragment implements PictureReceiver, C
     @Override
     public void modifyDescriptionOfPicture(PictureHelperEntity pictureToBeModified, String description) {
         // replace the description
-        int index = testPictures.indexOf(pictureToBeModified);
-        testPictures.remove(index);
+        int index = pictures.indexOf(pictureToBeModified);
+        pictures.remove(index);
         pictureToBeModified.setDescription(description);
-        testPictures.add(index, pictureToBeModified);
-//        testPictures.get(index).setDescription(description);
+        pictures.add(index, pictureToBeModified);
         pictureListAdapter.notifyDataSetChanged();
     }
 
@@ -171,7 +171,7 @@ public class EditPicturesFragment extends Fragment implements PictureReceiver, C
 
 
 
-        pictureListAdapter = new CasePictureListAdapter(getContext(), testPictures, this);
+        pictureListAdapter = new CasePictureListAdapter(getContext(), pictures, this);
 
         pictureList.setAdapter(pictureListAdapter);
         EmbedableListViewUtility.setListViewHeightBasedOnChildren(pictureList);
@@ -311,6 +311,8 @@ public class EditPicturesFragment extends Fragment implements PictureReceiver, C
                 options.inJustDecodeBounds = false;
                 bm = BitmapFactory.decodeFile(selectedImagePath, options);
 
+                bm = correctBitmapOrientation(bm, selectedImagePath);
+
                 PictureHelperEntity newPicture = new PictureHelperEntity();
                 newPicture.setThumbnail(bm);
                 newPicture.setPicture(bm);
@@ -322,8 +324,78 @@ public class EditPicturesFragment extends Fragment implements PictureReceiver, C
         }
     }
 
+    /**
+     * rotates the bitmap according to its native-rotation
+     * # Memory-heavy?! but no other solutions... ?!#
+     * @param bitmap
+     * @return
+     */
+    private Bitmap correctBitmapOrientation(Bitmap bitmap, String path) {
+        ExifInterface exif = null;
+        try {
+            exif = new ExifInterface(path);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                ExifInterface.ORIENTATION_UNDEFINED);
+
+        Bitmap bmRotated = rotateBitmap(bitmap, orientation);
+        return bmRotated;
+    }
+
+    /**
+     * http://stackoverflow.com/questions/20478765/how-to-get-the-correct-orientation-of-the-image-selected-from-the-default-image
+     * @param bitmap
+     * @param orientation
+     * @return
+     */
+    public static Bitmap rotateBitmap(Bitmap bitmap, int orientation) {
+
+        Matrix matrix = new Matrix();
+        switch (orientation) {
+            case ExifInterface.ORIENTATION_NORMAL:
+                return bitmap;
+            case ExifInterface.ORIENTATION_FLIP_HORIZONTAL:
+                matrix.setScale(-1, 1);
+                break;
+            case ExifInterface.ORIENTATION_ROTATE_180:
+                matrix.setRotate(180);
+                break;
+            case ExifInterface.ORIENTATION_FLIP_VERTICAL:
+                matrix.setRotate(180);
+                matrix.postScale(-1, 1);
+                break;
+            case ExifInterface.ORIENTATION_TRANSPOSE:
+                matrix.setRotate(90);
+                matrix.postScale(-1, 1);
+                break;
+            case ExifInterface.ORIENTATION_ROTATE_90:
+                matrix.setRotate(90);
+                break;
+            case ExifInterface.ORIENTATION_TRANSVERSE:
+                matrix.setRotate(-90);
+                matrix.postScale(-1, 1);
+                break;
+            case ExifInterface.ORIENTATION_ROTATE_270:
+                matrix.setRotate(-90);
+                break;
+            default:
+                return bitmap;
+        }
+        try {
+            Bitmap bmRotated = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+            bitmap.recycle();
+            return bmRotated;
+        }
+        catch (OutOfMemoryError e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     private void addNewPicture(PictureHelperEntity newPicture) {
-        testPictures.add(newPicture);
+        pictures.add(newPicture);
         EmbedableListViewUtility.setListViewHeightBasedOnChildren(pictureList);
         pictureListAdapter.notifyDataSetChanged();
 
@@ -344,5 +416,9 @@ public class EditPicturesFragment extends Fragment implements PictureReceiver, C
     public void casePictureClicked(PictureHelperEntity picture) {
         // open a dialog for editing the picture description
         showPictureDescriptionDialog(picture);
+    }
+
+    public List<PictureHelperEntity> getPictures() {
+        return pictures;
     }
 }

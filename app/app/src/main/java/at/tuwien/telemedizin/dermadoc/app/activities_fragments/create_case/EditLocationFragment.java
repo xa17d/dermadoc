@@ -302,6 +302,11 @@ public class EditLocationFragment extends Fragment {
     }
 
 
+    public List<BodyLocalization> getSelectedBodyLocalizations() {
+        return selectedBodyParts;
+    }
+
+
     /**
      * this touch-listener uses two helper-images to detect which body-localization was selected
      *
@@ -622,5 +627,6 @@ public class EditLocationFragment extends Fragment {
             img.setDrawingCacheEnabled(false);
             return hotspots.getPixel(x, y);
         }
+
     }
 }

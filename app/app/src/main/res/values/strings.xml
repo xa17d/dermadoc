@@ -134,5 +134,7 @@
     <string name="option_pic_dialog_positive">OK</string>
     <string name="label_no_description_touch_here"> &lt;no description found&gt; </string>
 
+    <string name="label_option_positive">Yes</string>
+    <string name="label_option_negative">No</string>
 
 </resources>

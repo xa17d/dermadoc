@@ -196,4 +196,22 @@ public class PhysicianSelectionFragment extends Fragment {
         }
     }
 
+    public Physician getSelectedPhysician() {
+        // is the option "next available physician" checked?
+        if (nextPhysicianAvailableCheckbox.isChecked()) {
+            return null;
+        }
+
+        // iterate the radio-buttons and get the selected physician
+        for (int i = 0; i < nearbyPhysicianRadioButtonList.size(); i++) {
+            if (nearbyPhysicianRadioButtonList.get(i).isChecked()) {
+                return nearbyPhysicianList.get(i);
+            }
+        }
+
+        // no physician was selected and the checkbox was not selected
+        // -> handle as if the checkbox is selected
+        return null;
+    }
+
 }
