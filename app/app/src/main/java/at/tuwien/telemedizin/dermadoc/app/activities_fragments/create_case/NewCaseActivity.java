@@ -59,7 +59,6 @@ public class NewCaseActivity extends AppCompatActivity implements OnCaseDataRequ
     private FloatingActionButton fab;
     private TabLayout tabLayout;
 
-    private PictureReceiver pictureReceiver;
 
     private EditAnamnesisFragment anamnesisFragmen;
     private EditSymptomsFragment symptomsFragment;
@@ -229,8 +228,8 @@ public class NewCaseActivity extends AppCompatActivity implements OnCaseDataRequ
      */
     public void notifyEditPictureDescription(PictureHelperEntity pictureToBeModified, String description) {
         Log.d(LOG_TAG, "notifyEditPictureDescription()");
-        if (pictureReceiver != null) {
-            pictureReceiver.modifyDescriptionOfPicture(pictureToBeModified, description);
+        if (picturesFragment != null) {
+            picturesFragment.modifyDescriptionOfPicture(pictureToBeModified, description);
         }
     }
 
