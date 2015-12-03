@@ -38,7 +38,7 @@ public class TestContentProvider implements ContentProvider {
     private Anamnesis mockAnamnesis() {
 
         AnamnesisQuestion q1 = new AnamnesisQuestionBool();
-        q1.setQuestion("Has your cat show similar symptoms?");
+        q1.setQuestion("Has your cat shown similar symptoms?");
         AnamnesisQuestion q2 = new AnamnesisQuestionText();
         q2.setQuestion("What's the name of your cat?");
         AnamnesisQuestion q3 = new AnamnesisQuestionText();
