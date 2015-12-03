@@ -1,9 +1,10 @@
 package at.tuwien.telemedizin.dermadoc.desktop.gui.main.controls.casedata.edit;
 
 import at.tuwien.telemedizin.dermadoc.desktop.gui.main.Controller;
+import at.tuwien.telemedizin.dermadoc.desktop.gui.main.controls.casedata.edit.lists.GCMedicationList;
 import at.tuwien.telemedizin.dermadoc.desktop.gui.main.controls.handler.CaseDataEventHandler;
 import at.tuwien.telemedizin.dermadoc.entities.Case;
-import at.tuwien.telemedizin.dermadoc.entities.casedata.TextMessage;
+import at.tuwien.telemedizin.dermadoc.entities.casedata.Advice;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.TextArea;
@@ -13,23 +14,25 @@ import java.io.IOException;
 import java.util.Calendar;
 
 /**
- * Created by Lucas on 17.11.2015.
+ * Created by Lucas on 01.12.2015.
  */
-public class GCTextMessageEdit extends AGCCaseDataEdit {
+public class GCAdviceEdit  extends AGCCaseDataEdit {
 
     @FXML private GridPane gpCaseData;
-    @FXML private TextArea taTextMessage;
+    @FXML private TextArea taAdvice;
 
     private Controller controller;
     private Case aCase;
     private CaseDataEventHandler saveEventHandler;
 
-    public GCTextMessageEdit(Controller controller, Case aCase) {
+    private GCMedicationList gcMedicationList;
+
+    public GCAdviceEdit(Controller controller, Case aCase) {
 
         this.controller = controller;
         this.aCase = aCase;
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("gc_textmessage_edit.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("gc_advice_edit.fxml"));
         loader.setRoot(this);
         loader.setController(this);
         try {
@@ -37,6 +40,12 @@ public class GCTextMessageEdit extends AGCCaseDataEdit {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        //add medication list
+        gcMedicationList = new GCMedicationList();
+        gpCaseData.add(gcMedicationList, 0, 1);
+
+        gcMedicationList.getStyleClass().add(this.getCaseStyle());
     }
 
     @FXML
@@ -49,18 +58,18 @@ public class GCTextMessageEdit extends AGCCaseDataEdit {
     private void save() {
 
         //send to backend
-        textMessage = new TextMessage(-1l, Calendar.getInstance(), controller.getPhysician(), taTextMessage.getText());
-        controller.saveCaseData(aCase, textMessage);
+        advice = new Advice(-1l, Calendar.getInstance(), controller.getPhysician(), taAdvice.getText(), gcMedicationList.getMedication());
+        controller.saveCaseData(aCase, advice);
 
         //notify list
         if(saveEventHandler != null) {
-            saveEventHandler.onEvent(textMessage);
+            saveEventHandler.onEvent(advice);
         }
     }
 
-    private TextMessage textMessage;
-    public TextMessage getTextMessage() {
-        return textMessage;
+    private Advice advice;
+    public Advice getAdvice() {
+        return advice;
     }
 
     @Override

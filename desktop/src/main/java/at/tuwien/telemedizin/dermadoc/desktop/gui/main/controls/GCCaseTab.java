@@ -3,6 +3,7 @@ package at.tuwien.telemedizin.dermadoc.desktop.gui.main.controls;
 import at.tuwien.telemedizin.dermadoc.desktop.gui.main.Controller;
 import at.tuwien.telemedizin.dermadoc.desktop.gui.main.controls.casedata.GCCaseDataList;
 import at.tuwien.telemedizin.dermadoc.desktop.gui.main.controls.casedata.edit.AGCCaseDataEdit;
+import at.tuwien.telemedizin.dermadoc.desktop.gui.main.controls.casedata.edit.GCAdviceEdit;
 import at.tuwien.telemedizin.dermadoc.desktop.gui.main.controls.casedata.edit.GCTextMessageEdit;
 import at.tuwien.telemedizin.dermadoc.entities.Case;
 import javafx.application.Platform;
@@ -12,6 +13,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
@@ -23,6 +26,7 @@ import java.util.function.Predicate;
 public class GCCaseTab extends Tab {
 
     @FXML private VBox vbInput;
+    @FXML private GridPane gpBottom;
     @FXML private TitledPane tpPatientOverview;
 
     private Controller controller;
@@ -74,30 +78,26 @@ public class GCCaseTab extends Tab {
         gcCaseDataList.getChildren().addListener(new ListChangeListener<Node>() {
             @Override
             public void onChanged(Change<? extends Node> c) {
-                //scroll to bottom
-                //TODO fix this dirty hack!
-                Thread t = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            Thread.sleep(50);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        Platform.runLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                spCaseData.setVvalue(spCaseData.getVmax());
-                            }
-                        });
-                    }
-                });
-                t.start();
+                scrollToBottom();
             }
         });
     }
 
     public Case getCase() { return aCase; }
+
+    @FXML
+    private void expand() {
+        gcCaseDataList.expand(true);
+        //TODO
+        //scrollToBottom();
+    }
+
+    @FXML
+    private void collapse() {
+        gcCaseDataList.expand(false);
+        //TODO
+        //scrollToBottom();
+    }
 
     @FXML
     private void newFreetext() {
@@ -111,6 +111,13 @@ public class GCCaseTab extends Tab {
         controller.showErrorMessage("ERROR - this button is not implemented yet!");
     }
 
+    @FXML
+    private void newAdvice() {
+
+        checkForOpenEditsAndRemove();
+        gcCaseDataList.add(new GCAdviceEdit(controller, aCase));
+    }
+
     private void checkForOpenEditsAndRemove() {
 
         //TODO maybe show a dialog to confirm the deleting of the actual edit?
@@ -121,5 +128,27 @@ public class GCCaseTab extends Tab {
             }
         });
         gcCaseDataList.getChildren().removeAll(filteredList);
+    }
+
+    private void scrollToBottom() {
+
+        //TODO fix this dirty hack!
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(50);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        spCaseData.setVvalue(spCaseData.getVmax());
+                    }
+                });
+            }
+        });
+        t.start();
     }
 }

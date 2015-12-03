@@ -4,6 +4,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 
 /**
  * Created by Lucas on 17.11.2015.
@@ -15,10 +16,10 @@ public abstract class AGCCaseData extends HBox {
 
     public abstract boolean byPhysician();
 
-    final public void initStyle(GridPane gpCaseData) {
-        gpCaseData.getStyleClass().add(this.getCaseStyle());
+    final public void initStyle(Pane caseDataPane) {
+        caseDataPane.getStyleClass().add(this.getCaseStyle());
         this.setAlignment(getPos());
-        HBox.setMargin(gpCaseData, new Insets(5, 5, 15, 5));
+        HBox.setMargin(caseDataPane, new Insets(5, 5, 15, 5));
     }
 
     final public Pos getPos() {

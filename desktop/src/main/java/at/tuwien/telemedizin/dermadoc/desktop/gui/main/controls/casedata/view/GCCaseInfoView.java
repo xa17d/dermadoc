@@ -66,4 +66,9 @@ public class GCCaseInfoView extends AGCCaseDataView {
     public boolean byPhysician() {
         return (data.getAuthor() instanceof Physician);
     }
+
+    @Override
+    public void expand(boolean expand) {
+        //TODO
+    }
 }

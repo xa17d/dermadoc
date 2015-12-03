@@ -1,12 +1,22 @@
 package at.tuwien.telemedizin.dermadoc.desktop.gui.main.controls.casedata.view;
 
+import at.tuwien.telemedizin.dermadoc.desktop.gui.main.controls.casedata.edit.GCAdviceEdit;
+import at.tuwien.telemedizin.dermadoc.desktop.gui.main.controls.casedata.edit.GCDiagnosisEdit;
 import at.tuwien.telemedizin.dermadoc.desktop.gui.main.controls.casedata.edit.GCTextMessageEdit;
+import at.tuwien.telemedizin.dermadoc.entities.Icd10Diagnosis;
+import at.tuwien.telemedizin.dermadoc.entities.Medication;
 import at.tuwien.telemedizin.dermadoc.entities.Physician;
+import at.tuwien.telemedizin.dermadoc.entities.casedata.Advice;
 import at.tuwien.telemedizin.dermadoc.entities.casedata.CaseData;
 import at.tuwien.telemedizin.dermadoc.entities.casedata.Diagnosis;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TitledPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 
@@ -15,7 +25,12 @@ import java.io.IOException;
  */
 public class GCDiagnosisView extends AGCCaseDataView {
 
-    @FXML private GridPane gpCaseData;
+    private static final int ROW_HEIGHT = 24;
+
+    @FXML private VBox vbCaseData;
+    @FXML private Label lbMessage;
+    @FXML private TitledPane tpDiagnosis;
+    @FXML private ListView<Icd10Diagnosis> lvDiagnosis;
 
     private Diagnosis data;
 
@@ -28,7 +43,7 @@ public class GCDiagnosisView extends AGCCaseDataView {
             throw new IllegalArgumentException("case data must be a diagnosis!");
         }
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("gc_textmessage_view.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("gc_diagnosis_view.fxml"));
         loader.setRoot(this);
         loader.setController(this);
         try {
@@ -38,12 +53,11 @@ public class GCDiagnosisView extends AGCCaseDataView {
         }
     }
 
-    public GCDiagnosisView(GCTextMessageEdit gcTextMessage) {
+    public GCDiagnosisView(GCDiagnosisEdit gcDiagnosis) {
 
-        /*TODO
-        this.data = gcTextMessage.getTextMessage();
+        this.data = gcDiagnosis.getDiagnosis();
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("gc_textmessage_view.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("gc_diagnosis_view.fxml"));
         loader.setRoot(this);
         loader.setController(this);
         try {
@@ -51,18 +65,25 @@ public class GCDiagnosisView extends AGCCaseDataView {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        */
     }
 
     @FXML
     private void initialize() {
 
-        this.initStyle(gpCaseData);
-        //TODO
+        this.initStyle(vbCaseData);
+
+        lbMessage.setText(data.getMessage());
+        lvDiagnosis.setItems(FXCollections.observableArrayList(data.getDiagnosisList()));
+        lvDiagnosis.setPrefHeight((data.getDiagnosisList().size()+1) * ROW_HEIGHT + 2);
     }
 
     @Override
     public boolean byPhysician() {
-        return (data.getAuthor() instanceof Physician);
+        return true;
+    }
+
+    @Override
+    public void expand(boolean expand) {
+        tpDiagnosis.setExpanded(expand);
     }
 }
