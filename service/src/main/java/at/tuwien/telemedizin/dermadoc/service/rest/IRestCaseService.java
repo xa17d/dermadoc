@@ -5,7 +5,7 @@ import at.tuwien.telemedizin.dermadoc.entities.Notification;
 import at.tuwien.telemedizin.dermadoc.entities.casedata.CaseData;
 import at.tuwien.telemedizin.dermadoc.entities.rest.CaseDataList;
 import at.tuwien.telemedizin.dermadoc.entities.rest.CaseList;
-import at.tuwien.telemedizin.dermadoc.service.rest.listener.DermadocNotificationHandler;
+import at.tuwien.telemedizin.dermadoc.entities.rest.NotificationList;
 import at.tuwien.telemedizin.dermadoc.service.rest.listener.RestListener;
 
 import java.util.List;

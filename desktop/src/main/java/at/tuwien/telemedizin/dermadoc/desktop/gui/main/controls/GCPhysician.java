@@ -1,9 +1,11 @@
 package at.tuwien.telemedizin.dermadoc.desktop.gui.main.controls;
 
+import at.tuwien.telemedizin.dermadoc.desktop.gui.DesktopApplication;
 import at.tuwien.telemedizin.dermadoc.desktop.gui.main.Controller;
 import at.tuwien.telemedizin.dermadoc.desktop.gui.main.MainStage;
 import at.tuwien.telemedizin.dermadoc.entities.Notification;
 import at.tuwien.telemedizin.dermadoc.entities.Physician;
+import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -49,7 +51,12 @@ public class GCPhysician extends GridPane {
         notificationList.addListener(new ListChangeListener<Notification>() {
             @Override
             public void onChanged(Change<? extends Notification> c) {
-                btNotification.setText(String.valueOf(notificationList.size()));
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        btNotification.setText(String.valueOf(notificationList.size()));
+                    }
+                });
             }
         });
 
@@ -64,7 +71,7 @@ public class GCPhysician extends GridPane {
 
         lbName.setText(physician.getName());
         lbAdditionalInfo.setText("TODO // " + physician.getMail());
-        ivDoctor.setImage(new Image(MainStage.class.getResourceAsStream("drlucas.jpg")));
+        ivDoctor.setImage(new Image(DesktopApplication.class.getResourceAsStream("dracula.png")));
 
         this.getStylesheets().add(getClass().getResource("notification.css").toExternalForm());
         btNotification.getStyleClass().add("notification-button");

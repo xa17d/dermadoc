@@ -4,6 +4,7 @@ import at.tuwien.telemedizin.dermadoc.desktop.gui.main.Controller;
 import at.tuwien.telemedizin.dermadoc.desktop.service.dto.PatientCaseMap;
 import at.tuwien.telemedizin.dermadoc.entities.Case;
 import at.tuwien.telemedizin.dermadoc.entities.Patient;
+import javafx.application.Platform;
 import javafx.collections.*;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -52,7 +53,12 @@ public class GCPatientList extends VBox {
                 change.getValueAdded().addListener(new ListChangeListener<Case>() {
                     @Override
                     public void onChanged(Change<? extends Case> c) {
-                        updateList();
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                updateList();
+                            }
+                        });
                     }
                 });
             }

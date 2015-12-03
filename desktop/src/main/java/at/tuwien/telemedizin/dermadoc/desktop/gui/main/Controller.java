@@ -57,8 +57,12 @@ public class Controller {
     @FXML
     public void initialize() {
 
+        //create patient case map
+        patientCaseMap = new PatientCaseMap();
+
         //initialize service layer
         caseService = new CaseService(token);
+
 
         //initialize physician view on top
         try {
@@ -69,7 +73,6 @@ public class Controller {
         }
 
         //initialize the patient list
-        patientCaseMap = new PatientCaseMap();
         try {
             patientCaseMap = caseService.getAllCases();
         } catch (DermadocException e) {
@@ -149,10 +152,7 @@ public class Controller {
     }
 
     public Case getCaseById(long id) {
-
-        //TODO get cases from backend or from observable list???
-        //caseService.getCaseById();
-        return new Case(id, new Patient(), Calendar.getInstance());
+        return caseService.getCaseById(id);
     }
 
     public ObservableList<CaseData> getCaseData(Case aCase) {
