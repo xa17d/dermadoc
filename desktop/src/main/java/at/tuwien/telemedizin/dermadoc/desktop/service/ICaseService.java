@@ -92,4 +92,6 @@ public interface ICaseService {
      * @throws DermadocException
      */
     ObservableList<Notification> getNotificationList() throws DermadocException;
+
+    Case getCaseById(long caseId);
 }

@@ -3,13 +3,11 @@ package at.tuwien.telemedizin.dermadoc.desktop.service;
 import at.tuwien.telemedizin.dermadoc.desktop.exception.DermadocException;
 import at.tuwien.telemedizin.dermadoc.desktop.service.dto.PatientCaseMap;
 import at.tuwien.telemedizin.dermadoc.entities.*;
-import at.tuwien.telemedizin.dermadoc.entities.rest.CaseDataList;
-import at.tuwien.telemedizin.dermadoc.entities.rest.CaseList;
+import at.tuwien.telemedizin.dermadoc.entities.rest.*;
 import at.tuwien.telemedizin.dermadoc.entities.rest.Error;
 import at.tuwien.telemedizin.dermadoc.service.rest.RestCaseService;
-import at.tuwien.telemedizin.dermadoc.service.rest.listener.DermadocNotificationHandler;
+import at.tuwien.telemedizin.dermadoc.desktop.service.dto.DermadocNotificationHandler;
 import at.tuwien.telemedizin.dermadoc.entities.casedata.CaseData;
-import at.tuwien.telemedizin.dermadoc.entities.rest.AuthenticationToken;
 import at.tuwien.telemedizin.dermadoc.service.rest.IRestCaseService;
 import at.tuwien.telemedizin.dermadoc.service.rest.listener.RestListener;
 import javafx.application.Platform;
@@ -18,7 +16,6 @@ import javafx.collections.ObservableList;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.*;
 
 /**
  * Created by Lucas on 26.11.2015.
@@ -36,6 +33,8 @@ public class CaseService implements ICaseService {
     public CaseService(AuthenticationToken token) {
 
         rest = new RestCaseService(token);
+
+        startPollingNotifications();
     }
 
 
@@ -94,32 +93,6 @@ public class CaseService implements ICaseService {
         rest.postCaseData(caseDataListener, aCase, caseData);
     }
 
-    @Override
-    public ObservableList<Notification> getNotificationList() throws DermadocException {
-
-        DermadocNotificationHandler notificationHandler = new DermadocNotificationHandler() {
-            @Override
-            public void onNewNotifications(List<Notification> notifications) {
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        obsNotificationList.addAll(notifications);
-                        updatePatientCaseList();
-                    }
-                });
-            }
-        };
-
-        rest.setNotificationHandler(notificationHandler);
-        return obsNotificationList;
-    }
-
-    private void updatePatientCaseList() {
-
-        //TODO not very elegant
-        //obsPatientCaseMap = new PatientCaseMap();
-        //rest.getAllCases(openCasesListener);
-    }
 
     /*
      * LISTENER
@@ -142,6 +115,19 @@ public class CaseService implements ICaseService {
         public void onRequestComplete(CaseList requestResult) {
 
             obsPatientCaseMap.putAll(requestResult);
+            obsPatientCaseMap.sort();
+        }
+
+        @Override
+        public void onError(Error error) {
+            //TODO
+        }
+    };
+
+    private RestListener<Case> caseByIdListener = new RestListener<Case>() {
+        @Override
+        public void onRequestComplete(Case requestResult) {
+            obsPatientCaseMap.put(requestResult);
             obsPatientCaseMap.sort();
         }
 
@@ -174,6 +160,114 @@ public class CaseService implements ICaseService {
             //TODO
         }
     };
+
+
+
+
+    /*
+     * NOTIFICATIONS
+     */
+
+    @Override
+    public ObservableList<Notification> getNotificationList() throws DermadocException {
+        return obsNotificationList;
+    }
+
+
+    private void startPollingNotifications() {
+
+        new Thread(new NotificationPoller(new DermadocNotificationHandler() {
+            @Override
+            public void onNewNotifications(List<Notification> notifications) {
+
+                for(Notification n : notifications) {
+                    computeNotification(n);
+                }
+            }
+
+            private void computeNotification(Notification notification) {
+
+                if(!obsNotificationList.contains(notification)) {
+                    obsNotificationList.add(notification);
+
+                    for(Patient p : obsPatientCaseMap.keySet()) {
+                        ObservableList<Case> cases = obsPatientCaseMap.get(p);
+                        for(Case c : cases) {
+                            //case already exists - update case data
+                            if(c.getId() == notification.getCaseId()) {
+
+                                caseCaseDataMap.remove(c);
+                                try {
+                                    getCaseData(c);
+                                } catch (DermadocException e) {
+                                    e.printStackTrace();
+                                }
+
+                                return;
+                            }
+                        }
+                    }
+
+                    //case not yet existing - get case
+                    rest.getCaseById(caseByIdListener, notification.getCaseId());
+                }
+            }
+        })).start();
+    }
+
+
+
+    private class NotificationPoller implements Runnable {
+
+        private DermadocNotificationHandler handler;
+
+        public NotificationPoller(DermadocNotificationHandler handler) {
+
+            this.handler = handler;
+        }
+
+        @Override
+        public void run() {
+            while(true) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                rest.getNotifications(notificationListener);
+            }
+        }
+
+        private RestListener<NotificationList> notificationListener = new RestListener<NotificationList>() {
+            @Override
+            public void onRequestComplete(NotificationList requestResult) {
+                handler.onNewNotifications(requestResult);
+            }
+
+            @Override
+            public void onError(Error error) {
+                //TODO
+            }
+        };
+    }
+
+    @Override
+    public Case getCaseById(long id) {
+
+        for(Patient p : obsPatientCaseMap.keySet()) {
+            ObservableList<Case> list = obsPatientCaseMap.get(p);
+
+            for(Case c : list) {
+                if(c.getId() == id) {
+                    return c;
+                }
+            }
+        }
+
+        //TODO exception
+        return null;
+    }
 
 
 

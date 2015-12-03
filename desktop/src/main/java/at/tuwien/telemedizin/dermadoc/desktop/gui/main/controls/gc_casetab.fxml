@@ -9,6 +9,14 @@
 <fx:root type="javafx.scene.control.Tab" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <content>
       <BorderPane id="caseTabBottom" maxHeight="Infinity" maxWidth="Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="200.0">
+         <top>
+            <TitledPane fx:id="tpPatientOverview" animated="true" text="Overview" BorderPane.alignment="CENTER" />
+         </top>
+         <center>
+            <!--<ScrollPane fitToWidth="true">-->
+            <VBox fx:id="vbInput"/>
+            <!--</ScrollPane>-->
+         </center>
          <bottom>
             <GridPane fx:id="gpBottom">
                <children>
@@ -33,14 +41,6 @@
                </BorderPane.margin>
             </GridPane>
          </bottom>
-         <top>
-            <TitledPane fx:id="tpPatientOverview" animated="true" text="Overview" BorderPane.alignment="CENTER" />
-         </top>
-         <center>
-            <!--<ScrollPane fitToWidth="true">-->
-            <VBox fx:id="vbInput" />
-            <!--</ScrollPane>-->
-         </center>
       </BorderPane>
    </content>
 </fx:root>

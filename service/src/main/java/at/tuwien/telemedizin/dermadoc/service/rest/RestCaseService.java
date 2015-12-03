@@ -1,13 +1,12 @@
 package at.tuwien.telemedizin.dermadoc.service.rest;
 
 import at.tuwien.telemedizin.dermadoc.entities.Case;
-import at.tuwien.telemedizin.dermadoc.entities.Physician;
-import at.tuwien.telemedizin.dermadoc.entities.User;
+import at.tuwien.telemedizin.dermadoc.entities.Notification;
 import at.tuwien.telemedizin.dermadoc.entities.casedata.CaseData;
 import at.tuwien.telemedizin.dermadoc.entities.rest.AuthenticationToken;
 import at.tuwien.telemedizin.dermadoc.entities.rest.CaseDataList;
 import at.tuwien.telemedizin.dermadoc.entities.rest.CaseList;
-import at.tuwien.telemedizin.dermadoc.service.rest.listener.DermadocNotificationHandler;
+import at.tuwien.telemedizin.dermadoc.entities.rest.NotificationList;
 import at.tuwien.telemedizin.dermadoc.service.rest.listener.RestListener;
 
 import java.util.List;
@@ -20,6 +19,7 @@ public class RestCaseService implements IRestCaseService {
     //private static final String URL_ = "http://dermadoc.xa1.at:82/";
     private static final String URL_ = "http://localhost:8080/";
     private static final String CASES_ = "cases/";
+    private static final String NOTIFICATIONS_ = "notifications/";
     private static final String OPEN = "open";
     private static final String _DATA = "/data";
     private static final String _ACCEPT = "/accept";
@@ -53,8 +53,8 @@ public class RestCaseService implements IRestCaseService {
     }
 
     @Override
-    public void setNotificationHandler(DermadocNotificationHandler handler) {
-
+    public void getNotifications(RestListener<NotificationList> listener) {
+        new Thread(new GetNotifications(token, listener)).start();
     }
 
     @Override
@@ -146,6 +146,21 @@ public class RestCaseService implements IRestCaseService {
         }
     }
 
+    private class GetNotifications implements Runnable {
+
+        private AuthenticationToken token;
+        private RestListener<NotificationList> listener;
+        public GetNotifications(AuthenticationToken token, RestListener<NotificationList> listener) {
+            this.token = token;
+            this.listener = listener;
+        }
+
+        @Override
+        public void run() {
+            GetRequest<NotificationList> rest = new GetRequest<>(token, NotificationList.class);
+            rest.get(URL_ + NOTIFICATIONS_, listener);
+        }
+    }
 
 
 
