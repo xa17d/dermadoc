@@ -3,6 +3,7 @@ package at.tuwien.telemedizin.dermadoc.app.activities_fragments.login;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -30,24 +31,18 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import org.springframework.http.HttpAuthentication;
-import org.springframework.http.HttpBasicAuthentication;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.StringHttpMessageConverter;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import at.tuwien.telemedizin.dermadoc.app.R;
+import at.tuwien.telemedizin.dermadoc.app.activities_fragments.MainActivity;
+import at.tuwien.telemedizin.dermadoc.app.activities_fragments.create_case.NewCaseActivity;
+import at.tuwien.telemedizin.dermadoc.entities.rest.AuthenticationData;
+import at.tuwien.telemedizin.dermadoc.entities.rest.AuthenticationToken;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -336,7 +331,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+    public class UserLoginTask extends AsyncTask<Void, Void, AuthenticationToken> {
 
         private final String mEmail;
         private final String mPassword;
@@ -349,7 +344,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
 
         @Override
-        protected Boolean doInBackground(Void... params) {
+        protected AuthenticationToken doInBackground(Void... params) {
             Log.d(LOG_TAG,"doInBackground()");
             // TODO: attempt authentication against a network service.
             final String url="http://dermadoc.xa1.at:82";
@@ -371,46 +366,52 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 //                Log.d(LOG_TAG, url);
 //                ResponseEntity<String> response = restTemplate.exchange(loginURL, HttpMethod.POST, new HttpEntity<Object>(requestHeaders), String.class);
 
-                String requestStrXml = "<AuthenticationData>"
-                        + "<mail>p</mail>"
-                        + "<password>p</password>"
-                        + "</AuthenticationData>";
+
+                AuthenticationData aData = new AuthenticationData();
+                aData.setMail(mEmail);
+                aData.setPassword(mPassword);
 
 
                         RestTemplate restTemplate = new RestTemplate();
-                String result = restTemplate.postForObject(loginURL, requestStrXml, String.class);
+                Log.d(LOG_TAG,"send Request");
+                AuthenticationToken aToken = restTemplate.postForObject(loginURL, aData, AuthenticationToken.class);
 
 //                Log.d(LOG_TAG,"response Body: " + response.getBody().toString());
 //                outp = response.getBody().toString();
 
-                Log.d(LOG_TAG,"response Body: " + result);
-                outp = result;
-                return true;
+                Log.d(LOG_TAG,"response Body: " + aToken.toString());
+                outp = aToken.toString(); // TODO remove - for testing
+                return aToken;
             } catch (HttpClientErrorException e) {
                 Log.e(LOG_TAG, "exception: " + e.getLocalizedMessage(), e);
-                return false;
+                return null;
             } catch (ResourceAccessException e) {
                 Log.e(LOG_TAG, "exception: " + e.getLocalizedMessage(), e);
-                return false;
+                return null;
             } catch (Exception e) {
                 // catch all other exception to prevent the app from crashing
                 Log.e(LOG_TAG, "exception: " + e.getLocalizedMessage(), e);
-                return false;
+                return null;
             }
 
 
         }
 
         @Override
-        protected void onPostExecute(final Boolean success) {
-            Log.d(LOG_TAG,"onPostExecute() success: " + success);
+        protected void onPostExecute(final AuthenticationToken token) {
+            Log.d(LOG_TAG,"onPostExecute() success: " + (token!=null));
             mAuthTask = null;
             showProgress(false);
 
 
-            if (success) {
+            if (token != null && token.getToken() != null) {
                 addOutput(outp);
-                finish();
+                // start main activity
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                intent.putExtra(MainActivity.TOKEN_INTENT_KEY, token.getToken());
+                intent.putExtra(MainActivity.TOKEN_TYPE_INTENT_KEY, token.getType());
+                startActivity(intent);
+
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();

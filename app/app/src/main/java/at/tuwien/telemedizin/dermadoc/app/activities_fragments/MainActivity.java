@@ -32,12 +32,18 @@ import at.tuwien.telemedizin.dermadoc.entities.CaseStatus;
 import at.tuwien.telemedizin.dermadoc.entities.Gender;
 import at.tuwien.telemedizin.dermadoc.entities.GeoLocation;
 import at.tuwien.telemedizin.dermadoc.entities.Patient;
+import at.tuwien.telemedizin.dermadoc.entities.rest.AuthenticationToken;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, CaseListFragment.OnCaseListEventListener{
 
     private List<Case> currentCaseList;
     private List<Case> closedCaseList;
+
+    public static final String TOKEN_INTENT_KEY = MainActivity.class.getName() + "TOKEN_INTENT";
+    public static final String TOKEN_TYPE_INTENT_KEY = MainActivity.class.getName() + "TOKEN_TYPE_INTENT";
+
+    private AuthenticationToken authenticationToken;
 
     private CaseSortCategory caseListSortCategory; // set when a sort is executed
 
@@ -82,6 +88,16 @@ public class MainActivity extends AppCompatActivity
             fragmentTransaction.replace(R.id.contentFrame,fragment);
             fragmentTransaction.commit();
             setTitle(title);
+        }
+
+        Intent intent = getIntent();
+        // get the AuthenticationToken
+        String aToken = intent.getStringExtra(TOKEN_INTENT_KEY);
+        String aTokenType = intent.getStringExtra(TOKEN_TYPE_INTENT_KEY);
+        if (aToken != null) {
+            authenticationToken = new AuthenticationToken();
+            authenticationToken.setToken(aToken);
+            authenticationToken.setType(aTokenType);
         }
 
         // TODO replace
