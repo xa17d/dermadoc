@@ -19,13 +19,13 @@
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="New RadioButton1"
+            android:text="@string/label_option_positive"
             android:id="@+id/question_answer_1" />
 
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="New RadioButton2"
+            android:text="@string/label_option_negative"
             android:id="@+id/question_answer_2" />
     </RadioGroup>
 </LinearLayout>

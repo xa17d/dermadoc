@@ -45,6 +45,8 @@ public class EditSymptomsFragment extends Fragment {
     private ImageView painAssessmentHelpIcon;
     private TextView painAssessmentHelpText;
 
+    private PainAssessmentArrayAdapter painArrayAdapter;
+    private Spinner painSpinner;
 
     /**
      * Use this factory method to create a new instance of
@@ -141,9 +143,9 @@ public class EditSymptomsFragment extends Fragment {
 //        painGridView.setExpanded(true);
 //        painGridView.setAdapter(new PainAssessmentGridAdapter(getContext()));
 
-        Spinner painSpinner = (Spinner) v.findViewById(R.id.pain_scale_spinner);
+        painSpinner = (Spinner) v.findViewById(R.id.pain_scale_spinner);
         List<PainIntensity> spinnerValues = new ArrayList<PainIntensity>(Arrays.asList(PainIntensity.values()));
-        PainAssessmentArrayAdapter painArrayAdapter = new PainAssessmentArrayAdapter(getContext(), R.layout.pain_assessment_element, spinnerValues);
+        painArrayAdapter = new PainAssessmentArrayAdapter(getContext(), R.layout.pain_assessment_element, spinnerValues);
         painSpinner.setAdapter(painArrayAdapter);
 
         // button to get to the next part
@@ -184,5 +186,12 @@ public class EditSymptomsFragment extends Fragment {
         }
     }
 
+    public String getSymptomDescription() {
+        return symptomDescriptionEditText.getText().toString();
+    }
+
+    public PainIntensity getPainIntensity() {
+        return painArrayAdapter.getItem(painSpinner.getSelectedItemPosition());
+    }
 
 }

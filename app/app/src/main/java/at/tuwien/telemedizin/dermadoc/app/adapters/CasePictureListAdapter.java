@@ -2,11 +2,13 @@ package at.tuwien.telemedizin.dermadoc.app.adapters;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -27,14 +29,15 @@ public class CasePictureListAdapter extends ArrayAdapter<PictureHelperEntity> {
     public static final String LOG_TAG = CasePictureListAdapter.class.getSimpleName();
 
     private final Context context;
+    private CasePictureClickedHandler itemClickHandler;
     private final List<PictureHelperEntity> values;
 
 
-    public CasePictureListAdapter(Context context, List<PictureHelperEntity> values) {
+    public CasePictureListAdapter(Context context, List<PictureHelperEntity> values, CasePictureClickedHandler handler) {
         super(context, R.layout.edit_picture_list_item, values);
         this.context = context;
         this.values = values;
-
+        this.itemClickHandler = handler;
     }
 
     @Override
@@ -50,7 +53,7 @@ public class CasePictureListAdapter extends ArrayAdapter<PictureHelperEntity> {
 
         }
 
-        PictureHelperEntity pictureItem = getItem(position);
+        final PictureHelperEntity pictureItem = getItem(position);
         // check if the case_item exists
         if (pictureItem != null) {
             ImageView imageView = (ImageView) v.findViewById(R.id.picture_image_view);
@@ -58,15 +61,39 @@ public class CasePictureListAdapter extends ArrayAdapter<PictureHelperEntity> {
             TextView imageText = (TextView) v.findViewById(R.id.picture_text_view);
 
             imageView.setImageBitmap(pictureItem.getThumbnail());
-            imageText.setText(pictureItem.getDescription());
 
+            String picDescription = pictureItem.getDescription();
+            if (picDescription == null || picDescription.trim().length() == 0) {
+                picDescription = context.getString(R.string.label_no_description_touch_here);
+            }
+            imageText.setText(picDescription);
 
-            imageText.setText("Arm left"); // TODO remove
+            final Bitmap thumbnail = pictureItem.getThumbnail();
+            final String currentDescription = pictureItem.getDescription();
+
+            View.OnClickListener editDescriptionListener = new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // show dialog, edit Description
+//                    AddPictureDescriptionDialog dialog =
+//                            new AddPictureDescriptionDialog(context, thumbnail, currentDescription);
+//                    dialog.show();
+
+                    CasePictureListAdapter.this.itemClickHandler.casePictureClicked(pictureItem);
+                }
+            };
+
+            // the listener is added to the frame-layout and the imageView separatly, to keep the
+            // are on the right side for the "delete/cancel" button and avoid pressing "edit" by mistake
+            FrameLayout textContainer = (FrameLayout) v.findViewById(R.id.picture_text_container_layout);
+
+            textContainer.setOnClickListener(editDescriptionListener);
+            imageView.setOnClickListener(editDescriptionListener);
 
             deleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // delte this row
+                    // delete this row
                     showDeleteAlertDialog(position, (ListView) parentListView);
                 }
             });
@@ -107,4 +134,10 @@ public class CasePictureListAdapter extends ArrayAdapter<PictureHelperEntity> {
         this.notifyDataSetChanged();
     }
 
+    public interface CasePictureClickedHandler {
+        public void casePictureClicked(PictureHelperEntity picture);
+    }
+
 }
+
+

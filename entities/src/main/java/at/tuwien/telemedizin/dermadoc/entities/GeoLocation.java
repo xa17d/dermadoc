@@ -55,4 +55,13 @@ public class GeoLocation {
     private static double rad2deg(double rad) {
         return (rad * 180 / Math.PI);
     }
+
+    @Override
+    public String toString() {
+        return "GeoLocation{" +
+                "latitude=" + latitude +
+                ", longitude=" + longitude +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }

@@ -7,7 +7,7 @@
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <!-- to take a picture and store it -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -42,7 +42,9 @@
         <activity
             android:name=".activities_fragments.create_case.NewCaseActivity"
             android:label="@string/title_activity_create_case"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" >
+            <!-- use portrait until all issues of rotating are resolved -->
         </activity>
     </application>
 
