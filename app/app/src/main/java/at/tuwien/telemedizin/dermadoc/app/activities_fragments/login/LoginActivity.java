@@ -19,6 +19,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -29,7 +30,21 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import org.springframework.http.HttpAuthentication;
+import org.springframework.http.HttpBasicAuthentication;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.ResourceAccessException;
+import org.springframework.web.client.RestTemplate;
+
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import at.tuwien.telemedizin.dermadoc.app.R;
@@ -41,12 +56,16 @@ import static android.Manifest.permission.READ_CONTACTS;
  */
 public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
+    public static final String LOG_TAG = LoginActivity.class.getSimpleName();
+
     public static final String ARG_ACCOUNT_TYPE =
             LoginActivity.class.getName() + "_ACCOUNT_TYPE";
     public static final String ARG_AUTH_TYPE =
             LoginActivity.class.getName() + "_AUTH_TYPE";
     public static final String ARG_IS_ADDING_NEW_ACCOUNT =
             LoginActivity.class.getName() + "_IS_ADDING_NEW_ACCOUNT";
+
+    private TextView testOutput;
 
     /**
      * Id to identity READ_CONTACTS permission request.
@@ -91,6 +110,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
+        testOutput =(TextView) findViewById(R.id.server_output_text);
+
         Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -109,6 +130,16 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
 
         getLoaderManager().initLoader(0, null, this);
+    }
+
+    private void addOutput(String output) {
+        String s = testOutput.getText().toString();
+        if (s.trim().length() > 0) {
+            s += "\n";
+        }
+
+        s += output;
+        testOutput.setText(s);
     }
 
     private boolean mayRequestContacts() {
@@ -201,12 +232,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     private boolean isEmailValid(String email) {
         //TODO: Replace this with your own logic
-        return email.contains("@");
+//        return email.contains("@");
+        return (email.length() > 0);
     }
 
     private boolean isPasswordValid(String password) {
         //TODO: Replace this with your own logic
-        return password.length() > 4;
+        return password != null
+                && password.trim().length() > 0;
     }
 
     /**
@@ -308,6 +341,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         private final String mEmail;
         private final String mPassword;
 
+        private String outp;
+
         UserLoginTask(String email, String password) {
             mEmail = email;
             mPassword = password;
@@ -315,33 +350,66 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         @Override
         protected Boolean doInBackground(Void... params) {
+            Log.d(LOG_TAG,"doInBackground()");
             // TODO: attempt authentication against a network service.
+            final String url="http://dermadoc.xa1.at:82";
+            final String loginURL = url + "/login";
 
             try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
+                // Populate the HTTP Basic Authentication header
+                // https://github.com/spring-projects/spring-android-samples/blob/master/spring-android-basic-auth/client/src/org/springframework/android/basicauth/MainActivity.java
+                // or http://www.techrepublic.com/blog/software-engineer/calling-restful-services-from-your-android-app/
+//                HttpAuthentication authHeader = new HttpBasicAuthentication(mEmail, mPassword);
+//                HttpHeaders requestHeaders = new HttpHeaders();
+//                requestHeaders.setAuthorization(authHeader);
+//                requestHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_XHTML_XML));
+
+//                RestTemplate restTemplate = new RestTemplate();
+//                restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
+//                //
+//                // Make the network request
+//                Log.d(LOG_TAG, url);
+//                ResponseEntity<String> response = restTemplate.exchange(loginURL, HttpMethod.POST, new HttpEntity<Object>(requestHeaders), String.class);
+
+                String requestStrXml = "<AuthenticationData>"
+                        + "<mail>p</mail>"
+                        + "<password>p</password>"
+                        + "</AuthenticationData>";
+
+
+                        RestTemplate restTemplate = new RestTemplate();
+                String result = restTemplate.postForObject(loginURL, requestStrXml, String.class);
+
+//                Log.d(LOG_TAG,"response Body: " + response.getBody().toString());
+//                outp = response.getBody().toString();
+
+                Log.d(LOG_TAG,"response Body: " + result);
+                outp = result;
+                return true;
+            } catch (HttpClientErrorException e) {
+                Log.e(LOG_TAG, "exception: " + e.getLocalizedMessage(), e);
+                return false;
+            } catch (ResourceAccessException e) {
+                Log.e(LOG_TAG, "exception: " + e.getLocalizedMessage(), e);
+                return false;
+            } catch (Exception e) {
+                // catch all other exception to prevent the app from crashing
+                Log.e(LOG_TAG, "exception: " + e.getLocalizedMessage(), e);
                 return false;
             }
 
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
-            }
 
-            // TODO: register the new account here.
-            return true;
         }
 
         @Override
         protected void onPostExecute(final Boolean success) {
+            Log.d(LOG_TAG,"onPostExecute() success: " + success);
             mAuthTask = null;
             showProgress(false);
 
+
             if (success) {
+                addOutput(outp);
                 finish();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
