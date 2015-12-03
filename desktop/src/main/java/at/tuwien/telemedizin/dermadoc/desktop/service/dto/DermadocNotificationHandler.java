@@ -1,4 +1,4 @@
-package at.tuwien.telemedizin.dermadoc.service.rest.listener;
+package at.tuwien.telemedizin.dermadoc.desktop.service.dto;
 
 import at.tuwien.telemedizin.dermadoc.entities.Notification;
 

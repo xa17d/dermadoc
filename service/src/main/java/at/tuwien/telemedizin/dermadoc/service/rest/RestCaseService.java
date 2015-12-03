@@ -1,8 +1,7 @@
 package at.tuwien.telemedizin.dermadoc.service.rest;
 
 import at.tuwien.telemedizin.dermadoc.entities.Case;
-import at.tuwien.telemedizin.dermadoc.entities.Physician;
-import at.tuwien.telemedizin.dermadoc.entities.User;
+import at.tuwien.telemedizin.dermadoc.entities.Notification;
 import at.tuwien.telemedizin.dermadoc.entities.casedata.CaseData;
 import at.tuwien.telemedizin.dermadoc.entities.rest.AuthenticationToken;
 import at.tuwien.telemedizin.dermadoc.entities.rest.CaseDataList;
@@ -53,7 +52,7 @@ public class RestCaseService implements IRestCaseService {
     }
 
     @Override
-    public void setNotificationHandler(DermadocNotificationHandler handler) {
+    void getNotifications(RestListener<NotificationList> listener) {
 
     }
 

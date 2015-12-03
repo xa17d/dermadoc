@@ -7,7 +7,7 @@ import at.tuwien.telemedizin.dermadoc.entities.rest.CaseDataList;
 import at.tuwien.telemedizin.dermadoc.entities.rest.CaseList;
 import at.tuwien.telemedizin.dermadoc.entities.rest.Error;
 import at.tuwien.telemedizin.dermadoc.service.rest.RestCaseService;
-import at.tuwien.telemedizin.dermadoc.service.rest.listener.DermadocNotificationHandler;
+import at.tuwien.telemedizin.dermadoc.desktop.service.dto.DermadocNotificationHandler;
 import at.tuwien.telemedizin.dermadoc.entities.casedata.CaseData;
 import at.tuwien.telemedizin.dermadoc.entities.rest.AuthenticationToken;
 import at.tuwien.telemedizin.dermadoc.service.rest.IRestCaseService;
@@ -18,7 +18,6 @@ import javafx.collections.ObservableList;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.*;
 
 /**
  * Created by Lucas on 26.11.2015.
@@ -94,32 +93,6 @@ public class CaseService implements ICaseService {
         rest.postCaseData(caseDataListener, aCase, caseData);
     }
 
-    @Override
-    public ObservableList<Notification> getNotificationList() throws DermadocException {
-
-        DermadocNotificationHandler notificationHandler = new DermadocNotificationHandler() {
-            @Override
-            public void onNewNotifications(List<Notification> notifications) {
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        obsNotificationList.addAll(notifications);
-                        updatePatientCaseList();
-                    }
-                });
-            }
-        };
-
-        rest.setNotificationHandler(notificationHandler);
-        return obsNotificationList;
-    }
-
-    private void updatePatientCaseList() {
-
-        //TODO not very elegant
-        //obsPatientCaseMap = new PatientCaseMap();
-        //rest.getAllCases(openCasesListener);
-    }
 
     /*
      * LISTENER

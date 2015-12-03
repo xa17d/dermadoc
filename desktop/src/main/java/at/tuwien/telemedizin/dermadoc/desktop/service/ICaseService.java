@@ -78,18 +78,4 @@ public interface ICaseService {
      */
     void saveCaseData(Case aCase, CaseData caseData) throws DermadocException;
 
-
-
-    /*
-     * NOTIFICATIONS
-     */
-
-    /**
-     * get an observable list of notifications
-     * notification is added to list, as soon as it gest registered
-     *
-     * @return notification list
-     * @throws DermadocException
-     */
-    ObservableList<Notification> getNotificationList() throws DermadocException;
 }
