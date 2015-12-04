@@ -1,11 +1,20 @@
 package at.tuwien.telemedizin.dermadoc.desktop.gui.main.controls.casedata;
 
 import at.tuwien.telemedizin.dermadoc.desktop.gui.main.controls.casedata.edit.AGCCaseDataEdit;
+import at.tuwien.telemedizin.dermadoc.desktop.gui.main.controls.casedata.view.AGCCaseDataView;
 import at.tuwien.telemedizin.dermadoc.desktop.gui.main.controls.handler.CaseDataEventHandler;
-import at.tuwien.telemedizin.dermadoc.entities.casedata.CaseData;
+import at.tuwien.telemedizin.dermadoc.entities.*;
+import at.tuwien.telemedizin.dermadoc.entities.casedata.*;
+import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.scene.Node;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 
 /**
  * Created by Lucas on 20.11.2015.
@@ -30,16 +39,21 @@ public class GCCaseDataList extends VBox {
             @Override
             public void onChanged(Change<? extends CaseData> c) {
 
-                while(c.next()) {
-                    for (CaseData cd : c.getAddedSubList()) {
-                        AGCCaseData gcCaseData = gcFactory.getGC(cd);
-                        cgList.getChildren().add(gcCaseData);
-                    }
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        while(c.next()) {
+                            for (CaseData cd : c.getAddedSubList()) {
+                                AGCCaseData gcCaseData = gcFactory.getGC(cd);
+                                cgList.getChildren().add(gcCaseData);
+                            }
 
-                    for (CaseData cd : c.getRemoved()) {
-                        cgList.getChildren().remove(cd);
+                            for (CaseData cd : c.getRemoved()) {
+                                cgList.getChildren().remove(cd);
+                            }
+                        }
                     }
-                }
+                });
             }
         });
 
@@ -57,5 +71,15 @@ public class GCCaseDataList extends VBox {
             }
         });
         this.getChildren().add(editComponent);
+    }
+
+    public void expand(boolean expand) {
+
+        for(Node n : this.getChildren()) {
+            if(n instanceof AGCCaseDataView) {
+                AGCCaseDataView cdv = (AGCCaseDataView) n;
+                cdv.expand(expand);
+            }
+        }
     }
 }

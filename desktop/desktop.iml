@@ -38,6 +38,17 @@
       </library>
     </orderEntry>
     <orderEntry type="module-library">
+      <library name="Gradle: org.codehaus.woodstox:woodstox-core-asl:4.1.4">
+        <CLASSES>
+          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.codehaus.woodstox/woodstox-core-asl/4.1.4/79b82e7dfd5c24b228ea56456d6adce225259ec4/woodstox-core-asl-4.1.4.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.codehaus.woodstox/woodstox-core-asl/4.1.4/a363593119d1ba7020996a8469d8dc548eb57982/woodstox-core-asl-4.1.4-sources.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
       <library name="Gradle: com.fasterxml.jackson.core:jackson-core:2.6.1">
         <CLASSES>
           <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-core/2.6.1/892d15011456ea3563319b27bdd612dbc89bb776/jackson-core-2.6.1.jar!/" />
@@ -89,6 +100,17 @@
         <JAVADOC />
         <SOURCES>
           <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.codehaus.woodstox/stax2-api/3.1.4/b40604d61c01cc081a4a7bdfc562aa9847ee8857/stax2-api-3.1.4-sources.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Gradle: javax.xml.stream:stax-api:1.0-2">
+        <CLASSES>
+          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/javax.xml.stream/stax-api/1.0-2/d6337b0de8b25e53e81b922352fbea9f9f57ba0b/stax-api-1.0-2.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/javax.xml.stream/stax-api/1.0-2/dd58a0151c110e27c6c18abd45b01792f46d3fcd/stax-api-1.0-2-sources.jar!/" />
         </SOURCES>
       </library>
     </orderEntry>

@@ -33,4 +33,25 @@ public class Notification {
     public String toString() {
         return text;
     }
+
+    @Override
+    public int hashCode() {
+        return (int)this.getId();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+
+        if(o == null)
+            return false;
+
+        if(this.hashCode() != o.hashCode())
+            return false;
+
+        if(this.getClass() != o.getClass())
+            return false;
+
+        Notification n = (Notification) o;
+        return this.getId() == n.getId();
+    }
 }

@@ -7,4 +7,5 @@ import at.tuwien.telemedizin.dermadoc.desktop.gui.main.controls.casedata.AGCCase
  */
 public abstract class AGCCaseDataView extends AGCCaseData {
 
+    abstract public void expand(boolean expand);
 }

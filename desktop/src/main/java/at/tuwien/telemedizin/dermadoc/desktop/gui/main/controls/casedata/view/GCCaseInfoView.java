@@ -3,31 +3,30 @@ package at.tuwien.telemedizin.dermadoc.desktop.gui.main.controls.casedata.view;
 import at.tuwien.telemedizin.dermadoc.desktop.gui.main.controls.casedata.edit.GCTextMessageEdit;
 import at.tuwien.telemedizin.dermadoc.entities.Physician;
 import at.tuwien.telemedizin.dermadoc.entities.casedata.CaseData;
-import at.tuwien.telemedizin.dermadoc.entities.casedata.TextMessage;
+import at.tuwien.telemedizin.dermadoc.entities.casedata.CaseInfo;
+import at.tuwien.telemedizin.dermadoc.entities.casedata.Diagnosis;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 
 import java.io.IOException;
 
 /**
- * Created by Lucas on 18.11.2015.
+ * view of a diagnosis
  */
-public class GCTextMessageView extends AGCCaseDataView {
+public class GCCaseInfoView extends AGCCaseDataView {
 
     @FXML private GridPane gpCaseData;
-    @FXML private Label lbMessage;
 
-    private TextMessage message;
+    private CaseInfo data;
 
-    public GCTextMessageView(CaseData caseData) {
+    public GCCaseInfoView(CaseData caseData) {
 
-        if(caseData instanceof TextMessage) {
-            this.message = (TextMessage) caseData;
+        if(caseData instanceof CaseInfo) {
+            this.data = (CaseInfo) caseData;
         }
         else {
-            throw new IllegalArgumentException("case data must be a text message!");
+            throw new IllegalArgumentException("case data must be a case info!");
         }
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("gc_textmessage_view.fxml"));
@@ -40,9 +39,10 @@ public class GCTextMessageView extends AGCCaseDataView {
         }
     }
 
-    public GCTextMessageView(GCTextMessageEdit gcTextMessage) {
+    public GCCaseInfoView(GCTextMessageEdit gcTextMessage) {
 
-        this.message = gcTextMessage.getTextMessage();
+        /*TODO
+        this.data = gcTextMessage.getTextMessage();
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("gc_textmessage_view.fxml"));
         loader.setRoot(this);
@@ -52,22 +52,23 @@ public class GCTextMessageView extends AGCCaseDataView {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        */
     }
 
     @FXML
     private void initialize() {
 
         this.initStyle(gpCaseData);
-        lbMessage.setText(message.getMessage());
+        //TODO
     }
 
     @Override
     public boolean byPhysician() {
-        return (message.getAuthor() instanceof Physician);
+        return (data.getAuthor() instanceof Physician);
     }
 
     @Override
     public void expand(boolean expand) {
-        //do nothing
+        //TODO
     }
 }
