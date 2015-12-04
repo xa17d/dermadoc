@@ -41,8 +41,9 @@ import java.util.List;
 import at.tuwien.telemedizin.dermadoc.app.R;
 import at.tuwien.telemedizin.dermadoc.app.activities_fragments.MainActivity;
 import at.tuwien.telemedizin.dermadoc.app.activities_fragments.create_case.NewCaseActivity;
-import at.tuwien.telemedizin.dermadoc.entities.rest.AuthenticationData;
-import at.tuwien.telemedizin.dermadoc.entities.rest.AuthenticationToken;
+import at.tuwien.telemedizin.dermadoc.entities.rest.*;
+import at.tuwien.telemedizin.dermadoc.service.rest.RestLoginService;
+import at.tuwien.telemedizin.dermadoc.service.rest.listener.RestListener;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -220,8 +221,35 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
-            mAuthTask.execute((Void) null);
+            // TODO async task replace by service-call
+//            mAuthTask = new UserLoginTask(email, password);
+//            mAuthTask.execute((Void) null);
+
+            AuthenticationData aData = new AuthenticationData();
+            aData.setMail(email);
+            aData.setPassword(password);
+
+            RestListener<AuthenticationToken> restListener = new RestListener<AuthenticationToken>() {
+                @Override
+                public void onRequestComplete(AuthenticationToken requestResult) {
+                    // TODO check null
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    intent.putExtra(MainActivity.TOKEN_INTENT_KEY, requestResult.getToken());
+                    intent.putExtra(MainActivity.TOKEN_TYPE_INTENT_KEY, requestResult.getType());
+                    startActivity(intent);
+                    // TODO finish + noHistory
+                }
+
+                @Override
+                public void onError(at.tuwien.telemedizin.dermadoc.entities.rest.Error error) {
+                    // TODO display error message if the returned error was caused by other issues (internal server ...)
+                    mPasswordView.setError(getString(R.string.error_incorrect_password));
+                    mPasswordView.requestFocus();
+                }
+            };
+
+            RestLoginService loginService = new RestLoginService();
+            loginService.postLogin(restListener, aData);
         }
     }
 
