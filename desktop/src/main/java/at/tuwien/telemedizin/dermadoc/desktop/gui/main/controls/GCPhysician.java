@@ -33,6 +33,7 @@ public class GCPhysician extends GridPane {
     private Physician physician;
 
     private PopOver popOverNotification;
+    private GCNotification gcNotification;
 
     public GCPhysician(Controller controller, Physician physician, ObservableList<Notification> notificationList) {
 
@@ -48,6 +49,11 @@ public class GCPhysician extends GridPane {
             e.printStackTrace();
         }
 
+        gcNotification = new GCNotification(controller, notificationList);
+        popOverNotification = new PopOver(gcNotification);
+        popOverNotification.setArrowLocation(PopOver.ArrowLocation.TOP_CENTER);
+        gcNotification.setPopOver(popOverNotification);
+
         notificationList.addListener(new ListChangeListener<Notification>() {
             @Override
             public void onChanged(Change<? extends Notification> c) {
@@ -55,15 +61,11 @@ public class GCPhysician extends GridPane {
                     @Override
                     public void run() {
                         btNotification.setText(String.valueOf(notificationList.size()));
+                        gcNotification.updateList();
                     }
                 });
             }
         });
-
-        GCNotification gcNotification = new GCNotification(controller, notificationList);
-        popOverNotification = new PopOver(gcNotification);
-        popOverNotification.setArrowLocation(PopOver.ArrowLocation.TOP_CENTER);
-        gcNotification.setPopOver(popOverNotification);
     }
 
     @FXML
