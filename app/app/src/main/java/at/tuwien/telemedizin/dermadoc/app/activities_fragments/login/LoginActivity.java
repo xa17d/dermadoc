@@ -40,10 +40,11 @@ import java.util.List;
 
 import at.tuwien.telemedizin.dermadoc.app.R;
 import at.tuwien.telemedizin.dermadoc.app.activities_fragments.MainActivity;
-import at.tuwien.telemedizin.dermadoc.app.activities_fragments.create_case.NewCaseActivity;
 import at.tuwien.telemedizin.dermadoc.entities.rest.*;
-import at.tuwien.telemedizin.dermadoc.service.rest.RestLoginService;
-import at.tuwien.telemedizin.dermadoc.service.rest.listener.RestListener;
+//import at.tuwien.telemedizin.dermadoc.service.rest.RestLoginService;
+//import at.tuwien.telemedizin.dermadoc.service.rest.listener.RestListener;
+import at.tuwien.telemedizin.dermadoc.app.service_test_package.rest.RestLoginService;
+import at.tuwien.telemedizin.dermadoc.app.service_test_package.rest.listener.RestListener;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -228,6 +229,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             AuthenticationData aData = new AuthenticationData();
             aData.setMail(email);
             aData.setPassword(password);
+
 
             RestListener<AuthenticationToken> restListener = new RestListener<AuthenticationToken>() {
                 @Override
