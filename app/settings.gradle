@@ -1,6 +1,4 @@
 include ':app'
 include ':entities'
-include ':service'
 project(":entities").projectDir = file("../entities")
-project(":service").projectDir = file("../service")
 

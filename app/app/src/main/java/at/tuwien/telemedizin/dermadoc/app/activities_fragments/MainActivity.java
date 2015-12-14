@@ -1,10 +1,16 @@
 package at.tuwien.telemedizin.dermadoc.app.activities_fragments;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,6 +20,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -25,20 +33,30 @@ import at.tuwien.telemedizin.dermadoc.app.R;
 import at.tuwien.telemedizin.dermadoc.app.activities_fragments.create_case.NewCaseActivity;
 import at.tuwien.telemedizin.dermadoc.app.adapters.MyCasesPagerEnum;
 import at.tuwien.telemedizin.dermadoc.app.comparators.CaseSortCategory;
+import at.tuwien.telemedizin.dermadoc.app.helper.ToStringHelper;
 import at.tuwien.telemedizin.dermadoc.app.persistence.ContentProvider;
 import at.tuwien.telemedizin.dermadoc.app.persistence.ContentProviderFactory;
+import at.tuwien.telemedizin.dermadoc.app.server_interface.RestServerInterface;
+import at.tuwien.telemedizin.dermadoc.app.server_interface.ServerInterface;
+import at.tuwien.telemedizin.dermadoc.app.server_interface.ServerInterfaceFactory;
 import at.tuwien.telemedizin.dermadoc.entities.Case;
 import at.tuwien.telemedizin.dermadoc.entities.CaseStatus;
 import at.tuwien.telemedizin.dermadoc.entities.Gender;
 import at.tuwien.telemedizin.dermadoc.entities.GeoLocation;
 import at.tuwien.telemedizin.dermadoc.entities.Patient;
+import at.tuwien.telemedizin.dermadoc.entities.rest.AuthenticationData;
 import at.tuwien.telemedizin.dermadoc.entities.rest.AuthenticationToken;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, CaseListFragment.OnCaseListEventListener{
 
+    public static final String LOG_TAG = MainActivity.class.getSimpleName();
+
+    private Patient user; // the currently active user
+
     private List<Case> currentCaseList;
     private List<Case> closedCaseList;
+    private ServerInterface serverInterface;
 
     public static final String TOKEN_INTENT_KEY = MainActivity.class.getName() + "TOKEN_INTENT";
     public static final String TOKEN_TYPE_INTENT_KEY = MainActivity.class.getName() + "TOKEN_TYPE_INTENT";
@@ -49,6 +67,11 @@ public class MainActivity extends AppCompatActivity
 
     // To hide the sort-menu-item whenever fragments are changed etc.
     private MenuItem sortMenuItem;
+
+    private RelativeLayout loadingProgressLayout;
+    private TextView loadingProgressInfoTextView;
+
+    private LoadUserDataTask loadUserDataTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,15 +113,29 @@ public class MainActivity extends AppCompatActivity
             setTitle(title);
         }
 
-        Intent intent = getIntent();
-        // get the AuthenticationToken
-        String aToken = intent.getStringExtra(TOKEN_INTENT_KEY);
-        String aTokenType = intent.getStringExtra(TOKEN_TYPE_INTENT_KEY);
-        if (aToken != null) {
-            authenticationToken = new AuthenticationToken();
-            authenticationToken.setToken(aToken);
-            authenticationToken.setType(aTokenType);
-        }
+//        Intent intent = getIntent();
+//        // get the AuthenticationToken
+//        String aToken = intent.getStringExtra(TOKEN_INTENT_KEY);
+//        String aTokenType = intent.getStringExtra(TOKEN_TYPE_INTENT_KEY);
+//        if (aToken != null) {
+//            authenticationToken = new AuthenticationToken();
+//            authenticationToken.setToken(aToken);
+//            authenticationToken.setType(aTokenType);
+//        }
+
+        loadingProgressLayout = (RelativeLayout) findViewById(R.id.loading_data_progress_layout);
+        loadingProgressLayout.setVisibility(View.GONE);
+        loadingProgressInfoTextView = (TextView) findViewById(R.id.loading_data_info_text);
+
+        serverInterface = ServerInterfaceFactory.getInstance();
+
+        Log.d(LOG_TAG, "serverInterface - authToken?: " + ((RestServerInterface)serverInterface).hasAuthToken());
+
+        // TODO
+        // 1. load Patient data
+
+        // 2. Load Case-List
+
 
         // TODO replace
         ContentProvider cP = ContentProviderFactory.getContentProvider();
@@ -106,6 +143,12 @@ public class MainActivity extends AppCompatActivity
         closedCaseList = cP.getCurrentCasesOfUser(); // TODO for testing purpose - remove or replace
     }
 
+    private void loadUserData() {
+        String infoText = getString(R.string.label_loading_data_dynamic, getString(R.string.option_loading_user_data_insert));
+        showProgress(true, infoText);
+        loadUserDataTask = new LoadUserDataTask(this);
+        loadUserDataTask.execute((Void) null);
+    }
 
     @Override
     public void onBackPressed() {
@@ -210,6 +253,97 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onSettingNewCaseSortCategory(CaseSortCategory caseSortCategory) {
         this.caseListSortCategory = caseSortCategory;
+    }
+
+    /**
+     * this method supplements the showProgress(boolean, String) method
+     * @param show
+     */
+    private void showProgress(boolean show) {
+        showProgress(show, getString(R.string.label_loading_data_static));
+    }
+
+    /**
+     * Shows the progress UI and hides the login form.
+     * @param show - should the progress view be visible or not
+     * @param infoText - the text that should be displayed along with the progress-view
+     */
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    private void showProgress(final boolean show, String infoText) {
+        // set the info-text in the text-view
+        loadingProgressInfoTextView.setText(infoText);
+
+        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
+        // for very easy animations. If available, use these APIs to fade-in
+        // the progress spinner.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+            loadingProgressLayout.setVisibility(show ? View.GONE : View.VISIBLE);
+            loadingProgressLayout.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    loadingProgressLayout.setVisibility(show ? View.GONE : View.VISIBLE);
+                }
+            });
+
+            loadingProgressLayout.setVisibility(show ? View.VISIBLE : View.GONE);
+            loadingProgressLayout.animate().setDuration(shortAnimTime).alpha(
+                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    loadingProgressLayout.setVisibility(show ? View.VISIBLE : View.GONE);
+                }
+            });
+        } else {
+            // The ViewPropertyAnimator APIs are not available, so simply show
+            // and hide the relevant UI components.
+            loadingProgressLayout.setVisibility(show ? View.VISIBLE : View.GONE);
+            loadingProgressLayout.setVisibility(show ? View.GONE : View.VISIBLE);
+        }
+    }
+
+    /**
+     * Represents an asynchronous login/registration task used to authenticate
+     * the user.
+     */
+    public class LoadUserDataTask extends AsyncTask<Void, Void, Patient> {
+        private MainActivity activity;
+
+        private String outp;
+
+        LoadUserDataTask(MainActivity activity) {
+            this.activity = activity;
+        }
+
+        @Override
+        protected Patient doInBackground(Void... params) {
+            Log.d(LOG_TAG, "doInBackground()");
+
+
+            ServerInterface sI = ServerInterfaceFactory.getInstance();
+            Patient currentUser = sI.getUser();
+
+            Log.d(LOG_TAG, "retrieved User: " + ToStringHelper.toString(currentUser));
+
+            return currentUser;
+        }
+
+        @Override
+        protected void onPostExecute(final Patient user) {
+            Log.d(LOG_TAG,"onPostExecute() user: " + user);
+            loadUserDataTask = null;
+            showProgress(false);
+            // TODO check result etc.
+//            activity.loginTaskFinished(success);
+        }
+
+        @Override
+        protected void onCancelled() {
+            loadUserDataTask = null;
+            showProgress(false);
+        }
     }
 
 }

@@ -137,4 +137,10 @@
     <string name="label_option_positive">Yes</string>
     <string name="label_option_negative">No</string>
 
+    <string name="label_loading_data_static">Loading Data</string>
+    <string name="label_loading_data_dynamic">Loading %1$s-Data</string> <!-- placeholder string - fill at runtime -->
+    <string name="option_loading_user_data_insert">User</string> <!-- content for placeholder string - select this option at runtime -->
+    <string name="option_loading_case_list_data_insert">Case-List</string> <!-- content for placeholder string - select this option at runtime -->
+    <string name="option_loading_physician_data_insert">Physician-List</string> <!-- content for placeholder string - select this option at runtime -->
+
 </resources>

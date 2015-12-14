@@ -41,6 +41,9 @@ import java.util.List;
 import at.tuwien.telemedizin.dermadoc.app.R;
 import at.tuwien.telemedizin.dermadoc.app.activities_fragments.MainActivity;
 import at.tuwien.telemedizin.dermadoc.app.activities_fragments.create_case.NewCaseActivity;
+import at.tuwien.telemedizin.dermadoc.app.server_interface.ServerInterface;
+import at.tuwien.telemedizin.dermadoc.app.server_interface.ServerInterfaceFactory;
+import at.tuwien.telemedizin.dermadoc.entities.Patient;
 import at.tuwien.telemedizin.dermadoc.entities.rest.AuthenticationData;
 import at.tuwien.telemedizin.dermadoc.entities.rest.AuthenticationToken;
 
@@ -77,7 +80,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
-    private UserLoginTask mAuthTask = null;
+    private ULoginTask mAuthTask = null;
+    private ULoginTask mRetrieveUserTask = null;
 
     // UI references.
     private AutoCompleteTextView mEmailView;
@@ -220,7 +224,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
+            mAuthTask = new ULoginTask(email, password, this);
             mAuthTask.execute((Void) null);
         }
     }
@@ -236,6 +240,26 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         return password != null
                 && password.trim().length() > 0;
     }
+
+    private void loginTaskFinished(boolean success) {
+        Log.d(LOG_TAG,"loginTaskFinished() success: " + success);
+        mAuthTask = null;
+        showProgress(false);
+
+
+        if (success) {
+            // start main activity
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+            LoginActivity.this.finish();
+
+        } else {
+            mPasswordView.setError(getString(R.string.error_incorrect_password));
+            mPasswordView.requestFocus();
+        }
+
+    }
+
 
     /**
      * Shows the progress UI and hides the login form.
@@ -331,91 +355,43 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
-    public class UserLoginTask extends AsyncTask<Void, Void, AuthenticationToken> {
+    public class ULoginTask extends AsyncTask<Void, Void, Boolean> {
 
         private final String mEmail;
         private final String mPassword;
+        private LoginActivity activity;
 
         private String outp;
 
-        UserLoginTask(String email, String password) {
+        ULoginTask(String email, String password, LoginActivity activity) {
             mEmail = email;
             mPassword = password;
+            this.activity = activity;
         }
 
         @Override
-        protected AuthenticationToken doInBackground(Void... params) {
+        protected Boolean doInBackground(Void... params) {
             Log.d(LOG_TAG,"doInBackground()");
             // TODO: attempt authentication against a network service.
-            final String url="http://dermadoc.xa1.at:82";
-            final String loginURL = url + "/login";
 
-            try {
-                // Populate the HTTP Basic Authentication header
-                // https://github.com/spring-projects/spring-android-samples/blob/master/spring-android-basic-auth/client/src/org/springframework/android/basicauth/MainActivity.java
-                // or http://www.techrepublic.com/blog/software-engineer/calling-restful-services-from-your-android-app/
-//                HttpAuthentication authHeader = new HttpBasicAuthentication(mEmail, mPassword);
-//                HttpHeaders requestHeaders = new HttpHeaders();
-//                requestHeaders.setAuthorization(authHeader);
-//                requestHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_XHTML_XML));
+            AuthenticationData aData = new AuthenticationData();
+            aData.setMail(mEmail);
+            aData.setPassword(mPassword);
 
-//                RestTemplate restTemplate = new RestTemplate();
-//                restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
-//                //
-//                // Make the network request
-//                Log.d(LOG_TAG, url);
-//                ResponseEntity<String> response = restTemplate.exchange(loginURL, HttpMethod.POST, new HttpEntity<Object>(requestHeaders), String.class);
+            ServerInterface sI = ServerInterfaceFactory.getInstance();
+            boolean success = sI.login(aData);
 
+            // retrieve User data
 
-                AuthenticationData aData = new AuthenticationData();
-                aData.setMail(mEmail);
-                aData.setPassword(mPassword);
-
-
-                        RestTemplate restTemplate = new RestTemplate();
-                Log.d(LOG_TAG,"send Request");
-                AuthenticationToken aToken = restTemplate.postForObject(loginURL, aData, AuthenticationToken.class);
-
-//                Log.d(LOG_TAG,"response Body: " + response.getBody().toString());
-//                outp = response.getBody().toString();
-
-                Log.d(LOG_TAG,"response Body: " + aToken.toString());
-                outp = aToken.toString(); // TODO remove - for testing
-                return aToken;
-            } catch (HttpClientErrorException e) {
-                Log.e(LOG_TAG, "exception: " + e.getLocalizedMessage(), e);
-                return null;
-            } catch (ResourceAccessException e) {
-                Log.e(LOG_TAG, "exception: " + e.getLocalizedMessage(), e);
-                return null;
-            } catch (Exception e) {
-                // catch all other exception to prevent the app from crashing
-                Log.e(LOG_TAG, "exception: " + e.getLocalizedMessage(), e);
-                return null;
-            }
-
-
+            return success;
         }
 
         @Override
-        protected void onPostExecute(final AuthenticationToken token) {
-            Log.d(LOG_TAG,"onPostExecute() success: " + (token!=null));
+        protected void onPostExecute(final Boolean success) {
+            Log.d(LOG_TAG,"onPostExecute() success: " + success);
             mAuthTask = null;
             showProgress(false);
-
-
-            if (token != null && token.getToken() != null) {
-                addOutput(outp);
-                // start main activity
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                intent.putExtra(MainActivity.TOKEN_INTENT_KEY, token.getToken());
-                intent.putExtra(MainActivity.TOKEN_TYPE_INTENT_KEY, token.getType());
-                startActivity(intent);
-
-            } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
-            }
+            activity.loginTaskFinished(success);
         }
 
         @Override
