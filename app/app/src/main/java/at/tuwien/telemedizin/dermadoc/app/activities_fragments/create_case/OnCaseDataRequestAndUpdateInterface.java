@@ -1,7 +1,7 @@
 package at.tuwien.telemedizin.dermadoc.app.activities_fragments.create_case;
 
-import at.tuwien.telemedizin.dermadoc.entities.Case;
-import at.tuwien.telemedizin.dermadoc.entities.casedata.Anamnesis;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.CaseParc;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.AnamnesisParc;
 
 /**
  * Created by FAUser on 02.12.2015.
@@ -10,11 +10,9 @@ import at.tuwien.telemedizin.dermadoc.entities.casedata.Anamnesis;
  */
 public interface OnCaseDataRequestAndUpdateInterface {
 
-    public Anamnesis getAnamnesisForm();
+    public AnamnesisParc getAnamnesisForm();
 
-    public void updateAnamnesis(Anamnesis anamnesis);
-
-    public Case getCase();
+    public CaseParc getCase();
 
 
 

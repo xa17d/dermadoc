@@ -21,6 +21,10 @@ import java.util.Calendar;
 import java.util.List;
 
 import at.tuwien.telemedizin.dermadoc.app.R;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.AnamnesisParc;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.AnamnesisQuestionBoolParc;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.AnamnesisQuestionParc;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.AnamnesisQuestionTextParc;
 import at.tuwien.telemedizin.dermadoc.entities.Physician;
 import at.tuwien.telemedizin.dermadoc.entities.casedata.Anamnesis;
 import at.tuwien.telemedizin.dermadoc.entities.casedata.AnamnesisQuestion;
@@ -44,7 +48,7 @@ public class EditAnamnesisFragment extends Fragment {
     private TextView anamnesisHelpText;
 
     private LinearLayout anamnesisQuestionListLayout;
-    private Anamnesis anamnesisItem;
+    private AnamnesisParc anamnesisItem;
     private List<View> questionViews; //list containing the views displaying each question - the indexes of question and question-view are equal
 
     /**
@@ -143,12 +147,12 @@ public class EditAnamnesisFragment extends Fragment {
     }
 
     private void setUpQuestionList(LayoutInflater inflater, LinearLayout listRoot) {
-        List<AnamnesisQuestion> questions = anamnesisItem.getQuestions();
-        for (AnamnesisQuestion q : questions) {
+        List<AnamnesisQuestionParc> questions = anamnesisItem.getQuestions();
+        for (AnamnesisQuestionParc q : questions) {
             // add views to the linearLayout, each displaying one question-item + answer-view
             // according to question type
             View questionItemView;
-            if (q instanceof AnamnesisQuestionBool) {
+            if (q instanceof AnamnesisQuestionBoolParc) {
                 questionItemView = inflater.inflate(R.layout.anamnesis_question_bool_item, null, false);
 
                 // get Radio-Buttons and set option-text
@@ -168,20 +172,20 @@ public class EditAnamnesisFragment extends Fragment {
         }
     }
 
-    public Anamnesis getFilledAnamnesis() {
+    public AnamnesisParc getFilledAnamnesis() {
         // get the data from the views
-        List<AnamnesisQuestion> questions = anamnesisItem.getQuestions();
+        List<AnamnesisQuestionParc> questions = anamnesisItem.getQuestions();
         for(int i = 0; i < questions.size(); i++) {
-            AnamnesisQuestion q = questions.get(i);
+            AnamnesisQuestionParc q = questions.get(i);
             View qItemLayout = questionViews.get(i);
-            if (q instanceof AnamnesisQuestionBool) {
+            if (q instanceof AnamnesisQuestionBoolParc) {
                 boolean firstOptionChecked = ((RadioButton)qItemLayout.findViewById(R.id.question_answer_1)).isChecked();
-                ((AnamnesisQuestionBool)q).setAnswer(firstOptionChecked);
-                Log.d(LOG_TAG, "answer " + i + " " + ((AnamnesisQuestionBool) anamnesisItem.getQuestions().get(i)).getAnswer());
+                ((AnamnesisQuestionBoolParc)q).setAnswer(firstOptionChecked);
+                Log.d(LOG_TAG, "answer " + i + " " + ((AnamnesisQuestionBoolParc) anamnesisItem.getQuestions().get(i)).getAnswer());
             } else {
                 String answerString = ((TextView)qItemLayout.findViewById(R.id.question_answer_text)).getText().toString();
-                ((AnamnesisQuestionText)q).setAnswer(answerString);
-                Log.d(LOG_TAG, "answer " + i + " " + ((AnamnesisQuestionText) anamnesisItem.getQuestions().get(i)).getAnswer());
+                ((AnamnesisQuestionTextParc)q).setAnswer(answerString);
+                Log.d(LOG_TAG, "answer " + i + " " + ((AnamnesisQuestionTextParc) anamnesisItem.getQuestions().get(i)).getAnswer());
             }
             // TODO do i have to remove and add the question-object to the list?
 

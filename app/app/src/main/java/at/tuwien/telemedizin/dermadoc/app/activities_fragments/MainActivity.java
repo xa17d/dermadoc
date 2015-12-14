@@ -25,19 +25,18 @@ import at.tuwien.telemedizin.dermadoc.app.R;
 import at.tuwien.telemedizin.dermadoc.app.activities_fragments.create_case.NewCaseActivity;
 import at.tuwien.telemedizin.dermadoc.app.adapters.MyCasesPagerEnum;
 import at.tuwien.telemedizin.dermadoc.app.comparators.CaseSortCategory;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.CaseParc;
 import at.tuwien.telemedizin.dermadoc.app.persistence.ContentProvider;
 import at.tuwien.telemedizin.dermadoc.app.persistence.ContentProviderFactory;
-import at.tuwien.telemedizin.dermadoc.entities.Case;
 import at.tuwien.telemedizin.dermadoc.entities.CaseStatus;
 import at.tuwien.telemedizin.dermadoc.entities.Gender;
 import at.tuwien.telemedizin.dermadoc.entities.GeoLocation;
-import at.tuwien.telemedizin.dermadoc.entities.Patient;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, CaseListFragment.OnCaseListEventListener{
 
-    private List<Case> currentCaseList;
-    private List<Case> closedCaseList;
+    private List<CaseParc> currentCaseList;
+    private List<CaseParc> closedCaseList;
 
     private CaseSortCategory caseListSortCategory; // set when a sort is executed
 
@@ -175,7 +174,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public List<Case> onListRequest(long listKey) {
+    public List<CaseParc> onListRequest(long listKey) {
         if (listKey == MyCasesPagerEnum.CURRENT.getKey()) {
             return currentCaseList;
         } else if (listKey == MyCasesPagerEnum.OLD.getKey()) {

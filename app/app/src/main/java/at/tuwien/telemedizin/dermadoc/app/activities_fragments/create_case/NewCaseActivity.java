@@ -24,16 +24,15 @@ import at.tuwien.telemedizin.dermadoc.app.R;
 import at.tuwien.telemedizin.dermadoc.app.adapters.NewCasePagerAdapter;
 import at.tuwien.telemedizin.dermadoc.app.adapters.NewCasePagerEnum;
 import at.tuwien.telemedizin.dermadoc.app.entities.PictureHelperEntity;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.CaseParc;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.PatientParc;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.PhysicianParc;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.AnamnesisParc;
 import at.tuwien.telemedizin.dermadoc.app.helper.ToStringHelper;
 import at.tuwien.telemedizin.dermadoc.app.persistence.ContentProvider;
 import at.tuwien.telemedizin.dermadoc.app.persistence.ContentProviderFactory;
 import at.tuwien.telemedizin.dermadoc.entities.BodyLocalization;
-import at.tuwien.telemedizin.dermadoc.entities.Case;
 import at.tuwien.telemedizin.dermadoc.entities.PainIntensity;
-import at.tuwien.telemedizin.dermadoc.entities.Patient;
-import at.tuwien.telemedizin.dermadoc.entities.Physician;
-import at.tuwien.telemedizin.dermadoc.entities.User;
-import at.tuwien.telemedizin.dermadoc.entities.casedata.Anamnesis;
 
 public class NewCaseActivity extends AppCompatActivity implements OnCaseDataRequestAndUpdateInterface, OnTabChangedInFragmentInterface {
 
@@ -43,8 +42,8 @@ public class NewCaseActivity extends AppCompatActivity implements OnCaseDataRequ
     public static final int SELECT_FILE = 102;
 
 
-    private Case caseItem;
-    private Anamnesis defaultAnamnesis;
+    private CaseParc caseItem;
+    private AnamnesisParc defaultAnamnesis;
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -148,10 +147,10 @@ public class NewCaseActivity extends AppCompatActivity implements OnCaseDataRequ
         ContentProvider cP = ContentProviderFactory.getContentProvider();
 
         defaultAnamnesis = cP.getAnamnesisForm();
-        Patient user = cP.getCurrentUser();
+        PatientParc user = cP.getCurrentUser();
         Calendar cal = Calendar.getInstance();
 
-        caseItem = new Case(-1, user, cal);
+        caseItem = new CaseParc(-1, user, cal);
     }
 
     /**
@@ -234,18 +233,13 @@ public class NewCaseActivity extends AppCompatActivity implements OnCaseDataRequ
     }
 
     @Override
-    public Anamnesis getAnamnesisForm() {
+    public AnamnesisParc getAnamnesisForm() {
 
         return defaultAnamnesis;
     }
 
     @Override
-    public void updateAnamnesis(Anamnesis anamnesis) {
-        // TODO
-    }
-
-    @Override
-    public Case getCase() {
+    public CaseParc getCase() {
         return caseItem;
     }
 
@@ -264,10 +258,10 @@ public class NewCaseActivity extends AppCompatActivity implements OnCaseDataRequ
         List<BodyLocalization> localizations = locationFragment.getSelectedBodyLocalizations();
 
         // anamnesis data
-        Anamnesis anamnesisForm = anamnesisFragmen.getFilledAnamnesis();
+        AnamnesisParc anamnesisForm = anamnesisFragmen.getFilledAnamnesis();
 
         // physician fragment
-        Physician physicianSelection = physicianSelectionFragment.getSelectedPhysician();
+        PhysicianParc physicianSelection = physicianSelectionFragment.getSelectedPhysician();
 
         // finish fragment
         String caseName = finishFragment.getCaseName();
@@ -275,8 +269,8 @@ public class NewCaseActivity extends AppCompatActivity implements OnCaseDataRequ
         caseItem.setName(caseName);
         caseItem.setPhysician(physicianSelection);
 
-        Log.d(LOG_TAG, ToStringHelper.toString(caseItem));
-        Log.d(LOG_TAG, ToStringHelper.toString(anamnesisForm));
+        Log.d(LOG_TAG, caseItem.toString());
+        Log.d(LOG_TAG, anamnesisForm.toString());
         Log.d(LOG_TAG, "symptoms: " + symptomDescription + ", Pain: " + painIntensity);
         Log.d(LOG_TAG, ToStringHelper.toStringPics(pictures));
         Log.d(LOG_TAG, ToStringHelper.toStringLoc(localizations));

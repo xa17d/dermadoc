@@ -5,6 +5,14 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.CaseParc;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.GeoLocationParc;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.PatientParc;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.PhysicianParc;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.AnamnesisParc;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.AnamnesisQuestionBoolParc;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.AnamnesisQuestionParc;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.AnamnesisQuestionTextParc;
 import at.tuwien.telemedizin.dermadoc.entities.Case;
 import at.tuwien.telemedizin.dermadoc.entities.CaseStatus;
 import at.tuwien.telemedizin.dermadoc.entities.Gender;
@@ -21,41 +29,41 @@ import at.tuwien.telemedizin.dermadoc.entities.casedata.AnamnesisQuestionText;
  */
 public class TestContentProvider implements ContentProvider {
     @Override
-    public Patient getCurrentUser() {
+    public PatientParc getCurrentUser() {
         return null;
     }
 
     @Override
-    public List<Physician> getNearbyPhysicians(GeoLocation geoLocation) {
+    public List<PhysicianParc> getNearbyPhysicians(GeoLocationParc geoLocation) {
         return null;
     }
 
     @Override
-    public Anamnesis getAnamnesisForm() {
+    public AnamnesisParc getAnamnesisForm() {
         return mockAnamnesis();
     }
 
-    private Anamnesis mockAnamnesis() {
+    private AnamnesisParc mockAnamnesis() {
 
-        AnamnesisQuestion q1 = new AnamnesisQuestionBool();
+        AnamnesisQuestionParc q1 = new AnamnesisQuestionBoolParc();
         q1.setQuestion("Has your cat shown similar symptoms?");
-        AnamnesisQuestion q2 = new AnamnesisQuestionText();
+        AnamnesisQuestionParc q2 = new AnamnesisQuestionTextParc();
         q2.setQuestion("What's the name of your cat?");
-        AnamnesisQuestion q3 = new AnamnesisQuestionText();
+        AnamnesisQuestionParc q3 = new AnamnesisQuestionTextParc();
         q3.setQuestion("Why didn't you name her \"Samtpfote\"?");
-        AnamnesisQuestion q4 = new AnamnesisQuestionBool();
+        AnamnesisQuestionParc q4 = new AnamnesisQuestionBoolParc();
         q4.setQuestion("I just need another question for this test-list. You can ignore it and do not have to bother answering");
-        List<AnamnesisQuestion> qList = new ArrayList<>();
+        List<AnamnesisQuestionParc> qList = new ArrayList<>();
         qList.add(q1);
         qList.add(q2);
         qList.add(q3);
         qList.add(q4);
 
-        return new Anamnesis(0, Calendar.getInstance(), new Physician(), "what message", qList);
+        return new AnamnesisParc(0, Calendar.getInstance(), new PhysicianParc(), "what message", qList);
     }
 
     @Override
-    public List<Case> getCurrentCasesOfUser() {
+    public List<CaseParc> getCurrentCasesOfUser() {
         return loadCurrentCaseLists();
     }
 
@@ -63,16 +71,16 @@ public class TestContentProvider implements ContentProvider {
      * loads the case-list(s) from the server
      * TODO
      */
-    private List<Case> loadCurrentCaseLists() {
+    private List<CaseParc> loadCurrentCaseLists() {
 
-        List<Case> currentCaseList;
+        List<CaseParc> currentCaseList;
 
-        Patient patient = new Patient();
+        PatientParc patient = new PatientParc();
         patient.setId(1l);
         patient.setMail("mail@mail.at");
         patient.setPassword("no");
         patient.setName("Peter Hans Gruber dings Norbert");
-        patient.setLocation(new GeoLocation("hier", 2.0, 2.0));
+        patient.setLocation(new GeoLocationParc("hier", 2.0, 2.0));
 
         patient.setSvnr("1212");
         patient.setGender(Gender.Female);
@@ -81,17 +89,17 @@ public class TestContentProvider implements ContentProvider {
 
         long startNumber = 100000;
 
-        currentCaseList = new ArrayList<Case>();
-        Case testCase1 = new Case(startNumber+2045, patient, new GregorianCalendar());
+        currentCaseList = new ArrayList<CaseParc>();
+        CaseParc testCase1 = new CaseParc(startNumber+2045, patient, new GregorianCalendar());
         testCase1.setStatus(CaseStatus.Active);
         testCase1.setName("First Case");
         currentCaseList.add(testCase1);
-        Case testCase2 = new Case(startNumber+451, patient, new GregorianCalendar());
+        CaseParc testCase2 = new CaseParc(startNumber+451, patient, new GregorianCalendar());
         testCase2.setStatus(CaseStatus.LookingForPhysician);
         testCase2.setName("Second Case");
         currentCaseList.add(testCase2);
         for (int i = 0; i < 5; i++) {
-            Case testCaseA = new Case((startNumber+10 + i), patient, new GregorianCalendar());
+            CaseParc testCaseA = new CaseParc((startNumber+10 + i), patient, new GregorianCalendar());
             testCaseA.setStatus(CaseStatus.values()[i%3]); // 3 because 4 would be closed
             testCaseA.setName("My " + i + ". Case");
             currentCaseList.add(testCaseA);
@@ -114,12 +122,12 @@ public class TestContentProvider implements ContentProvider {
 
 
     @Override
-    public long saveNewCase(Case caseItem) {
+    public long saveNewCase(CaseParc caseItem) {
         return 0;
     }
 
     @Override
-    public boolean saveModifiedCase(Case caseItem) {
+    public boolean saveModifiedCase(CaseParc caseItem) {
         return false;
     }
 }

@@ -2,14 +2,14 @@ package at.tuwien.telemedizin.dermadoc.app.comparators;
 
 import java.util.Comparator;
 
-import at.tuwien.telemedizin.dermadoc.entities.Case;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.CaseParc;
 
 /**
  * Created by FAUser on 18.11.2015.
  *
  * Comparator for comparing Case-Objects - needed to sort the list
  */
-public class CaseComparator implements Comparator<Case> {
+public class CaseParcComparator implements Comparator<CaseParc> {
 
 
     // multiple Comparators, because multiple ways to sort case-items
@@ -20,7 +20,7 @@ public class CaseComparator implements Comparator<Case> {
 
 
     @Override
-    public int compare(Case lhs, Case rhs) {
+    public int compare(CaseParc lhs, CaseParc rhs) {
 
         int compResult = 0;
 
@@ -46,7 +46,7 @@ public class CaseComparator implements Comparator<Case> {
         return compResult;
     }
 
-    private int compareNames(Case lhs, Case rhs) {
+    private int compareNames(CaseParc lhs, CaseParc rhs) {
         String lhsName = lhs.getName();
         String rhsName = rhs.getName();
 
@@ -54,22 +54,22 @@ public class CaseComparator implements Comparator<Case> {
     }
 
 
-    private int compareIDs(Case lhs, Case rhs) {
+    private int compareIDs(CaseParc lhs, CaseParc rhs) {
         Long lhsID = lhs.getId();
         Long rhsID = rhs.getId();
 
         return lhsID.compareTo(rhsID);
     }
 
-    private int compareStatus(Case lhs, Case rhs) {
+    private int compareStatus(CaseParc lhs, CaseParc rhs) {
         return statusComparator.compare(lhs.getStatus(), rhs.getStatus());
     }
 
-    private int compareDateOfCreation(Case lhs, Case rhs) {
+    private int compareDateOfCreation(CaseParc lhs, CaseParc rhs) {
         return dateOfCreationComparator.compare(lhs.getCreated(), rhs.getCreated());
     }
 
-    private int compareLastModified(Case lhs, Case rhs) {
+    private int compareLastModified(CaseParc lhs, CaseParc rhs) {
         // TODO
         return 0;
     }

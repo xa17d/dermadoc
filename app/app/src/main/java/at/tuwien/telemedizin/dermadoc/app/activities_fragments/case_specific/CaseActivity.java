@@ -22,11 +22,11 @@ import android.widget.Toast;
 
 import at.tuwien.telemedizin.dermadoc.app.R;
 import at.tuwien.telemedizin.dermadoc.app.activities_fragments.DummyContentFragment;
-import at.tuwien.telemedizin.dermadoc.app.entities.CaseEntity;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.CaseParc;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.PatientParc;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.PhysicianParc;
 import at.tuwien.telemedizin.dermadoc.app.helper.FormatHelper;
-import at.tuwien.telemedizin.dermadoc.entities.Case;
-import at.tuwien.telemedizin.dermadoc.entities.Patient;
-import at.tuwien.telemedizin.dermadoc.entities.Physician;
+
 
 
 public class CaseActivity extends AppCompatActivity
@@ -34,7 +34,7 @@ public class CaseActivity extends AppCompatActivity
 
     public static final String LOG_TAG = CaseActivity.class.getSimpleName();
 
-    private Case caseItem;
+    private CaseParc caseItem;
 
     private NavigationView navigationView;
     private TextView navHeaderMainTextView;
@@ -81,10 +81,10 @@ public class CaseActivity extends AppCompatActivity
 
         // load case
         Intent intent = getIntent();
-        Parcelable caseParcel = intent.getParcelableExtra(CaseEntity.INTENT_KEY);
+        Parcelable caseParcel = intent.getParcelableExtra(CaseParc.INTENT_KEY);
         if (caseParcel != null) {
 //            Log.d(LOG_TAG, "case-parcelable in intent != null -> casting");
-            caseItem = (Case) caseParcel;
+            caseItem = (CaseParc) caseParcel;
         } else {
 //            Log.d(LOG_TAG, "case-parcelable == null -> exiting activity");
             Toast.makeText(getBaseContext(), getString(R.string.msg_err_item_not_received), Toast.LENGTH_LONG).show();
@@ -119,12 +119,12 @@ public class CaseActivity extends AppCompatActivity
         // TODO patient info is less interesting for the patient -> remove
         navHeaderPatientTextView = (TextView)
                 navigationView.getHeaderView(0).findViewById(R.id.case_overview_patient);
-        Patient patient = caseItem.getPatient();
+        PatientParc patient = caseItem.getPatient();
         navHeaderPatientTextView.setText(patient != null ? patient.getName() : "No Info");
 
         navHeaderPhysicianTextView = (TextView)
                 navigationView.getHeaderView(0).findViewById(R.id.case_overview_physician);
-        Physician physician = caseItem.getPhysician();
+        PhysicianParc physician = caseItem.getPhysician();
         navHeaderPhysicianTextView.setText(physician != null ?
                 physician.getName() : getString(R.string.msg_no_physician_info_found));
 
@@ -226,7 +226,7 @@ public class CaseActivity extends AppCompatActivity
 
 
     @Override
-    public Case getCase() {
+    public CaseParc getCase() {
         return caseItem;
     }
 }

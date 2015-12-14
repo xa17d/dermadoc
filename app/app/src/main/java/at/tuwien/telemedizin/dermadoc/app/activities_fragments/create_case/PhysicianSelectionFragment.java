@@ -19,7 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import at.tuwien.telemedizin.dermadoc.app.R;
-import at.tuwien.telemedizin.dermadoc.entities.Physician;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.PhysicianParc;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -39,7 +40,7 @@ public class PhysicianSelectionFragment extends Fragment {
 
     private RadioGroup nearbyPhysicianListLayout;
 
-    private List<Physician> nearbyPhysicianList;
+    private List<PhysicianParc> nearbyPhysicianList;
     private List<RadioButton> nearbyPhysicianRadioButtonList; // view representing the physician
 
     /**
@@ -73,26 +74,26 @@ public class PhysicianSelectionFragment extends Fragment {
     }
 
     // TODO remove
-    private List<Physician> mockPhysicianList() {
-        Physician a = new Physician();
+    private List<PhysicianParc> mockPhysicianList() {
+        PhysicianParc a = new PhysicianParc();
         a.setId(0);
         a.setName("a");
 
-        Physician b = new Physician();
+        PhysicianParc b = new PhysicianParc();
         b.setId(1);
         b.setName("b");
 
-        Physician c = new Physician();
+        PhysicianParc c = new PhysicianParc();
         c.setId(2);
         c.setName("c");
 
-        List<Physician> list = new ArrayList<Physician>();
+        List<PhysicianParc> list = new ArrayList<PhysicianParc>();
         list.add(a);
         list.add(b);
         list.add(c);
 
         for(int i = 0; i < 5; i++) {
-            Physician p = new Physician();
+            PhysicianParc p = new PhysicianParc();
             int aAsChar = (int) 'd';
             p.setName("" + (char) (aAsChar + i));
             list.add(p);
@@ -174,7 +175,7 @@ public class PhysicianSelectionFragment extends Fragment {
     }
 
     private void setUpPhysicianList(LayoutInflater inflater, LinearLayout listRoot) {
-        for (Physician p : nearbyPhysicianList) {
+        for (PhysicianParc p : nearbyPhysicianList) {
             // use a inflater to get utilise the right theme
             RadioButton rBtn = (RadioButton) inflater.inflate(R.layout.physician_list_item_radio_button, null, false);
             rBtn.setText(p.getName());
@@ -196,7 +197,7 @@ public class PhysicianSelectionFragment extends Fragment {
         }
     }
 
-    public Physician getSelectedPhysician() {
+    public PhysicianParc getSelectedPhysician() {
         // is the option "next available physician" checked?
         if (nextPhysicianAvailableCheckbox.isChecked()) {
             return null;
