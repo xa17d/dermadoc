@@ -1,6 +1,9 @@
 package at.tuwien.telemedizin.dermadoc.app.activities_fragments.create_case;
 
+import java.util.List;
+
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.CaseParc;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.PhysicianParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.AnamnesisParc;
 
 /**
@@ -13,6 +16,10 @@ public interface OnCaseDataRequestAndUpdateInterface {
     public AnamnesisParc getAnamnesisForm();
 
     public CaseParc getCase();
+
+    public List<PhysicianParc> getNearbyPhysicians();
+
+    public CaseParc collectCaseData();
 
 
 

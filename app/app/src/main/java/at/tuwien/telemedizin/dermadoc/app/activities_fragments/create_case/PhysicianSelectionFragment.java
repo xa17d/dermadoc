@@ -31,6 +31,7 @@ public class PhysicianSelectionFragment extends Fragment {
 
 
     private OnTabChangedInFragmentInterface tabChangeInterface;
+    private OnCaseDataRequestAndUpdateInterface caseDataInterface;
 
     private boolean physicianHintIsVisible;
 
@@ -69,37 +70,37 @@ public class PhysicianSelectionFragment extends Fragment {
 
         }
 
-        nearbyPhysicianList = mockPhysicianList(); // TODO
+        nearbyPhysicianList = getPhysicianList();
         nearbyPhysicianRadioButtonList = new ArrayList<>();
     }
 
-    // TODO remove
-    private List<PhysicianParc> mockPhysicianList() {
-        PhysicianParc a = new PhysicianParc();
-        a.setId(0);
-        a.setName("a");
 
-        PhysicianParc b = new PhysicianParc();
-        b.setId(1);
-        b.setName("b");
+    private List<PhysicianParc> getPhysicianList() {
+//        PhysicianParc a = new PhysicianParc(); // TODO remove
+//        a.setId(0);
+//        a.setName("a");
+//
+//        PhysicianParc b = new PhysicianParc();
+//        b.setId(1);
+//        b.setName("b");
+//
+//        PhysicianParc c = new PhysicianParc();
+//        c.setId(2);
+//        c.setName("c");
+//
+//        List<PhysicianParc> list = new ArrayList<PhysicianParc>();
+//        list.add(a);
+//        list.add(b);
+//        list.add(c);
+//
+//        for(int i = 0; i < 5; i++) {
+//            PhysicianParc p = new PhysicianParc();
+//            int aAsChar = (int) 'd';
+//            p.setName("" + (char) (aAsChar + i));
+//            list.add(p);
+//        }
 
-        PhysicianParc c = new PhysicianParc();
-        c.setId(2);
-        c.setName("c");
-
-        List<PhysicianParc> list = new ArrayList<PhysicianParc>();
-        list.add(a);
-        list.add(b);
-        list.add(c);
-
-        for(int i = 0; i < 5; i++) {
-            PhysicianParc p = new PhysicianParc();
-            int aAsChar = (int) 'd';
-            p.setName("" + (char) (aAsChar + i));
-            list.add(p);
-        }
-
-        return list;
+        return caseDataInterface.getNearbyPhysicians();
     }
 
 
@@ -110,6 +111,12 @@ public class PhysicianSelectionFragment extends Fragment {
             tabChangeInterface = (OnTabChangedInFragmentInterface) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString() + " must implement " + OnTabChangedInFragmentInterface.class.getSimpleName());
+        }
+
+        try {
+            caseDataInterface = (OnCaseDataRequestAndUpdateInterface) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString() + " must implement " + OnCaseDataRequestAndUpdateInterface.class.getSimpleName());
         }
 
     }

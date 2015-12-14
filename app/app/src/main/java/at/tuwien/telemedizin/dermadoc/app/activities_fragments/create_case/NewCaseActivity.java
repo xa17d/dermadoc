@@ -28,6 +28,7 @@ import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.CaseParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.PatientParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.PhysicianParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.AnamnesisParc;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.CaseInfoParc;
 import at.tuwien.telemedizin.dermadoc.app.helper.ToStringHelper;
 import at.tuwien.telemedizin.dermadoc.app.persistence.ContentProvider;
 import at.tuwien.telemedizin.dermadoc.app.persistence.ContentProviderFactory;
@@ -44,6 +45,7 @@ public class NewCaseActivity extends AppCompatActivity implements OnCaseDataRequ
 
     private CaseParc caseItem;
     private AnamnesisParc defaultAnamnesis;
+    private List<PhysicianParc> nearbyPhysicians;
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -146,11 +148,15 @@ public class NewCaseActivity extends AppCompatActivity implements OnCaseDataRequ
     private void setUpData() {
         ContentProvider cP = ContentProviderFactory.getContentProvider();
 
-        defaultAnamnesis = cP.getAnamnesisForm();
+        defaultAnamnesis = cP.getAnamnesisForm(); // TODO get data from server?
         PatientParc user = cP.getCurrentUser();
         Calendar cal = Calendar.getInstance();
 
         caseItem = new CaseParc(-1, user, cal);
+
+        nearbyPhysicians = new ArrayList<>();
+        // TODO get data from server
+
     }
 
     /**
@@ -243,7 +249,13 @@ public class NewCaseActivity extends AppCompatActivity implements OnCaseDataRequ
         return caseItem;
     }
 
-    public void collectCaseData() {
+    @Override
+    public List<PhysicianParc> getNearbyPhysicians() {
+        return nearbyPhysicians;
+    }
+
+    @Override
+    public CaseParc collectCaseData() {
 
         Log.d(LOG_TAG, "collectCaseData()");
 
@@ -266,8 +278,11 @@ public class NewCaseActivity extends AppCompatActivity implements OnCaseDataRequ
         // finish fragment
         String caseName = finishFragment.getCaseName();
 
+        // TODO CaseInfo
+
         caseItem.setName(caseName);
         caseItem.setPhysician(physicianSelection);
+        // TODO add caseData/CaseInfo to case
 
         Log.d(LOG_TAG, caseItem.toString());
         Log.d(LOG_TAG, anamnesisForm.toString());
@@ -275,5 +290,6 @@ public class NewCaseActivity extends AppCompatActivity implements OnCaseDataRequ
         Log.d(LOG_TAG, ToStringHelper.toStringPics(pictures));
         Log.d(LOG_TAG, ToStringHelper.toStringLoc(localizations));
 
+        return caseItem;
     }
 }

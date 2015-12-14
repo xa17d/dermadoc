@@ -35,6 +35,7 @@ public class FinishEditingFragment extends Fragment {
     private static final String ARG_NEW_CASE = "newCase";
 
     private OnTabChangedInFragmentInterface tabChangeInterface;
+    private OnCaseDataRequestAndUpdateInterface caseDataInterface;
 
     private boolean newCase; // if it is a new case, no symptom information has to be loaded and the layout switches into edit-mode
     private boolean finishCaseHintIsVisible;
@@ -84,6 +85,12 @@ public class FinishEditingFragment extends Fragment {
             tabChangeInterface = (OnTabChangedInFragmentInterface) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString() + " must implement " + OnTabChangedInFragmentInterface.class.getSimpleName());
+        }
+
+        try {
+            caseDataInterface = (OnCaseDataRequestAndUpdateInterface) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString() + " must implement " + OnCaseDataRequestAndUpdateInterface.class.getSimpleName());
         }
 
     }
@@ -151,7 +158,7 @@ public class FinishEditingFragment extends Fragment {
                 // save the new case-object on the server
                 // TODO
 
-                ((NewCaseActivity)getActivity()).collectCaseData(); // TODO better without cast! (onAttach etc.)
+                 caseDataInterface.collectCaseData(); // TODO better without cast! (onAttach etc.)
             }
         });
 
@@ -187,4 +194,6 @@ public class FinishEditingFragment extends Fragment {
     public String getCaseName() {
         return caseNameEditText.getText().toString();
     }
+
+
 }

@@ -10,12 +10,16 @@ import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.MedicationParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.PatientParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.PhysicianParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.UserParc;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.AnamnesisQuestionBoolParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.AnamnesisQuestionParc;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.AnamnesisQuestionTextParc;
 import at.tuwien.telemedizin.dermadoc.entities.Medication;
 import at.tuwien.telemedizin.dermadoc.entities.Patient;
 import at.tuwien.telemedizin.dermadoc.entities.Physician;
 import at.tuwien.telemedizin.dermadoc.entities.User;
 import at.tuwien.telemedizin.dermadoc.entities.casedata.AnamnesisQuestion;
+import at.tuwien.telemedizin.dermadoc.entities.casedata.AnamnesisQuestionBool;
+import at.tuwien.telemedizin.dermadoc.entities.casedata.AnamnesisQuestionText;
 
 /**
  * Created by FAUser on 20.11.2015.
@@ -65,7 +69,12 @@ public class ParcelableHelper {
 
         List<AnamnesisQuestionParc> questionsParcList = new ArrayList<>();
         for (AnamnesisQuestion q : anamnesisQuestions) {
-            questionsParcList.add(new AnamnesisQuestionParc(q));
+            if (q instanceof AnamnesisQuestionBool) {
+                questionsParcList.add(new AnamnesisQuestionBoolParc((AnamnesisQuestionBool)q));
+            } else{
+                questionsParcList.add(new AnamnesisQuestionTextParc((AnamnesisQuestionText)q));
+            }
+
         }
         return questionsParcList;
     }
