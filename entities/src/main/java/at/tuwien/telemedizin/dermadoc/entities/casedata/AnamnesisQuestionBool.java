@@ -9,4 +9,9 @@ public class AnamnesisQuestionBool extends AnamnesisQuestion {
     public void setAnswer(boolean answer) {
         this.answer = answer;
     }
+
+    @Override
+    public String toString() {
+        return "# " + getQuestion() + "\n   * " + (getAnswer() ? "YES" : "NO");
+    }
 }

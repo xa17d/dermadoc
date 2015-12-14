@@ -3,6 +3,7 @@ package at.tuwien.telemedizin.dermadoc.entities.casedata;
 import at.tuwien.telemedizin.dermadoc.entities.Medication;
 import at.tuwien.telemedizin.dermadoc.entities.User;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -16,6 +17,10 @@ public class Advice extends CaseData {
 
         this.message = message;
         this.medications = medications;
+    }
+
+    public Advice() {
+        medications = new ArrayList<Medication>();
     }
 
     private String message;

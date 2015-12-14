@@ -25,8 +25,8 @@ jar {
     baseName = 'server'
     version = '0.0.1-SNAPSHOT'
 }
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+//sourceCompatibility = 1.8
+//targetCompatibility = 1.8
 
 repositories {
     mavenCentral()
@@ -34,14 +34,27 @@ repositories {
 
 
 dependencies {
-    compile('org.springframework.boot:spring-boot-starter-data-jpa')
-    runtime('mysql:mysql-connector-java')
-    //compile('org.springframework.boot:spring-boot-starter-security')
-    //compile('org.springframework.boot:spring-boot-starter-jdbc')
+    // Spring Stuff
     compile('org.springframework.boot:spring-boot-starter-web')
+    compile 'org.springframework.boot:spring-boot-starter-security'
+    compile 'org.springframework.boot:spring-boot-starter-actuator'
+    compile 'org.springframework.boot:spring-boot-starter-aop'
     compile('com.fasterxml.jackson.dataformat:jackson-dataformat-xml')
+    compile('org.slf4j:log4j-over-slf4j:1.7.12')
+
+    // Persistence Stuff
+    compile('org.springframework.boot:spring-boot-starter-data-jpa')
+    //compile('org.springframework.boot:spring-boot-starter-jdbc')
+    runtime('mysql:mysql-connector-java')
+
+    //fix for xml parser
+    compile('org.codehaus.woodstox:woodstox-core-asl:4.1.4')
+
+    // Test Stuff
     testCompile('org.springframework.boot:spring-boot-starter-test')
     testCompile group: 'junit', name: 'junit', version: '4.11'
+
+    // Other Projects
     compile project(':entities')
 }
 

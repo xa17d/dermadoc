@@ -1,64 +1,55 @@
 package at.tuwien.telemedizin.dermadoc.server.persistence.dao.mock;
 
 import at.tuwien.telemedizin.dermadoc.entities.*;
-import at.tuwien.telemedizin.dermadoc.server.persistence.dao.EntityNotFoundException;
+import at.tuwien.telemedizin.dermadoc.server.exceptions.EntityNotFoundException;
 import at.tuwien.telemedizin.dermadoc.server.persistence.dao.UserDao;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.data.crossstore.ChangeSetPersister;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.util.List;
 
 /**
  * Created by daniel on 23.11.2015.
  */
+@Repository
 public class UserDaoMock implements UserDao {
     public UserDaoMock() {
-        // create initial mocked data
-
-        Physician p1 = new Physician();
-        p1.setName("Dr. Acula");
-        p1.setPassword("a");
-        p1.setMail("a");
-        p1.setId(0);
-        p1.setLocation(new GeoLocation("Transsilvanien", 45.7340837, 21.1990513));
-        users.add(p1);
-
-        Patient p2 = new Patient();
-        p2.setName("Rainer Zufall");
-        p2.setGender(Gender.Male);
-        Calendar birthTime = GregorianCalendar.getInstance();
-        birthTime.set(1990,01,01);
-        p2.setBirthTime(birthTime);
-        p2.setSvnr("1234010190");
-        p2.setMail("p");
-        p2.setPassword("p");
-        p2.setId(1);
-        users.add(p2);
+        this.users = MockData.users;
     }
 
-    private ArrayList<User> users = new ArrayList<>();
+    private ArrayList<User> users;
 
 
     @Override
-    public User getUserById(long id) throws EntityNotFoundException {
-        for (User u:users) {
-            if (u.getId() == id) {
-                return  u;
+    public User getUserById(long userId) {
+        for (User u : users) {
+            if (u.getId() == userId) {
+                return u;
             }
         }
-        throw new EntityNotFoundException("id="+id);
+        throw new EntityNotFoundException("id="+userId);
     }
 
     @Override
-    public User getUserByMail(String mail) throws EntityNotFoundException {
-        for (User u:users) {
+    public User getUserByMail(String mail) {
+        for (User u : users) {
             if (u.getMail().toLowerCase().equals(mail.toLowerCase())) {
-                return  u;
+                return u;
             }
         }
         throw new EntityNotFoundException("mail="+mail);
+    }
+
+    @Override
+    public List<Physician> listPhysicians() {
+        ArrayList<Physician> result = new ArrayList<>();
+
+        for (User u : users) {
+            if (u instanceof Physician) {
+                result.add((Physician)u);
+            }
+        }
+
+        return result;
     }
 }

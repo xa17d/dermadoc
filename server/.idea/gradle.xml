@@ -9,17 +9,21 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$/.." />
+            <option value="$PROJECT_DIR$/../app" />
             <option value="$PROJECT_DIR$/../desktop" />
             <option value="$PROJECT_DIR$/../entities" />
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/../service" />
           </set>
         </option>
         <option name="myModules">
           <set>
             <option value="$PROJECT_DIR$/.." />
+            <option value="$PROJECT_DIR$/../app" />
             <option value="$PROJECT_DIR$/../desktop" />
             <option value="$PROJECT_DIR$/../entities" />
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/../service" />
           </set>
         </option>
       </GradleProjectSettings>

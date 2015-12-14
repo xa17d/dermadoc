@@ -9,4 +9,9 @@ public class AnamnesisQuestionText extends AnamnesisQuestion {
     public void setAnswer(String answer) {
         this.answer = answer;
     }
+
+    @Override
+    public String toString() {
+        return "# " + getQuestion() + (getAnswer() == null ? "" : ("\n   * " + getAnswer()));
+    }
 }

@@ -19,6 +19,10 @@ public class CaseInfo extends CaseData {
         this.size = size;
     }
 
+    public CaseInfo() {
+
+    }
+
     private BodyLocalization localization;
     public BodyLocalization getLocalization() { return localization; }
 

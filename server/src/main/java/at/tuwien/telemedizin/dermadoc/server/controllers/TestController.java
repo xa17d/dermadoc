@@ -4,7 +4,7 @@ import at.tuwien.telemedizin.dermadoc.entities.Gender;
 import at.tuwien.telemedizin.dermadoc.entities.GeoLocation;
 import at.tuwien.telemedizin.dermadoc.entities.Patient;
 import at.tuwien.telemedizin.dermadoc.entities.User;
-import at.tuwien.telemedizin.dermadoc.server.persistence.dao.EntityNotFoundException;
+import at.tuwien.telemedizin.dermadoc.server.exceptions.EntityNotFoundException;
 import at.tuwien.telemedizin.dermadoc.server.persistence.dao.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +19,8 @@ import java.util.Calendar;
 public class TestController {
     @RequestMapping(value = "/")
     public String helloWorld() {
-        return "Hello Derma Doc";
+
+        return "<html><h1>Hello Derma Doc</h1></html>";
     }
 
     @RequestMapping(value = "/testpatient")

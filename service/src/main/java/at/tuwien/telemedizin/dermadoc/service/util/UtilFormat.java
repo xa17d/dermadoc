@@ -6,6 +6,8 @@ import java.util.Date;
 
 public class UtilFormat {
 
+    private UtilFormat() {   }
+
     private static SimpleDateFormat sdfLong = new SimpleDateFormat("dd.MM.yyyy");
 
     public static String formatDate(Calendar date) {
