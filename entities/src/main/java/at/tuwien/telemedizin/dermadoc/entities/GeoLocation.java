@@ -1,8 +1,11 @@
 package at.tuwien.telemedizin.dermadoc.entities;
 
+import javax.persistence.Embeddable;
+
 /**
  * Geographic location
  */
+@Embeddable
 public class GeoLocation {
 
     public GeoLocation() {  }

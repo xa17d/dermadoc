@@ -37,7 +37,7 @@ repositories {
 
 
 dependencies {
-    compile group: 'org.hibernate.javax.persistence', name: 'hibernate-jpa-2.0-api', version: '1.0.0.Final'
+    // compile group: 'org.hibernate.javax.persistence', name: 'hibernate-jpa-2.0-api', version: '1.0.0.Final'
 
     compile group: 'org.hibernate', name: 'hibernate-core'
     compile group: 'org.hibernate', name: 'hibernate-entitymanager'

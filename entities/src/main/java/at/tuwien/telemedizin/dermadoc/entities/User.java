@@ -3,9 +3,7 @@ package at.tuwien.telemedizin.dermadoc.entities;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * Abstract User
@@ -23,10 +21,12 @@ public abstract class User {
     public long getId() { return id; }
     public void setId(long id) { this.id = id; }
 
+    @Column(nullable = false)
     private String mail;
     public String getMail() { return mail; }
     public void setMail(String mail) { this.mail = mail; }
 
+    @Column(nullable = false)
     private String password;
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
@@ -35,6 +35,8 @@ public abstract class User {
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
 
+    @Column(name = "location")
+    @Embedded
     private GeoLocation location;
     public GeoLocation getLocation() { return location; }
     public void setLocation(GeoLocation location) { this.location = location; }

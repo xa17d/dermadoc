@@ -1,10 +1,14 @@
 package at.tuwien.telemedizin.dermadoc.entities;
 
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.util.Calendar;
 
 /**
  * Patient
  */
+@Entity
+@Table(name = "patient")
 public class Patient extends User {
     private String svnr;
     public String getSvnr() { return svnr; }
