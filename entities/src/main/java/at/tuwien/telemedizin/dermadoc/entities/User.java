@@ -37,7 +37,7 @@ public abstract class User {
     public void setPassword(String password) { this.password = password; }
 
     @Basic
-    @Column(name = "name", insertable = false, updatable = false)
+    @Column(name = "name")
     private String name;
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
