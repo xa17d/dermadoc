@@ -13,7 +13,7 @@ import javax.persistence.*;
         @JsonSubTypes.Type(value = Patient.class),
         @JsonSubTypes.Type(value = Physician.class)
 })
-@Entity
+@MappedSuperclass
 @Table(name = "person")// indexes = @Index(name="user_mail_constraint",columnList = "mail", unique = true))
 public abstract class User {
     @Id
