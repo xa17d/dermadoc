@@ -292,4 +292,27 @@ public class NewCaseActivity extends AppCompatActivity implements OnCaseDataRequ
 
         return caseItem;
     }
+
+    /**
+     * checks the case for missing information
+     * @param caseItemToValidate
+     * @return
+     */
+    public boolean validateCase(CaseParc caseItemToValidate) {
+
+        // TODO
+
+        // TODO: symptom description?
+
+        // TODO: pain-intensity selected?
+
+        // TODO: >0 pictures added?
+
+        // TODO: >0 locations selected
+
+        // TODO: all anamnesis-questions answered?
+
+        // TODO: case name set?
+        return false;
+    }
 }

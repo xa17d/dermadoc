@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.Icd10DiagnosisParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.MedicationParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.PatientParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.PhysicianParc;
@@ -13,6 +14,7 @@ import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.UserParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.AnamnesisQuestionBoolParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.AnamnesisQuestionParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.AnamnesisQuestionTextParc;
+import at.tuwien.telemedizin.dermadoc.entities.Icd10Diagnosis;
 import at.tuwien.telemedizin.dermadoc.entities.Medication;
 import at.tuwien.telemedizin.dermadoc.entities.Patient;
 import at.tuwien.telemedizin.dermadoc.entities.Physician;
@@ -77,5 +79,18 @@ public class ParcelableHelper {
 
         }
         return questionsParcList;
+    }
+
+    public static List<Icd10DiagnosisParc> mapIcd10DiagnosesToParc(List<Icd10Diagnosis> diagnosisList) {
+
+        if (diagnosisList == null) {
+            return null;
+        }
+
+        List<Icd10DiagnosisParc> diagParcList = new ArrayList<>();
+        for (Icd10Diagnosis d : diagnosisList) {
+            diagParcList.add(new Icd10DiagnosisParc(d));
+        }
+        return diagParcList;
     }
 }

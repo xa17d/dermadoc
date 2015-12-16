@@ -3,6 +3,7 @@ package at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -58,7 +59,7 @@ public class AnamnesisParc extends CaseDataParc {
         super(in);
 
         this.message = in.readString();
-
+        this.questions = new ArrayList<>();
         in.readList(this.questions, null); // does that work?! null for class loader -> default, but is there a default?! TODO
     }
 

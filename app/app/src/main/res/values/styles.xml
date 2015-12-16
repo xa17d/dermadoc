@@ -82,6 +82,7 @@
 
     <style name="FinishEditingButton" parent="EditCaseNextButton">
         <item name="android:textStyle">bold</item>
+        <item name="android:background">@drawable/finish_button_background_shape</item>
     </style>
 
     <style name="EditCaseTabLayout" parent="Widget.Design.TabLayout">

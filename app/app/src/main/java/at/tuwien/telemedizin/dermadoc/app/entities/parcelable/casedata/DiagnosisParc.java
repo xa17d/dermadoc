@@ -3,8 +3,11 @@ package at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.Icd10DiagnosisParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.UserParc;
 import at.tuwien.telemedizin.dermadoc.app.helper.ParcelableHelper;
 import at.tuwien.telemedizin.dermadoc.entities.User;
@@ -15,7 +18,7 @@ import at.tuwien.telemedizin.dermadoc.entities.casedata.Diagnosis;
  */
 public class DiagnosisParc extends CaseDataParc {
 
-    public DiagnosisParc(long id, Calendar created, UserParc author, String message) {
+    public DiagnosisParc(long id, Calendar created, UserParc author, String message, List<Icd10DiagnosisParc> diagnosisList) {
         super(id, created, author);
 
         this.message = message;
@@ -24,11 +27,15 @@ public class DiagnosisParc extends CaseDataParc {
     private String message;
     public String getMessage() { return message; }
 
+    private List<Icd10DiagnosisParc> diagnosisList;
+    public List<Icd10DiagnosisParc> getDiagnosisList() { return diagnosisList; }
+
     @Override
     public String toString() {
         return super.toString() +
                 "DiagnosisParc{" +
                 "message='" + message + '\'' +
+                "', diagnosisList='" + diagnosisList +
                 '}';
     }
 
@@ -41,7 +48,8 @@ public class DiagnosisParc extends CaseDataParc {
         this(diagnosis.getId(),
                 diagnosis.getCreated(),
                 ParcelableHelper.mapUserToUserParc(diagnosis.getAuthor()),
-                diagnosis.getMessage());
+                diagnosis.getMessage(),
+                ParcelableHelper.mapIcd10DiagnosesToParc(diagnosis.getDiagnosisList()));
     }
 
 
@@ -52,6 +60,8 @@ public class DiagnosisParc extends CaseDataParc {
         super(in);
 
         this.message = in.readString();
+        diagnosisList = new ArrayList<>();
+        in.readList(diagnosisList, Icd10DiagnosisParc.class.getClassLoader());
     }
 
     @Override
@@ -64,6 +74,7 @@ public class DiagnosisParc extends CaseDataParc {
 
         super.writeToParcel(dest, flags);
         dest.writeString(message);
+        dest.writeList(diagnosisList);
     }
 
     // this is used to regenerate your object. All Parcelables must have a CREATOR that implements these two methods

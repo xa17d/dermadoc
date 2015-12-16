@@ -3,6 +3,7 @@ package at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -59,7 +60,7 @@ public class AdviceParc extends CaseDataParc {
         super(in);
 
         this.message = in.readString();
-
+        this.medications = new ArrayList<>();
         in.readList(this.medications, MedicationParc.class.getClassLoader());
     }
 
