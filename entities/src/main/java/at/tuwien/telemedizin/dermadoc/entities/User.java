@@ -36,12 +36,13 @@ public abstract class User {
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
 
-
+    @Basic
+    @Column(name = "name", insertable = false, updatable = false)
     private String name;
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
 
-    @Column(name = "location")
+
     @Embedded
     private GeoLocation location;
     public GeoLocation getLocation() { return location; }
