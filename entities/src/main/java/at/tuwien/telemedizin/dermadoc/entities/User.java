@@ -3,6 +3,10 @@ package at.tuwien.telemedizin.dermadoc.entities;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 /**
  * Abstract User
  */
@@ -11,7 +15,10 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         @JsonSubTypes.Type(value = Patient.class),
         @JsonSubTypes.Type(value = Physician.class)
 })
+@Entity
+@Table(name = "person")// indexes = @Index(name="user_mail_constraint",columnList = "mail", unique = true))
 public abstract class User {
+    @Id
     private long id;
     public long getId() { return id; }
     public void setId(long id) { this.id = id; }
