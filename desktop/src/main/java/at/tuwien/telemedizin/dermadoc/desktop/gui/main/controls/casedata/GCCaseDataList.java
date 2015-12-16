@@ -5,6 +5,8 @@ import at.tuwien.telemedizin.dermadoc.desktop.gui.main.controls.casedata.view.AG
 import at.tuwien.telemedizin.dermadoc.desktop.gui.main.controls.handler.CaseDataEventHandler;
 import at.tuwien.telemedizin.dermadoc.entities.*;
 import at.tuwien.telemedizin.dermadoc.entities.casedata.*;
+import at.tuwien.telemedizin.dermadoc.service.exception.DermadocConversionException;
+import at.tuwien.telemedizin.dermadoc.service.util.UtilImageConverter;
 import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -12,6 +14,8 @@ import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
+import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -56,6 +60,19 @@ public class GCCaseDataList extends VBox {
                 });
             }
         });
+
+        //------------------
+        //MOCK
+        try {
+            URL url = getClass().getResource("testimage.jpg");
+            byte[] imageByte = new byte[0];
+            imageByte = UtilImageConverter.imageToByte(new File(url.getPath()), "jpg");
+            PhotoMessage pm = new PhotoMessage(-1l, Calendar.getInstance(), new Patient(), "jpg", imageByte );
+            this.getChildren().add(gcFactory.getGC(pm));
+        } catch (DermadocConversionException e) {
+            e.printStackTrace();
+        }
+        //-----------
 
         this.setFillWidth(true);
     }

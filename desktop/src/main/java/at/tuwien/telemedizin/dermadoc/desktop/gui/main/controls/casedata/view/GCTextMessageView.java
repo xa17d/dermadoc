@@ -19,12 +19,12 @@ public class GCTextMessageView extends AGCCaseDataView {
     @FXML private GridPane gpCaseData;
     @FXML private Label lbMessage;
 
-    private TextMessage message;
+    private TextMessage data;
 
     public GCTextMessageView(CaseData caseData) {
 
         if(caseData instanceof TextMessage) {
-            this.message = (TextMessage) caseData;
+            this.data = (TextMessage) caseData;
         }
         else {
             throw new IllegalArgumentException("case data must be a text message!");
@@ -42,7 +42,7 @@ public class GCTextMessageView extends AGCCaseDataView {
 
     public GCTextMessageView(GCTextMessageEdit gcTextMessage) {
 
-        this.message = gcTextMessage.getTextMessage();
+        this.data = gcTextMessage.getTextMessage();
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("gc_textmessage_view.fxml"));
         loader.setRoot(this);
@@ -58,12 +58,12 @@ public class GCTextMessageView extends AGCCaseDataView {
     private void initialize() {
 
         this.initStyle(gpCaseData);
-        lbMessage.setText(message.getMessage());
+        lbMessage.setText(data.getMessage());
     }
 
     @Override
     public boolean byPhysician() {
-        return (message.getAuthor() instanceof Physician);
+        return (data.getAuthor() instanceof Physician);
     }
 
     @Override

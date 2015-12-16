@@ -1,6 +1,6 @@
 package at.tuwien.telemedizin.dermadoc.desktop.gui.main;
 
-import at.tuwien.telemedizin.dermadoc.desktop.exception.DermadocException;
+import at.tuwien.telemedizin.dermadoc.service.exception.DermadocException;
 import at.tuwien.telemedizin.dermadoc.desktop.gui.main.controls.GCCaseTab;
 import at.tuwien.telemedizin.dermadoc.desktop.gui.main.controls.GCOpenCaseList;
 import at.tuwien.telemedizin.dermadoc.desktop.gui.main.controls.GCPatientList;
@@ -23,8 +23,6 @@ import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.*;
 import org.controlsfx.control.NotificationPane;
-
-import java.util.*;
 
 /**
  * main controller
