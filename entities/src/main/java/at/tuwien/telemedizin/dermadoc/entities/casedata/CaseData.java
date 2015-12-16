@@ -47,9 +47,7 @@ public abstract class CaseData {
     public boolean getPrivate() { return isPrivate; }
     public void setPrivate(boolean isPrivate) { this.isPrivate = isPrivate; }
 
-    private CaseData nextVersion;
-    public CaseData getNextVersion() { return nextVersion; }
-    public void setNextVersion(CaseData nextVersion) { this.nextVersion = nextVersion; }
-
-    private boolean isObsolete() { return (nextVersion != null); }
+    private boolean obsolete;
+    public boolean isObsolete() { return obsolete; }
+    public void setObsolete(boolean obsolete) { this.obsolete = obsolete; }
 }

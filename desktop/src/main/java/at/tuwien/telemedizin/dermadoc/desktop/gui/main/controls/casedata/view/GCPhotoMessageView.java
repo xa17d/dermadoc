@@ -63,6 +63,8 @@ public class GCPhotoMessageView extends AGCCaseDataView {
             //TODO
             e.printStackTrace();
         }
+
+        expand(false);
     }
 
     @FXML
@@ -74,6 +76,11 @@ public class GCPhotoMessageView extends AGCCaseDataView {
 
     @Override
     public boolean byPhysician() {
+        return false;
+    }
+
+    @Override
+    public boolean isObsolete() {
         return false;
     }
 

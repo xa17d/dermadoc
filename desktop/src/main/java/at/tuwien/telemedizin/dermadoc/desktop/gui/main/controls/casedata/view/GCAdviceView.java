@@ -82,6 +82,13 @@ public class GCAdviceView extends AGCCaseDataView {
     }
 
     @Override
+    public boolean isObsolete() {
+        //TODO
+        //return data.isObsolete();
+        return false;
+    }
+
+    @Override
     public void expand(boolean expand) {
         tpMedication.setExpanded(expand);
     }

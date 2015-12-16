@@ -67,6 +67,11 @@ public class GCTextMessageView extends AGCCaseDataView {
     }
 
     @Override
+    public boolean isObsolete() {
+        return false;
+    }
+
+    @Override
     public void expand(boolean expand) {
         //do nothing
     }

@@ -83,6 +83,13 @@ public class GCDiagnosisView extends AGCCaseDataView {
     }
 
     @Override
+    public boolean isObsolete() {
+        //TODO
+        //return data.isObsolete();
+        return true;
+    }
+
+    @Override
     public void expand(boolean expand) {
         tpDiagnosis.setExpanded(expand);
     }

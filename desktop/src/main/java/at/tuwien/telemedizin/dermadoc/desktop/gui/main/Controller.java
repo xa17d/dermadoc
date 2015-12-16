@@ -1,10 +1,7 @@
 package at.tuwien.telemedizin.dermadoc.desktop.gui.main;
 
+import at.tuwien.telemedizin.dermadoc.desktop.gui.main.controls.*;
 import at.tuwien.telemedizin.dermadoc.service.exception.DermadocException;
-import at.tuwien.telemedizin.dermadoc.desktop.gui.main.controls.GCCaseTab;
-import at.tuwien.telemedizin.dermadoc.desktop.gui.main.controls.GCOpenCaseList;
-import at.tuwien.telemedizin.dermadoc.desktop.gui.main.controls.GCPatientList;
-import at.tuwien.telemedizin.dermadoc.desktop.gui.main.controls.GCPhysician;
 import at.tuwien.telemedizin.dermadoc.desktop.gui.lock.LockStage;
 import at.tuwien.telemedizin.dermadoc.desktop.gui.main.controls.error.ErrorPane;
 import at.tuwien.telemedizin.dermadoc.desktop.gui.main.controls.handler.OpenMainTabEventHandler;

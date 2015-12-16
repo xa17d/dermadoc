@@ -1,5 +1,6 @@
 package at.tuwien.telemedizin.dermadoc.desktop.gui.main.controls.casedata;
 
+import at.tuwien.telemedizin.dermadoc.desktop.gui.main.controls.GCCaseInfo;
 import at.tuwien.telemedizin.dermadoc.desktop.gui.main.controls.casedata.edit.AGCCaseDataEdit;
 import at.tuwien.telemedizin.dermadoc.desktop.gui.main.controls.casedata.view.AGCCaseDataView;
 import at.tuwien.telemedizin.dermadoc.desktop.gui.main.controls.handler.CaseDataEventHandler;
@@ -26,17 +27,19 @@ import java.util.List;
 public class GCCaseDataList extends VBox {
 
     private ObservableList<CaseData> caseDataList;
+    private GCCaseInfo gcCaseInfo;
+
     private GCCaseDataFactory gcFactory;
 
-    public GCCaseDataList(ObservableList<CaseData> caseDataList) {
-
-        gcFactory = new GCCaseDataFactory();
-        GCCaseDataList cgList = this;
+    public GCCaseDataList(ObservableList<CaseData> caseDataList, GCCaseInfo gcCaseInfo) {
 
         this.caseDataList = caseDataList;
+        this.gcCaseInfo = gcCaseInfo;
+
+        gcFactory = new GCCaseDataFactory();
 
         for(CaseData cd : caseDataList) {
-            this.getChildren().add(gcFactory.getGC(cd));
+            addView(cd);
         }
 
         this.caseDataList.addListener(new ListChangeListener<CaseData>() {
@@ -48,12 +51,11 @@ public class GCCaseDataList extends VBox {
                     public void run() {
                         while(c.next()) {
                             for (CaseData cd : c.getAddedSubList()) {
-                                AGCCaseData gcCaseData = gcFactory.getGC(cd);
-                                cgList.getChildren().add(gcCaseData);
+                                addView(cd);
                             }
 
                             for (CaseData cd : c.getRemoved()) {
-                                cgList.getChildren().remove(cd);
+                                removeView(cd);
                             }
                         }
                     }
@@ -72,12 +74,30 @@ public class GCCaseDataList extends VBox {
         } catch (DermadocConversionException e) {
             e.printStackTrace();
         }
+
+        CaseInfo ci = new CaseInfo(-1l, Calendar.getInstance(), new Patient(), BodyLocalization.ABDOMEN, PainIntensity.Mild, 5);
+        gcCaseInfo.addCaseInfo(ci);
         //-----------
 
         this.setFillWidth(true);
     }
 
-    public void add(AGCCaseDataEdit editComponent) {
+    private void addView(CaseData cd) {
+
+        //special treatment for case info
+        if(cd instanceof CaseInfo) {
+            gcCaseInfo.addCaseInfo((CaseInfo) cd);
+        }
+        else {
+            this.getChildren().add(gcFactory.getGC(cd));
+        }
+    }
+
+    private void removeView(CaseData cd) {
+        this.getChildren().remove(cd);
+    }
+
+    public void addEdit(AGCCaseDataEdit editComponent) {
 
         GCCaseDataList gcList = this;
         editComponent.setSaveEventHandler(new CaseDataEventHandler() {

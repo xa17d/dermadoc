@@ -13,11 +13,15 @@ public abstract class AGCCaseData extends HBox {
 
     protected static final String STYLE_PATIENT = "chat-bubblepatient";
     protected static final String STYLE_PHYSICIAN = "chat-bubblephysician";
+    protected static final String STYLE_OBSOLETE = "chat-obsolete";
 
     public abstract boolean byPhysician();
 
+    public abstract boolean isObsolete();
+
     final public void initStyle(Pane caseDataPane) {
         caseDataPane.getStyleClass().add(this.getCaseStyle());
+        if(isObsolete()) { caseDataPane.getStyleClass().add(STYLE_OBSOLETE); };
         this.setAlignment(getPos());
         HBox.setMargin(caseDataPane, new Insets(5, 5, 15, 5));
     }
