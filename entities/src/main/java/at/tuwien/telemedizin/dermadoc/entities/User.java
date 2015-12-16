@@ -13,10 +13,15 @@ import javax.persistence.*;
         @JsonSubTypes.Type(value = Patient.class),
         @JsonSubTypes.Type(value = Physician.class)
 })
-@MappedSuperclass
-@Table(name = "person")// indexes = @Index(name="user_mail_constraint",columnList = "mail", unique = true))
+@Entity
+@Table(name = "person")
+@Inheritance(strategy = InheritanceType.JOINED)
+// indexes = @Index(name="user_mail_constraint",columnList = "mail", unique = true))
 public abstract class User {
+
     @Id
+    @GeneratedValue
+    @Column(name = "person_id")
     private long id;
     public long getId() { return id; }
     public void setId(long id) { this.id = id; }
@@ -30,6 +35,7 @@ public abstract class User {
     private String password;
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
+
 
     private String name;
     public String getName() { return name; }
