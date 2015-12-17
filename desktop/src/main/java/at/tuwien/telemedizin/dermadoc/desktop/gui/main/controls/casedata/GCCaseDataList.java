@@ -75,8 +75,42 @@ public class GCCaseDataList extends VBox {
             e.printStackTrace();
         }
 
-        CaseInfo ci = new CaseInfo(-1l, Calendar.getInstance(), new Patient(), BodyLocalization.ABDOMEN, PainIntensity.Mild, 5);
-        gcCaseInfo.addCaseInfo(ci);
+        Patient p = new Patient();
+        p.setName("John Doe");
+        p.setGender(Gender.Male);
+        p.setSvnr("3023 15.02.1991");
+        Calendar birthTime = Calendar.getInstance();
+        birthTime.set(1991,2,15);
+        p.setBirthTime(birthTime);
+
+        List<BodyLocalization> localizations = new ArrayList<>();
+        localizations.add(BodyLocalization.ABDOMEN);
+        localizations.add(BodyLocalization.HAND_LEFT);
+        localizations.add(BodyLocalization.HEAD);
+        localizations.add(BodyLocalization.LOWER_BACK);
+
+        CaseInfo ci1 = new CaseInfo(-1l, Calendar.getInstance(), p, localizations, PainIntensity.Severe, 5);
+        gcCaseInfo.addCaseInfo(ci1);
+
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        localizations.remove(BodyLocalization.LOWER_BACK);
+        CaseInfo ci2 = new CaseInfo(-2l, Calendar.getInstance(), p, localizations, PainIntensity.Moderate, 5);
+        gcCaseInfo.addCaseInfo(ci2);
+
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        localizations.remove(BodyLocalization.HEAD);
+        CaseInfo ci3 = new CaseInfo(-3l, Calendar.getInstance(), p, localizations, PainIntensity.Mild, 5);
+        gcCaseInfo.addCaseInfo(ci3);
         //-----------
 
         this.setFillWidth(true);

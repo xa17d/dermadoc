@@ -26,6 +26,6 @@ public class Advice extends CaseData {
     private String message;
     public String getMessage() { return message; }
 
-    private List<Medication> medications;
+    private List<Medication> medications = new ArrayList<>();
     public List<Medication> getMedications() { return medications; }
 }

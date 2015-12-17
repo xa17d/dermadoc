@@ -32,7 +32,7 @@ public class LoginStage extends Stage {
             this.setMaxHeight(300);
 
             Scene scene = new Scene(root, 500, 300);
-            scene.getStylesheets().add(DesktopApplication.class.getResource("style.css").toExternalForm());
+            scene.getStylesheets().add(DesktopApplication.class.getResource("main.css").toExternalForm());
             this.setScene(scene);
 
         } catch (IOException e) {

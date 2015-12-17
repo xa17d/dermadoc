@@ -32,7 +32,7 @@ public class PhotoStage extends Stage {
             this.setMinHeight(400);
 
             Scene scene = new Scene(root, 700, 700);
-            scene.getStylesheets().add(DesktopApplication.class.getResource("style.css").toExternalForm());
+            scene.getStylesheets().add(DesktopApplication.class.getResource("main.css").toExternalForm());
             this.setScene(scene);
 
         } catch (IOException e) {

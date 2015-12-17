@@ -1,11 +1,16 @@
 package at.tuwien.telemedizin.dermadoc.desktop.gui.main.controls.casedata.edit.lists;
 
 import at.tuwien.telemedizin.dermadoc.entities.Medication;
+import at.tuwien.telemedizin.dermadoc.service.data.MedicationList;
 import javafx.collections.FXCollections;
-import javafx.scene.layout.VBox;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.control.Button;
+import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 import org.controlsfx.control.ListSelectionView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,22 +18,26 @@ import java.util.List;
  */
 public class GCMedicationList extends ListSelectionView<Medication> {
 
-    public GCMedicationList() {
+    public GCMedicationList(ObservableList<Medication> selectedList) {
+
         super();
 
-        //MOCK
-        List<Medication> mediList = new ArrayList<>();
-        mediList.add(new Medication("Medi 1"));
-        mediList.add(new Medication("Medi 2"));
-        mediList.add(new Medication("Medi 3"));
-        mediList.add(new Medication("Medi 4"));
-        mediList.add(new Medication("Medi 5"));
-        //----
+        ObservableList<Medication> filteredList = FXCollections.observableArrayList();
+        GCSearchBar<Medication> searchBar = new GCSearchBar<>(MedicationList.getAll(), selectedList, filteredList);
 
-        this.setSourceItems(FXCollections.observableArrayList(mediList));
-    }
+        this.setSourceHeader(searchBar);
+        this.setTargetHeader(new Pane());
 
-    public List<Medication> getMedication() {
-        return this.getTargetItems();
+        Button btClose = new Button("close");
+        btClose.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                ((Stage) btClose.getScene().getWindow()).close();
+            }
+        });
+        this.setTargetFooter(btClose);
+
+        this.setSourceItems(filteredList);
+        this.setTargetItems(selectedList);
     }
 }

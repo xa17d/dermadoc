@@ -15,8 +15,8 @@
             <RowConstraints vgrow="NEVER" />
         </rowConstraints>
         <children>
-            <TextArea fx:id="taAdvice" prefHeight="150.0" prefWidth="400.0" maxWidth="400" />
-            <Label fx:id="lbMedication" prefWidth="400.0" maxWidth="400" wrapText="true" GridPane.rowIndex="1"/>
+            <TextArea fx:id="taDiagnosis" prefHeight="150.0" prefWidth="400.0" maxWidth="400" />
+            <Label fx:id="lbDiagnosis" prefWidth="400.0" maxWidth="400" wrapText="true" GridPane.rowIndex="1"/>
             <Button mnemonicParsing="false" onAction="#save" text="Save" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
                 <GridPane.margin>
                     <Insets bottom="15.0" left="15.0" right="25.0" top="15.0" />

@@ -69,6 +69,27 @@
     -fx-border-color: rgb(255, 255, 255);
 }
 
+.titled-pane:focused {
+    -fx-text-fill: white;
+}
+
+.titled-pane > .title {
+    -fx-background-color: -fx-box-border, -fx-inner-border, -fx-body-color;
+    -fx-background-insets: 0, 1, 2;
+    -fx-background-radius: 5 5 0 0, 4 4 0 0, 3 3 0 0;
+    -fx-padding: 0.166667em 0.833333em 0.25em 0.833333em;
+}
+
+.titled-pane > *.content {
+    -fx-background-color: -fx-base;
+    -fx-background-insets: 0, 0 1 1 1;
+    -fx-padding: 0.167em;
+ }
+
+.titled-pane:focused > .title > .arrow-button .arrow {
+    -fx-background-color: white;
+}
+
 #caseTabBottom {
     -fx-background-color: -fx-box-border, linear-gradient(to right, derive(-fx-color,15%) 0%, derive(-fx-color,65%) 15%, derive(-fx-color,15%) 30%, derive(-fx-color,65%) 45%, derive(-fx-color,15%) 60%, derive(-fx-color,65%) 75%, derive(-fx-color,15%) 90%, derive(-fx-color,15%) 100%);
 }

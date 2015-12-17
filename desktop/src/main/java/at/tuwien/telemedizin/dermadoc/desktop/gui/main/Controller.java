@@ -193,13 +193,16 @@ public class Controller {
 
     public void lock() {
 
-        Stage mainStage = (Stage) bpMain.getScene().getWindow();
+        Stage mainStage = getStage();
         mainStage.close();
         showLockStage(mainStage);
     }
 
     public void showLockStage(Stage mainStage) {
-
         new LockStage(mainStage).show();
+    }
+
+    public Stage getStage() {
+        return (Stage) bpMain.getScene().getWindow();
     }
 }

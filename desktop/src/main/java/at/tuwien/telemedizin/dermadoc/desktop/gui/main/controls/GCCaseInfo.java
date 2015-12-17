@@ -1,12 +1,19 @@
 package at.tuwien.telemedizin.dermadoc.desktop.gui.main.controls;
 
+import at.tuwien.telemedizin.dermadoc.desktop.util.CaseDataComparator;
 import at.tuwien.telemedizin.dermadoc.desktop.util.UtilBodyLocalization;
 import at.tuwien.telemedizin.dermadoc.desktop.util.UtilPainIntensity;
+import at.tuwien.telemedizin.dermadoc.desktop.util.UtilSet;
+import at.tuwien.telemedizin.dermadoc.entities.BodyLocalization;
+import at.tuwien.telemedizin.dermadoc.entities.Case;
 import at.tuwien.telemedizin.dermadoc.entities.casedata.CaseInfo;
 import at.tuwien.telemedizin.dermadoc.entities.Patient;
+import at.tuwien.telemedizin.dermadoc.service.util.UtilCalculator;
+import at.tuwien.telemedizin.dermadoc.service.util.UtilFormat;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.effect.BlendMode;
 import javafx.scene.image.Image;
@@ -15,19 +22,24 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Lucas on 14.11.2015.
  */
 public class GCCaseInfo extends GridPane {
 
-    List<CaseInfo> caseInfos;
+    private Case aCase;
 
-    public GCCaseInfo() {
+    private Set<CaseInfo> caseInfos;
 
-        caseInfos = new ArrayList<>();
+    private CaseInfo actualVersion;
+
+    public GCCaseInfo(Case aCase) {
+
+        this.aCase = aCase;
+
+        caseInfos = new TreeSet<>(new CaseDataComparator());
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("gc_caseinfo_new.fxml"));
         loader.setRoot(this);
@@ -50,43 +62,84 @@ public class GCCaseInfo extends GridPane {
 
     @FXML AnchorPane apBodyLocalization;
     @FXML ImageView ivPain;
-
+    @FXML Label lbName;
+    @FXML Label lbGender;
+    @FXML Label lbSvnr;
+    @FXML Label lbAge;
+    @FXML Label lbCreated;
+    @FXML Label lbCaseName;
+    @FXML Label lbCaseDescription;
 
     private void update(CaseInfo caseInfo) {
 
+        actualVersion = caseInfo;
+
         //TEXT
-        //TODO
+        Patient p = (Patient) caseInfo.getAuthor();
+        lbName.setText(p.getName());
+        lbGender.setText(p.getGender().getAbbreviation());
+        lbSvnr.setText(p.getSvnr());
+        lbAge.setText(UtilCalculator.age(p.getBirthTime()) + " Y");
+        lbCreated.setText(UtilFormat.formatDate(caseInfo.getCreated()));
+        lbCaseName.setText(aCase.getName());
+        lbCaseDescription.setText(aCase.getDescription());
 
         //LOCALIZATION
-        ImageView main = new ImageView(utilBody.getMain());
-        main.setPreserveRatio(true);
-        main.setFitWidth(200);
-        ImageView mask = new ImageView(utilBody.getMask(caseInfo.getLocalization()));
-        mask.setPreserveRatio(true);
-        mask.setFitWidth(200);
 
-        mask.setBlendMode(BlendMode.ADD);
+        //all masks + main
+        ImageView[] mask = new ImageView[caseInfo.getLocalizations().size()+1];
 
-        Group blend = new Group(
-                main,
-                mask
-        );
+        mask[0] = new ImageView(utilBody.getMain());
+        mask[0].setPreserveRatio(true);
+        mask[0].setFitWidth(200);
 
-        apBodyLocalization.getChildren().add(blend);
+        int i = 1;
+        for(BodyLocalization bl : caseInfo.getLocalizations()) {
+            mask[i] = new ImageView(utilBody.getMask(bl));
+            mask[i].setPreserveRatio(true);
+            mask[i].setFitWidth(200);
+            mask[i].setBlendMode(BlendMode.MULTIPLY);
+            i++;
+        }
+
+        apBodyLocalization.getChildren().add(new Group(mask));
 
         //PAIN
         ivPain.setImage(utilPain.getImage(caseInfo.getPain()));
-    }
 
-    public void addCaseInfo(CaseInfo caseInfo) {
-
-        caseInfos.add(caseInfo);
-        for(CaseInfo ci : caseInfos) {
-            if (!ci.isObsolete()) {
-                update(ci);
-            }
+        //BUTTONS
+        if(utilSet.getPreviousElement(caseInfos, actualVersion) == null) {
+            btBack.setVisible(false);
+        }
+        else {
+            btBack.setVisible(true);
         }
 
+        if(utilSet.getNextElement(caseInfos, actualVersion) == null) {
+            btForward.setVisible(false);
+        }
+        else {
+            btForward.setVisible(true);
+        }
+    }
 
+    UtilSet<CaseInfo> utilSet = new UtilSet<>();
+
+    public void addCaseInfo(CaseInfo caseInfo) {
+        caseInfos.add(caseInfo);
+        update(utilSet.getLastElement(caseInfos));
+    }
+
+    @FXML Button btBack;
+    @FXML Button btForward;
+
+    @FXML
+    private void goBack() {
+        update(utilSet.getPreviousElement(caseInfos, actualVersion));
+    }
+
+    @FXML
+    private void goForward() {
+        update(utilSet.getNextElement(caseInfos, actualVersion));
     }
 }

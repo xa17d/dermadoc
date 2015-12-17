@@ -24,6 +24,6 @@ public class Icd10Diagnosis {
 
     @Override
     public String toString() {
-        return icd10Code + " - " + icd10Name;
+        return icd10Code + " - " + (icd10Name.length()+icd10Code.length() > 50 ? (icd10Name.substring(0,40) + "...") : icd10Name);
     }
 }
