@@ -91,4 +91,9 @@ public class GCDiagnosisView extends AGCCaseDataView {
     public void expand(boolean expand) {
         tpDiagnosis.setExpanded(expand);
     }
+
+    @Override
+    public CaseData getCaseData() {
+        return data;
+    }
 }

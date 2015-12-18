@@ -5,23 +5,38 @@ import at.tuwien.telemedizin.dermadoc.service.data.Icd10List;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBoxTreeItem;
 import javafx.scene.control.TreeItem;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
 import org.controlsfx.control.CheckTreeView;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
  * Created by Lucas on 17.12.2015.
  */
-public class GCDiagnosisList extends AnchorPane {
+public class GCDiagnosisList extends BorderPane {
+
+    @FXML private AnchorPane apTree;
+    @FXML private Button btClose;
 
     public GCDiagnosisList(ObservableList<Icd10Diagnosis> selectedList) {
 
-        super();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("gc_diagnosislist.fxml"));
+        loader.setRoot(this);
+        loader.setController(this);
+        try {
+            loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         List<Icd10Diagnosis> list = Icd10List.getAll();
         int[] level = Icd10List.getLevels();
@@ -74,6 +89,15 @@ public class GCDiagnosisList extends AnchorPane {
             }
         });
 
-        this.getChildren().add(checkTreeView);
+        AnchorPane.setBottomAnchor(checkTreeView, 0.0);
+        AnchorPane.setLeftAnchor(checkTreeView, 0.0);
+        AnchorPane.setRightAnchor(checkTreeView, 0.0);
+        AnchorPane.setTopAnchor(checkTreeView, 0.0);
+        apTree.getChildren().add(checkTreeView);
+    }
+
+    @FXML
+    private void close() {
+        ((Stage) btClose.getScene().getWindow()).close();
     }
 }

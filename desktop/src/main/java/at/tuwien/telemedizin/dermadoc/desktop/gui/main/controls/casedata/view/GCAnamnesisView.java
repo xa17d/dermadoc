@@ -69,4 +69,9 @@ public class GCAnamnesisView  extends AGCCaseDataView {
     public void expand(boolean expand) {
         tpAnamnesis.setExpanded(expand);
     }
+
+    @Override
+    public CaseData getCaseData() {
+        return data;
+    }
 }

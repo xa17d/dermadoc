@@ -80,9 +80,11 @@ public class GCAdviceEdit extends AGCCaseDataEdit {
         Stage dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.initOwner(controller.getStage());
-        Scene scene = new Scene(gcMedicationList, 300, 400);
+        Scene scene = new Scene(gcMedicationList, 500, 450);
         scene.getStylesheets().add(DesktopApplication.class.getResource("main.css").toExternalForm());
         dialog.setScene(scene);
+        dialog.setMinWidth(500);
+        dialog.setMinHeight(450);
         dialog.show();
 
         lbMedication.setOnMouseClicked(new EventHandler<MouseEvent>() {

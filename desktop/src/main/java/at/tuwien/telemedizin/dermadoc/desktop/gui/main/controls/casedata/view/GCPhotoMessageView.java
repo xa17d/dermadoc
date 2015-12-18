@@ -88,4 +88,9 @@ public class GCPhotoMessageView extends AGCCaseDataView {
     public void expand(boolean expand) {
         tpPhotos.setExpanded(expand);
     }
+
+    @Override
+    public CaseData getCaseData() {
+        return data;
+    }
 }

@@ -75,4 +75,9 @@ public class GCTextMessageView extends AGCCaseDataView {
     public void expand(boolean expand) {
         //do nothing
     }
+
+    @Override
+    public CaseData getCaseData() {
+        return data;
+    }
 }

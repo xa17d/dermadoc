@@ -91,4 +91,9 @@ public class GCAdviceView extends AGCCaseDataView {
     public void expand(boolean expand) {
         tpMedication.setExpanded(expand);
     }
+
+    @Override
+    public CaseData getCaseData() {
+        return data;
+    }
 }

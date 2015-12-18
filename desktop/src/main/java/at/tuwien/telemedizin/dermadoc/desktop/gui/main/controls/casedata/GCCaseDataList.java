@@ -139,6 +139,16 @@ public class GCCaseDataList extends VBox {
             public void onEvent(CaseData caseData) {
                 gcList.getChildren().remove(editComponent);
                 caseDataList.add(caseData);
+
+                //set old case data of same type obsolete
+                //TODO dirty
+                if(caseData instanceof Advice || caseData instanceof Diagnosis) {
+                    for(AGCCaseDataView cdv : getAllCaseDataViews()) {
+                        if(caseData.getClass().equals(cdv.getCaseData().getClass())) {
+                            cdv.setObsolete();
+                        }
+                    }
+                }
             }
         });
         this.getChildren().add(editComponent);
@@ -152,5 +162,16 @@ public class GCCaseDataList extends VBox {
                 cdv.expand(expand);
             }
         }
+    }
+
+    private List<AGCCaseDataView> getAllCaseDataViews() {
+
+        List<AGCCaseDataView> result = new ArrayList<>();
+        for(Node n : this.getChildren()) {
+            if(n instanceof AGCCaseDataView) {
+                result.add((AGCCaseDataView) n);
+            }
+        }
+        return result;
     }
 }

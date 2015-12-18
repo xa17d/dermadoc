@@ -72,16 +72,18 @@ public class GCDiagnosisEdit extends AGCCaseDataEdit {
             }
         });
 
-        //show medication list
+        //show icd10 list
         gcDiagnosisList = new GCDiagnosisList(diagnosisList);
         gcDiagnosisList.getStyleClass().add(this.getCaseStyle());
 
         Stage dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.initOwner(controller.getStage());
-        Scene scene = new Scene(gcDiagnosisList, 300, 400);
+        Scene scene = new Scene(gcDiagnosisList, 500, 450);
         scene.getStylesheets().add(DesktopApplication.class.getResource("main.css").toExternalForm());
         dialog.setScene(scene);
+        dialog.setMinWidth(500);
+        dialog.setMinHeight(450);
         dialog.show();
 
         lbDiagnosis.setOnMouseClicked(new EventHandler<MouseEvent>() {
