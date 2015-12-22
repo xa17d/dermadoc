@@ -61,6 +61,11 @@ public class NewCasePagerAdapter extends FragmentPagerAdapter {
         return pictureReceiver;
     }
 
+    public void addFragments(List<Fragment> fragmentList, List<String> titleList) {
+        this.fragmentList = fragmentList;
+        this.titleList = titleList;
+    }
+
 //    public Fragment getFragment(NewCasePagerEnum category) {
 //        switch(category) {
 //            case SYMPTOMS:

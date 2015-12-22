@@ -124,4 +124,17 @@
     <string name="label_edit_location_section_header_description">Specify Location(s):</string>
     <string name="hint_edit_location_description">Specify the position where the symptoms occur.</string>
 
+    <string name="label_edit_picture_description_section_header_description">Edit Picture Description</string>
+    <string name="hint_edit_picture_description_description">The description of the picture should at least specify the position and the approximate size of the shown area.</string>
+
+    <string name="label_edit_picture_description_field">Description</string>
+    <string name="title_picture_description_dialog">Picture Description</string>
+    <string name="title_activity_picture">PictureActivity</string>
+
+    <string name="option_pic_dialog_positive">OK</string>
+    <string name="label_no_description_touch_here"> &lt;no description found&gt; </string>
+
+    <string name="label_option_positive">Yes</string>
+    <string name="label_option_negative">No</string>
+
 </resources>

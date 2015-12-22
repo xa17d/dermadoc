@@ -1,8 +1,13 @@
 package at.tuwien.telemedizin.dermadoc.entities;
 
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+
 /**
  * Geographic location
  */
+@Embeddable
+
 public class GeoLocation {
 
     public GeoLocation() {  }
@@ -13,12 +18,15 @@ public class GeoLocation {
         this.longitude = longitude;
     }
 
+    @Column(nullable = true)
     private double latitude;
     public double getLatitude() { return latitude; }
 
+    @Column(nullable = true)
     private double longitude;
     public double getLongitude() { return longitude; }
 
+    @Column(name = "location", nullable = true)
     private String name;
     public String getName() { return name; }
 
@@ -54,5 +62,14 @@ public class GeoLocation {
      */
     private static double rad2deg(double rad) {
         return (rad * 180 / Math.PI);
+    }
+
+    @Override
+    public String toString() {
+        return "GeoLocation{" +
+                "latitude=" + latitude +
+                ", longitude=" + longitude +
+                ", name='" + name + '\'' +
+                '}';
     }
 }

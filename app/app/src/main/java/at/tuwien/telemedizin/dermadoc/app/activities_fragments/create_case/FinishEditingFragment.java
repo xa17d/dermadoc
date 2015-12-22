@@ -150,6 +150,8 @@ public class FinishEditingFragment extends Fragment {
 
                 // save the new case-object on the server
                 // TODO
+
+                ((NewCaseActivity)getActivity()).collectCaseData(); // TODO better without cast! (onAttach etc.)
             }
         });
 
@@ -182,4 +184,7 @@ public class FinishEditingFragment extends Fragment {
     }
 
 
+    public String getCaseName() {
+        return caseNameEditText.getText().toString();
+    }
 }

@@ -4,6 +4,7 @@ package at.tuwien.telemedizin.dermadoc.app.activities_fragments.create_case;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,8 +34,9 @@ import at.tuwien.telemedizin.dermadoc.entities.casedata.AnamnesisQuestionText;
  */
 public class EditAnamnesisFragment extends Fragment {
 
-
+    public static final String LOG_TAG = EditAnamnesisFragment.class.getSimpleName();
     private OnTabChangedInFragmentInterface tabChangeInterface;
+    private OnCaseDataRequestAndUpdateInterface caseDataInterface;
 
     private boolean anamnesisHintIsVisible;
 
@@ -71,29 +73,12 @@ public class EditAnamnesisFragment extends Fragment {
 
         }
 
-        this.anamnesisItem = mockAnamnesis(); // TODO
+        this.anamnesisItem = caseDataInterface.getAnamnesisForm();
         this.questionViews = new ArrayList<>();
     }
 
-    // TODO remove
-    private Anamnesis mockAnamnesis() {
 
-        AnamnesisQuestion q1 = new AnamnesisQuestionBool();
-        q1.setQuestion("Has your cat show similar symptoms?");
-        AnamnesisQuestion q2 = new AnamnesisQuestionText();
-        q2.setQuestion("What's the name of your cat?");
-        AnamnesisQuestion q3 = new AnamnesisQuestionText();
-        q3.setQuestion("Why didn't you name her \"Samtpfote\"?");
-        AnamnesisQuestion q4 = new AnamnesisQuestionBool();
-        q4.setQuestion("I just need another question for this test-list. You can ignore it and do not have to bother answering");
-        List<AnamnesisQuestion> qList = new ArrayList<>();
-        qList.add(q1);
-        qList.add(q2);
-        qList.add(q3);
-        qList.add(q4);
 
-        return new Anamnesis(0, Calendar.getInstance(), new Physician(), "what message", qList);
-    }
 
     @Override
     public void onAttach(Context context) {
@@ -102,6 +87,12 @@ public class EditAnamnesisFragment extends Fragment {
             tabChangeInterface = (OnTabChangedInFragmentInterface) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString() + " must implement " + OnTabChangedInFragmentInterface.class.getSimpleName());
+        }
+
+        try {
+            caseDataInterface = (OnCaseDataRequestAndUpdateInterface) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString() + " must implement " + OnCaseDataRequestAndUpdateInterface.class.getSimpleName());
         }
 
     }
@@ -175,6 +166,27 @@ public class EditAnamnesisFragment extends Fragment {
             questionViews.add(questionItemView);
             listRoot.addView(questionItemView);
         }
+    }
+
+    public Anamnesis getFilledAnamnesis() {
+        // get the data from the views
+        List<AnamnesisQuestion> questions = anamnesisItem.getQuestions();
+        for(int i = 0; i < questions.size(); i++) {
+            AnamnesisQuestion q = questions.get(i);
+            View qItemLayout = questionViews.get(i);
+            if (q instanceof AnamnesisQuestionBool) {
+                boolean firstOptionChecked = ((RadioButton)qItemLayout.findViewById(R.id.question_answer_1)).isChecked();
+                ((AnamnesisQuestionBool)q).setAnswer(firstOptionChecked);
+                Log.d(LOG_TAG, "answer " + i + " " + ((AnamnesisQuestionBool) anamnesisItem.getQuestions().get(i)).getAnswer());
+            } else {
+                String answerString = ((TextView)qItemLayout.findViewById(R.id.question_answer_text)).getText().toString();
+                ((AnamnesisQuestionText)q).setAnswer(answerString);
+                Log.d(LOG_TAG, "answer " + i + " " + ((AnamnesisQuestionText) anamnesisItem.getQuestions().get(i)).getAnswer());
+            }
+            // TODO do i have to remove and add the question-object to the list?
+
+        }
+        return anamnesisItem;
     }
 
 

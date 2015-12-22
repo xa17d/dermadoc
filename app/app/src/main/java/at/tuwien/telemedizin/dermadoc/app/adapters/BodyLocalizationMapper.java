@@ -17,7 +17,7 @@ import at.tuwien.telemedizin.dermadoc.entities.PainIntensity;
 public class BodyLocalizationMapper {
 
 
-    public static int[] getImageResource(BodyLocalization localization) {
+    public static int[] getImageMasksResource(BodyLocalization localization) {
 
         int[] resourceIdArray;
         List<Integer> resources = new ArrayList<Integer>();
@@ -143,6 +143,7 @@ public class BodyLocalizationMapper {
         }
         return resourceIdArray;
     }
+
 
     public static List<BodyLocalization> getBodyLocalizations(BodyLocalizationZoomHelper localization) {
 

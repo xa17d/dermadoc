@@ -47,8 +47,8 @@ public class CaseComparator implements Comparator<Case> {
     }
 
     private int compareNames(Case lhs, Case rhs) {
-        String lhsName = "TODO"; // TODO
-        String rhsName = "TODO"; // TODO
+        String lhsName = lhs.getName();
+        String rhsName = rhs.getName();
 
         return lhsName.compareTo(rhsName);
     }

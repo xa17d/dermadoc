@@ -3,6 +3,8 @@ package at.tuwien.telemedizin.dermadoc.entities;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
+import javax.persistence.*;
+
 /**
  * Abstract User
  */
@@ -11,23 +13,37 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         @JsonSubTypes.Type(value = Patient.class),
         @JsonSubTypes.Type(value = Physician.class)
 })
+@Entity
+@Table(name = "person")
+@Inheritance(strategy = InheritanceType.JOINED)
+// indexes = @Index(name="user_mail_constraint",columnList = "mail", unique = true))
 public abstract class User {
+
+    @Id
+    @GeneratedValue
+    @Column(name = "person_id")
     private long id;
     public long getId() { return id; }
     public void setId(long id) { this.id = id; }
 
+    @Column(nullable = false)
     private String mail;
     public String getMail() { return mail; }
     public void setMail(String mail) { this.mail = mail; }
 
+    @Column(nullable = false)
     private String password;
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
 
+    @Basic
+    @Column(name = "name")
     private String name;
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
 
+
+    @Embedded
     private GeoLocation location;
     public GeoLocation getLocation() { return location; }
     public void setLocation(GeoLocation location) { this.location = location; }

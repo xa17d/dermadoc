@@ -27,13 +27,15 @@
     <color name="tab_header_text_color">#dfdfdf</color>
 
 
+    <color name="secondary_light_color">#63d8fc</color>
+
     <!-- colors for the clickable-areas in location-image-fragment -->
-    <color name="location_area_head">#009eff</color>
-    <color name="location_area_torso">#fcff00</color>
-    <color name="location_area_arm_left">#ff7900</color>
-    <color name="location_area_arm_right">#00ff54</color>
-    <color name="location_area_legs">#ff0048</color>
-    <color name="location_area_back">#ff00f0</color>
+    <color name="location_area_1">#009eff</color> <!-- full body: head; but reused for other zoomed-parts -->
+    <color name="location_area_2">#fcff00</color> <!-- full body: torso; but reused for other zoomed-parts -->
+    <color name="location_area_3">#ff7900</color> <!-- full arm_left: head; but reused for other zoomed-parts -->
+    <color name="location_area_4">#00ff54</color> <!-- full arm_right: head; but reused for other zoomed-parts -->
+    <color name="location_area_5">#ff0048</color> <!-- full body: legs; but reused for other zoomed-parts -->
+    <color name="location_area_6">#ff00f0</color> <!-- full body: back; but reused for other zoomed-parts -->
 
 
 
