@@ -1,15 +1,13 @@
 package at.tuwien.telemedizin.dermadoc.entities;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.PrimaryKeyJoinColumn;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Calendar;
 
 /**
  * Patient
  */
 @Entity
+@Embeddable
 @Table(name = "patient")
 @PrimaryKeyJoinColumn(name = "person_id")
 public class Patient extends User {

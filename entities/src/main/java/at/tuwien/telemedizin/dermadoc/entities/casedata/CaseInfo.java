@@ -4,12 +4,17 @@ import at.tuwien.telemedizin.dermadoc.entities.BodyLocalization;
 import at.tuwien.telemedizin.dermadoc.entities.PainIntensity;
 import at.tuwien.telemedizin.dermadoc.entities.User;
 
+import javax.persistence.*;
 import java.util.Calendar;
 import java.util.List;
 
 /**
  * General case information.
  */
+@Entity
+@Embeddable
+@Table(name = "case_info")
+@PrimaryKeyJoinColumn(name = "id")
 public class CaseInfo extends CaseData {
 
     public CaseInfo(long id, Calendar created, User author, List<BodyLocalization> localizations, PainIntensity pain, double size) {
@@ -22,9 +27,18 @@ public class CaseInfo extends CaseData {
 
     public CaseInfo() {   }
 
+
     private List<BodyLocalization> localizations;
     public List<BodyLocalization> getLocalizations() { return localizations; }
 
+    //TODO 'localization' is deprecated, 'localizationS' should be used at backend, for more than one localization
+    @Column(name = "body_location")
+    @Deprecated
+    private BodyLocalization localization;
+    @Deprecated
+    public BodyLocalization getLocalization() { return localization; }
+
+    @Column(name = "pain_intensity")
     private PainIntensity pain;
     public PainIntensity getPain() { return pain; }
 
@@ -41,8 +55,4 @@ public class CaseInfo extends CaseData {
         this.pain = pain;
         this.size = size;
     }
-
-    @Deprecated
-    public BodyLocalization getLocalization() { return localization; }
-    private BodyLocalization localization;
 }

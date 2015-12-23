@@ -1,5 +1,6 @@
 package at.tuwien.telemedizin.dermadoc.entities;
 
+import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
@@ -8,6 +9,7 @@ import javax.persistence.Table;
  * Physician
  */
 @Entity
+@Embeddable
 @Table(name = "patient")
 @PrimaryKeyJoinColumn(name = "person_id")
 public class Physician extends User {
