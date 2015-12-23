@@ -61,7 +61,17 @@ public class GCAnamnesisView  extends AGCCaseDataView {
     }
 
     @Override
+    public boolean isObsolete() {
+        return data.isObsolete();
+    }
+
+    @Override
     public void expand(boolean expand) {
         tpAnamnesis.setExpanded(expand);
+    }
+
+    @Override
+    public CaseData getCaseData() {
+        return data;
     }
 }

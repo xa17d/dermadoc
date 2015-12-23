@@ -74,7 +74,7 @@ public class GCDiagnosisView extends AGCCaseDataView {
 
         lbMessage.setText(data.getMessage());
         lvDiagnosis.setItems(FXCollections.observableArrayList(data.getDiagnosisList()));
-        lvDiagnosis.setPrefHeight((data.getDiagnosisList().size()+1) * ROW_HEIGHT + 2);
+        lvDiagnosis.setPrefHeight((data.getDiagnosisList().size()+1) * ROW_HEIGHT + 4);
     }
 
     @Override
@@ -83,7 +83,17 @@ public class GCDiagnosisView extends AGCCaseDataView {
     }
 
     @Override
+    public boolean isObsolete() {
+        return data.isObsolete();
+    }
+
+    @Override
     public void expand(boolean expand) {
         tpDiagnosis.setExpanded(expand);
+    }
+
+    @Override
+    public CaseData getCaseData() {
+        return data;
     }
 }

@@ -74,13 +74,20 @@ public abstract class CaseData {
     public boolean getPrivate() { return isPrivate; }
     public void setPrivate(boolean isPrivate) { this.isPrivate = isPrivate; }
 
+    private boolean obsolete;
+    public boolean isObsolete() { return obsolete; }
+    public void setObsolete(boolean obsolete) { this.obsolete = obsolete; }
+
+    //TODO 'nextVersion' is deprecated, 'obsolete' should be used at backend
     //@Column(name="version_id")
     @MapsId
     @OneToOne
     @JoinColumn(name = "casedata_id")
+    @Deprecated
     private CaseData nextVersion;
+    @Deprecated
     public CaseData getNextVersion() { return nextVersion; }
+    @Deprecated
     public void setNextVersion(CaseData nextVersion) { this.nextVersion = nextVersion; }
 
-    private boolean isObsolete() { return (nextVersion != null); }
 }

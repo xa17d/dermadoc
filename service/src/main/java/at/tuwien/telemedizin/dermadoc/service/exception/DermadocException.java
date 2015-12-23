@@ -1,4 +1,4 @@
-package at.tuwien.telemedizin.dermadoc.desktop.exception;
+package at.tuwien.telemedizin.dermadoc.service.exception;
 
 /**
  * abstract exception for dermadoc project

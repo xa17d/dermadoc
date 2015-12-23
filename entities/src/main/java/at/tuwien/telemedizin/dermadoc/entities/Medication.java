@@ -11,6 +11,11 @@ public class Medication {
         this.name = name;
     }
 
+    public Medication(String name, String dosis) {
+        this.name = name;
+        this.dosis = dosis;
+    }
+
     private String name;
     public String getName() { return name; }
 

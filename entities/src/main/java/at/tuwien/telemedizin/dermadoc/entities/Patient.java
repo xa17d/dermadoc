@@ -22,7 +22,7 @@ public class Patient extends User {
     public void setBirthTime(Calendar birthTime) { this.birthTime = birthTime; }
 
     private Gender gender;
-    public Gender getGender() { return gender; }
+    public Gender getGender() { return gender != null ? gender : Gender.Undefined; }
     public void setGender(Gender gender) { this.gender = gender; }
 
     @Override

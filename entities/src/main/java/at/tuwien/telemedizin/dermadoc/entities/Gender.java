@@ -4,7 +4,25 @@ package at.tuwien.telemedizin.dermadoc.entities;
  * Gender
  */
 public enum Gender {
-    Undefined,
-    Male,
-    Female
+
+    Undefined("-", "undef"),
+    Male("M", "male"),
+    Female("F", "female");
+
+    private String shortName;
+    private String longName;
+
+    Gender(String shortName, String longName) {
+        this.shortName = shortName;
+        this.longName = longName;
+    }
+
+    public String getAbbreviation() {
+        return shortName;
+    }
+
+    @Override
+    public String toString() {
+        return longName;
+    }
 }

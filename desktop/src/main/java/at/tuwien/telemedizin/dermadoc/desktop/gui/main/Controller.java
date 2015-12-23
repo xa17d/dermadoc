@@ -1,10 +1,7 @@
 package at.tuwien.telemedizin.dermadoc.desktop.gui.main;
 
-import at.tuwien.telemedizin.dermadoc.desktop.exception.DermadocException;
-import at.tuwien.telemedizin.dermadoc.desktop.gui.main.controls.GCCaseTab;
-import at.tuwien.telemedizin.dermadoc.desktop.gui.main.controls.GCOpenCaseList;
-import at.tuwien.telemedizin.dermadoc.desktop.gui.main.controls.GCPatientList;
-import at.tuwien.telemedizin.dermadoc.desktop.gui.main.controls.GCPhysician;
+import at.tuwien.telemedizin.dermadoc.desktop.gui.main.controls.*;
+import at.tuwien.telemedizin.dermadoc.service.exception.DermadocException;
 import at.tuwien.telemedizin.dermadoc.desktop.gui.lock.LockStage;
 import at.tuwien.telemedizin.dermadoc.desktop.gui.main.controls.error.ErrorPane;
 import at.tuwien.telemedizin.dermadoc.desktop.gui.main.controls.handler.OpenMainTabEventHandler;
@@ -23,8 +20,6 @@ import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.*;
 import org.controlsfx.control.NotificationPane;
-
-import java.util.*;
 
 /**
  * main controller
@@ -198,13 +193,16 @@ public class Controller {
 
     public void lock() {
 
-        Stage mainStage = (Stage) bpMain.getScene().getWindow();
+        Stage mainStage = getStage();
         mainStage.close();
         showLockStage(mainStage);
     }
 
     public void showLockStage(Stage mainStage) {
-
         new LockStage(mainStage).show();
+    }
+
+    public Stage getStage() {
+        return (Stage) bpMain.getScene().getWindow();
     }
 }

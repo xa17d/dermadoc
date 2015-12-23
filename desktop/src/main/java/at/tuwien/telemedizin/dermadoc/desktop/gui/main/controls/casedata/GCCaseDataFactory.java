@@ -18,7 +18,6 @@ public class GCCaseDataFactory {
 
         mappingView.put(TextMessage.class, GCTextMessageView.class);
         mappingView.put(PhotoMessage.class, GCPhotoMessageView.class);
-        mappingView.put(CaseInfo.class, GCCaseInfoView.class);
         mappingView.put(Anamnesis.class, GCAnamnesisView.class);
         mappingView.put(Diagnosis.class, GCDiagnosisView.class);
         mappingView.put(Advice.class, GCAdviceView.class);

@@ -4,6 +4,7 @@ import at.tuwien.telemedizin.dermadoc.desktop.gui.main.Controller;
 import at.tuwien.telemedizin.dermadoc.desktop.gui.main.controls.casedata.GCCaseDataList;
 import at.tuwien.telemedizin.dermadoc.desktop.gui.main.controls.casedata.edit.AGCCaseDataEdit;
 import at.tuwien.telemedizin.dermadoc.desktop.gui.main.controls.casedata.edit.GCAdviceEdit;
+import at.tuwien.telemedizin.dermadoc.desktop.gui.main.controls.casedata.edit.GCDiagnosisEdit;
 import at.tuwien.telemedizin.dermadoc.desktop.gui.main.controls.casedata.edit.GCTextMessageEdit;
 import at.tuwien.telemedizin.dermadoc.entities.Case;
 import javafx.application.Platform;
@@ -13,7 +14,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 
@@ -62,10 +62,12 @@ public class GCCaseTab extends Tab {
         this.setText(aCase.getPatient().getName() + " - " + aCase.getName());
 
         //patient overview
-        tpPatientOverview.setContent(new GCCaseTabPatientOverview(aCase.getPatient()));
+        GCCaseInfo gcCaseInfo = new GCCaseInfo(aCase);
+        tpPatientOverview.setContent(gcCaseInfo);
+        tpPatientOverview.setExpanded(false);
 
         //load case data list
-        gcCaseDataList = new GCCaseDataList(controller.getCaseData(aCase));
+        gcCaseDataList = new GCCaseDataList(controller.getCaseData(aCase), gcCaseInfo);
 
         //show case data list in scroll pane
         spCaseData = new ScrollPane(gcCaseDataList);
@@ -103,19 +105,21 @@ public class GCCaseTab extends Tab {
     private void newFreetext() {
 
         checkForOpenEditsAndRemove();
-        gcCaseDataList.add(new GCTextMessageEdit(controller, aCase));
+        gcCaseDataList.addEdit(new GCTextMessageEdit(controller, aCase));
     }
 
     @FXML
     private void newDiagnosis() {
-        controller.showErrorMessage("ERROR - this button is not implemented yet!");
+
+        checkForOpenEditsAndRemove();
+        gcCaseDataList.addEdit(new GCDiagnosisEdit(controller, aCase));
     }
 
     @FXML
     private void newAdvice() {
 
         checkForOpenEditsAndRemove();
-        gcCaseDataList.add(new GCAdviceEdit(controller, aCase));
+        gcCaseDataList.addEdit(new GCAdviceEdit(controller, aCase));
     }
 
     private void checkForOpenEditsAndRemove() {
