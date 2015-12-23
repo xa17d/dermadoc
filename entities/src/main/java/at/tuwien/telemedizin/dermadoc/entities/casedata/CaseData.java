@@ -63,7 +63,7 @@ public abstract class CaseData {
     public void setCreated(Calendar created) { this.created = created; }
 
     //@Column(name="author_id")
-    @MapsId
+    //@MapsId
     @OneToOne
     @JoinColumn(name = "author_id")
     private User author;
