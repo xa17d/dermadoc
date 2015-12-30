@@ -5,7 +5,7 @@ apply plugin: 'java'
 apply plugin: 'spring-boot'
 apply plugin: 'io.spring.dependency-management'
 
-sourceCompatibility = 1.5
+sourceCompatibility = 1.8
 
 jar {
     manifest {

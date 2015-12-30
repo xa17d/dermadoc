@@ -18,7 +18,7 @@ public class Case {
     public Case() { }
 
     @Id
-    @GeneratedValue
+    //@GeneratedValue
     @Column(name = "case_id")
     private long id;
     public long getId() { return id; }

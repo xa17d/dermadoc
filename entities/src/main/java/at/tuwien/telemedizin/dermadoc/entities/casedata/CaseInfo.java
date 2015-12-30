@@ -28,6 +28,7 @@ public class CaseInfo extends CaseData {
     public CaseInfo() {   }
 
 
+    @ElementCollection
     private List<BodyLocalization> localizations;
     public List<BodyLocalization> getLocalizations() { return localizations; }
 

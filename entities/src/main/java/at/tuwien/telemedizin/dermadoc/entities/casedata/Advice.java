@@ -10,6 +10,7 @@ import java.util.List;
 /**
  * Advice from a Physician
  */
+
 public class Advice extends CaseData {
 
     public Advice(long id, Calendar created, User author, String message, List<Medication> medications) {

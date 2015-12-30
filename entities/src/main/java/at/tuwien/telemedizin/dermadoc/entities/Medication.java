@@ -3,6 +3,8 @@ package at.tuwien.telemedizin.dermadoc.entities;
 /**
  * Medication
  */
+//@Entity
+//@Table(name="medication")
 public class Medication {
 
     public Medication() {  }

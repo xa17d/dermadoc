@@ -10,7 +10,8 @@ import java.util.List;
 /**
  * Diagnosis by a physician
  */
-
+//@Entity
+//@Table(name="diagnosis")
 public class Diagnosis extends CaseData {
 
     public Diagnosis(long id, Calendar created, User author, String message, List<Icd10Diagnosis> diagnosisList) {
