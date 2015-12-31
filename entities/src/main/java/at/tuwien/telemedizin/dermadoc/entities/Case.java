@@ -25,17 +25,17 @@ public class Case {
     public void setId(long id) { this.id = id; }
 
     //@Column(name="patient_id")
-    @MapsId
+    // @MapsId
     @OneToOne
-    @JoinColumn(name = "patient_id")
+    //@JoinColumn(name = "patient_id")
     private Patient patient;
     public Patient getPatient() { return patient; }
     public void setPatient(Patient patient) { this.patient = patient; }
 
     //@Column(name="physician_id")
-    @MapsId
+    //@MapsId
     @OneToOne
-    @JoinColumn(name = "physician_id")
+    // @JoinColumn(name = "physician_id")
     private Physician physician;
     public Physician getPhysician() { return physician; }
     public void setPhysician(Physician physician) { this.physician = physician; }

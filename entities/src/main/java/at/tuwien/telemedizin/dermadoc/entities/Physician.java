@@ -10,7 +10,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Embeddable
-@Table(name = "patient")
+@Table(name = "physician")
 @PrimaryKeyJoinColumn(name = "person_id")
 public class Physician extends User {
     @Override

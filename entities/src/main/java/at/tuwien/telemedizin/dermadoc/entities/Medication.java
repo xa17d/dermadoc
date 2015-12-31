@@ -1,10 +1,14 @@
 package at.tuwien.telemedizin.dermadoc.entities;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 /**
  * Medication
  */
-//@Entity
-//@Table(name="medication")
+@Entity
+@Table(name = "medication")
 public class Medication {
 
     public Medication() {  }
@@ -18,6 +22,8 @@ public class Medication {
         this.dosis = dosis;
     }
 
+
+    @Id
     private String name;
     public String getName() { return name; }
 

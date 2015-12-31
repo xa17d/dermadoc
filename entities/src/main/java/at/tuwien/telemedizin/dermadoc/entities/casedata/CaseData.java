@@ -42,9 +42,9 @@ public abstract class CaseData {
     public long getId() { return id; }
     public void setId(long id) { this.id = id; }
 
-    @MapsId
+    //@MapsId
     @OneToOne
-    @JoinColumn(name = "case_id")
+    // @JoinColumn(name = "case_id")
     private Case caseId;
 
     public Case getCase() {
@@ -81,14 +81,14 @@ public abstract class CaseData {
 
     //TODO 'nextVersion' is deprecated, 'obsolete' should be used at backend
     //@Column(name="version_id")
-    @MapsId
-    @OneToOne
-    @JoinColumn(name = "casedata_id")
-    @Deprecated
-    private CaseData nextVersion;
-    @Deprecated
-    public CaseData getNextVersion() { return nextVersion; }
-    @Deprecated
-    public void setNextVersion(CaseData nextVersion) { this.nextVersion = nextVersion; }
+//    @MapsId
+//    @OneToOne
+//    @JoinColumn(name = "casedata_id")
+//    @Deprecated
+//    private CaseData nextVersion;
+//    @Deprecated
+//    public CaseData getNextVersion() { return nextVersion; }
+//    @Deprecated
+//    public void setNextVersion(CaseData nextVersion) { this.nextVersion = nextVersion; }
 
 }
