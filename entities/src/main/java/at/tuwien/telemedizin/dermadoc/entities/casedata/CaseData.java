@@ -36,15 +36,13 @@ public abstract class CaseData {
     public CaseData() { }
 
     @Id
-    //@GeneratedValue
     @Column(name = "casedata_id")
     private long id;
     public long getId() { return id; }
     public void setId(long id) { this.id = id; }
 
-    //@MapsId
+
     @OneToOne
-    // @JoinColumn(name = "case_id")
     private Case caseId;
 
     public Case getCase() {
@@ -62,8 +60,7 @@ public abstract class CaseData {
     public Calendar getCreated() { return created; }
     public void setCreated(Calendar created) { this.created = created; }
 
-    //@Column(name="author_id")
-    //@MapsId
+
     @OneToOne
     @JoinColumn(name = "author_id")
     private User author;
@@ -80,10 +77,7 @@ public abstract class CaseData {
     public void setObsolete(boolean obsolete) { this.obsolete = obsolete; }
 
     //TODO 'nextVersion' is deprecated, 'obsolete' should be used at backend
-    //@Column(name="version_id")
-//    @MapsId
 //    @OneToOne
-//    @JoinColumn(name = "casedata_id")
 //    @Deprecated
 //    private CaseData nextVersion;
 //    @Deprecated

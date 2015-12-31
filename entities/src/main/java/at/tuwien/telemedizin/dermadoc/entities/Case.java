@@ -18,24 +18,18 @@ public class Case {
     public Case() { }
 
     @Id
-    //@GeneratedValue
     @Column(name = "case_id")
     private long id;
     public long getId() { return id; }
     public void setId(long id) { this.id = id; }
 
-    //@Column(name="patient_id")
-    // @MapsId
     @OneToOne
-    //@JoinColumn(name = "patient_id")
     private Patient patient;
     public Patient getPatient() { return patient; }
     public void setPatient(Patient patient) { this.patient = patient; }
 
-    //@Column(name="physician_id")
-    //@MapsId
+
     @OneToOne
-    // @JoinColumn(name = "physician_id")
     private Physician physician;
     public Physician getPhysician() { return physician; }
     public void setPhysician(Physician physician) { this.physician = physician; }
