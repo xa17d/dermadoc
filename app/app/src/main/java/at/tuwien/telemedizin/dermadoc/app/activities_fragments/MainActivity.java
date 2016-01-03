@@ -145,7 +145,8 @@ public class MainActivity extends AppCompatActivity
             sortMenuItem.setVisible(true);
 
         } else if (id == R.id.nav_my_account) {
-            fragment = DummyContentFragment.newInstance("My Account ... soon"); // TODO replace with real fragment/function
+
+            Toast.makeText(getBaseContext(), "There will be a User-Fragment", Toast.LENGTH_LONG).show(); // TODO
             title = getString(R.string.nav_my_account);
             sortMenuItem.setVisible(false);
         } else if (id == R.id.nav_help) {
