@@ -3,13 +3,16 @@ package at.tuwien.telemedizin.dermadoc.app.activities_fragments.create_case;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -24,6 +27,10 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import org.springframework.http.StreamingHttpOutputMessage;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -31,12 +38,16 @@ import java.util.List;
 import at.tuwien.telemedizin.dermadoc.app.R;
 import at.tuwien.telemedizin.dermadoc.app.adapters.NewCasePagerAdapter;
 import at.tuwien.telemedizin.dermadoc.app.adapters.NewCasePagerEnum;
+import at.tuwien.telemedizin.dermadoc.app.entities.CaseValidationError;
+import at.tuwien.telemedizin.dermadoc.app.entities.CaseValidationErrorLevel;
 import at.tuwien.telemedizin.dermadoc.app.entities.PictureHelperEntity;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.CaseParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.PatientParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.PhysicianParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.AnamnesisParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.CaseInfoParc;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.PhotoMessageParc;
+import at.tuwien.telemedizin.dermadoc.app.helper.CaseDataExtractionHelper;
 import at.tuwien.telemedizin.dermadoc.app.helper.ToStringHelper;
 import at.tuwien.telemedizin.dermadoc.app.persistence.ContentProvider;
 import at.tuwien.telemedizin.dermadoc.app.persistence.ContentProviderFactory;
@@ -44,6 +55,7 @@ import at.tuwien.telemedizin.dermadoc.app.server_interface.ServerInterface;
 import at.tuwien.telemedizin.dermadoc.app.server_interface.ServerInterfaceFactory;
 import at.tuwien.telemedizin.dermadoc.entities.BodyLocalization;
 import at.tuwien.telemedizin.dermadoc.entities.PainIntensity;
+import at.tuwien.telemedizin.dermadoc.entities.casedata.PhotoMessage;
 
 
 public class NewCaseActivity extends AppCompatActivity implements OnCaseDataRequestAndUpdateInterface, OnTabChangedInFragmentInterface {
@@ -57,6 +69,8 @@ public class NewCaseActivity extends AppCompatActivity implements OnCaseDataRequ
     private CaseParc caseItem;
     private AnamnesisParc defaultAnamnesis;
     private List<PhysicianParc> nearbyPhysicians;
+
+    private List<CaseValidationError> currentErrorList;
 
     private LinearLayout mainContentLayout;
     private RelativeLayout loadingProgressLayout;
@@ -130,6 +144,8 @@ public class NewCaseActivity extends AppCompatActivity implements OnCaseDataRequ
         loadingProgressLayout = (RelativeLayout) findViewById(R.id.loading_data_progress_layout);
         loadingProgressLayout.setVisibility(View.GONE);
         loadingProgressInfoTextView = (TextView) findViewById(R.id.loading_data_info_text);
+
+        currentErrorList = new ArrayList<>(); // empty list
 
         // TODO change to this user
         setUpData();
@@ -286,22 +302,86 @@ public class NewCaseActivity extends AppCompatActivity implements OnCaseDataRequ
     @Override
     public CaseParc finishEditing() {
         String infoText = getString(R.string.hint_progress_collecting_data);
-        // collecting all input data
+        // 1) collecting all input data
         // show progress
         showProgress(true, infoText);
         CaseParc editedCaseItem = collectCaseData();
 
-        // TODO check if the data is correct
+        // 2) check if the data is correct
         infoText = getString(R.string.hint_progress_checking_data);
         loadingProgressInfoTextView.setText(infoText);
-        validateCase(editedCaseItem);
+        currentErrorList = validateCase(editedCaseItem);
+        // get rid of old errorMessages
+        finishFragment.resetErrorMessages();
 
-        // TODO send it to the server
-        infoText = getString(R.string.hint_progress_sending_data);
-        loadingProgressInfoTextView.setText(infoText);
-        sendDataToServer(editedCaseItem);
+        if (currentErrorList.size() > 0) {
+            // if the list.size > 0 -> Errors or warnings -> display them
+            finishFragment.addErrorMessages(currentErrorList);
+
+            // check if only warnings
+            if (onlyWarnings(currentErrorList)) {
+                // only warnings - ask the user if he wants to continue anyway
+                showValidationAlertDialog(editedCaseItem);
+
+            } else {
+                // there are errors which have to be fixed first
+                showProgress(false, null);
+                return editedCaseItem;
+            }
+        } else {
+            // 3) no errors -> send it to the server
+            infoText = getString(R.string.hint_progress_sending_data);
+            loadingProgressInfoTextView.setText(infoText);
+            sendDataToServer(editedCaseItem);
+        }
 
         return editedCaseItem;
+    }
+
+    @Override
+    public List<CaseValidationError> getCaseValidationErrors() {
+        return currentErrorList;
+    }
+
+    /**
+     * display a dialog and ask the user, if warnings should be ignored.
+     * If the warnings are ignored, the case is sent to the server. If the dialog is
+     * canceled, the user can fix the warnings.
+     * @param editedCaseItem
+     */
+    private void showValidationAlertDialog(CaseParc editedCaseItem) {
+        final CaseParc caseItemToSend = editedCaseItem;
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        // 2. Chain together various setter methods to set the dialog characteristics
+        builder.setMessage(R.string.msg_dialog_validation_warning)
+                .setTitle(R.string.title_dialog_validation_warning);
+        // Add the buttons
+        builder.setPositiveButton(R.string.option_continue, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User clicked OK button -> ignore the warnings and send the data
+                String infoText = getString(R.string.hint_progress_sending_data);
+                loadingProgressInfoTextView.setText(infoText);
+                sendDataToServer(caseItemToSend);
+            }
+        });
+        builder.setNegativeButton(R.string.option_cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User cancelled the dialog  - return to fix the warnings
+                showProgress(false, null);
+            }
+        });
+        // 3. Get the AlertDialog from create()
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private boolean onlyWarnings(List<CaseValidationError> errorList) {
+        for (CaseValidationError e : errorList) {
+            if (e.getLevel() == CaseValidationErrorLevel.ERROR) {
+                return false;
+            }
+        }
+        return true;
     }
 
 
@@ -328,17 +408,48 @@ public class NewCaseActivity extends AppCompatActivity implements OnCaseDataRequ
         // finish fragment
         String caseName = finishFragment.getCaseName();
 
-        // TODO CaseInfo
+        // TODO size
+
+        Calendar timestamp = Calendar.getInstance();
+
+        // CaseInfo
+        CaseInfoParc caseInfo = new CaseInfoParc(-1, timestamp,
+                caseItem.getPatient(), localizations, painIntensity, 0, symptomDescription);
 
         caseItem.setName(caseName);
         caseItem.setPhysician(physicianSelection);
-        // TODO add caseData/CaseInfo to case
+        caseItem.addDataElement(caseInfo);
+
+        // add picture elements
+        for (PictureHelperEntity p : pictures) {
+            // bitmap to byte array
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            p.getThumbnail().compress(Bitmap.CompressFormat.JPEG, 100, stream); // TODO full size image instead of thumbnail
+            byte[] byteArray = stream.toByteArray();
+            try {
+                stream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            // PictureHelperEntity to PhotoMessage
+            PhotoMessageParc photoMessageParc = new PhotoMessageParc(-1,
+                    timestamp, caseItem.getPatient(), p.getDescription(), byteArray);
+            // add photoMessage to caseItem
+            caseItem.addDataElement(photoMessageParc);
+        }
+
+        // add Anamnesis element
+        if (anamnesisForm != null) {
+            caseItem.addDataElement(anamnesisForm);
+        }
+
 
         Log.d(LOG_TAG, caseItem.toString());
-        Log.d(LOG_TAG, anamnesisForm.toString());
+        Log.d(LOG_TAG, anamnesisForm != null ? anamnesisForm.toString() : "anamnesis = null");
         Log.d(LOG_TAG, "symptoms: " + symptomDescription + ", Pain: " + painIntensity);
         Log.d(LOG_TAG, ToStringHelper.toStringPics(pictures));
         Log.d(LOG_TAG, ToStringHelper.toStringLoc(localizations));
+        Log.d(LOG_TAG, "caseItem - dataElements.size()=" + caseItem.getDataElements().size());
 
         return caseItem;
     }
@@ -348,22 +459,64 @@ public class NewCaseActivity extends AppCompatActivity implements OnCaseDataRequ
      * @param caseItemToValidate
      * @return
      */
-    public boolean validateCase(CaseParc caseItemToValidate) {
+    public List<CaseValidationError> validateCase(CaseParc caseItemToValidate) {
+        List<CaseValidationError> validationErrors = new ArrayList<>();
 
-        // TODO
+        CaseDataExtractionHelper<CaseInfoParc> caseInfoExtractor = new CaseDataExtractionHelper<>(CaseInfoParc.class);
+        List<CaseInfoParc> caseInfos = caseInfoExtractor.extractElements(caseItemToValidate.getDataElements());
+        if (caseInfos.size() > 0) {
+            CaseInfoParc lastCaseInfo = caseInfos.get(0);
 
-        // TODO: symptom description?
+            // symptom description?
+            String symptomDescription = lastCaseInfo.getSymptomDescription();
+            int minimalDescriptionLength = 1;
+            if (symptomDescription == null || symptomDescription.trim().length() < minimalDescriptionLength) {
+                validationErrors.add(new CaseValidationError(
+                        getString(R.string.msg_validation_error_description), CaseValidationErrorLevel.ERROR));
+            }
 
-        // TODO: pain-intensity selected?
+            // pain-intensity selected?
+            PainIntensity painIntensity = lastCaseInfo.getPain();
+            if (painIntensity == null || painIntensity == PainIntensity.Undefined) {
+                validationErrors.add(new CaseValidationError(
+                        getString(R.string.msg_validation_error_pain), CaseValidationErrorLevel.WARNING));
+            }
 
-        // TODO: >0 pictures added?
+            //  >0 locations selected
+            List<BodyLocalization> localizations = lastCaseInfo.getLocalizations();
+            if (localizations.size() == 0) {
+                validationErrors.add(new CaseValidationError(
+                        getString(R.string.msg_validation_error_localizations), CaseValidationErrorLevel.ERROR));
+            }
+        }
 
-        // TODO: >0 locations selected
+        // case name set?
+        String name = caseItemToValidate.getName();
+        if (name == null || name.trim().length() == 0) {
+                validationErrors.add(new CaseValidationError(
+                        getString(R.string.msg_validation_error_name), CaseValidationErrorLevel.ERROR));
+        }
 
-        // TODO: all anamnesis-questions answered?
+        // >0 pictures added?
+        CaseDataExtractionHelper<PhotoMessageParc> photoMessageExtractor = new CaseDataExtractionHelper<>(PhotoMessageParc.class);
+        List<PhotoMessageParc> pictures = photoMessageExtractor.extractElements(caseItemToValidate.getDataElements());
+        if (pictures.size() == 0) {
+            validationErrors.add(new CaseValidationError(
+                    getString(R.string.msg_validation_error_pictures), CaseValidationErrorLevel.WARNING));
+        }
 
-        // TODO: case name set?
-        return false;
+        // all anamnesis-questions answered?
+        CaseDataExtractionHelper<AnamnesisParc> anamnesisDataExtractor = new CaseDataExtractionHelper<>(AnamnesisParc.class);
+        List<AnamnesisParc> anamnesisList = anamnesisDataExtractor.extractElements(caseItemToValidate.getDataElements());
+        if (anamnesisList.size() > 0) {
+            AnamnesisParc lastAnamnesis = anamnesisList.get(0);
+            // TODO is it really a good idea to test all questions for answers? TODO
+//            validationErrors.add(new CaseValidationError(
+//                    getString(R.string.msg_validation_error_pictures), CaseValidationErrorLevel.WARNING));
+        }
+
+
+        return validationErrors;
     }
 
 

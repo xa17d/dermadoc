@@ -6,7 +6,11 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.Calendar;
+import java.util.LinkedList;
+import java.util.List;
 
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.AdviceParc;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.CaseDataParc;
 import at.tuwien.telemedizin.dermadoc.app.helper.FormatHelper;
 import at.tuwien.telemedizin.dermadoc.app.helper.ParcelableHelper;
 import at.tuwien.telemedizin.dermadoc.entities.Case;
@@ -25,6 +29,7 @@ public class CaseParc implements Parcelable {
         this.id = id;
         this.patient = patient;
         this.created = created;
+        this.dataElements = new LinkedList<>();
     }
 
     private long id;
@@ -48,6 +53,26 @@ public class CaseParc implements Parcelable {
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
 
+    private List<CaseDataParc> dataElements;
+    public List<CaseDataParc> getDataElements() {
+        return dataElements;
+    }
+    public void setDataElements(List<CaseDataParc> dataElements) {
+        this.dataElements = dataElements;
+    }
+
+    /**
+     * adds the element at the first position
+     * @param dataElement
+     */
+    public void addDataElement(CaseDataParc dataElement) {
+        this.dataElements.add(0, dataElement); // always add at the first position
+    }
+
+    public CaseDataParc getDataElement(int position) {
+        return this.dataElements.get(position);
+    }
+
     /**
      * mapping constructor
      */
@@ -57,6 +82,8 @@ public class CaseParc implements Parcelable {
         this.physician = new PhysicianParc(caseItem.getPhysician());
         this.status = caseItem.getStatus();
         this.name = caseItem.getName();
+        // dataElements // TODO!!!!!
+        dataElements = new LinkedList<>();
     }
 
     @Override
@@ -68,6 +95,7 @@ public class CaseParc implements Parcelable {
                 ", created=" + FormatHelper.calendarToDateFormatString(created) +
                 ", status=" + status +
                 ", name='" + name + '\'' +
+                ", dataElements nb=" + dataElements.size() +
                 '}';
     }
 
@@ -88,6 +116,9 @@ public class CaseParc implements Parcelable {
 
         this.patient = in.readParcelable(PatientParc.class.getClassLoader());
         this.physician = in.readParcelable(PhysicianParc.class.getClassLoader());
+
+        dataElements = new LinkedList<>();
+        in.readList(dataElements, null);
     }
 
     @Override
@@ -112,6 +143,9 @@ public class CaseParc implements Parcelable {
 
         dest.writeParcelable(patient, flags);
         dest.writeParcelable(physician, flags);
+
+        // data Elements
+        dest.writeList(dataElements);
     }
 
     // this is used to regenerate your object. All Parcelables must have a CREATOR that implements these two methods

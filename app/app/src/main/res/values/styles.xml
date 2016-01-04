@@ -110,4 +110,15 @@
         <!-- todo -->
     </style>
 
+    <style name="ErrorListItemHeaderText" >
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">14sp</item>
+        <!-- todo -->
+    </style>
+
+    <style name="ErrorListItemInfoText" >
+        <item name="android:textSize">18sp</item>
+        <!-- todo -->
+    </style>
+
 </resources>

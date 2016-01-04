@@ -157,4 +157,15 @@
 
     <string name="hint_loading">loading...</string>
 
+    <!-- // case validation error -->
+    <string name="msg_validation_error_description">Insufficient symptom description</string>
+    <string name="msg_validation_error_pain">No pain intensity selected</string>
+    <string name="msg_validation_error_localizations">No localizations selected</string>
+    <string name="msg_validation_error_name">Insufficient case name</string>
+    <string name="msg_validation_error_pictures">No pictures added</string>
+
+    <string name="title_dialog_validation_warning">Validation Warnings</string>
+    <string name="msg_dialog_validation_warning">Some warnings regarding the edited information occurred. Do you want to continue anyway?</string>
+    <string name="option_continue">Continue</string>
+
 </resources>

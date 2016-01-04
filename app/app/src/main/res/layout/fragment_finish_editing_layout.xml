@@ -132,6 +132,15 @@
                </LinearLayout>
 
 
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:layout_marginTop="4dp"
+            android:id="@+id/error_list_layout">
+
+        </LinearLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"

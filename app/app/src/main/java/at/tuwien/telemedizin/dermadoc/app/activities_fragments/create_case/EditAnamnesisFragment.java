@@ -174,6 +174,11 @@ public class EditAnamnesisFragment extends Fragment {
 
     public AnamnesisParc getFilledAnamnesis() {
         // get the data from the views
+        // not possible, if onCreate was never called - check
+        if (anamnesisItem == null) {
+            return null;
+        }
+
         List<AnamnesisQuestionParc> questions = anamnesisItem.getQuestions();
         for(int i = 0; i < questions.size(); i++) {
             AnamnesisQuestionParc q = questions.get(i);

@@ -4,12 +4,14 @@ package at.tuwien.telemedizin.dermadoc.app.activities_fragments.create_case;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -19,6 +21,8 @@ import java.util.List;
 
 import at.tuwien.telemedizin.dermadoc.app.R;
 import at.tuwien.telemedizin.dermadoc.app.adapters.PainAssessmentArrayAdapter;
+import at.tuwien.telemedizin.dermadoc.app.entities.CaseValidationError;
+import at.tuwien.telemedizin.dermadoc.app.entities.CaseValidationErrorLevel;
 import at.tuwien.telemedizin.dermadoc.entities.PainIntensity;
 
 /**
@@ -48,6 +52,8 @@ public class FinishEditingFragment extends Fragment {
 
     private ImageView caseNameHelpIcon;
     private TextView caseNameHelpText;
+
+    private LinearLayout errorMessagesLayout;
 
 
     /**
@@ -150,17 +156,47 @@ public class FinishEditingFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                // create a case-object with all the actual parameters
-                // TODO
-
-                // save the new case-object on the server
-                // TODO
-
                  caseDataInterface.finishEditing(); // TODO better without cast! (onAttach etc.)
             }
         });
 
+        errorMessagesLayout = (LinearLayout) v.findViewById(R.id.error_list_layout);
+        addErrorMessages(caseDataInterface.getCaseValidationErrors());
+
         return v;
+    }
+
+    public void resetErrorMessages() {
+        errorMessagesLayout.removeAllViewsInLayout();
+    }
+
+    /**
+     * adds the error-items and displays them
+     * @param errorList
+     */
+    public void addErrorMessages(List<CaseValidationError> errorList) {
+        for (CaseValidationError e : errorList) {
+            addDataViewToList(e, errorMessagesLayout, getActivity().getLayoutInflater());
+        }
+    }
+
+    private void addDataViewToList(CaseValidationError errorItem, LinearLayout root, LayoutInflater inflater) {
+        View errorView = inflater.inflate(R.layout.case_error_list_item, null, false);
+        // set textElements
+        TextView headerTextView = (TextView) errorView.findViewById(R.id.element_header_textView);
+        TextView infoTextView = (TextView) errorView.findViewById(R.id.element_info_textView);
+
+        headerTextView.setText(errorItem.getLevel().toString());
+        infoTextView.setText(errorItem.getMessage());
+
+        // setBackgroundColor according to error-level
+        if (errorItem.getLevel() == CaseValidationErrorLevel.ERROR) {
+            errorView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.error_color));
+        } else {
+            errorView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.warning_color));
+        }
+
+        root.addView(errorView);
     }
 
 

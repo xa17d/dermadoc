@@ -14,6 +14,7 @@ import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.UserParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.AnamnesisQuestionBoolParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.AnamnesisQuestionParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.AnamnesisQuestionTextParc;
+import at.tuwien.telemedizin.dermadoc.entities.BodyLocalization;
 import at.tuwien.telemedizin.dermadoc.entities.Icd10Diagnosis;
 import at.tuwien.telemedizin.dermadoc.entities.Medication;
 import at.tuwien.telemedizin.dermadoc.entities.Patient;
@@ -92,5 +93,12 @@ public class ParcelableHelper {
             diagParcList.add(new Icd10DiagnosisParc(d));
         }
         return diagParcList;
+    }
+
+    public static List<BodyLocalization> mapLocalizationToList(BodyLocalization bodyLocalization) {
+        List<BodyLocalization> localizations = new ArrayList<BodyLocalization>();
+        localizations.add(bodyLocalization);
+        return localizations;
+
     }
 }

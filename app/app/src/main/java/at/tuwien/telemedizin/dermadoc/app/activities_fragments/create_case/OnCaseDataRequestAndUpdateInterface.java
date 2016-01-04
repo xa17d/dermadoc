@@ -2,6 +2,7 @@ package at.tuwien.telemedizin.dermadoc.app.activities_fragments.create_case;
 
 import java.util.List;
 
+import at.tuwien.telemedizin.dermadoc.app.entities.CaseValidationError;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.CaseParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.PhysicianParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.AnamnesisParc;
@@ -20,6 +21,8 @@ public interface OnCaseDataRequestAndUpdateInterface {
     public List<PhysicianParc> getNearbyPhysicians();
 
     public CaseParc finishEditing();
+
+    public List<CaseValidationError> getCaseValidationErrors();
 
 
 
