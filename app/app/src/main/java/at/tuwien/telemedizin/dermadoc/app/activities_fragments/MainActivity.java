@@ -26,14 +26,16 @@ import at.tuwien.telemedizin.dermadoc.app.activities_fragments.create_case.NewCa
 import at.tuwien.telemedizin.dermadoc.app.adapters.MyCasesPagerEnum;
 import at.tuwien.telemedizin.dermadoc.app.comparators.CaseSortCategory;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.CaseParc;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.PatientParc;
 import at.tuwien.telemedizin.dermadoc.app.persistence.ContentProvider;
 import at.tuwien.telemedizin.dermadoc.app.persistence.ContentProviderFactory;
 import at.tuwien.telemedizin.dermadoc.entities.CaseStatus;
 import at.tuwien.telemedizin.dermadoc.entities.Gender;
 import at.tuwien.telemedizin.dermadoc.entities.GeoLocation;
+import at.tuwien.telemedizin.dermadoc.entities.User;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, CaseListFragment.OnCaseListEventListener{
+        implements NavigationView.OnNavigationItemSelectedListener, CaseListFragment.OnCaseListEventListener, UserDataCallbackInterface {
 
     private List<CaseParc> currentCaseList;
     private List<CaseParc> closedCaseList;
@@ -42,6 +44,8 @@ public class MainActivity extends AppCompatActivity
 
     // To hide the sort-menu-item whenever fragments are changed etc.
     private MenuItem sortMenuItem;
+
+    private PatientParc currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +91,9 @@ public class MainActivity extends AppCompatActivity
         ContentProvider cP = ContentProviderFactory.getContentProvider();
         currentCaseList = cP.getCurrentCasesOfUser();
         closedCaseList = cP.getCurrentCasesOfUser(); // TODO for testing purpose - remove or replace
+
+        // TODO load User Data
+        currentUser = new PatientParc();
     }
 
 
@@ -146,7 +153,8 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_my_account) {
 
-            Toast.makeText(getBaseContext(), "There will be a User-Fragment", Toast.LENGTH_LONG).show(); // TODO
+            fragment = UserDataOverviewFragment.newInstance();
+//            Toast.makeText(getBaseContext(), "There will be a User-Fragment", Toast.LENGTH_LONG).show(); // TODO
             title = getString(R.string.nav_my_account);
             sortMenuItem.setVisible(false);
         } else if (id == R.id.nav_help) {
@@ -196,4 +204,8 @@ public class MainActivity extends AppCompatActivity
         this.caseListSortCategory = caseSortCategory;
     }
 
+    @Override
+    public PatientParc getUser() {
+        return currentUser;
+    }
 }

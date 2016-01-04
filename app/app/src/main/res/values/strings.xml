@@ -143,5 +143,9 @@
     <string name="label_user_id">Id</string>
     <string name="label_user_mail">Mail</string>
     <string name="label_user_location">location</string>
+    <string name="label_user_svnr">SVNR</string>
+    <string name="label_user_gender">Gender</string>
+
+    <string name="hint_loading">loading...</string>
 
 </resources>

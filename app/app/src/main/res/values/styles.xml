@@ -99,4 +99,15 @@
         <!-- todo -->
     </style>
 
+    <style name="UserDataListItemHeaderText" >
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">14sp</item>
+        <!-- todo -->
+    </style>
+
+    <style name="UserDataListItemText" >
+        <item name="android:textSize">18sp</item>
+        <!-- todo -->
+    </style>
+
 </resources>
