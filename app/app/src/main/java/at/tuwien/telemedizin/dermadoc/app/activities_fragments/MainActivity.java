@@ -46,22 +46,32 @@ import at.tuwien.telemedizin.dermadoc.entities.GeoLocation;
 import at.tuwien.telemedizin.dermadoc.entities.Patient;
 import at.tuwien.telemedizin.dermadoc.entities.rest.AuthenticationData;
 import at.tuwien.telemedizin.dermadoc.entities.rest.AuthenticationToken;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.CaseParc;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.PatientParc;
+import at.tuwien.telemedizin.dermadoc.app.persistence.ContentProvider;
+import at.tuwien.telemedizin.dermadoc.app.persistence.ContentProviderFactory;
+import at.tuwien.telemedizin.dermadoc.entities.CaseStatus;
+import at.tuwien.telemedizin.dermadoc.entities.Gender;
+import at.tuwien.telemedizin.dermadoc.entities.GeoLocation;
+import at.tuwien.telemedizin.dermadoc.entities.User;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, CaseListFragment.OnCaseListEventListener{
+        implements NavigationView.OnNavigationItemSelectedListener, CaseListFragment.OnCaseListEventListener, UserDataCallbackInterface {
+
 
     public static final String LOG_TAG = MainActivity.class.getSimpleName();
 
     private Patient user; // the currently active user
 
-    private List<Case> currentCaseList;
-    private List<Case> closedCaseList;
+    private List<CaseParc> currentCaseList;
+    private List<CaseParc> closedCaseList;
     private ServerInterface serverInterface;
 
     public static final String TOKEN_INTENT_KEY = MainActivity.class.getName() + "TOKEN_INTENT";
     public static final String TOKEN_TYPE_INTENT_KEY = MainActivity.class.getName() + "TOKEN_TYPE_INTENT";
 
     private AuthenticationToken authenticationToken;
+
 
     private CaseSortCategory caseListSortCategory; // set when a sort is executed
 
@@ -73,6 +83,8 @@ public class MainActivity extends AppCompatActivity
     private TextView loadingProgressInfoTextView;
 
     private LoadUserDataTask loadUserDataTask;
+    private PatientParc currentUser;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,6 +155,9 @@ public class MainActivity extends AppCompatActivity
         ContentProvider cP = ContentProviderFactory.getContentProvider();
         currentCaseList = cP.getCurrentCasesOfUser();
         closedCaseList = cP.getCurrentCasesOfUser(); // TODO for testing purpose - remove or replace
+
+        // TODO load User Data
+        currentUser = new PatientParc();
     }
 
     /**
@@ -228,7 +243,9 @@ public class MainActivity extends AppCompatActivity
             sortMenuItem.setVisible(true);
 
         } else if (id == R.id.nav_my_account) {
-            fragment = DummyContentFragment.newInstance("My Account ... soon"); // TODO replace with real fragment/function
+
+            fragment = UserDataOverviewFragment.newInstance();
+//            Toast.makeText(getBaseContext(), "There will be a User-Fragment", Toast.LENGTH_LONG).show(); // TODO
             title = getString(R.string.nav_my_account);
             sortMenuItem.setVisible(false);
         } else if (id == R.id.nav_help) {
@@ -257,7 +274,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public List<Case> onListRequest(long listKey) {
+    public List<CaseParc> onListRequest(long listKey) {
         if (listKey == MyCasesPagerEnum.CURRENT.getKey()) {
             return currentCaseList;
         } else if (listKey == MyCasesPagerEnum.OLD.getKey()) {
@@ -375,4 +392,8 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    @Override
+    public PatientParc getUser() {
+        return currentUser;
+    }
 }

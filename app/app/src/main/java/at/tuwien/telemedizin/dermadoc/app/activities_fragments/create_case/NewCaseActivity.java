@@ -32,17 +32,19 @@ import at.tuwien.telemedizin.dermadoc.app.R;
 import at.tuwien.telemedizin.dermadoc.app.adapters.NewCasePagerAdapter;
 import at.tuwien.telemedizin.dermadoc.app.adapters.NewCasePagerEnum;
 import at.tuwien.telemedizin.dermadoc.app.entities.PictureHelperEntity;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.CaseParc;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.PatientParc;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.PhysicianParc;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.AnamnesisParc;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.CaseInfoParc;
 import at.tuwien.telemedizin.dermadoc.app.helper.ToStringHelper;
 import at.tuwien.telemedizin.dermadoc.app.persistence.ContentProvider;
 import at.tuwien.telemedizin.dermadoc.app.persistence.ContentProviderFactory;
 import at.tuwien.telemedizin.dermadoc.app.server_interface.ServerInterface;
 import at.tuwien.telemedizin.dermadoc.app.server_interface.ServerInterfaceFactory;
 import at.tuwien.telemedizin.dermadoc.entities.BodyLocalization;
-import at.tuwien.telemedizin.dermadoc.entities.Case;
 import at.tuwien.telemedizin.dermadoc.entities.PainIntensity;
-import at.tuwien.telemedizin.dermadoc.entities.Patient;
-import at.tuwien.telemedizin.dermadoc.entities.Physician;
-import at.tuwien.telemedizin.dermadoc.entities.casedata.Anamnesis;
+
 
 public class NewCaseActivity extends AppCompatActivity implements OnCaseDataRequestAndUpdateInterface, OnTabChangedInFragmentInterface {
 
@@ -52,8 +54,9 @@ public class NewCaseActivity extends AppCompatActivity implements OnCaseDataRequ
     public static final int SELECT_FILE = 102;
 
 
-    private Case caseItem;
-    private Anamnesis defaultAnamnesis;
+    private CaseParc caseItem;
+    private AnamnesisParc defaultAnamnesis;
+    private List<PhysicianParc> nearbyPhysicians;
 
     private LinearLayout mainContentLayout;
     private RelativeLayout loadingProgressLayout;
@@ -168,11 +171,15 @@ public class NewCaseActivity extends AppCompatActivity implements OnCaseDataRequ
     private void setUpData() {
         ContentProvider cP = ContentProviderFactory.getContentProvider();
 
-        defaultAnamnesis = cP.getAnamnesisForm();
-        Patient user = cP.getCurrentUser();
+        defaultAnamnesis = cP.getAnamnesisForm(); // TODO get data from server?
+        PatientParc user = cP.getCurrentUser();
         Calendar cal = Calendar.getInstance();
 
-        caseItem = new Case(-1, user, cal);
+        caseItem = new CaseParc(-1, user, cal);
+
+        nearbyPhysicians = new ArrayList<>();
+        // TODO get data from server
+
     }
 
     /**
@@ -255,19 +262,19 @@ public class NewCaseActivity extends AppCompatActivity implements OnCaseDataRequ
     }
 
     @Override
-    public Anamnesis getAnamnesisForm() {
+    public AnamnesisParc getAnamnesisForm() {
 
         return defaultAnamnesis;
     }
 
     @Override
-    public void updateAnamnesis(Anamnesis anamnesis) {
-        // TODO
+    public CaseParc getCase() {
+        return caseItem;
     }
 
     @Override
-    public Case getCase() {
-        return caseItem;
+    public List<PhysicianParc> getNearbyPhysicians() {
+        return nearbyPhysicians;
     }
 
     /**
@@ -276,25 +283,29 @@ public class NewCaseActivity extends AppCompatActivity implements OnCaseDataRequ
      * checks the input data for missing information
      * sends the data to the server
      */
-    public void finishEditing() {
+    @Override
+    public CaseParc finishEditing() {
         String infoText = getString(R.string.hint_progress_collecting_data);
         // collecting all input data
         // show progress
         showProgress(true, infoText);
-        collectCaseData();
+        CaseParc editedCaseItem = collectCaseData();
 
         // TODO check if the data is correct
         infoText = getString(R.string.hint_progress_checking_data);
         loadingProgressInfoTextView.setText(infoText);
-        checkCollectedData();
+        validateCase(editedCaseItem);
 
         // TODO send it to the server
         infoText = getString(R.string.hint_progress_sending_data);
         loadingProgressInfoTextView.setText(infoText);
-        sendDataToServer();
+        sendDataToServer(editedCaseItem);
+
+        return editedCaseItem;
     }
 
-    public void collectCaseData() {
+
+    public CaseParc collectCaseData() {
 
         Log.d(LOG_TAG, "collectCaseData()");
 
@@ -309,37 +320,57 @@ public class NewCaseActivity extends AppCompatActivity implements OnCaseDataRequ
         List<BodyLocalization> localizations = locationFragment.getSelectedBodyLocalizations();
 
         // anamnesis data
-        Anamnesis anamnesisForm = anamnesisFragmen.getFilledAnamnesis();
+        AnamnesisParc anamnesisForm = anamnesisFragmen.getFilledAnamnesis();
 
         // physician fragment
-        Physician physicianSelection = physicianSelectionFragment.getSelectedPhysician();
+        PhysicianParc physicianSelection = physicianSelectionFragment.getSelectedPhysician();
 
         // finish fragment
         String caseName = finishFragment.getCaseName();
 
+        // TODO CaseInfo
+
         caseItem.setName(caseName);
         caseItem.setPhysician(physicianSelection);
+        // TODO add caseData/CaseInfo to case
 
-        Log.d(LOG_TAG, ToStringHelper.toString(caseItem));
-        Log.d(LOG_TAG, ToStringHelper.toString(anamnesisForm));
+        Log.d(LOG_TAG, caseItem.toString());
+        Log.d(LOG_TAG, anamnesisForm.toString());
         Log.d(LOG_TAG, "symptoms: " + symptomDescription + ", Pain: " + painIntensity);
         Log.d(LOG_TAG, ToStringHelper.toStringPics(pictures));
         Log.d(LOG_TAG, ToStringHelper.toStringLoc(localizations));
 
+        return caseItem;
     }
 
     /**
-     * checks the collected input-data for missing information
-     * and displays a warning message to the user
+     * checks the case for missing information
+     * @param caseItemToValidate
+     * @return
      */
-    private void checkCollectedData() {
+    public boolean validateCase(CaseParc caseItemToValidate) {
 
+        // TODO
+
+        // TODO: symptom description?
+
+        // TODO: pain-intensity selected?
+
+        // TODO: >0 pictures added?
+
+        // TODO: >0 locations selected
+
+        // TODO: all anamnesis-questions answered?
+
+        // TODO: case name set?
+        return false;
     }
+
 
     /**
      * starts a async-task and send the data to the server
      */
-    private void sendDataToServer() {
+    private void sendDataToServer(CaseParc caseItem) {
         loadPhysicianListAsyncTask = new LoadPhysicianListAsyncTask(this);
         loadPhysicianListAsyncTask.execute((Void) null);
     }
@@ -397,7 +428,7 @@ public class NewCaseActivity extends AppCompatActivity implements OnCaseDataRequ
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
-    public class LoadPhysicianListAsyncTask extends AsyncTask<Void, Void, List<Physician>> {
+    public class LoadPhysicianListAsyncTask extends AsyncTask<Void, Void, List<PhysicianParc>> {
         private NewCaseActivity activity;
 
         private String outp;
@@ -407,10 +438,10 @@ public class NewCaseActivity extends AppCompatActivity implements OnCaseDataRequ
         }
 
         @Override
-        protected List<Physician> doInBackground(Void... params) {
+        protected List<PhysicianParc> doInBackground(Void... params) {
             Log.d(LOG_TAG, "doInBackground()");
 
-            List<Physician> physicianList = new ArrayList<>();
+            List<PhysicianParc> physicianList = new ArrayList<>();
 
             ServerInterface sI = ServerInterfaceFactory.getInstance();
             // TODO
@@ -428,7 +459,7 @@ public class NewCaseActivity extends AppCompatActivity implements OnCaseDataRequ
         }
 
         @Override
-        protected void onPostExecute(final List<Physician> physicianList) {
+        protected void onPostExecute(final List<PhysicianParc> physicianList) {
             Log.d(LOG_TAG,"onPostExecute() physicianList: " + (physicianList != null ? physicianList.size() : null));
             loadPhysicianListAsyncTask = null;
             showProgress(false);

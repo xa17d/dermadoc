@@ -17,10 +17,9 @@ import java.util.List;
 import at.tuwien.telemedizin.dermadoc.app.R;
 import at.tuwien.telemedizin.dermadoc.app.activities_fragments.case_specific.CaseActivity;
 import at.tuwien.telemedizin.dermadoc.app.adapters.CaseListAdapter;
-import at.tuwien.telemedizin.dermadoc.app.comparators.CaseComparator;
+import at.tuwien.telemedizin.dermadoc.app.comparators.CaseParcComparator;
 import at.tuwien.telemedizin.dermadoc.app.comparators.CaseSortCategory;
-import at.tuwien.telemedizin.dermadoc.app.entities.CaseEntity;
-import at.tuwien.telemedizin.dermadoc.entities.Case;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.CaseParc;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -31,12 +30,11 @@ public class CaseListFragment extends Fragment {
 
     public static final String LOG_TAG = CaseListFragment.class.getSimpleName();
 
-    String param1;
 
     private static final String ARG_LIST_KEY = "listKey";
     private long listKey;
 
-    private List<Case> listValues;
+    private List<CaseParc> listValues;
 
     private ListView listView;
     private CaseListAdapter adapter;
@@ -96,7 +94,7 @@ public class CaseListFragment extends Fragment {
 
                 Intent intent = new Intent(getContext(), CaseActivity.class);
 
-                intent.putExtra(CaseEntity.INTENT_KEY, new CaseEntity(adapter.getItem(position)));
+                intent.putExtra(CaseParc.INTENT_KEY, adapter.getItem(position));
                 startActivity(intent);
             }
         });
@@ -157,7 +155,7 @@ public class CaseListFragment extends Fragment {
     private void sortCaseList(CaseSortCategory sortCategory) {
         Log.d(LOG_TAG, "Fragment " + listKey + " sortCaseList(" + sortCategory + ")");
 
-        CaseComparator caseComparator = new CaseComparator();
+        CaseParcComparator caseComparator = new CaseParcComparator();
         if (sortCategory != null) {
             caseComparator.setActiveCategory(sortCategory);
         }
@@ -209,7 +207,7 @@ public class CaseListFragment extends Fragment {
          * @param listKey listKey from the MyCasesPagerEnum
          * @return
          */
-        public List<Case> onListRequest(long listKey);
+        public List<CaseParc> onListRequest(long listKey);
 
         /**
          * the fragment requests the active case-sort-category

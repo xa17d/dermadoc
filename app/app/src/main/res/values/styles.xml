@@ -82,6 +82,7 @@
 
     <style name="FinishEditingButton" parent="EditCaseNextButton">
         <item name="android:textStyle">bold</item>
+        <item name="android:background">@drawable/finish_button_background_shape</item>
     </style>
 
     <style name="EditCaseTabLayout" parent="Widget.Design.TabLayout">
@@ -95,6 +96,17 @@
 
     <style name="EditCaseTabTextAppearance" parent="TextAppearance.Design.Tab">
         <item name="android:textColor">@color/tab_header_text_color</item>
+        <!-- todo -->
+    </style>
+
+    <style name="UserDataListItemHeaderText" >
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">14sp</item>
+        <!-- todo -->
+    </style>
+
+    <style name="UserDataListItemText" >
+        <item name="android:textSize">18sp</item>
         <!-- todo -->
     </style>
 

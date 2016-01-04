@@ -10,10 +10,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import at.tuwien.telemedizin.dermadoc.app.R;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.CaseParc;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.PatientParc;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.PhysicianParc;
 import at.tuwien.telemedizin.dermadoc.app.helper.FormatHelper;
-import at.tuwien.telemedizin.dermadoc.entities.Case;
-import at.tuwien.telemedizin.dermadoc.entities.Patient;
-import at.tuwien.telemedizin.dermadoc.entities.Physician;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -64,10 +64,10 @@ public class CaseOverviewFragment extends Fragment {
         caseStatusTextView = (TextView) v.findViewById(R.id.case_overview_status);
 
         // load caseData
-        Case caseItem = caseDataCallbackInterface.getCase();
-        Patient patient = caseItem.getPatient();
+        CaseParc caseItem = caseDataCallbackInterface.getCase();
+        PatientParc patient = caseItem.getPatient();
         patientNameTextView.setText(patient != null ? patient.getName() : "No Info");
-        Physician physician = caseItem.getPhysician();
+        PhysicianParc physician = caseItem.getPhysician();
         physicianNameTextView.setText(physician != null ?
                 physician.getName() : getString(R.string.msg_no_physician_info_found));
 

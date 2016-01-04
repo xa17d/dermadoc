@@ -49,6 +49,11 @@ public class GCNotification extends AnchorPane {
                 popOver.hide();
             }
         });
+
+        updateList();
+    }
+
+    public void updateList() {
         lvNotifications.setItems(notificationList);
     }
 

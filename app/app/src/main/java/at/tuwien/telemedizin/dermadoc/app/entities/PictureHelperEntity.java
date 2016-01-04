@@ -2,6 +2,8 @@ package at.tuwien.telemedizin.dermadoc.app.entities;
 
 import android.graphics.Bitmap;
 
+import java.io.File;
+
 /**
  * Created by FAUser on 22.11.2015.
  *
@@ -11,7 +13,16 @@ public class PictureHelperEntity {
 
     private Bitmap picture;
     private Bitmap thumbnail;
+    private String pictureFileReference;
     private String description;
+
+    public String getPictureFileReference() {
+        return pictureFileReference;
+    }
+
+    public void setPictureFileReference(String pictureFileReference) {
+        this.pictureFileReference = pictureFileReference;
+    }
 
     public Bitmap getPicture() {
         return picture;
