@@ -32,6 +32,18 @@
 
     </android.support.design.widget.AppBarLayout>
 
+    <include layout="@layout/loading_data_progress_item"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <LinearLayout
+        android:id="@+id/content_root_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+
     <android.support.design.widget.TabLayout
         android:id="@+id/tabs"
         android:layout_width="match_parent"
@@ -51,9 +63,10 @@
             android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="110dp"
+
             android:fillViewport="true"/>
 
+    </LinearLayout>
     <!--</android.support.v4.widget.NestedScrollView>-->
 
 <!-- TODO the above used marginTop avoids overlapping errors ... but that should not be necessary -->

@@ -142,16 +142,8 @@ public class FinishEditingFragment extends Fragment {
         finishButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // check all required fields
-                // TODO
 
-                // create a case-object with all the actual parameters
-                // TODO
-
-                // save the new case-object on the server
-                // TODO
-
-                ((NewCaseActivity)getActivity()).collectCaseData(); // TODO better without cast! (onAttach etc.)
+                ((NewCaseActivity)getActivity()).finishEditing(); // TODO better without cast! (onAttach etc.)
             }
         });
 

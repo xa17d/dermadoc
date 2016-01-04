@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity
     // To hide the sort-menu-item whenever fragments are changed etc.
     private MenuItem sortMenuItem;
 
+    private RelativeLayout mainContentLayout;
     private RelativeLayout loadingProgressLayout;
     private TextView loadingProgressInfoTextView;
 
@@ -123,6 +124,8 @@ public class MainActivity extends AppCompatActivity
 //            authenticationToken.setType(aTokenType);
 //        }
 
+        mainContentLayout = (RelativeLayout) findViewById(R.id.contentFrame);
+
         loadingProgressLayout = (RelativeLayout) findViewById(R.id.loading_data_progress_layout);
         loadingProgressLayout.setVisibility(View.GONE);
         loadingProgressInfoTextView = (TextView) findViewById(R.id.loading_data_info_text);
@@ -132,15 +135,34 @@ public class MainActivity extends AppCompatActivity
         Log.d(LOG_TAG, "serverInterface - authToken?: " + ((RestServerInterface)serverInterface).hasAuthToken());
 
         // TODO
-        // 1. load Patient data
 
-        // 2. Load Case-List
+        getDataFromServer();
 
 
         // TODO replace
         ContentProvider cP = ContentProviderFactory.getContentProvider();
         currentCaseList = cP.getCurrentCasesOfUser();
         closedCaseList = cP.getCurrentCasesOfUser(); // TODO for testing purpose - remove or replace
+    }
+
+    /**
+     * sends local data to server and retrieves data from server
+     * TODO
+     */
+    private void syncData() {
+        // send data TODO
+        // get data
+        getDataFromServer();
+    }
+
+    private void getDataFromServer() {
+        // TODO
+        // 1. load Patient data
+
+        // 2. Load Case-List
+
+        // 3. load user Data
+        loadUserData();
     }
 
     private void loadUserData() {
@@ -182,6 +204,7 @@ public class MainActivity extends AppCompatActivity
             return true;
         } else if (id == R.id.action_syncronize) {
             Toast.makeText(getBaseContext(), "Synchronisation with server coming soon!", Toast.LENGTH_LONG).show(); // TODO replace with real fragment/function
+            syncData();
         }
 
         return super.onOptionsItemSelected(item);
@@ -279,12 +302,12 @@ public class MainActivity extends AppCompatActivity
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
             int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
-            loadingProgressLayout.setVisibility(show ? View.GONE : View.VISIBLE);
-            loadingProgressLayout.animate().setDuration(shortAnimTime).alpha(
+            mainContentLayout.setVisibility(show ? View.GONE : View.VISIBLE);
+            mainContentLayout.animate().setDuration(shortAnimTime).alpha(
                     show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
-                    loadingProgressLayout.setVisibility(show ? View.GONE : View.VISIBLE);
+                    mainContentLayout.setVisibility(show ? View.GONE : View.VISIBLE);
                 }
             });
 
@@ -300,7 +323,7 @@ public class MainActivity extends AppCompatActivity
             // The ViewPropertyAnimator APIs are not available, so simply show
             // and hide the relevant UI components.
             loadingProgressLayout.setVisibility(show ? View.VISIBLE : View.GONE);
-            loadingProgressLayout.setVisibility(show ? View.GONE : View.VISIBLE);
+            mainContentLayout.setVisibility(show ? View.GONE : View.VISIBLE);
         }
     }
 
@@ -325,6 +348,13 @@ public class MainActivity extends AppCompatActivity
             ServerInterface sI = ServerInterfaceFactory.getInstance();
             Patient currentUser = sI.getUser();
 
+            // TODO remoeve
+            try {
+                Thread.sleep(3000);                 //1000 milliseconds is one second.
+            } catch(InterruptedException ex) {
+                Thread.currentThread().interrupt();
+            }
+
             Log.d(LOG_TAG, "retrieved User: " + ToStringHelper.toString(currentUser));
 
             return currentUser;
@@ -336,7 +366,6 @@ public class MainActivity extends AppCompatActivity
             loadUserDataTask = null;
             showProgress(false);
             // TODO check result etc.
-//            activity.loginTaskFinished(success);
         }
 
         @Override

@@ -143,4 +143,8 @@
     <string name="option_loading_case_list_data_insert">Case-List</string> <!-- content for placeholder string - select this option at runtime -->
     <string name="option_loading_physician_data_insert">Physician-List</string> <!-- content for placeholder string - select this option at runtime -->
 
+    <string name="hint_progress_collecting_data">collecting data</string>
+    <string name="hint_progress_checking_data">checking data</string>
+    <string name="hint_progress_sending_data">sending data to server</string>
+
 </resources>

@@ -84,38 +84,38 @@ public class RestServerInterface implements ServerInterface {
             return null;
         }
 
-        RestTemplate restTemplate = new RestTemplate();
-        // setting up the authentication-token-header
-        String authHeader = AUTHORIZATION_HEADER_PREFIX
-                + " " + authToken.getType()
-                + " " + authToken.getToken();
-        HttpHeaders requestHeaders = new HttpHeaders();
-        requestHeaders.setContentType(MediaType.APPLICATION_XHTML_XML);
-        requestHeaders.add()
-        HttpEntity<?> requestEntity = new HttpEntity<Object>(requestHeaders);
-        request.setHeader(HttpHeaders.AUTHORIZATION, authHeader);
-
-//        header.setContentType(MediaType.APPLICATION_XHTML_XML);
-//        header.add(HEADER_AUTH_TYPE_ELEMENT, authToken.getType());
-//        header.add(HEADER_AUTH_TOKEN_ELEMENT, authToken.getToken());
-
-
-
-        Log.d(LOG_TAG, "send Request");
-        try {
-            aToken = restTemplate.postForObject(url + LOGIN_URL, authenticationData, AuthenticationToken.class);
-
-        } catch (HttpClientErrorException e) {
-            Log.e(LOG_TAG, "exception: " + e.getLocalizedMessage(), e);
-            return null;
-        } catch (ResourceAccessException e) {
-            Log.e(LOG_TAG, "exception: " + e.getLocalizedMessage(), e);
-            return null;
-        } catch (Exception e) {
-            // catch all other exception to prevent the app from crashing
-            Log.e(LOG_TAG, "exception: " + e.getLocalizedMessage(), e);
-            return null;
-        }
+//        RestTemplate restTemplate = new RestTemplate();
+//        // setting up the authentication-token-header
+//        String authHeader = AUTHORIZATION_HEADER_PREFIX
+//                + " " + authToken.getType()
+//                + " " + authToken.getToken();
+//        HttpHeaders requestHeaders = new HttpHeaders();
+//        requestHeaders.setContentType(MediaType.APPLICATION_XHTML_XML);
+//        requestHeaders.add()
+//        HttpEntity<?> requestEntity = new HttpEntity<Object>(requestHeaders);
+//        request.setHeader(HttpHeaders.AUTHORIZATION, authHeader);
+//
+////        header.setContentType(MediaType.APPLICATION_XHTML_XML);
+////        header.add(HEADER_AUTH_TYPE_ELEMENT, authToken.getType());
+////        header.add(HEADER_AUTH_TOKEN_ELEMENT, authToken.getToken());
+//
+//
+//
+//        Log.d(LOG_TAG, "send Request");
+//        try {
+//            aToken = restTemplate.postForObject(url + LOGIN_URL, authenticationData, AuthenticationToken.class);
+//
+//        } catch (HttpClientErrorException e) {
+//            Log.e(LOG_TAG, "exception: " + e.getLocalizedMessage(), e);
+//            return null;
+//        } catch (ResourceAccessException e) {
+//            Log.e(LOG_TAG, "exception: " + e.getLocalizedMessage(), e);
+//            return null;
+//        } catch (Exception e) {
+//            // catch all other exception to prevent the app from crashing
+//            Log.e(LOG_TAG, "exception: " + e.getLocalizedMessage(), e);
+//            return null;
+//        }
 
 
         // TODO
