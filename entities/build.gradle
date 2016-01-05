@@ -45,15 +45,14 @@ dependencies {
     compile('javax.inject:javax.inject:1')
 
 
-    compile('org.springframework.boot:spring-boot-starter-web')
-    compile 'org.springframework.boot:spring-boot-starter-security'
-    compile 'org.springframework.boot:spring-boot-starter-actuator'
-    compile 'org.springframework.boot:spring-boot-starter-aop'
-    compile('com.fasterxml.jackson.dataformat:jackson-dataformat-xml')
+    compile("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")
+    compile "org.springframework.boot:spring-boot-starter-security:${springBootVersion}"
+    compile "org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}"
+    compile "org.springframework.boot:spring-boot-starter-aop:${springBootVersion}"
     compile('org.slf4j:log4j-over-slf4j:1.7.12')
 
     // Persistence Stuff
-    compile('org.springframework.boot:spring-boot-starter-data-jpa')
+    compile("org.springframework.boot:spring-boot-starter-data-jpa:${springBootVersion}")
 
     // compile group: 'javax.persistence', name: 'persistence-api', version: '1.0'
 }
