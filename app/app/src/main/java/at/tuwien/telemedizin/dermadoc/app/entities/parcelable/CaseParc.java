@@ -118,7 +118,7 @@ public class CaseParc implements Parcelable {
         this.physician = in.readParcelable(PhysicianParc.class.getClassLoader());
 
         dataElements = new LinkedList<>();
-        in.readList(dataElements, null);
+        in.readList(dataElements, CaseDataParc.class.getClassLoader());
     }
 
     @Override

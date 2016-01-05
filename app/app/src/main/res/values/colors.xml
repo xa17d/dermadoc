@@ -40,6 +40,8 @@
     <color name="error_color">#ff8d8b</color>
     <color name="warning_color">#ffdc96</color>
 
+    <color name="fix_text_color">#000000</color>
+
 
 
 </resources>

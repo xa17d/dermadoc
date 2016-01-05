@@ -26,6 +26,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.springframework.http.StreamingHttpOutputMessage;
 
@@ -77,7 +78,7 @@ public class NewCaseActivity extends AppCompatActivity implements OnCaseDataRequ
     private TextView loadingProgressInfoTextView;
 
     private LoadPhysicianListAsyncTask loadPhysicianListAsyncTask;
-
+    private SendingEditedCaseAsyncTask sendingEditedCaseAsyncTask;
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -165,7 +166,7 @@ public class NewCaseActivity extends AppCompatActivity implements OnCaseDataRequ
         fragmentList.add(picturesFragment);
         titleList.add(getString(NewCasePagerEnum.PICTURE.getTitleResId()));
 
-        locationFragment = EditLocationFragment.newInstance(true);
+        locationFragment = EditLocationFragment.newInstance(true, false);
         fragmentList.add(locationFragment);
         titleList.add(getString(NewCasePagerEnum.LOCATION.getTitleResId()));
 
@@ -524,8 +525,12 @@ public class NewCaseActivity extends AppCompatActivity implements OnCaseDataRequ
      * starts a async-task and send the data to the server
      */
     private void sendDataToServer(CaseParc caseItem) {
-        loadPhysicianListAsyncTask = new LoadPhysicianListAsyncTask(this);
-        loadPhysicianListAsyncTask.execute((Void) null);
+        sendingEditedCaseAsyncTask = new SendingEditedCaseAsyncTask(this);
+        sendingEditedCaseAsyncTask.execute(caseItem);
+    }
+
+    private void finishActivity() {
+        this.finish();
     }
 
     /**
@@ -623,6 +628,55 @@ public class NewCaseActivity extends AppCompatActivity implements OnCaseDataRequ
         protected void onCancelled() {
             loadPhysicianListAsyncTask = null;
             showProgress(false);
+        }
+    }
+
+    /**
+     * sending the case to the server
+     * the user.
+     */
+    public class SendingEditedCaseAsyncTask extends AsyncTask<CaseParc, Void, Boolean> {
+        private NewCaseActivity activity;
+
+        private String outp;
+
+        SendingEditedCaseAsyncTask(NewCaseActivity activity) {
+            this.activity = activity;
+        }
+
+        @Override
+        protected Boolean doInBackground(CaseParc... params) {
+            Log.d(LOG_TAG, "doInBackground()");
+
+            ServerInterface sI = ServerInterfaceFactory.getInstance();
+            // TODO
+
+            // TODO remoeve
+            try {
+                Thread.sleep(3000);                 //1000 milliseconds is one second.
+            } catch(InterruptedException ex) {
+                Thread.currentThread().interrupt();
+            }
+
+            Log.d(LOG_TAG, "end doInBackground()");
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean success) {
+            Log.d(LOG_TAG,"onPostExecute() " + success);
+            sendingEditedCaseAsyncTask = null;
+            showProgress(false);
+            Toast.makeText(getBaseContext(), "Data was sent to the server", Toast.LENGTH_LONG).show();
+            finishActivity();
+
+        }
+
+        @Override
+        protected void onCancelled() {
+            sendingEditedCaseAsyncTask = null;
+            showProgress(false);
+            Toast.makeText(getBaseContext(), "Sending data to the server was cancelled", Toast.LENGTH_LONG).show();
         }
     }
 }

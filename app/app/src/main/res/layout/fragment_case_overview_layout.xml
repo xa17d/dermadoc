@@ -1,12 +1,76 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="at.tuwien.telemedizin.dermadoc.app.activities_fragments.case_specific.CaseOverviewFragment">
 
-    <include layout="@layout/case_overview_info_table"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/activity_vertical_margin"
+        android:paddingRight="@dimen/activity_vertical_margin">
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/case_name_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="12dp"
+            android:paddingTop="18dp"
+            android:text="New Text"
+            android:textSize="20sp" />
+
+
+        <include
+            layout="@layout/case_overview_info_table"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+            <TextView
+                style="@style/HeaderLevel2Style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:id="@+id/basic_case_data_header"
+                android:text="@string/header_case_basic_infos" />
+
+            <!--<ImageView-->
+                <!--android:layout_width="20dp"-->
+                <!--android:layout_height="20dp"-->
+                <!--android:layout_marginTop="20dp"-->
+                <!--android:layout_marginLeft="20dp"-->
+                <!--android:layout_alignParentTop="true"-->
+                <!--android:layout_toRightOf="@id/basic_case_data_header"-->
+                <!--android:id="@+id/imageView2"-->
+                <!--android:src="@drawable/ic_action_edit_white_18dp"-->
+
+        <LinearLayout
+            android:id="@+id/basic_data_list_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/label_localizations"
+            android:id="@+id/element_header_textView"
+            style="@style/OverviewTableTextStyle"
+            android:paddingBottom="4dp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/location_fragment_container">
+            <!-- this relative layout is used to nest a fragment dynamically -->
+        </RelativeLayout>
+
+
+    </LinearLayout>
+
+</ScrollView>

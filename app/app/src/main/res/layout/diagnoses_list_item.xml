@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    >
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="30dp"
+    android:layout_marginEnd="10dp"
+    android:layout_marginTop="10dp"
+    android:layout_marginBottom="10dp"
+    android:paddingBottom="10dp"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="10dp"
+    android:background="@drawable/diagnosis_message_background_shape">
+
+    <ImageView
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+
+        android:id="@+id/data_icon_view"
+        android:src="@drawable/diagnosis_icon" />
+
+    <LinearLayout
+        android:id="@+id/diagnsis_item_linlayout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@id/data_icon_view"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical"
+        android:paddingBottom="10dp">
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="false"
+            android:text="Message"
+            android:id="@+id/message_text_view" />
+
+    <LinearLayout
+        android:id="@+id/diagnsis_icd10_list_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="12dp"
+        android:orientation="vertical">
+
+    </LinearLayout>
+
+    </LinearLayout>
+
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@id/diagnsis_item_linlayout1">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_date_of_creation"
+            android:id="@+id/creation_label"
+            android:layout_alignParentLeft="true"
+            android:textAppearance="@style/TimestampTextStyle" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="DATE"
+            android:id="@+id/creation_text"
+            android:layout_alignParentRight="true"
+            android:textAppearance="@style/TimestampTextStyle" />
+    </RelativeLayout>
+
+
+
+
+</RelativeLayout>
+
+
+</LinearLayout>

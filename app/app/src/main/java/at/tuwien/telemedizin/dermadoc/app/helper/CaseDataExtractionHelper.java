@@ -5,6 +5,7 @@ import java.util.List;
 
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.AdviceParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.CaseDataParc;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.CaseInfoParc;
 import at.tuwien.telemedizin.dermadoc.entities.casedata.CaseData;
 
 /**
@@ -28,5 +29,17 @@ public class CaseDataExtractionHelper<T extends CaseDataParc> {
             }
         }
         return extractionResult;
+    }
+
+
+    public static CaseInfoParc getLatestCaseInfo(List<CaseDataParc> caseDataList) {
+        CaseDataExtractionHelper<CaseInfoParc> caseInfoExtractor = new CaseDataExtractionHelper<>(CaseInfoParc.class);
+        // get all caseInfo-objects
+        List<CaseInfoParc> caseInfos = caseInfoExtractor.extractElements(caseDataList);
+        if (caseInfos.size() == 0) {
+            return null;
+        }
+        CaseInfoParc cI = caseInfos.get(0);
+        return cI;
     }
 }

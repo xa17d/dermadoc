@@ -48,6 +48,25 @@
     <style name="NavDrawerTextStyle" parent="TextAppearance.AppCompat.Body2">
         <item name="android:textSize">14sp</item>
 
+
+    </style>
+
+    <style name="OverviewTableTextStyle" parent="TextAppearance.AppCompat.Body2">
+        <item name="android:textSize">14sp</item>
+        <!--<item name="android:textColor">@color/fix_text_color</item>-->
+
+    </style>
+
+    <style name="OverviewTableRowStyle" >
+        <item name="android:paddingBottom">4dp</item>
+
+    </style>
+
+    <style name="HeaderLevel2Style" >
+        <item name="android:paddingTop">20dp</item>
+        <item name="android:paddingBottom">4dp</item>
+        <item name="android:textSize">18sp</item>
+
     </style>
 
     <style name="HintText" parent="TextAppearance.AppCompat.Small">
@@ -119,6 +138,10 @@
     <style name="ErrorListItemInfoText" >
         <item name="android:textSize">18sp</item>
         <!-- todo -->
+    </style>
+
+    <style name="TimestampTextStyle" parent="TextAppearance.AppCompat.Small">
+        <item name="android:textSize">12sp</item>
     </style>
 
 </resources>

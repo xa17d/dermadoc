@@ -12,74 +12,33 @@
         android:shrinkColumns="*"
         >
 
-        <TableRow>
+        <TableRow style="@style/OverviewTableRowStyle">
 
             <TextView android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:singleLine="true"
-                android:textAppearance="@style/NavDrawerTextStyle"
-                android:text="@string/label_case_status" />
+                android:textAppearance="@style/OverviewTableTextStyle"
+                android:text="@string/label_case_id" />
 
             <TextView android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
                 android:singleLine="true"
                 android:ellipsize="marquee"
-                android:textAppearance="@style/NavDrawerTextStyle"
-                android:id="@+id/case_overview_status"
-                android:text="STATUS"/>
+                android:textAppearance="@style/OverviewTableTextStyle"
+                android:id="@+id/case_overview_id"
+                android:text="CASE ID" />
 
         </TableRow>
 
-        <TableRow>
+        <TableRow style="@style/OverviewTableRowStyle">
 
             <TextView android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:singleLine="true"
-                android:textAppearance="@style/NavDrawerTextStyle"
-                android:text="@string/label_patient" />
-
-            <TextView android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="3"
-                android:singleLine="true"
-                android:ellipsize="marquee"
-                android:textAppearance="@style/NavDrawerTextStyle"
-                android:id="@+id/case_overview_patient"
-                android:text="PATIENT NAME" />
-
-        </TableRow>
-
-        <TableRow>
-
-            <TextView android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:singleLine="true"
-                android:textAppearance="@style/NavDrawerTextStyle"
-                android:text="@string/label_physician" />
-
-            <TextView android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="3"
-                android:singleLine="true"
-                android:ellipsize="marquee"
-                android:textAppearance="@style/NavDrawerTextStyle"
-                android:id="@+id/case_overview_physician"
-                android:text="PHYSICIAN NAME" />
-
-        </TableRow>
-
-        <TableRow
-            >
-
-            <TextView android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:singleLine="true"
-                android:textAppearance="@style/NavDrawerTextStyle"
+                android:textAppearance="@style/OverviewTableTextStyle"
                 android:text="@string/label_date_of_creation" />
 
             <TextView android:layout_width="0dp"
@@ -87,11 +46,52 @@
                 android:layout_weight="3"
                 android:singleLine="true"
                 android:ellipsize="marquee"
-                android:textAppearance="@style/NavDrawerTextStyle"
+                android:textAppearance="@style/OverviewTableTextStyle"
                 android:id="@+id/case_overview_date_of_creation"
                 android:text="DATE" />
 
         </TableRow>
+
+        <TableRow style="@style/OverviewTableRowStyle">
+
+            <TextView android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:singleLine="true"
+                android:textAppearance="@style/OverviewTableTextStyle"
+                android:text="@string/label_case_status" />
+
+            <TextView android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:singleLine="true"
+                android:ellipsize="marquee"
+                android:textAppearance="@style/OverviewTableTextStyle"
+                android:id="@+id/case_overview_status"
+                android:text="STATUS"/>
+
+        </TableRow>
+
+        <TableRow style="@style/OverviewTableRowStyle">
+
+            <TextView android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:singleLine="true"
+                android:textAppearance="@style/OverviewTableTextStyle"
+                android:text="@string/label_physician" />
+
+            <TextView android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:singleLine="true"
+                android:ellipsize="marquee"
+                android:textAppearance="@style/OverviewTableTextStyle"
+                android:id="@+id/case_overview_physician"
+                android:text="PHYSICIAN NAME" />
+
+        </TableRow>
+
     </TableLayout>
 
 </TableLayout>

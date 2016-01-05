@@ -22,6 +22,7 @@ public class DiagnosisParc extends CaseDataParc {
         super(id, created, author);
 
         this.message = message;
+        this.diagnosisList = diagnosisList;
     }
 
     private String message;

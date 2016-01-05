@@ -20,17 +20,23 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import at.tuwien.telemedizin.dermadoc.app.R;
 import at.tuwien.telemedizin.dermadoc.app.activities_fragments.DummyContentFragment;
+import at.tuwien.telemedizin.dermadoc.app.activities_fragments.create_case.EditLocationFragment;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.CaseParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.PatientParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.PhysicianParc;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.CaseInfoParc;
+import at.tuwien.telemedizin.dermadoc.app.helper.CaseDataExtractionHelper;
 import at.tuwien.telemedizin.dermadoc.app.helper.FormatHelper;
-
+import at.tuwien.telemedizin.dermadoc.entities.BodyLocalization;
 
 
 public class CaseActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, CaseDataCallbackInterface {
+        implements NavigationView.OnNavigationItemSelectedListener, CaseDataCallbackInterface, EditLocationFragment.BodyLocationCallbackInterface {
 
     public static final String LOG_TAG = CaseActivity.class.getSimpleName();
 
@@ -43,6 +49,8 @@ public class CaseActivity extends AppCompatActivity
     private TextView navHeaderPhysicianTextView;
     private TextView navHeaderDateOfCreationTextView;
 
+    private FloatingActionButton fab;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,7 +58,7 @@ public class CaseActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -69,7 +77,7 @@ public class CaseActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         // default content is case-list
-        Fragment fragment = CaseOverviewFragment.newInstance(); // TODO replace with real fragment/function
+        Fragment fragment = CaseOverviewFragment.newInstance();
         String title = getString(R.string.nav_case_overview);
 
         if (fragment != null) {
@@ -118,9 +126,9 @@ public class CaseActivity extends AppCompatActivity
 
         // TODO patient info is less interesting for the patient -> remove
         navHeaderPatientTextView = (TextView)
-                navigationView.getHeaderView(0).findViewById(R.id.case_overview_patient);
+                navigationView.getHeaderView(0).findViewById(R.id.case_overview_id);
         PatientParc patient = caseItem.getPatient();
-        navHeaderPatientTextView.setText(patient != null ? patient.getName() : "No Info");
+        navHeaderPatientTextView.setText(caseItem.getId() + "");
 
         navHeaderPhysicianTextView = (TextView)
                 navigationView.getHeaderView(0).findViewById(R.id.case_overview_physician);
@@ -192,17 +200,23 @@ public class CaseActivity extends AppCompatActivity
         if (id == R.id.nav_case_overview) {
             fragment = CaseOverviewFragment.newInstance(); //
             title = getString(R.string.nav_case_overview);
+            fab.setVisibility(View.VISIBLE);
 
         } else if (id == R.id.nav_case_advice) {
             fragment = DummyContentFragment.newInstance("Advice"); // TODO replace with real fragment/function
             title = getString(R.string.nav_case_advice);
+            fab.setVisibility(View.GONE);
 
         } else if (id == R.id.nav_case_diagnoses) {
-            fragment = DummyContentFragment.newInstance("Diagnoses"); // TODO replace with real fragment/function
+            fragment = DiagnosesListFragment.newInstance();
             title = getString(R.string.nav_case_diagnoses);
+            fab.setVisibility(View.GONE);
+
         } else if (id == R.id.nav_case_etc) {
             fragment = DummyContentFragment.newInstance("etc..."); // TODO replace with real fragment/function
             title = "ETC";
+            fab.setVisibility(View.VISIBLE); // TODO
+
         } else if (id == R.id.nav_back_to_main) {
             // finish this activity
             CaseActivity.this.finish();
@@ -228,5 +242,16 @@ public class CaseActivity extends AppCompatActivity
     @Override
     public CaseParc getCase() {
         return caseItem;
+    }
+
+    @Override
+    public List<BodyLocalization> getBodyLocations() {
+        // provide the localizations to the fragment
+        CaseInfoParc cI = CaseDataExtractionHelper.getLatestCaseInfo(caseItem.getDataElements());
+        if (cI != null) {
+            return cI.getLocalizations();
+        } else {
+            return new ArrayList<BodyLocalization>();
+        }
     }
 }

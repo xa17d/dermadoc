@@ -77,11 +77,11 @@ public abstract class CaseDataParc implements Parcelable {
         long createdTimeInMillis = in.readLong();
         this.created = ParcelableHelper.longToCalendar(createdTimeInMillis);
 
-        this.author = in.readParcelable(null); // null -> should use the default classLoader specified in the non-abstract class
+        this.author = in.readParcelable(User.class.getClassLoader()); // null -> should use the default classLoader specified in the non-abstract class .. NOT WORKING WITH NULL
 
         int isPrivateAsInt = in.readInt();
         this.isPrivate = (isPrivateAsInt == 1);
-
+        //
         this.nextVersion = in.readParcelable(null); // null -> should use the default classLoader specified in the non-abstract class
     }
 

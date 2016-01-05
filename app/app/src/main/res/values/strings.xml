@@ -155,6 +155,8 @@
     <string name="label_user_svnr">SVNR</string>
     <string name="label_user_gender">Gender</string>
 
+    <string name="label_case_id">ID</string>
+
     <string name="hint_loading">loading...</string>
 
     <!-- // case validation error -->
@@ -167,5 +169,15 @@
     <string name="title_dialog_validation_warning">Validation Warnings</string>
     <string name="msg_dialog_validation_warning">Some warnings regarding the edited information occurred. Do you want to continue anyway?</string>
     <string name="option_continue">Continue</string>
+
+    <string name="header_case_basic_infos">Basic Data</string>
+
+    <string name="label_edit_basic_case_data_button">Edit Basic Data</string>
+
+    <string name="label_symptoms">Symptoms</string>
+    <string name="label_pain">Pain Intensity</string>
+    <string name="label_localizations">Localizations</string>
+    <string name="label_size">Size</string>
+    <string name="label_size_diameter_hint">(diameter)</string>
 
 </resources>

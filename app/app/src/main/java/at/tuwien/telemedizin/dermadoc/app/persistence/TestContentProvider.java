@@ -7,16 +7,21 @@ import java.util.List;
 
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.CaseParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.GeoLocationParc;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.Icd10DiagnosisParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.PatientParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.PhysicianParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.AnamnesisParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.AnamnesisQuestionBoolParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.AnamnesisQuestionParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.AnamnesisQuestionTextParc;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.CaseInfoParc;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.DiagnosisParc;
+import at.tuwien.telemedizin.dermadoc.entities.BodyLocalization;
 import at.tuwien.telemedizin.dermadoc.entities.Case;
 import at.tuwien.telemedizin.dermadoc.entities.CaseStatus;
 import at.tuwien.telemedizin.dermadoc.entities.Gender;
 import at.tuwien.telemedizin.dermadoc.entities.GeoLocation;
+import at.tuwien.telemedizin.dermadoc.entities.PainIntensity;
 import at.tuwien.telemedizin.dermadoc.entities.Patient;
 import at.tuwien.telemedizin.dermadoc.entities.Physician;
 import at.tuwien.telemedizin.dermadoc.entities.casedata.Anamnesis;
@@ -30,7 +35,18 @@ import at.tuwien.telemedizin.dermadoc.entities.casedata.AnamnesisQuestionText;
 public class TestContentProvider implements ContentProvider {
     @Override
     public PatientParc getCurrentUser() {
-        return null;
+
+        PatientParc patient = new PatientParc();
+        patient.setId(1l);
+        patient.setMail("mail@mail.at");
+        patient.setPassword("no");
+        patient.setName("Peter Hans Gruber dings Norbert");
+        patient.setLocation(new GeoLocationParc("hier", 2.0, 2.0));
+
+        patient.setSvnr("1212");
+        patient.setGender(Gender.Female);
+        patient.setBirthTime(Calendar.getInstance());
+        return patient;
     }
 
     @Override
@@ -93,9 +109,40 @@ public class TestContentProvider implements ContentProvider {
         CaseParc testCase1 = new CaseParc(startNumber+2045, patient, new GregorianCalendar());
         testCase1.setStatus(CaseStatus.Active);
         testCase1.setName("First Case");
+
+
+        PhysicianParc physician = new PhysicianParc();
+        physician.setId(1l);
+        physician.setMail("mail@phy.at");
+        physician.setPassword("no");
+        physician.setName("Dr. Brause");
+        physician.setLocation(new GeoLocationParc("dort", 3.0, 3.0));
+
+        testCase1.setPhysician(physician);
+
+        List<BodyLocalization> localizations = new ArrayList<>();
+        localizations.add(BodyLocalization.HAND_LEFT);
+        localizations.add(BodyLocalization.FOOT_LEFT);
+
+        CaseInfoParc caseInfo = new CaseInfoParc(-1, Calendar.getInstance(), patient, localizations, PainIntensity.Mild, 2, "description test hello test");
+        testCase1.addDataElement(caseInfo);
+
+        List<Icd10DiagnosisParc> d1_icList = new ArrayList<>();
+        d1_icList.add(new Icd10DiagnosisParc("101010", "Hühnerauge"));
+        d1_icList.add(new Icd10DiagnosisParc("02221", "Nase im Gesicht"));
+        DiagnosisParc d1 = new DiagnosisParc(-1, Calendar.getInstance(), physician,"test Diagnose 1 ", d1_icList);
+        testCase1.addDataElement(d1);
+
+
+
+
+        List<Icd10DiagnosisParc> d2_icList = new ArrayList<>();
+        DiagnosisParc d2 = new DiagnosisParc(-1, Calendar.getInstance(), physician,"Das ist, wie als würden Sie eine Tasse Rohrfrei trinken. Natürlich reinigt das einen - aber mit der Zeit wird man hohl. ", d2_icList);
+        testCase1.addDataElement(d2);
+
         currentCaseList.add(testCase1);
         CaseParc testCase2 = new CaseParc(startNumber+451, patient, new GregorianCalendar());
-        testCase2.setStatus(CaseStatus.LookingForPhysician);
+        testCase2.setStatus(CaseStatus.Active);
         testCase2.setName("Second Case");
         currentCaseList.add(testCase2);
         for (int i = 0; i < 5; i++) {
