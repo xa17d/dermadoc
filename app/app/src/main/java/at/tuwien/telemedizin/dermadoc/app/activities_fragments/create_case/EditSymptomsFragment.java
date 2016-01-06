@@ -35,6 +35,7 @@ public class EditSymptomsFragment extends Fragment {
     private static final String ARG_NEW_CASE = "newCase";
 
     private OnTabChangedInFragmentInterface tabChangeInterface;
+    private SymptomsSourceInterface symptomsSourceInterface;
 
     private boolean newCase; // if it is a new case, no symptom information has to be loaded and the layout switches into edit-mode
     private boolean symptomsHintIsVisible;
@@ -139,6 +140,16 @@ public class EditSymptomsFragment extends Fragment {
             throw new ClassCastException(context.toString() + " must implement " + OnTabChangedInFragmentInterface.class.getSimpleName());
         }
 
+        boolean pNewCase = getArguments().getBoolean(ARG_NEW_CASE);
+        if (!pNewCase) {
+            try {
+                symptomsSourceInterface = (SymptomsSourceInterface) context;
+            } catch (ClassCastException e) {
+                throw new ClassCastException(context.toString() + " must implement " + SymptomsSourceInterface.class.getSimpleName());
+            }
+        }
+
+
     }
 
     @Override
@@ -241,6 +252,20 @@ public class EditSymptomsFragment extends Fragment {
             }
         });
 
+        // load data if it exists
+        if (!newCase) {
+            currentSelectedSize = symptomsSourceInterface.getSize();
+            updateSizeTextView();
+
+            symptomDescriptionEditText.setText(symptomsSourceInterface.getSymptomDescription());
+
+            int indexOfPI = spinnerValues.indexOf(symptomsSourceInterface.getPainIntensity());
+            if (indexOfPI >= 0) {
+                painSpinner.setSelection(indexOfPI);
+            }
+
+        }
+
         return v;
     }
 
@@ -293,4 +318,12 @@ public class EditSymptomsFragment extends Fragment {
         return currentSelectedSize;
     }
 
+
+    public interface SymptomsSourceInterface {
+        public double getSize();
+
+        public String getSymptomDescription();
+
+        public PainIntensity getPainIntensity();
+    }
 }

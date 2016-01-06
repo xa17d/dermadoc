@@ -24,13 +24,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import at.tuwien.telemedizin.dermadoc.app.R;
-import at.tuwien.telemedizin.dermadoc.app.activities_fragments.create_case.NewCaseActivity;
+import at.tuwien.telemedizin.dermadoc.app.activities_fragments.create_case.EditCaseActivity;
 import at.tuwien.telemedizin.dermadoc.app.adapters.MyCasesPagerEnum;
 import at.tuwien.telemedizin.dermadoc.app.comparators.CaseSortCategory;
 import at.tuwien.telemedizin.dermadoc.app.helper.ToStringHelper;
@@ -39,21 +36,10 @@ import at.tuwien.telemedizin.dermadoc.app.persistence.ContentProviderFactory;
 import at.tuwien.telemedizin.dermadoc.app.server_interface.RestServerInterface;
 import at.tuwien.telemedizin.dermadoc.app.server_interface.ServerInterface;
 import at.tuwien.telemedizin.dermadoc.app.server_interface.ServerInterfaceFactory;
-import at.tuwien.telemedizin.dermadoc.entities.Case;
-import at.tuwien.telemedizin.dermadoc.entities.CaseStatus;
-import at.tuwien.telemedizin.dermadoc.entities.Gender;
-import at.tuwien.telemedizin.dermadoc.entities.GeoLocation;
 import at.tuwien.telemedizin.dermadoc.entities.Patient;
-import at.tuwien.telemedizin.dermadoc.entities.rest.AuthenticationData;
 import at.tuwien.telemedizin.dermadoc.entities.rest.AuthenticationToken;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.CaseParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.PatientParc;
-import at.tuwien.telemedizin.dermadoc.app.persistence.ContentProvider;
-import at.tuwien.telemedizin.dermadoc.app.persistence.ContentProviderFactory;
-import at.tuwien.telemedizin.dermadoc.entities.CaseStatus;
-import at.tuwien.telemedizin.dermadoc.entities.Gender;
-import at.tuwien.telemedizin.dermadoc.entities.GeoLocation;
-import at.tuwien.telemedizin.dermadoc.entities.User;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, CaseListFragment.OnCaseListEventListener, UserDataCallbackInterface {
@@ -101,7 +87,7 @@ public class MainActivity extends AppCompatActivity
 //                        .setAction("Action", null).show();
 
                 // launch activity to create a new case
-                Intent intent = new Intent(MainActivity.this, NewCaseActivity.class);
+                Intent intent = new Intent(MainActivity.this, EditCaseActivity.class);
                 startActivity(intent);
             }
         });

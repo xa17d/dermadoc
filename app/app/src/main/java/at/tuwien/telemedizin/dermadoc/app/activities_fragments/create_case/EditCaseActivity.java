@@ -28,8 +28,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.springframework.http.StreamingHttpOutputMessage;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -57,12 +55,11 @@ import at.tuwien.telemedizin.dermadoc.app.server_interface.ServerInterface;
 import at.tuwien.telemedizin.dermadoc.app.server_interface.ServerInterfaceFactory;
 import at.tuwien.telemedizin.dermadoc.entities.BodyLocalization;
 import at.tuwien.telemedizin.dermadoc.entities.PainIntensity;
-import at.tuwien.telemedizin.dermadoc.entities.casedata.PhotoMessage;
 
 
-public class NewCaseActivity extends AppCompatActivity implements OnCaseDataRequestAndUpdateInterface, OnTabChangedInFragmentInterface {
+public class EditCaseActivity extends AppCompatActivity implements OnCaseDataRequestAndUpdateInterface, OnTabChangedInFragmentInterface {
 
-    public static final String LOG_TAG = NewCaseActivity.class.getSimpleName();
+    public static final String LOG_TAG = EditCaseActivity.class.getSimpleName();
 
     public static final int REQUEST_CAMERA = 1;
     public static final int SELECT_FILE = 102;
@@ -594,11 +591,11 @@ public class NewCaseActivity extends AppCompatActivity implements OnCaseDataRequ
      * the user.
      */
     public class LoadPhysicianListAsyncTask extends AsyncTask<Void, Void, List<PhysicianParc>> {
-        private NewCaseActivity activity;
+        private EditCaseActivity activity;
 
         private String outp;
 
-        LoadPhysicianListAsyncTask(NewCaseActivity activity) {
+        LoadPhysicianListAsyncTask(EditCaseActivity activity) {
             this.activity = activity;
         }
 
@@ -643,11 +640,11 @@ public class NewCaseActivity extends AppCompatActivity implements OnCaseDataRequ
      * the user.
      */
     public class SendingEditedCaseAsyncTask extends AsyncTask<CaseParc, Void, Boolean> {
-        private NewCaseActivity activity;
+        private EditCaseActivity activity;
 
         private String outp;
 
-        SendingEditedCaseAsyncTask(NewCaseActivity activity) {
+        SendingEditedCaseAsyncTask(EditCaseActivity activity) {
             this.activity = activity;
         }
 

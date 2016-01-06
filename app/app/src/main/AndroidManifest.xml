@@ -47,7 +47,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities_fragments.create_case.NewCaseActivity"
+            android:name=".activities_fragments.create_case.EditCaseActivity"
             android:label="@string/title_activity_create_case"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" >

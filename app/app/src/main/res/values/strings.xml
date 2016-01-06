@@ -208,6 +208,8 @@
     <string name="header_size">Size</string>
     <string name="size_number_format_hint">xx.xx cm</string>
 
+    <string name="label_physician_selected">This case is taken care of the following doctor:</string>
+
 
 
 </resources>

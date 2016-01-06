@@ -29,6 +29,8 @@ import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.PhysicianParc;
  */
 public class PhysicianSelectionFragment extends Fragment {
 
+    private static final String ARG_NEW_CASE = "newCase";
+    private boolean newCase;
 
     private OnTabChangedInFragmentInterface tabChangeInterface;
     private OnCaseDataRequestAndUpdateInterface caseDataInterface;
@@ -44,6 +46,7 @@ public class PhysicianSelectionFragment extends Fragment {
     private List<PhysicianParc> nearbyPhysicianList;
     private List<RadioButton> nearbyPhysicianRadioButtonList; // view representing the physician
 
+
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -51,10 +54,10 @@ public class PhysicianSelectionFragment extends Fragment {
 
      * @return A new instance of fragment EditSymptomsFragment.
      */
-    public static PhysicianSelectionFragment newInstance() {
+    public static PhysicianSelectionFragment newInstance(boolean newCase) {
         PhysicianSelectionFragment fragment = new PhysicianSelectionFragment();
         Bundle args = new Bundle();
-
+        args.putBoolean(ARG_NEW_CASE, newCase);
         fragment.setArguments(args);
         return fragment;
     }
@@ -67,10 +70,13 @@ public class PhysicianSelectionFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-
+            newCase = getArguments().getBoolean(ARG_NEW_CASE);
         }
 
-        nearbyPhysicianList = getPhysicianList();
+        if (newCase) {
+            nearbyPhysicianList = getPhysicianList();
+        }
+
         nearbyPhysicianRadioButtonList = new ArrayList<>();
     }
 
@@ -125,7 +131,46 @@ public class PhysicianSelectionFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_physician_selection_layout, container, false);
+        View v = null;
+        if (newCase) {
+            v = inflater.inflate(R.layout.fragment_physician_selection_layout, container, false);
+            initializeForSelection(v,inflater);
+        } else {
+            v = inflater.inflate(R.layout.fragment_physician_display_layout, container, false);
+            initializeForDisplay(v, inflater);
+        }
+
+        // button to get to the next part
+        Button nextButton = (Button) v.findViewById(R.id.next_section_button);
+        nextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // go to the next section
+                tabChangeInterface.switchToTheNextTab();
+            }
+        });
+
+        return v;
+    }
+
+    private void setUpPhysicianList(LayoutInflater inflater, LinearLayout listRoot) {
+        for (PhysicianParc p : nearbyPhysicianList) {
+            // use a inflater to get utilise the right theme
+            RadioButton rBtn = (RadioButton) inflater.inflate(R.layout.physician_list_item_radio_button, null, false);
+            rBtn.setText(p.getName());
+            nearbyPhysicianRadioButtonList.add(rBtn);
+            listRoot.addView(rBtn);
+        }
+    }
+
+    private View initializeForDisplay(View v, LayoutInflater inflater) {
+        TextView physicianTextView = (TextView) v.findViewById(R.id.selected_physician_text_view);
+        physicianTextView.setText(caseDataInterface.getCase().getPhysician().getName());
+        return v;
+    }
+
+    private View initializeForSelection(View v, LayoutInflater inflater) {
+
 
         physicianHelpIcon = (ImageView) v.findViewById(R.id.physician_help_icon_view);
         physicianHelpText = (TextView) v.findViewById(R.id.physician_help_hint_text_view);
@@ -148,17 +193,6 @@ public class PhysicianSelectionFragment extends Fragment {
         });
 
 
-
-        // button to get to the next part
-        Button nextButton = (Button) v.findViewById(R.id.next_section_button);
-        nextButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // go to the next section
-                tabChangeInterface.switchToTheNextTab();
-            }
-        });
-
         nearbyPhysicianListLayout = (RadioGroup) v.findViewById(R.id.nearby_physician_list_linlayout);
         setUpPhysicianList(inflater, nearbyPhysicianListLayout);
 
@@ -179,16 +213,6 @@ public class PhysicianSelectionFragment extends Fragment {
         });
 
         return v;
-    }
-
-    private void setUpPhysicianList(LayoutInflater inflater, LinearLayout listRoot) {
-        for (PhysicianParc p : nearbyPhysicianList) {
-            // use a inflater to get utilise the right theme
-            RadioButton rBtn = (RadioButton) inflater.inflate(R.layout.physician_list_item_radio_button, null, false);
-            rBtn.setText(p.getName());
-            nearbyPhysicianRadioButtonList.add(rBtn);
-            listRoot.addView(rBtn);
-        }
     }
 
 

@@ -109,6 +109,11 @@ public class FinishEditingFragment extends Fragment {
 
         caseNameEditText = (EditText) v.findViewById(R.id.edit_case_name_edit_text);
 
+        if (!newCase) {
+            caseNameEditText.setText(caseDataInterface.getCase().getName());
+            caseNameEditText.setEnabled(false);
+        }
+
         finishCaseHelpIcon = (ImageView) v.findViewById(R.id.finish_editing_help_icon_view);
         finishCaseHelpText = (TextView) v.findViewById(R.id.finish_editing_help_hint_text_view);
 

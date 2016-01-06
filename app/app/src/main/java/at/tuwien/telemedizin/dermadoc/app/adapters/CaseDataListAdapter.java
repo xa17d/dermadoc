@@ -45,6 +45,7 @@ import at.tuwien.telemedizin.dermadoc.entities.casedata.AnamnesisQuestion;
 public class CaseDataListAdapter extends ArrayAdapter<CaseDataParc> {
     public static final String LOG_TAG = CaseDataListAdapter.class.getSimpleName();
 
+
     private final Context context;
     private final Activity activity;
     private final List<CaseDataParc> values;

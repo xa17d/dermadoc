@@ -96,6 +96,11 @@ public class EditLocationFragment extends Fragment {
         selectedBodyParts = new ArrayList<>(); // TODO fill with values, when this is not within a new case
         localizationToImageMap = new HashMap<>();
 
+        if (!newCase) {
+            // load localizations
+            selectedBodyParts = bodyLocationSourceInterface.getBodyLocations();
+        }
+
     }
 
 
@@ -145,11 +150,6 @@ public class EditLocationFragment extends Fragment {
                 tabChangeInterface.switchToTheNextTab();
             }
         });
-
-        if (!newCase) {
-            // load localizations
-            selectedBodyParts = bodyLocationSourceInterface.getBodyLocations();
-        }
 
         // set up selected body parts
         if (selectedBodyParts.size() > 0) {
@@ -318,7 +318,7 @@ public class EditLocationFragment extends Fragment {
                     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     // ensure, that some app can handle this intent - this app would crash otherwise
                     if (intent.resolveActivity(getContext().getPackageManager()) != null) {
-                        startActivityForResult(intent, NewCaseActivity.REQUEST_CAMERA);
+                        startActivityForResult(intent, EditCaseActivity.REQUEST_CAMERA);
                     }
                 } else if (textItems[which].equals(optionChooseFromLibrary)) {
                     // open galery
@@ -328,7 +328,7 @@ public class EditLocationFragment extends Fragment {
                     intent.setType("image/*");
                     startActivityForResult(
                             Intent.createChooser(intent, "Select File"),
-                            NewCaseActivity.SELECT_FILE);
+                            EditCaseActivity.SELECT_FILE);
                 } else if (textItems[which].equals(optionCancel)) {
                     // cancel operation
                     dialog.dismiss();
@@ -343,7 +343,7 @@ public class EditLocationFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         Log.d(LOG_TAG, "onActivityResult() requestCode: " + requestCode + ", resultCode: " + resultCode);
 
-        if (resultCode == NewCaseActivity.RESULT_OK) {
+        if (resultCode == EditCaseActivity.RESULT_OK) {
 
         }
     }

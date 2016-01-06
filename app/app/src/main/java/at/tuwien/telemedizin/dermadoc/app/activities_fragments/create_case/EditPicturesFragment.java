@@ -280,7 +280,7 @@ public class EditPicturesFragment extends Fragment implements PictureReceiver, C
             if (photoFile != null) {
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
                         Uri.fromFile(photoFile));
-                startActivityForResult(takePictureIntent, NewCaseActivity.REQUEST_CAMERA);
+                startActivityForResult(takePictureIntent, EditCaseActivity.REQUEST_CAMERA);
             }
         }
     }
@@ -313,7 +313,7 @@ public class EditPicturesFragment extends Fragment implements PictureReceiver, C
                     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE); // old-method should be replaced by dispatchTakePictureIntent() TODO
                     // ensure, that some app can handle this intent - this app would crash otherwise
                     if (intent.resolveActivity(getContext().getPackageManager()) != null) {
-                        startActivityForResult(intent, NewCaseActivity.REQUEST_CAMERA);
+                        startActivityForResult(intent, EditCaseActivity.REQUEST_CAMERA);
                     }
 
 //                    dispatchTakePictureIntent(); // should start camera-app to get a full-size image - does not work yet
@@ -326,7 +326,7 @@ public class EditPicturesFragment extends Fragment implements PictureReceiver, C
                     intent.setType("image/*");
                     startActivityForResult(
                             Intent.createChooser(intent, "Select File"),
-                            NewCaseActivity.SELECT_FILE);
+                            EditCaseActivity.SELECT_FILE);
                 } else if (textItems[which].equals(optionCancel)) {
                     // cancel operation
                     dialog.dismiss();
@@ -365,9 +365,9 @@ public class EditPicturesFragment extends Fragment implements PictureReceiver, C
         super.onActivityResult(requestCode, resultCode, data);
         Log.d(LOG_TAG, "onActivityResult() requestCode: " + requestCode + ", resultCode: " + resultCode);
 
-        if (resultCode == NewCaseActivity.RESULT_OK) {
+        if (resultCode == EditCaseActivity.RESULT_OK) {
 
-            if (requestCode == NewCaseActivity.REQUEST_CAMERA) {
+            if (requestCode == EditCaseActivity.REQUEST_CAMERA) {
                 Log.d(LOG_TAG, "Request Picture from Camera");
                 // handle results of camera-picture requests
                 Bitmap thumbnail = (Bitmap) data.getExtras().get("data"); // not with the new method
@@ -382,7 +382,7 @@ public class EditPicturesFragment extends Fragment implements PictureReceiver, C
                 // TODO
 
 
-            } else if (requestCode == NewCaseActivity.SELECT_FILE) {
+            } else if (requestCode == EditCaseActivity.SELECT_FILE) {
                 Log.d(LOG_TAG, "Request Picture from Select file");
                 // handle results of library-picture requests
                 Uri selectedImageUri = data.getData();
