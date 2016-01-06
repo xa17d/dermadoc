@@ -28,7 +28,8 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp">
+                android:layout_marginBottom="8dp"
+                android:id="@+id/header_relative_layout">
 
                 <ImageView
                     android:id="@+id/edit_location_help_icon_view"
@@ -106,7 +107,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:id="@+id/button_relative_layout">
         <Button
             android:id="@+id/next_section_button"
             android:layout_width="match_parent"

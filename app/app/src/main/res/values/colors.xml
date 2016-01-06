@@ -8,6 +8,11 @@
     <color name="colorPrimary">#459de1</color>
     <color name="colorPrimaryDark">#1876a9</color>
     <color name="colorAccent">#ffb940</color>
+    <color name="colorWhite">#ffffff</color>
+
+    <color name="back_grey">#c4c4c4</color>
+
+    <color name="colorPrimaryDarkDeselected">#6391ab</color>
     <!-- for the tabLayout in MyCases -->
     <color name="tab_text">#c7ceff</color>
     <color name="tab_text_act">#ffffff</color>
@@ -29,6 +34,7 @@
 
     <color name="secondary_light_color">#63d8fc</color>
 
+
     <!-- colors for the clickable-areas in location-image-fragment -->
     <color name="location_area_1">#009eff</color> <!-- full body: head; but reused for other zoomed-parts -->
     <color name="location_area_2">#fcff00</color> <!-- full body: torso; but reused for other zoomed-parts -->
@@ -37,6 +43,11 @@
     <color name="location_area_5">#ff0048</color> <!-- full body: legs; but reused for other zoomed-parts -->
     <color name="location_area_6">#ff00f0</color> <!-- full body: back; but reused for other zoomed-parts -->
 
+    <color name="error_color">#ff8d8b</color>
+    <color name="warning_color">#ffdc96</color>
 
+    <color name="fix_text_color">#000000</color>
+
+    <color name="message_type_text">#ffffff</color>
 
 </resources>

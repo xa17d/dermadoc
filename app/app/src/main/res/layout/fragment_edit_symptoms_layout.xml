@@ -1,8 +1,8 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/scrollView"
     android:layout_width="wrap_content"
-    android:fillViewport="true"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fillViewport="true">
 
     <LinearLayout xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
@@ -14,148 +14,206 @@
         <!-- TODO: Update blank fragment layout -->
 
 
-               <LinearLayout
-                   android:layout_width="match_parent"
-                   android:layout_height="wrap_content"
-                   android:orientation="vertical"
-                   >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
 
-                   <RelativeLayout
-                       android:layout_width="match_parent"
-                       android:layout_height="wrap_content"
-                       android:layout_marginBottom="0dp"
-                       android:focusable="true"
-                       android:focusableInTouchMode="true">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="0dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true">
 
 
-                       <ImageView
-                           android:id="@+id/symptoms_help_icon_view"
-                           android:layout_width="wrap_content"
-                           android:layout_height="wrap_content"
-                           android:layout_alignParentRight="true"
-                           android:layout_alignParentTop="true"
-                           android:layout_marginLeft="10dp"
-                           android:layout_marginRight="10dp"
-                           android:src="@drawable/ic_action_help_holo_light_18dp"
-                           />
+                <ImageView
+                    android:id="@+id/symptoms_help_icon_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/ic_action_help_holo_light_18dp" />
 
-                       <TextView
-                           android:id="@+id/symptoms_section_header"
-                           android:layout_width="0dp"
-                           android:layout_height="wrap_content"
-                           android:layout_alignParentLeft="true"
-                           android:layout_alignParentTop="true"
-                           android:layout_toLeftOf="@id/symptoms_help_icon_view"
-                           android:text="@string/label_symptoms_section_header_description"
-                           style="@style/NewCaseMainHeaderText" />
+                <TextView
+                    android:id="@+id/symptoms_section_header"
+                    style="@style/NewCaseMainHeaderText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_toLeftOf="@id/symptoms_help_icon_view"
+                    android:text="@string/label_symptoms_section_header_description" />
 
-                       <TextView
-                           android:id="@+id/symptoms_help_hint_text_view"
-                           android:layout_width="wrap_content"
-                           android:layout_height="wrap_content"
-                           android:layout_alignParentLeft="true"
-                           android:layout_below="@+id/symptoms_section_header"
-                           android:layout_marginBottom="10dp"
-                           android:layout_marginTop="10dp"
-                           android:background="@drawable/hint_background"
-                           android:padding="5dp"
-                           android:text="@string/hint_symptoms_description"
-                           android:textAppearance="@style/HintText"
-                           android:visibility="gone" />
+                <TextView
+                    android:id="@+id/symptoms_help_hint_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_below="@+id/symptoms_section_header"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/hint_background"
+                    android:padding="5dp"
+                    android:text="@string/hint_symptoms_description"
+                    android:textAppearance="@style/HintText"
+                    android:visibility="gone" />
 
-                   </RelativeLayout>
+            </RelativeLayout>
 
-                   <!-- this view/layout is focusable to avoid the editText being focused automaticall -->
-                   <RelativeLayout
-                       android:id="@+id/autotext_dummy"
-                       android:layout_width="0dp"
-                       android:layout_height="0dp"
-                       android:focusable="true"
-                       android:focusableInTouchMode="true"/>
+            <!-- this view/layout is focusable to avoid the editText being focused automaticall -->
+            <RelativeLayout
+                android:id="@+id/autotext_dummy"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true" />
 
-                    <!-- avoid getting focus automatically -->
-                   <android.support.design.widget.TextInputLayout
-                       android:layout_width="match_parent"
-                       android:layout_height="wrap_content"
-                       android:nextFocusUp="@id/autotext_dummy"
-                       android:nextFocusLeft="@id/autotext_dummy">
+            <!-- avoid getting focus automatically -->
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nextFocusLeft="@id/autotext_dummy"
+                android:nextFocusUp="@id/autotext_dummy">
 
-                       <EditText
-                           android:id="@+id/edit_symptoms_edit_text"
-                           android:layout_width="match_parent"
-                           android:layout_height="wrap_content"
-                           android:hint="@string/label_edit_symptoms_field"
-                           android:inputType="textMultiLine"
-                           />
-                   </android.support.design.widget.TextInputLayout>
+                <EditText
+                    android:id="@+id/edit_symptoms_edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/label_edit_symptoms_field"
+                    android:inputType="textMultiLine" />
+            </android.support.design.widget.TextInputLayout>
 
-                   <TextView
-                       android:id="@+id/edit_symptoms_text_view"
-                       android:layout_width="match_parent"
-                       android:layout_height="wrap_content"
-                       android:text="THE ENTERED SYMPTOMS"
-                       android:visibility="gone" />
-               </LinearLayout>
+            <TextView
+                android:id="@+id/edit_symptoms_text_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="THE ENTERED SYMPTOMS"
+                android:visibility="gone" />
+        </LinearLayout>
 
-               <LinearLayout
-                   android:layout_width="match_parent"
-                   android:layout_height="wrap_content"
-                   android:layout_marginTop="20dp"
-                   android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical">
 
-                   <RelativeLayout
-                       android:layout_width="match_parent"
-                       android:layout_height="wrap_content"
-                       android:layout_marginBottom="8dp">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp">
 
-                       <ImageView
-                           android:id="@+id/pain_assessment_help_icon_view"
-                           android:layout_width="wrap_content"
-                           android:layout_height="wrap_content"
-                           android:layout_alignParentRight="true"
-                           android:layout_alignParentTop="true"
-                           android:layout_marginLeft="10dp"
-                           android:layout_marginRight="10dp"
-                           android:src="@drawable/ic_action_help_holo_light_18dp" />
+                <ImageView
+                    android:id="@+id/pain_assessment_help_icon_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/ic_action_help_holo_light_18dp" />
 
 
-                       <TextView
-                           android:id="@+id/pain_assessment_section_header"
-                           android:layout_width="0dp"
-                           android:layout_height="wrap_content"
-                           android:layout_alignParentLeft="true"
-                           android:layout_alignParentTop="true"
-                           android:layout_toLeftOf="@id/pain_assessment_help_icon_view"
-                           android:text="@string/label_pain_assessment" />
+                <TextView
+                    android:id="@+id/pain_assessment_section_header"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_toLeftOf="@id/pain_assessment_help_icon_view"
+                    android:text="@string/label_pain_assessment" />
 
-                       <TextView
-                           android:id="@+id/pain_assessment_help_hint_text_view"
-                           android:layout_width="wrap_content"
-                           android:layout_height="wrap_content"
-                           android:layout_alignParentLeft="true"
-                           android:layout_below="@+id/pain_assessment_section_header"
-                           android:layout_marginBottom="10dp"
-                           android:layout_marginTop="10dp"
-                           android:background="@drawable/hint_background"
-                           android:padding="5dp"
-                           android:text="@string/hint_pain_assessment_description"
-                           android:textAppearance="@style/HintText"
-                           android:visibility="gone" />
+                <TextView
+                    android:id="@+id/pain_assessment_help_hint_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_below="@+id/pain_assessment_section_header"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/hint_background"
+                    android:padding="5dp"
+                    android:text="@string/hint_pain_assessment_description"
+                    android:textAppearance="@style/HintText"
+                    android:visibility="gone" />
 
-                   </RelativeLayout>
+            </RelativeLayout>
 
-                   <!--<include-->
-                <!--layout="@layout/pain_assessment_scale_layout"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content" />-->
+            <!--<include-->
+            <!--layout="@layout/pain_assessment_scale_layout"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content" />-->
 
             <Spinner
                 android:id="@+id/pain_scale_spinner"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:spinnerMode="dialog"/>
+                android:spinnerMode="dialog" />
 
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="0dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true">
+
+
+                <ImageView
+                    android:id="@+id/size_help_icon_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/ic_action_help_holo_light_18dp" />
+
+                <TextView
+                    android:id="@+id/size_section_header"
+                    style="@style/NewCaseMainHeaderText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_toLeftOf="@id/size_help_icon_view"
+                    android:text="@string/label_size_section_header_description" />
+
+                <TextView
+                    android:id="@+id/size_help_hint_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_below="@+id/size_section_header"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/hint_background"
+                    android:padding="5dp"
+                    android:text="@string/hint_size_description"
+                    android:textAppearance="@style/HintText"
+                    android:visibility="gone" />
+
+            </RelativeLayout>
+
+
+            <TextView
+                android:id="@+id/size_text_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/size_default"
+                android:textSize="20dp" />
 
         </LinearLayout>
 
@@ -166,13 +224,14 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
             <Button
                 android:id="@+id/next_section_button"
+                style="@style/EditCaseNextButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:text="@string/label_next_page"
-                style="@style/EditCaseNextButton" />
+                android:text="@string/label_next_page" />
 
         </RelativeLayout>
 

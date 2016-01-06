@@ -2,6 +2,11 @@ package at.tuwien.telemedizin.dermadoc.app.persistence;
 
 import java.util.List;
 
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.CaseParc;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.GeoLocationParc;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.PatientParc;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.PhysicianParc;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.AnamnesisParc;
 import at.tuwien.telemedizin.dermadoc.entities.Case;
 import at.tuwien.telemedizin.dermadoc.entities.GeoLocation;
 import at.tuwien.telemedizin.dermadoc.entities.Patient;
@@ -15,13 +20,13 @@ public interface ContentProvider {
 
 
     // #### get information #####
-    public Patient getCurrentUser();
+    public PatientParc getCurrentUser();
 
-    public List<Physician> getNearbyPhysicians(GeoLocation geoLocation);
+    public List<PhysicianParc> getNearbyPhysicians(GeoLocationParc geoLocation);
 
-    public Anamnesis getAnamnesisForm();
+    public AnamnesisParc getAnamnesisForm();
 
-    public List<Case> getCurrentCasesOfUser();
+    public List<CaseParc> getCurrentCasesOfUser();
 
     // #### send information #####
 
@@ -30,9 +35,9 @@ public interface ContentProvider {
      * @param caseItem
      * @return
      */
-    public long saveNewCase(Case caseItem);
+    public long saveNewCase(CaseParc caseItem);
 
-    public boolean saveModifiedCase(Case caseItem);
+    public boolean saveModifiedCase(CaseParc caseItem);
 
     // etc TODO
 }

@@ -15,7 +15,8 @@ import java.util.Random;
 
 import at.tuwien.telemedizin.dermadoc.app.DataGenerator;
 import at.tuwien.telemedizin.dermadoc.app.R;
-import at.tuwien.telemedizin.dermadoc.entities.Case;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.CaseParc;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.PhysicianParc;
 import at.tuwien.telemedizin.dermadoc.entities.CaseStatus;
 import at.tuwien.telemedizin.dermadoc.entities.Physician;
 
@@ -25,14 +26,14 @@ import at.tuwien.telemedizin.dermadoc.entities.Physician;
  *
  * following http://www.vogella.com/tutorials/AndroidListView/article.html
  */
-public class CaseListAdapter extends ArrayAdapter<Case> {
+public class CaseListAdapter extends ArrayAdapter<CaseParc> {
     public static final String LOG_TAG = CaseListAdapter.class.getSimpleName();
 
     private final Context context;
-    private final List<Case> values;
+    private final List<CaseParc> values;
 
 
-    public CaseListAdapter(Context context, List<Case> values) {
+    public CaseListAdapter(Context context, List<CaseParc> values) {
         super(context, -1, values);
         this.context = context;
         this.values = values;
@@ -51,7 +52,7 @@ public class CaseListAdapter extends ArrayAdapter<Case> {
 
         }
 
-        Case caseItem = getItem(position);
+        CaseParc caseItem = getItem(position);
         // check if the case_item exists
         if (caseItem != null) {
             TextView itemName = (TextView) v.findViewById(R.id.case_item_name);
@@ -74,7 +75,7 @@ public class CaseListAdapter extends ArrayAdapter<Case> {
             // if the status is "active" or "closed" also show the physician
             if (status == CaseStatus.Active || status == CaseStatus.Closed) {
                 rowPhysician.setVisibility(View.VISIBLE);
-                Physician physician = caseItem.getPhysician();
+                PhysicianParc physician = caseItem.getPhysician();
                 String physicianInfo = "";
 
                 if(physician != null) {
