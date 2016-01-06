@@ -16,11 +16,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import at.tuwien.telemedizin.dermadoc.app.R;
-import at.tuwien.telemedizin.dermadoc.app.activities_fragments.case_specific.CaseActivity;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.Icd10DiagnosisParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.MedicationParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.PatientParc;
@@ -35,8 +33,6 @@ import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.Diagnosis
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.PhotoMessageParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.TextMessageParc;
 import at.tuwien.telemedizin.dermadoc.app.helper.FormatHelper;
-import at.tuwien.telemedizin.dermadoc.entities.Case;
-import at.tuwien.telemedizin.dermadoc.entities.casedata.AnamnesisQuestion;
 
 /**
  * Created by FAUser on 18.11.2015.

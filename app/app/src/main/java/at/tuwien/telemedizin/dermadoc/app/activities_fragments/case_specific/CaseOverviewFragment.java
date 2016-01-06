@@ -1,7 +1,6 @@
 package at.tuwien.telemedizin.dermadoc.app.activities_fragments.case_specific;
 
 
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,21 +11,16 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
 import java.util.List;
 
 import at.tuwien.telemedizin.dermadoc.app.R;
 import at.tuwien.telemedizin.dermadoc.app.activities_fragments.create_case.EditLocationFragment;
 import at.tuwien.telemedizin.dermadoc.app.adapters.PainIntensityMapper;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.CaseParc;
-import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.PatientParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.PhysicianParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.CaseInfoParc;
 import at.tuwien.telemedizin.dermadoc.app.helper.CaseDataExtractionHelper;
 import at.tuwien.telemedizin.dermadoc.app.helper.FormatHelper;
-import at.tuwien.telemedizin.dermadoc.entities.BodyLocalization;
 
 /**
  * A simple {@link Fragment} subclass.

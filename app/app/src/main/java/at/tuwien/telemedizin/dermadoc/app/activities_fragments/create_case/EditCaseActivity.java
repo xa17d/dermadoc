@@ -55,8 +55,8 @@ import at.tuwien.telemedizin.dermadoc.app.persistence.ContentProvider;
 import at.tuwien.telemedizin.dermadoc.app.persistence.ContentProviderFactory;
 import at.tuwien.telemedizin.dermadoc.app.server_interface.ServerInterface;
 import at.tuwien.telemedizin.dermadoc.app.server_interface.ServerInterfaceFactory;
-import at.tuwien.telemedizin.dermadoc.entities.BodyLocalization;
-import at.tuwien.telemedizin.dermadoc.entities.PainIntensity;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.BodyLocalization;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.PainIntensity;
 
 
 public class EditCaseActivity extends AppCompatActivity implements OnCaseDataRequestAndUpdateInterface,

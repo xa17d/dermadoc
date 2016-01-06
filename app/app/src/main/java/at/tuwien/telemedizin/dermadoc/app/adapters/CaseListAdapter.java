@@ -17,8 +17,8 @@ import at.tuwien.telemedizin.dermadoc.app.DataGenerator;
 import at.tuwien.telemedizin.dermadoc.app.R;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.CaseParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.PhysicianParc;
-import at.tuwien.telemedizin.dermadoc.entities.CaseStatus;
-import at.tuwien.telemedizin.dermadoc.entities.Physician;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.CaseStatus;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.Physician;
 
 /**
  * Created by FAUser on 18.11.2015.

@@ -54,8 +54,8 @@ import at.tuwien.telemedizin.dermadoc.app.helper.CaseDataExtractionHelper;
 import at.tuwien.telemedizin.dermadoc.app.helper.FormatHelper;
 import at.tuwien.telemedizin.dermadoc.app.server_interface.ServerInterface;
 import at.tuwien.telemedizin.dermadoc.app.server_interface.ServerInterfaceFactory;
-import at.tuwien.telemedizin.dermadoc.entities.BodyLocalization;
-import at.tuwien.telemedizin.dermadoc.entities.casedata.PhotoMessage;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.BodyLocalization;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.casedata.PhotoMessage;
 
 
 public class AddPictureActivity extends AppCompatActivity {

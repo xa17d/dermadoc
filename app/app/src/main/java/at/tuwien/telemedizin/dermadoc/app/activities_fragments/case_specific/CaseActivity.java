@@ -33,7 +33,6 @@ import java.util.List;
 import at.tuwien.telemedizin.dermadoc.app.R;
 import at.tuwien.telemedizin.dermadoc.app.activities_fragments.create_case.EditCaseActivity;
 import at.tuwien.telemedizin.dermadoc.app.activities_fragments.create_case.EditLocationFragment;
-import at.tuwien.telemedizin.dermadoc.app.activities_fragments.create_case.EditSymptomsFragment;
 import at.tuwien.telemedizin.dermadoc.app.activities_fragments.edit_case.AddPictureActivity;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.CaseParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.PatientParc;
@@ -41,13 +40,11 @@ import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.PhysicianParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.CaseDataParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.CaseInfoParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.TextMessageParc;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.BodyLocalization;
 import at.tuwien.telemedizin.dermadoc.app.helper.CaseDataExtractionHelper;
 import at.tuwien.telemedizin.dermadoc.app.helper.FormatHelper;
 import at.tuwien.telemedizin.dermadoc.app.server_interface.ServerInterface;
 import at.tuwien.telemedizin.dermadoc.app.server_interface.ServerInterfaceFactory;
-import at.tuwien.telemedizin.dermadoc.entities.BodyLocalization;
-import at.tuwien.telemedizin.dermadoc.entities.PainIntensity;
-import at.tuwien.telemedizin.dermadoc.entities.casedata.CaseInfo;
 
 
 public class CaseActivity extends AppCompatActivity

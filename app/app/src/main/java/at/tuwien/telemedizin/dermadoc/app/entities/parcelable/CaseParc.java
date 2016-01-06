@@ -13,9 +13,9 @@ import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.AdvicePar
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.CaseDataParc;
 import at.tuwien.telemedizin.dermadoc.app.helper.FormatHelper;
 import at.tuwien.telemedizin.dermadoc.app.helper.ParcelableHelper;
-import at.tuwien.telemedizin.dermadoc.entities.Case;
-import at.tuwien.telemedizin.dermadoc.entities.CaseStatus;
-import at.tuwien.telemedizin.dermadoc.entities.Physician;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.Case;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.CaseStatus;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.Physician;
 
 /**
  * Created by daniel on 11.11.2015.

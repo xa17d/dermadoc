@@ -3,7 +3,7 @@ package at.tuwien.telemedizin.dermadoc.app.entities.parcelable;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import at.tuwien.telemedizin.dermadoc.entities.Icd10Diagnosis;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.Icd10Diagnosis;
 
 /**
  * Created by Lucas on 01.12.2015.

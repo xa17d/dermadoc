@@ -3,7 +3,7 @@ package at.tuwien.telemedizin.dermadoc.app.entities.parcelable;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import at.tuwien.telemedizin.dermadoc.entities.Medication;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.Medication;
 
 /**
  * Medication

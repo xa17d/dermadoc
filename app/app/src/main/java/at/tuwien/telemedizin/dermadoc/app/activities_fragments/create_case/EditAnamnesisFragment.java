@@ -25,11 +25,11 @@ import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.Anamnesis
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.AnamnesisQuestionBoolParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.AnamnesisQuestionParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.AnamnesisQuestionTextParc;
-import at.tuwien.telemedizin.dermadoc.entities.Physician;
-import at.tuwien.telemedizin.dermadoc.entities.casedata.Anamnesis;
-import at.tuwien.telemedizin.dermadoc.entities.casedata.AnamnesisQuestion;
-import at.tuwien.telemedizin.dermadoc.entities.casedata.AnamnesisQuestionBool;
-import at.tuwien.telemedizin.dermadoc.entities.casedata.AnamnesisQuestionText;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.Physician;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.casedata.Anamnesis;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.casedata.AnamnesisQuestion;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.casedata.AnamnesisQuestionBool;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.casedata.AnamnesisQuestionText;
 
 /**
  * A simple {@link Fragment} subclass.

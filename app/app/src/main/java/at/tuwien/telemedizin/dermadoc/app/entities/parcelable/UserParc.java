@@ -3,8 +3,8 @@ package at.tuwien.telemedizin.dermadoc.app.entities.parcelable;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import at.tuwien.telemedizin.dermadoc.entities.GeoLocation;
-import at.tuwien.telemedizin.dermadoc.entities.User;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.GeoLocation;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.User;
 
 /**
  * Abstract User
@@ -64,7 +64,8 @@ public abstract class UserParc implements Parcelable {
 
     // map
     public UserParc(User user) {
-        this(user.getId(), user.getMail(), user.getPassword(), user.getName(), new GeoLocationParc(user.getLocation()));
+        this(user.getId(), user.getMail(), user.getPassword(), user.getName(),
+                user.getLocation() != null ? new GeoLocationParc(user.getLocation()) : null);
     }
 
 

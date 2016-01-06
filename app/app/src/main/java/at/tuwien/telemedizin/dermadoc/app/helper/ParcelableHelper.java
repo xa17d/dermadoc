@@ -14,15 +14,15 @@ import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.UserParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.AnamnesisQuestionBoolParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.AnamnesisQuestionParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.AnamnesisQuestionTextParc;
-import at.tuwien.telemedizin.dermadoc.entities.BodyLocalization;
-import at.tuwien.telemedizin.dermadoc.entities.Icd10Diagnosis;
-import at.tuwien.telemedizin.dermadoc.entities.Medication;
-import at.tuwien.telemedizin.dermadoc.entities.Patient;
-import at.tuwien.telemedizin.dermadoc.entities.Physician;
-import at.tuwien.telemedizin.dermadoc.entities.User;
-import at.tuwien.telemedizin.dermadoc.entities.casedata.AnamnesisQuestion;
-import at.tuwien.telemedizin.dermadoc.entities.casedata.AnamnesisQuestionBool;
-import at.tuwien.telemedizin.dermadoc.entities.casedata.AnamnesisQuestionText;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.BodyLocalization;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.Icd10Diagnosis;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.Medication;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.Patient;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.Physician;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.User;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.casedata.AnamnesisQuestion;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.casedata.AnamnesisQuestionBool;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.casedata.AnamnesisQuestionText;
 
 /**
  * Created by FAUser on 20.11.2015.

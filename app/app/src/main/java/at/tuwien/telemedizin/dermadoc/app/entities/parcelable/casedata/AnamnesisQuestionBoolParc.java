@@ -4,7 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import at.tuwien.telemedizin.dermadoc.app.helper.ParcelableHelper;
-import at.tuwien.telemedizin.dermadoc.entities.casedata.AnamnesisQuestionBool;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.casedata.AnamnesisQuestionBool;
 
 /**
  * Created by daniel on 24.11.2015.

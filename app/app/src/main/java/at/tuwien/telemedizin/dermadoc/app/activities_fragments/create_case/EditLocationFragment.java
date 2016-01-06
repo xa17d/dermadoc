@@ -29,8 +29,8 @@ import java.util.Map;
 import at.tuwien.telemedizin.dermadoc.app.R;
 import at.tuwien.telemedizin.dermadoc.app.adapters.BodyLocalizationMapper;
 import at.tuwien.telemedizin.dermadoc.app.entities.BodyLocalizationZoomHelper;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.BodyLocalization;
 import at.tuwien.telemedizin.dermadoc.app.helper.ColorTool;
-import at.tuwien.telemedizin.dermadoc.entities.BodyLocalization;
 
 /**
  * A simple {@link Fragment} subclass.

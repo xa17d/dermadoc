@@ -1,8 +1,6 @@
 apply plugin: 'com.android.application'
+//apply plugin: 'io.spring.dependency-management'
 
-
-
-apply plugin: 'android'
 
 repositories {
     mavenCentral()
@@ -47,12 +45,18 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'com.android.support:design:23.1.1'
     compile 'org.springframework.android:spring-android-rest-template:2.0.0.M3'
+    compile 'org.codehaus.jackson:jackson-mapper-asl:1.9.13'
+//    compile 'org.springframework.android:spring-android-rest-template:1.0.1.RELEASE'
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.4.1.3' // von derm githup-proj
 
-    compile 'org.codehaus.jackson:jackson-mapper-asl:1.9.11'
+
+//    compile 'org.codehaus.jackson:jackson-mapper-asl:1.9.11'
     compile('org.slf4j:log4j-over-slf4j:1.7.12')
 
     // Persistence Stuff
-    compile("org.springframework.boot:spring-boot-starter-data-jpa:1.2.7.RELEASE")
+//    compile("org.springframework.boot:spring-boot-starter-data-jpa:1.2.7.RELEASE")
+//    compile group: 'javax.persistence', name: 'persistence-api', version: '1.0'
 
-    compile project(':entities')
+//    compile project(':entities')
+//    compile project(':service')
 }

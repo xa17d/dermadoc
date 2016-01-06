@@ -9,11 +9,11 @@ import java.util.List;
 
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.UserParc;
 import at.tuwien.telemedizin.dermadoc.app.helper.ParcelableHelper;
-import at.tuwien.telemedizin.dermadoc.entities.BodyLocalization;
-import at.tuwien.telemedizin.dermadoc.entities.CaseStatus;
-import at.tuwien.telemedizin.dermadoc.entities.PainIntensity;
-import at.tuwien.telemedizin.dermadoc.entities.User;
-import at.tuwien.telemedizin.dermadoc.entities.casedata.CaseInfo;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.BodyLocalization;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.CaseStatus;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.PainIntensity;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.User;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.casedata.CaseInfo;
 
 /**
  * General case information.

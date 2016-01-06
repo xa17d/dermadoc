@@ -23,7 +23,7 @@ import at.tuwien.telemedizin.dermadoc.app.R;
 import at.tuwien.telemedizin.dermadoc.app.adapters.PainAssessmentArrayAdapter;
 import at.tuwien.telemedizin.dermadoc.app.entities.CaseValidationError;
 import at.tuwien.telemedizin.dermadoc.app.entities.CaseValidationErrorLevel;
-import at.tuwien.telemedizin.dermadoc.entities.PainIntensity;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.PainIntensity;
 
 /**
  * A simple {@link Fragment} subclass.

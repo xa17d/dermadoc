@@ -10,7 +10,7 @@ import java.util.List;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.MedicationParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.UserParc;
 import at.tuwien.telemedizin.dermadoc.app.helper.ParcelableHelper;
-import at.tuwien.telemedizin.dermadoc.entities.casedata.Advice;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.casedata.Advice;
 
 /**
  * Advice from a Physician

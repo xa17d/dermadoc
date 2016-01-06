@@ -7,8 +7,8 @@ import java.util.Calendar;
 
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.UserParc;
 import at.tuwien.telemedizin.dermadoc.app.helper.ParcelableHelper;
-import at.tuwien.telemedizin.dermadoc.entities.User;
-import at.tuwien.telemedizin.dermadoc.entities.casedata.TextMessage;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.User;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.casedata.TextMessage;
 
 /**
  * Unstructured text message.

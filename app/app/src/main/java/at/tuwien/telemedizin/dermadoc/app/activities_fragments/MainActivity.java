@@ -8,18 +8,18 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
-import android.view.View;
-import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,16 +31,17 @@ import at.tuwien.telemedizin.dermadoc.app.activities_fragments.create_case.EditC
 import at.tuwien.telemedizin.dermadoc.app.activities_fragments.login.LoginActivity;
 import at.tuwien.telemedizin.dermadoc.app.adapters.MyCasesPagerEnum;
 import at.tuwien.telemedizin.dermadoc.app.comparators.CaseSortCategory;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.CaseParc;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.PatientParc;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.Patient;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.User;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.rest.AuthenticationToken;
 import at.tuwien.telemedizin.dermadoc.app.helper.ToStringHelper;
 import at.tuwien.telemedizin.dermadoc.app.persistence.ContentProvider;
 import at.tuwien.telemedizin.dermadoc.app.persistence.ContentProviderFactory;
 import at.tuwien.telemedizin.dermadoc.app.server_interface.RestServerInterface;
 import at.tuwien.telemedizin.dermadoc.app.server_interface.ServerInterface;
 import at.tuwien.telemedizin.dermadoc.app.server_interface.ServerInterfaceFactory;
-import at.tuwien.telemedizin.dermadoc.entities.Patient;
-import at.tuwien.telemedizin.dermadoc.entities.rest.AuthenticationToken;
-import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.CaseParc;
-import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.PatientParc;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, CaseListFragment.OnCaseListEventListener, UserDataCallbackInterface {
@@ -361,26 +362,38 @@ public class MainActivity extends AppCompatActivity
 
 
             ServerInterface sI = ServerInterfaceFactory.getInstance();
-            Patient currentUser = sI.getUser();
+            User currentUser = sI.getUser();
+            if (currentUser instanceof Patient) {
+                Patient currentPatientUser = (Patient) currentUser;
+                return currentPatientUser;
 
-            // TODO remoeve
-            try {
-                Thread.sleep(3000);                 //1000 milliseconds is one second.
-            } catch(InterruptedException ex) {
-                Thread.currentThread().interrupt();
             }
 
-            Log.d(LOG_TAG, "retrieved User: " + ToStringHelper.toString(currentUser));
+            // TODO remoeve
+//            try {
+//                Thread.sleep(3000);                 //1000 milliseconds is one second.
+//            } catch(InterruptedException ex) {
+//                Thread.currentThread().interrupt();
+//            }
 
-            return currentUser;
+            return null;
         }
 
         @Override
         protected void onPostExecute(final Patient user) {
             Log.d(LOG_TAG,"onPostExecute() user: " + user);
+
+            if (user == null) {
+                Log.d(LOG_TAG,"user == null -> finish activity");
+                // TODO
+
+            } else {
+                currentUser = new PatientParc(user);
+            }
+
+
             loadUserDataTask = null;
             showProgress(false);
-            // TODO check result etc.
         }
 
         @Override

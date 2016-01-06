@@ -3,8 +3,8 @@ package at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import at.tuwien.telemedizin.dermadoc.entities.casedata.AnamnesisQuestionBool;
-import at.tuwien.telemedizin.dermadoc.entities.casedata.AnamnesisQuestionText;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.casedata.AnamnesisQuestionBool;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.casedata.AnamnesisQuestionText;
 
 /**
  * Created by daniel on 24.11.2015.

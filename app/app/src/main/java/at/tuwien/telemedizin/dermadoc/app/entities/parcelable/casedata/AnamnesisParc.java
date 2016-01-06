@@ -9,7 +9,7 @@ import java.util.List;
 
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.UserParc;
 import at.tuwien.telemedizin.dermadoc.app.helper.ParcelableHelper;
-import at.tuwien.telemedizin.dermadoc.entities.casedata.Anamnesis;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.casedata.Anamnesis;
 
 /**
  * Created by daniel on 24.11.2015.
