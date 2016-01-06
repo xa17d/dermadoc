@@ -35,7 +35,7 @@ public class PostRequest<Trequest, Tresponse> {
                 httpConnection.setRequestProperty("Authorization", token.toString());
             }
             httpConnection.setRequestMethod("POST");
-            httpConnection.setRequestProperty("Content-Type", "text/json");
+            httpConnection.setRequestProperty("Content-Type", "application/json");
             httpConnection.setDoInput(true);
             httpConnection.setDoOutput(true);
 
