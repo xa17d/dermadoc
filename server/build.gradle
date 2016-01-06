@@ -50,7 +50,7 @@ dependencies {
     compile 'org.springframework.boot:spring-boot-starter-security'
     compile 'org.springframework.boot:spring-boot-starter-actuator'
     compile 'org.springframework.boot:spring-boot-starter-aop'
-    compile('com.fasterxml.jackson.dataformat:jackson-dataformat-xml')
+    //compile('com.fasterxml.jackson.dataformat:jackson-dataformat-xml')
     compile('org.slf4j:log4j-over-slf4j:1.7.12')
 
     // Persistence Stuff
@@ -59,7 +59,7 @@ dependencies {
     // runtime('mysql:mysql-connector-java')
 
     //fix for xml parser
-    compile('org.codehaus.woodstox:woodstox-core-asl:4.1.4')
+    //compile('org.codehaus.woodstox:woodstox-core-asl:4.1.4')
 
     // Test Stuff
     testCompile('org.springframework.boot:spring-boot-starter-test')

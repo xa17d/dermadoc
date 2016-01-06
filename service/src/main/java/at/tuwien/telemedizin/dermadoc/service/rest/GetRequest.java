@@ -4,7 +4,6 @@ import at.tuwien.telemedizin.dermadoc.entities.rest.AuthenticationToken;
 import at.tuwien.telemedizin.dermadoc.entities.rest.Error;
 import at.tuwien.telemedizin.dermadoc.service.rest.listener.RestListener;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -18,7 +17,7 @@ import java.net.URL;
  */
 public class GetRequest<Tresponse> {
 
-    private ObjectMapper mapper = new XmlMapper();
+    private ObjectMapper mapper = new ObjectMapper();
 
     private AuthenticationToken token;
     private Class<? extends Tresponse> typeParameterClass;
@@ -39,7 +38,7 @@ public class GetRequest<Tresponse> {
             }
             httpConnection.setRequestMethod("GET");
 
-            if (httpConnection.getResponseCode() >= 200 || httpConnection.getResponseCode() < 300 ) {
+            if (httpConnection.getResponseCode() >= 200 && httpConnection.getResponseCode() < 300 ) {
 
                 BufferedReader reader = new BufferedReader(new InputStreamReader(httpConnection.getInputStream()));
                 Tresponse response = mapper.readValue(reader, typeParameterClass);
