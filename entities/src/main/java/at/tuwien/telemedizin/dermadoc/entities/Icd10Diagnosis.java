@@ -1,8 +1,12 @@
 package at.tuwien.telemedizin.dermadoc.entities;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
 /**
  * Created by Lucas on 01.12.2015.
  */
+@Entity
 public class Icd10Diagnosis {
 
     //TODO actually use icd 10
@@ -14,6 +18,7 @@ public class Icd10Diagnosis {
         this.icd10Name = icd10Name;
     }
 
+    @Id
     private String icd10Code;
     public void setIcd10Code(String icd10Code) { this.icd10Code = icd10Code; }
     public String getIcd10Code() { return icd10Code; }
@@ -24,6 +29,6 @@ public class Icd10Diagnosis {
 
     @Override
     public String toString() {
-        return icd10Code + " - " + icd10Name;
+        return icd10Code + " - " + (icd10Name.length()+icd10Code.length() > 50 ? (icd10Name.substring(0,40) + "...") : icd10Name);
     }
 }

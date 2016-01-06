@@ -9,4 +9,9 @@ import at.tuwien.telemedizin.dermadoc.desktop.gui.main.controls.handler.CaseData
 public abstract class AGCCaseDataEdit extends AGCCaseData {
 
     public abstract void setSaveEventHandler(CaseDataEventHandler caseDataEventHandler);
+
+    @Override
+    public boolean isObsolete() {
+        return false;
+    }
 }

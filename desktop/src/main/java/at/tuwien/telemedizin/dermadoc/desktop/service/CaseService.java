@@ -1,6 +1,6 @@
 package at.tuwien.telemedizin.dermadoc.desktop.service;
 
-import at.tuwien.telemedizin.dermadoc.desktop.exception.DermadocException;
+import at.tuwien.telemedizin.dermadoc.service.exception.DermadocException;
 import at.tuwien.telemedizin.dermadoc.desktop.service.dto.PatientCaseMap;
 import at.tuwien.telemedizin.dermadoc.entities.*;
 import at.tuwien.telemedizin.dermadoc.entities.rest.*;
@@ -10,7 +10,6 @@ import at.tuwien.telemedizin.dermadoc.desktop.service.dto.DermadocNotificationHa
 import at.tuwien.telemedizin.dermadoc.entities.casedata.CaseData;
 import at.tuwien.telemedizin.dermadoc.service.rest.IRestCaseService;
 import at.tuwien.telemedizin.dermadoc.service.rest.listener.RestListener;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 

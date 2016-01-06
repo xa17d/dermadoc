@@ -10,7 +10,7 @@
         <Label fx:id="gender" GridPane.columnIndex="1" />
         <Label fx:id="svnr" GridPane.rowIndex="1" />
         <Label text="Spengergasse 13a" GridPane.columnIndex="2" />
-        <Label text="1050 Wien" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+        <ImageView fx:id="ivBodyLocalization" GridPane.columnIndex="2" GridPane.rowIndex="1" />
     </children>
     <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" minWidth="30.0"/>

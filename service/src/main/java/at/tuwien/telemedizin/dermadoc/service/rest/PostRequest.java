@@ -4,7 +4,6 @@ import at.tuwien.telemedizin.dermadoc.entities.rest.AuthenticationToken;
 import at.tuwien.telemedizin.dermadoc.entities.rest.Error;
 import at.tuwien.telemedizin.dermadoc.service.rest.listener.RestListener;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -16,7 +15,7 @@ import java.net.URL;
  */
 public class PostRequest<Trequest, Tresponse> {
 
-    private ObjectMapper mapper = new XmlMapper();
+    private ObjectMapper mapper = new ObjectMapper();
 
     private AuthenticationToken token;
     private Class<? extends Tresponse> typeParameterClassResponse;
@@ -36,7 +35,7 @@ public class PostRequest<Trequest, Tresponse> {
                 httpConnection.setRequestProperty("Authorization", token.toString());
             }
             httpConnection.setRequestMethod("POST");
-            httpConnection.setRequestProperty("Content-Type", "text/xml");
+            httpConnection.setRequestProperty("Content-Type", "application/json");
             httpConnection.setDoInput(true);
             httpConnection.setDoOutput(true);
 
@@ -45,7 +44,7 @@ public class PostRequest<Trequest, Tresponse> {
             outStream.flush();
             outStream.close();
 
-            if (httpConnection.getResponseCode() >= 200 || httpConnection.getResponseCode() < 300 ) {
+            if (httpConnection.getResponseCode() >= 200 && httpConnection.getResponseCode() < 300 ) {
 
                 BufferedReader reader = new BufferedReader(new InputStreamReader(httpConnection.getInputStream()));
                 Tresponse response = mapper.readValue(reader, typeParameterClassResponse);

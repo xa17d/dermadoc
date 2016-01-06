@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<fx:root type="javafx.scene.layout.HBox" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8">
+    <GridPane fx:id="gpCaseData">
+        <columnConstraints>
+            <ColumnConstraints hgrow="ALWAYS" prefWidth="500.0" />
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints minHeight="40.0" prefHeight="150.0" vgrow="ALWAYS" />
+            <RowConstraints minHeight="20.0" prefHeight="60.0" vgrow="SOMETIMES" />
+            <RowConstraints vgrow="NEVER" />
+        </rowConstraints>
+        <children>
+            <TextArea fx:id="taDiagnosis" prefHeight="150.0" prefWidth="400.0" maxWidth="400" />
+            <Label fx:id="lbDiagnosis" prefWidth="400.0" maxWidth="400" wrapText="true" GridPane.rowIndex="1"/>
+            <Button mnemonicParsing="false" onAction="#save" text="Save" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
+                <GridPane.margin>
+                    <Insets bottom="15.0" left="15.0" right="25.0" top="15.0" />
+                </GridPane.margin>
+            </Button>
+        </children>
+    </GridPane>
+</fx:root>

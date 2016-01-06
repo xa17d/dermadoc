@@ -2,11 +2,15 @@ package at.tuwien.telemedizin.dermadoc.entities.casedata;
 
 import at.tuwien.telemedizin.dermadoc.entities.User;
 
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.util.Calendar;
 
 /**
  * Created by daniel on 11.11.2015.
  */
+@Entity
+@Table(name = "photo_message")
 public class PhotoMessage extends CaseData {
 
     public PhotoMessage(long id, Calendar created, User author, String mime, byte[] photoData) {
