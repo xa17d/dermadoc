@@ -48,6 +48,7 @@ import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.PhysicianParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.AnamnesisParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.CaseInfoParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.PhotoMessageParc;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.TextMessageParc;
 import at.tuwien.telemedizin.dermadoc.app.helper.CaseDataExtractionHelper;
 import at.tuwien.telemedizin.dermadoc.app.helper.ToStringHelper;
 import at.tuwien.telemedizin.dermadoc.app.persistence.ContentProvider;
@@ -162,7 +163,7 @@ public class NewCaseActivity extends AppCompatActivity implements OnCaseDataRequ
         fragmentList.add(symptomsFragment);
         titleList.add(getString(NewCasePagerEnum.SYMPTOMS.getTitleResId()));
 
-        picturesFragment = EditPicturesFragment.newInstance(true);
+        picturesFragment = EditPicturesFragment.newInstance(true, false);
         fragmentList.add(picturesFragment);
         titleList.add(getString(NewCasePagerEnum.PICTURE.getTitleResId()));
 
@@ -393,6 +394,7 @@ public class NewCaseActivity extends AppCompatActivity implements OnCaseDataRequ
         // get data from symptom-fragment
         String symptomDescription = symptomsFragment.getSymptomDescription();
         PainIntensity painIntensity = symptomsFragment.getPainIntensity();
+        double size = symptomsFragment.getSize();
 
         // get data from picture-fragment
         List<PictureHelperEntity> pictures = picturesFragment.getPictures();
@@ -415,7 +417,7 @@ public class NewCaseActivity extends AppCompatActivity implements OnCaseDataRequ
 
         // CaseInfo
         CaseInfoParc caseInfo = new CaseInfoParc(-1, timestamp,
-                caseItem.getPatient(), localizations, painIntensity, 0, symptomDescription);
+                caseItem.getPatient(), localizations, painIntensity, size, symptomDescription);
 
         caseItem.setName(caseName);
         caseItem.setPhysician(physicianSelection);
@@ -434,9 +436,14 @@ public class NewCaseActivity extends AppCompatActivity implements OnCaseDataRequ
             }
             // PictureHelperEntity to PhotoMessage
             PhotoMessageParc photoMessageParc = new PhotoMessageParc(-1,
-                    timestamp, caseItem.getPatient(), p.getDescription(), byteArray);
+                    timestamp, caseItem.getPatient(), "JPEG", byteArray);
             // add photoMessage to caseItem
             caseItem.addDataElement(photoMessageParc);
+
+            // put the description in a following TextMessage
+            TextMessageParc photoRelatedMessageParc = new TextMessageParc(-1,
+                    timestamp, caseItem.getPatient(), p.getDescription());
+            caseItem.addDataElement(photoRelatedMessageParc);
         }
 
         // add Anamnesis element

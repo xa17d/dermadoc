@@ -59,7 +59,12 @@ public class PhotoMessageParc extends CaseDataParc {
         super(in);
 
         this.mime = in.readString();
-        in.readByteArray(this.photoData);
+        int byteArrayLength = in.readInt();
+        this.photoData = new byte[byteArrayLength];
+        if (byteArrayLength > 0) {
+            in.readByteArray(this.photoData);
+        }
+
     }
 
     @Override
@@ -72,6 +77,7 @@ public class PhotoMessageParc extends CaseDataParc {
 
         super.writeToParcel(dest, flags);
         dest.writeString(mime);
+        dest.writeInt(photoData != null ? photoData.length : 0);
         dest.writeByteArray(photoData);
     }
 

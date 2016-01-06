@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import at.tuwien.telemedizin.dermadoc.app.R;
+import at.tuwien.telemedizin.dermadoc.app.activities_fragments.edit_case.AddPictureActivity;
 import at.tuwien.telemedizin.dermadoc.app.entities.PictureHelperEntity;
 
 /**
@@ -174,6 +175,9 @@ public class EditPictureDescriptionFragment extends DialogFragment {
                                 // TODO: find a better way of communication
                                 if (getActivity() instanceof NewCaseActivity) {
                                     ((NewCaseActivity)getActivity()).notifyEditPictureDescription(picture,
+                                            descriptionEditText.getText().toString());
+                                } else if (getActivity() instanceof AddPictureActivity) {
+                                    ((AddPictureActivity)getActivity()).notifyEditPictureDescription(picture,
                                             descriptionEditText.getText().toString());
                                 }
 

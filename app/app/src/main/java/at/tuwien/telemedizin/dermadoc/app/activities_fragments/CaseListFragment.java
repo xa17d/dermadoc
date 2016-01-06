@@ -20,6 +20,7 @@ import at.tuwien.telemedizin.dermadoc.app.adapters.CaseListAdapter;
 import at.tuwien.telemedizin.dermadoc.app.comparators.CaseParcComparator;
 import at.tuwien.telemedizin.dermadoc.app.comparators.CaseSortCategory;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.CaseParc;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.PatientParc;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -95,6 +96,10 @@ public class CaseListFragment extends Fragment {
                 Intent intent = new Intent(getContext(), CaseActivity.class);
 
                 intent.putExtra(CaseParc.INTENT_KEY, adapter.getItem(position));
+
+                // TODO change
+                PatientParc currentUser = ((MainActivity)getActivity()).getUser();
+                intent.putExtra(CaseActivity.USER_INTENT_KEY, currentUser);
                 startActivity(intent);
             }
         });

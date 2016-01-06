@@ -14,15 +14,15 @@
                     android:icon="@drawable/ic_assignment_grey_36dp"
                     android:title="Overview"
                     />
-                <item android:id="@+id/nav_case_diagnoses"
-                    android:icon="@drawable/diagnoses_dark"
-                    android:title="Diagnoses" />
-                <item android:id="@+id/nav_case_advice"
-                    android:icon="@drawable/ic_action_pill_holo_light_18dp"
-                    android:title="Advice" />
-                <item android:id="@+id/nav_case_etc"
+                <item android:id="@+id/nav_case_conversation"
                     android:icon="@drawable/ic_speaker_notes_grey_36dp"
-                    android:title="etc..." />
+                    android:title="@string/label_nav_conversation" />
+                <!--<item android:id="@+id/nav_case_advice"-->
+                    <!--android:icon="@drawable/ic_action_pill_holo_light_18dp"-->
+                    <!--android:title="Advice" />-->
+                <!--<item android:id="@+id/nav_case_etc"-->
+                    <!--android:icon="@drawable/ic_speaker_notes_grey_36dp"-->
+                    <!--android:title="etc..." />-->
 
         </menu>
     </item>

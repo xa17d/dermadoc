@@ -2,14 +2,17 @@ package at.tuwien.telemedizin.dermadoc.app.activities_fragments.create_case;
 
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -36,6 +39,7 @@ public class EditSymptomsFragment extends Fragment {
     private boolean newCase; // if it is a new case, no symptom information has to be loaded and the layout switches into edit-mode
     private boolean symptomsHintIsVisible;
     private boolean painAssessmentHintIsVisible;
+    private boolean sizeAssessmentHintIsVisible;
 
     private EditText symptomDescriptionEditText;
 
@@ -44,6 +48,12 @@ public class EditSymptomsFragment extends Fragment {
 
     private ImageView painAssessmentHelpIcon;
     private TextView painAssessmentHelpText;
+
+    private ImageView sizeAssessmentHelpIcon;
+    private TextView sizeAssessmentHelpText;
+
+    private TextView sizeTexView;
+    private double currentSelectedSize = 0;
 
     private PainAssessmentArrayAdapter painArrayAdapter;
     private Spinner painSpinner;
@@ -67,6 +77,49 @@ public class EditSymptomsFragment extends Fragment {
 
     public EditSymptomsFragment() {
         // Required empty public constructor
+    }
+
+    public void showSizePickerDialog() {
+// 1. Instantiate an AlertDialog.Builder with its constructor
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+// 2. Chain together various setter methods to set the dialog characteristics
+        LayoutInflater inflater = LayoutInflater.from(getContext());
+        View dialogV = inflater.inflate(R.layout.pick_size_dialog_layout, null);
+        final NumberPicker nbP1 = (NumberPicker) dialogV.findViewById(R.id.number_picker_1);
+        nbP1.setMinValue(0);
+        nbP1.setMaxValue(100);
+        int currentSizeAsInt = (int)currentSelectedSize;
+        nbP1.setValue(currentSizeAsInt);
+        final NumberPicker nbP2 = (NumberPicker) dialogV.findViewById(R.id.number_picker_2);
+        nbP2.setMaxValue(9);
+        nbP2.setMinValue(0);
+        nbP2.setValue((int) ((currentSelectedSize - currentSizeAsInt)*10));
+
+        builder.setTitle(R.string.header_size);
+        builder.setView(dialogV);
+
+        builder.setPositiveButton(R.string.option_pic_dialog_positive, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User clicked OK button
+                // read values and send them to the textView / size
+                int i1 = nbP1.getValue();
+                int i2 = nbP2.getValue();
+
+                double s = i1 + i2/10.0;
+                currentSelectedSize = s;
+                updateSizeTextView();
+            }
+        });
+
+// 3. Get the AlertDialog from create()
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void updateSizeTextView() {
+        sizeTexView.setText(currentSelectedSize + " " + getString(R.string.size_type));
+//        sizeTexView.invalidate();
     }
 
     @Override
@@ -137,6 +190,36 @@ public class EditSymptomsFragment extends Fragment {
             }
         });
 
+        sizeAssessmentHelpIcon = (ImageView) v.findViewById(R.id.size_help_icon_view);
+        sizeAssessmentHelpText = (TextView) v.findViewById(R.id.size_help_hint_text_view);
+
+        sizeAssessmentHelpIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // make hint visible or hide it
+                toggleSizeHint();
+
+            }
+        });
+
+        sizeAssessmentHelpText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // make hint visible or hide it
+                toggleSizeHint();
+
+            }
+        });
+
+        sizeTexView = (TextView) v.findViewById(R.id.size_text_view);
+        sizeTexView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // show number picker dialog
+                showSizePickerDialog();
+            }
+        });
+
         // create pain-assessement grid
         // Grid view does not really work well ...
 //        EmbedableSGridView painGridView = (EmbedableSGridView) v.findViewById(R.id.pain_assessment_grid);
@@ -186,12 +269,28 @@ public class EditSymptomsFragment extends Fragment {
         }
     }
 
+    private void toggleSizeHint() {
+        if (sizeAssessmentHintIsVisible) {
+            sizeAssessmentHelpText.setVisibility(View.GONE);
+            sizeAssessmentHelpIcon.setImageResource(R.drawable.ic_action_help_holo_light_18dp);
+            sizeAssessmentHintIsVisible = false;
+        } else {
+            sizeAssessmentHelpText.setVisibility(View.VISIBLE);
+            sizeAssessmentHelpIcon.setImageResource(R.drawable.ic_action_help_yellow_dark_18dp);
+            sizeAssessmentHintIsVisible = true;
+        }
+    }
+
     public String getSymptomDescription() {
         return symptomDescriptionEditText.getText().toString();
     }
 
     public PainIntensity getPainIntensity() {
         return painArrayAdapter.getItem(painSpinner.getSelectedItemPosition());
+    }
+
+    public double getSize() {
+        return currentSelectedSize;
     }
 
 }

@@ -8,14 +8,18 @@ import java.util.List;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.CaseParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.GeoLocationParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.Icd10DiagnosisParc;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.MedicationParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.PatientParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.PhysicianParc;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.AdviceParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.AnamnesisParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.AnamnesisQuestionBoolParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.AnamnesisQuestionParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.AnamnesisQuestionTextParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.CaseInfoParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.DiagnosisParc;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.PhotoMessageParc;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.TextMessageParc;
 import at.tuwien.telemedizin.dermadoc.entities.BodyLocalization;
 import at.tuwien.telemedizin.dermadoc.entities.Case;
 import at.tuwien.telemedizin.dermadoc.entities.CaseStatus;
@@ -124,20 +128,68 @@ public class TestContentProvider implements ContentProvider {
         localizations.add(BodyLocalization.HAND_LEFT);
         localizations.add(BodyLocalization.FOOT_LEFT);
 
-        CaseInfoParc caseInfo = new CaseInfoParc(-1, Calendar.getInstance(), patient, localizations, PainIntensity.Mild, 2, "description test hello test");
+        Calendar timestamp = Calendar.getInstance();
+        timestamp.add(Calendar.DAY_OF_MONTH, -7);
+
+        CaseInfoParc caseInfo = new CaseInfoParc(-1, timestamp, patient, localizations, PainIntensity.Mild, 2, "description test hello test");
         testCase1.addDataElement(caseInfo);
+
+        timestamp = Calendar.getInstance();
+        timestamp.add(Calendar.DAY_OF_MONTH, -6);
 
         List<Icd10DiagnosisParc> d1_icList = new ArrayList<>();
         d1_icList.add(new Icd10DiagnosisParc("101010", "Hühnerauge"));
         d1_icList.add(new Icd10DiagnosisParc("02221", "Nase im Gesicht"));
-        DiagnosisParc d1 = new DiagnosisParc(-1, Calendar.getInstance(), physician,"test Diagnose 1 ", d1_icList);
+        DiagnosisParc d1 = new DiagnosisParc(-1, timestamp, physician,"test Diagnose 1 ", d1_icList);
         testCase1.addDataElement(d1);
 
+        timestamp = Calendar.getInstance();
+        timestamp.add(Calendar.DAY_OF_MONTH, -5);
+        timestamp.add(Calendar.HOUR_OF_DAY, -2);
 
+        // text msg
+        TextMessageParc textMsg1 = new TextMessageParc(-1, timestamp, physician,"Ich schicke Ihnen gleich ein paar Ratschläge und Medikamenten liste.");
+        testCase1.addDataElement(textMsg1);
+
+        timestamp = Calendar.getInstance();
+        timestamp.add(Calendar.DAY_OF_MONTH, -5);
+        timestamp.add(Calendar.HOUR_OF_DAY, -1);
+        // advice
+        List<MedicationParc> mediacations1 = new ArrayList<>();
+        MedicationParc med1 = new MedicationParc("Paralala");
+        MedicationParc med2 = new MedicationParc("Bilill");
+        mediacations1.add(med1);
+        mediacations1.add(med2);
+        AdviceParc advice1 = new AdviceParc(-1, timestamp, physician,"Bleiben aus der Sonne. Immer nur 60 Hz Strahlung ", mediacations1);
+
+        testCase1.addDataElement(advice1);
+
+        timestamp = Calendar.getInstance();
+        timestamp.add(Calendar.DAY_OF_MONTH, -5);
+
+        // text msg
+        TextMessageParc textMsg2 = new TextMessageParc(-1, timestamp, physician,"Falls Sie fragen haben, schreiben Sie mir bitte oder rufen Sie in der Ordination an.");
+        testCase1.addDataElement(textMsg2);
+
+        timestamp = Calendar.getInstance();
+        timestamp.add(Calendar.DAY_OF_MONTH, -3);
+
+        // text msg
+        TextMessageParc textMsg3 = new TextMessageParc(-1, timestamp, patient,"Danke!.");
+        testCase1.addDataElement(textMsg3);
+
+        // pic
+
+//        PhotoMessageParc photoMsg1 = new PhotoMessageParc(-1, Calendar.getInstance(), patient,"hier ein Bild von meinem dings...", null);
+//        testCase1.addDataElement(photoMsg1);
+
+        timestamp = Calendar.getInstance();
+        timestamp.add(Calendar.DAY_OF_MONTH, -2);
+        timestamp.add(Calendar.HOUR_OF_DAY, -6);
 
 
         List<Icd10DiagnosisParc> d2_icList = new ArrayList<>();
-        DiagnosisParc d2 = new DiagnosisParc(-1, Calendar.getInstance(), physician,"Das ist, wie als würden Sie eine Tasse Rohrfrei trinken. Natürlich reinigt das einen - aber mit der Zeit wird man hohl. ", d2_icList);
+        DiagnosisParc d2 = new DiagnosisParc(-1, timestamp, physician,"Das ist, wie als würden Sie eine Tasse Rohrfrei trinken. Natürlich reinigt das einen - aber mit der Zeit wird man hohl. ", d2_icList);
         testCase1.addDataElement(d2);
 
         currentCaseList.add(testCase1);

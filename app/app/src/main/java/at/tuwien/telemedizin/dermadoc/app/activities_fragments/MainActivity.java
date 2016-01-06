@@ -157,7 +157,7 @@ public class MainActivity extends AppCompatActivity
         closedCaseList = cP.getCurrentCasesOfUser(); // TODO for testing purpose - remove or replace
 
         // TODO load User Data
-        currentUser = new PatientParc();
+        currentUser = cP.getCurrentUser();
     }
 
     /**

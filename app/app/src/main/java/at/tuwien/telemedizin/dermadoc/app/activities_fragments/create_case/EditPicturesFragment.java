@@ -33,6 +33,7 @@ import java.util.Date;
 import java.util.List;
 
 import at.tuwien.telemedizin.dermadoc.app.R;
+import at.tuwien.telemedizin.dermadoc.app.activities_fragments.edit_case.AddPictureActivity;
 import at.tuwien.telemedizin.dermadoc.app.adapters.CasePictureListAdapter;
 import at.tuwien.telemedizin.dermadoc.app.adapters.EmbedableListViewUtility;
 import at.tuwien.telemedizin.dermadoc.app.entities.PictureHelperEntity;
@@ -52,8 +53,10 @@ public class EditPicturesFragment extends Fragment implements PictureReceiver, C
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_NEW_CASE = "newCase";
+    private static final String ARG_EMBEDDED = "embedded";
 
     private boolean newCase; // if it is a new case, no symptom information has to be loaded and the layout switches into edit-mode
+    private boolean embedded; // gets rid of the button and therefore the requirement for tab-change listener
     private boolean addPicturesHintIsVisible;
 
 
@@ -75,10 +78,11 @@ public class EditPicturesFragment extends Fragment implements PictureReceiver, C
      * @return A new instance of fragment EditSymptomsFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static EditPicturesFragment newInstance(boolean newCase) {
+    public static EditPicturesFragment newInstance(boolean newCase, boolean embedded) {
         EditPicturesFragment fragment = new EditPicturesFragment();
         Bundle args = new Bundle();
         args.putBoolean(ARG_NEW_CASE, newCase);
+        args.putBoolean(ARG_EMBEDDED, embedded);
 //        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
@@ -91,11 +95,16 @@ public class EditPicturesFragment extends Fragment implements PictureReceiver, C
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        try {
-            tabChangeInterface = (OnTabChangedInFragmentInterface) context;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString() + " must implement " + OnTabChangedInFragmentInterface.class.getSimpleName());
+        boolean embeddedA = getArguments().getBoolean(ARG_EMBEDDED);
+
+        if (!embeddedA) {
+            try {
+                tabChangeInterface = (OnTabChangedInFragmentInterface) context;
+            } catch (ClassCastException e) {
+                throw new ClassCastException(context.toString() + " must implement " + OnTabChangedInFragmentInterface.class.getSimpleName());
+            }
         }
+
 
     }
 
@@ -104,6 +113,7 @@ public class EditPicturesFragment extends Fragment implements PictureReceiver, C
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             newCase = getArguments().getBoolean(ARG_NEW_CASE);
+            embedded = getArguments().getBoolean(ARG_EMBEDDED);
             // TODO remove - START - test data
             pictures = new ArrayList<>();
             PictureHelperEntity testPicture1 = new PictureHelperEntity();
@@ -186,13 +196,30 @@ public class EditPicturesFragment extends Fragment implements PictureReceiver, C
 
         // button to get to the next part
         Button nextButton = (Button) v.findViewById(R.id.next_section_button);
-        nextButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // go to the next section
-                tabChangeInterface.switchToTheNextTab();
-            }
-        });
+
+        if (embedded) {
+            // next = finish
+            nextButton.setText(R.string.label_finish_editing);
+            nextButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // finish
+                    // TODO besser machen
+                    ((AddPictureActivity)getActivity()).collectPictureDataAndFinish();
+                }
+            });
+
+        } else {
+            nextButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // go to the next section
+                    tabChangeInterface.switchToTheNextTab();
+                }
+            });
+        }
+
+
 
         return v;
     }
