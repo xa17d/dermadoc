@@ -2,6 +2,7 @@ package at.tuwien.telemedizin.dermadoc.app.activities_fragments.case_specific;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -11,6 +12,7 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -24,6 +26,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import at.tuwien.telemedizin.dermadoc.app.R;
+import at.tuwien.telemedizin.dermadoc.app.activities_fragments.view_case_data_element.CaseDataActivity;
 import at.tuwien.telemedizin.dermadoc.app.adapters.CaseDataListAdapter;
 import at.tuwien.telemedizin.dermadoc.app.comparators.CaseDataDateOfCreationComparator;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.CaseParc;
@@ -144,6 +147,17 @@ public class CaseDataListFragment extends Fragment {
         // scroll to the bottom
 //        listView.scrollTo(0, listView.getHeight()); //did not work
         listView.setSelection(adapter.getCount() - 1);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // start the CaseActivity and open the selected case
+
+                Intent intent = new Intent(getContext(), CaseDataActivity.class);
+
+                intent.putExtra(CaseDataActivity.CASE_DATA_INTENT_KEY, adapter.getItem(position));
+                startActivity(intent);
+            }
+        });
 
         filterTextMsg = (TextView) v.findViewById(R.id.message_type_text_icon_view);
         filterPhotoMsg = (TextView) v.findViewById(R.id.message_type_photo_icon_view);

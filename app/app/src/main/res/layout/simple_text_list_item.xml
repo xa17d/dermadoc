@@ -6,9 +6,25 @@
     android:paddingTop="4dp">
 
 
+    <ImageView
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:id="@+id/list_point"
+        android:layout_alignParentLeft="true"
+        android:src="@drawable/icon_list_point"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="1dp"
+        android:layout_alignParentTop="true"
+        android:padding="4dp" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="New Text"
-        android:id="@+id/msg_text" />
+        android:id="@+id/msg_text"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@id/list_point"/>
+
+
 </RelativeLayout>

@@ -12,6 +12,14 @@
             android:text="Message"
             android:id="@+id/message_text_view" />
 
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="HEADER"
+        android:id="@+id/list_header_text_view"
+        android:paddingTop="20dp"/>
+
     <LinearLayout
         android:id="@+id/additional_info_list_layout"
         android:layout_width="match_parent"

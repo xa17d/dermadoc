@@ -34,6 +34,8 @@
     <string name="msg_no_physician_info_found">No physician info found</string>
 
     <string name="label_date_of_creation">Created</string>
+    <string name="label_date_of_author">Author</string>
+    <string name="label_date_of_id">ID</string>
     <string name="label_last_modified">Last modified</string>
     <string name="label_physician">Physician</string>
     <string name="label_case_status">Status</string>
@@ -60,6 +62,7 @@
         completions."
     </string>
     <string name="title_activity_create_case">Create new Case</string>
+    <string name="title_activity_update_case">Update Case</string>
     <string name="section_format">Hello World from section: %1$d</string>
 
     <string name="tab_header_symptoms">1. Symptoms</string>
@@ -164,6 +167,7 @@
     <!-- // case validation error -->
     <string name="msg_validation_error_description">Insufficient symptom description</string>
     <string name="msg_validation_error_pain">No pain intensity selected</string>
+    <string name="msg_validation_error_size">No size selected</string>
     <string name="msg_validation_error_localizations">No localizations selected</string>
     <string name="msg_validation_error_name">Insufficient case name</string>
     <string name="msg_validation_error_pictures">No pictures added</string>
@@ -190,12 +194,21 @@
     <string name="message_type_advice">A</string>
     <string name="message_type_anamnesis">Q</string>
 
+    <!-- case data headers -->
+    <string name="header_type_diagnosis">Diagnosis</string>
+    <string name="header_type_message">Message</string>
+    <string name="header_type_photo">Photo Message</string>
+    <string name="header_type_text">Text Message</string>
+    <string name="header_type_case_info">Case Info</string>
+    <string name="header_type_advice">Advice</string>
+    <string name="header_type_anamnesis">Anamnesis</string>
+
     <string name="label_nav_conversation">Conversation</string>
     <string name="hint_new_message">new message</string>
 
     <string name="nav_title_add_pictures">Add Pictures</string>
 
-    <string name="hint_case_info_message">This Case-Info can be accessed in the Overview</string>
+    <string name="hint_case_info_message">The latest Case-Info can be accessed in the Overview</string>
 
     <string name="activity_label_case">Case</string>
     <string name="activity_label_add_pic">AddPicture</string>
@@ -208,7 +221,14 @@
     <string name="header_size">Size</string>
     <string name="size_number_format_hint">xx.xx cm</string>
 
-    <string name="label_physician_selected">This case is taken care of the following doctor:</string>
+    <string name="label_physician_selected">This case is taken care of by the following doctor:</string>
+    <string name="title_activity_case_data">CaseDataActivity</string>
+
+    <string name="list_header_icd10">ICD10 - diagnoses</string>
+    <string name="list_header_medication">medications</string>
+    <string name="list_header_question">questions</string>
+
+    <string name="nav_header_message_1">Facebook plugin coming soon!</string>
 
 
 

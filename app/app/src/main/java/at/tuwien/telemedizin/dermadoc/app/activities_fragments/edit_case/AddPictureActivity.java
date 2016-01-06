@@ -160,10 +160,18 @@ public class AddPictureActivity extends AppCompatActivity {
             }
 
             PhotoMessageParc pM = new PhotoMessageParc(-1, Calendar.getInstance(), currentUser, "JPEG", byteArray);
-            TextMessageParc pDescription = new TextMessageParc(-1, Calendar.getInstance(), currentUser, pH.getDescription());
-
             photoRelatedMessages.add(pM);
-            photoRelatedMessages.add(pDescription);
+
+            String picDescriptionStr = pH.getDescription();
+            if (picDescriptionStr.trim().length() > 0) {
+                picDescriptionStr = "Picture: \n" + picDescriptionStr;
+                TextMessageParc pDescription = new TextMessageParc(-1, Calendar.getInstance(), currentUser,picDescriptionStr);
+                photoRelatedMessages.add(pDescription);
+            }
+
+
+
+
         }
 
         Intent resultData = new Intent();

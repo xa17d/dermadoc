@@ -163,8 +163,12 @@ public class EditLocationFragment extends Fragment {
         // if embedded, hide header and next-button
         RelativeLayout headerL = (RelativeLayout) v.findViewById(R.id.header_relative_layout);
         RelativeLayout buttonL = (RelativeLayout) v.findViewById(R.id.button_relative_layout);
-        headerL.setVisibility(View.GONE);
-        buttonL.setVisibility(View.GONE);
+
+        if (embeddedMode) {
+            headerL.setVisibility(View.GONE);
+            buttonL.setVisibility(View.GONE);
+        }
+
 
         return v;
     }

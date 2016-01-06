@@ -1,26 +1,32 @@
-package at.tuwien.telemedizin.dermadoc.app.adapters;
+package at.tuwien.telemedizin.dermadoc.app.activities_fragments.view_case_data_element;
 
-import android.app.Activity;
-import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Bundle;
+import android.os.Parcelable;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import at.tuwien.telemedizin.dermadoc.app.R;
 import at.tuwien.telemedizin.dermadoc.app.activities_fragments.case_specific.CaseActivity;
+import at.tuwien.telemedizin.dermadoc.app.activities_fragments.create_case.EditLocationFragment;
+import at.tuwien.telemedizin.dermadoc.app.adapters.PainIntensityMapper;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.Icd10DiagnosisParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.MedicationParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.PatientParc;
@@ -35,82 +41,82 @@ import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.Diagnosis
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.PhotoMessageParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.TextMessageParc;
 import at.tuwien.telemedizin.dermadoc.app.helper.FormatHelper;
-import at.tuwien.telemedizin.dermadoc.entities.Case;
-import at.tuwien.telemedizin.dermadoc.entities.casedata.AnamnesisQuestion;
 
-/**
- * Created by FAUser on 18.11.2015.
- * Adapter to fill the MyCases-List
- *
- * following http://www.vogella.com/tutorials/AndroidListView/article.html
- */
-public class CaseDataListAdapter extends ArrayAdapter<CaseDataParc> {
-    public static final String LOG_TAG = CaseDataListAdapter.class.getSimpleName();
+public class CaseDataActivity extends AppCompatActivity {
 
+    public static final String LOG_TAG = CaseDataActivity.class.getSimpleName();
 
-    private final Context context;
-    private final Activity activity;
-    private final List<CaseDataParc> values;
+    public static final String CASE_DATA_INTENT_KEY = CaseDataActivity.class.getSimpleName() + "caseData";
 
-
-    public CaseDataListAdapter(Context context, Activity activity, List<CaseDataParc> values) {
-        super(context, -1, values); //
-        this.context = context;
-        this.values = values;
-        this.activity = activity;
-
-    }
+    private CaseDataParc data;
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_case_data_layout);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-        View v = convertView;
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
+        fab.setVisibility(View.GONE); // hide until used
 
-        // save resources: only inflate when == null
-        if (v == null) {
-            LayoutInflater inflater = LayoutInflater.from(getContext());
-            v = inflater.inflate(R.layout.message_basic_list_item, parent, false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        // get Intent
+        Intent intent = getIntent();
+        Parcelable caseDataParcel = intent.getParcelableExtra(CASE_DATA_INTENT_KEY);
+        if (caseDataParcel != null) {
+            data = (CaseDataParc) caseDataParcel;
         } else {
-            // reset the specific-content
-            LinearLayout basicContentLayout = (LinearLayout) v.findViewById(R.id.message_item_body_linlayout1);
-            basicContentLayout.removeAllViewsInLayout();
+            Log.d(LOG_TAG, "no CaseDataParc intent");
+            finish();
         }
 
-        LinearLayout basicContentLayout = (LinearLayout) v.findViewById(R.id.message_item_body_linlayout1);
-        TextView messageTypeTextView = (TextView) v.findViewById(R.id.message_type_text_view);
-        TextView createdDate = (TextView) v.findViewById(R.id.creation_text);
-        RelativeLayout backgroundHolder = (RelativeLayout) v.findViewById(R.id.background_holder_layout);
-        RelativeLayout marginHolder = (RelativeLayout) v.findViewById(R.id.margin_holder_layout);
+        LinearLayout basicContentLayout = (LinearLayout) findViewById(R.id.message_item_body_linlayout1);
+        TextView messageTypeTextView = (TextView) findViewById(R.id.message_type_text_view);
+        TextView createdDate = (TextView) findViewById(R.id.creation_text);
+        TextView authorText = (TextView) findViewById(R.id.author_text);
+        TextView idText = (TextView) findViewById(R.id.id_text);
+        RelativeLayout backgroundHolder = (RelativeLayout)findViewById(R.id.background_holder_layout);
+        RelativeLayout marginHolder = (RelativeLayout) findViewById(R.id.margin_holder_layout);
 
-        CaseDataParc caseData = getItem(position);
 
         // set Background according to author
-        if (caseData.getAuthor() instanceof PatientParc) {
+        if (data.getAuthor() instanceof PatientParc) {
             backgroundHolder.setBackgroundResource(R.drawable.message_background_shape_2);
-            setLayoutParamsToMatchSide(marginHolder, true);
+//            setLayoutParamsToMatchSide(marginHolder, true);
         } else {
             backgroundHolder.setBackgroundResource(R.drawable.message_background_shape_1);
-            setLayoutParamsToMatchSide(marginHolder, false);
+//            setLayoutParamsToMatchSide(marginHolder, false);
         }
 
         // now check, which type the caseData is
-        View specificV = getSpecificTypeLayout(caseData, messageTypeTextView);
+        View specificV = getSpecificTypeLayout(data, messageTypeTextView);
         Log.d(LOG_TAG, "specificView = null? " + (specificV == null));
         basicContentLayout.addView(specificV);
 
         // date and time
-        String creationDateStr = FormatHelper.calendarToDateFormatString(caseData.getCreated(), getContext())
-                + " " + FormatHelper.calendarToTimeFormatString(caseData.getCreated(), getContext());
+        String creationDateStr = FormatHelper.calendarToDateFormatString(data.getCreated(), this)
+                + " " + FormatHelper.calendarToTimeFormatString(data.getCreated(), this);
         createdDate.setText(creationDateStr);
 
-        return v;
+        authorText.setText(data.getAuthor().getName());
+        idText.setText(data.getId() + "");
+
     }
 
     private View getSpecificTypeLayout(CaseDataParc caseData, TextView messageTypeTextView) {
         Log.d(LOG_TAG, "getSpecificTypeLayout()");
 
-        String messageTypeText = context.getString(R.string.message_type_message);
+        String messageTypeText = getString(R.string.message_type_message);
+        String newTitle = getString(R.string.message_type_message);
         View specificView = null;
 
         if (caseData == null) {
@@ -120,84 +126,45 @@ public class CaseDataListAdapter extends ArrayAdapter<CaseDataParc> {
 
         if (caseData instanceof DiagnosisParc) {
 
-            messageTypeText = context.getString(R.string.message_type_diagnosis);
+            messageTypeText = getString(R.string.message_type_diagnosis);
+            newTitle = getString(R.string.header_type_diagnosis);
 
             specificView = getDiagnosisLayout((DiagnosisParc)caseData);
         } else if (caseData instanceof PhotoMessageParc) {
-            messageTypeText = context.getString(R.string.message_type_photo);
+            messageTypeText = getString(R.string.message_type_photo);
+            newTitle = getString(R.string.header_type_photo);
             specificView = getPhotoMessageLayout((PhotoMessageParc)caseData);
         } else if (caseData instanceof TextMessageParc) {
-            messageTypeText = context.getString(R.string.message_type_text);
+            messageTypeText = getString(R.string.message_type_text);
+            newTitle = getString(R.string.header_type_text);
             specificView = getTextMessageLayout((TextMessageParc) caseData);
         } else if (caseData instanceof CaseInfoParc) {
-            messageTypeText = context.getString(R.string.message_type_case_info);
-
-            // show as text message with link to overview
-
-            specificView = getCaseinfoLayout((CaseInfoParc)caseData);
-            // TODO listener to link to the overview
-//            specificView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    if (activity instanceof CaseActivity) {
-//                        Log.d(LOG_TAG, "activity is CaseActivity - apply listener");
-//                        ((CaseActivity)activity).switchToOverview();
-//                    }
-//                }
-//            });
+            newTitle = getString(R.string.header_type_case_info);
+            messageTypeText = getString(R.string.message_type_case_info);
+            specificView = getCaseinfoLayout((CaseInfoParc) caseData);
 
         } else if (caseData instanceof AdviceParc) {
-            messageTypeText = context.getString(R.string.message_type_advice);
+            newTitle = getString(R.string.header_type_advice);
+            messageTypeText = getString(R.string.message_type_advice);
             specificView = getAdviceLayout((AdviceParc)caseData);
 
         } else if (caseData instanceof AnamnesisParc) {
-            messageTypeText = context.getString(R.string.message_type_anamnesis);
+            newTitle = getString(R.string.header_type_anamnesis);
+            messageTypeText = getString(R.string.message_type_anamnesis);
             specificView = getAnamnesisLayout((AnamnesisParc) caseData);
         }
 
         // TODO other types
 
         messageTypeTextView.setText(messageTypeText);
+        setTitle(newTitle);
 
         return specificView;
     }
 
-    /**
-     * makes the message-indent (right or left)
-     * @param rl
-     * @param left
-     */
-    private void setLayoutParamsToMatchSide(RelativeLayout rl, boolean left) {
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-
-        int end = 10;
-        int start = 10;
-        int top_bottom = 10;
-        int indent = 50;
-
-        // should the message be indented on the right or left side?
-        if (left) {
-            end = indent;
-        } else {
-            start = indent;
-        }
-
-        // convert into dp instead of px
-        int endDP = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, end, context.getResources().getDisplayMetrics());
-        int startDP = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, start, context.getResources().getDisplayMetrics());
-        int top_bottomDP = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, top_bottom, context.getResources().getDisplayMetrics());
-
-//        layoutParams.setMarginEnd(end);
-//        layoutParams.setMarginStart(start);
-        layoutParams.setMargins(startDP, top_bottomDP, endDP, top_bottomDP);
-        rl.setLayoutParams(layoutParams);
-    }
-
-
     private View getDiagnosisLayout(DiagnosisParc diagnosis) {
         Log.d(LOG_TAG, "getDiagnosisLayout()");
-        LayoutInflater inflater = LayoutInflater.from(getContext());
+        LayoutInflater inflater = LayoutInflater.from(this);
         View v = inflater.inflate(R.layout.advanced_message_list_item, null);
 
         // check if the case_item exists
@@ -214,9 +181,13 @@ public class CaseDataListAdapter extends ArrayAdapter<CaseDataParc> {
             List<Icd10DiagnosisParc> icd10List = diagnosis.getDiagnosisList();
             if (icd10List != null && icd10List.size() > 0) {
                 Log.d(LOG_TAG, "icd10List is > 0");
+                listHeaderTextView.setVisibility(View.VISIBLE);
+                listHeaderTextView.setText(R.string.list_header_icd10);
+
+
                 for (Icd10DiagnosisParc d10 : icd10List) {
                     // add elements to the list
-                    LayoutInflater inflater2 = LayoutInflater.from(getContext());
+                    LayoutInflater inflater2 = LayoutInflater.from(this);
                     View d10RootView = inflater2.inflate(R.layout.simple_text_list_item, null);
                     TextView diagnosisText = (TextView) d10RootView.findViewById(R.id.msg_text);
                     diagnosisText.setText(d10.toString());
@@ -230,7 +201,7 @@ public class CaseDataListAdapter extends ArrayAdapter<CaseDataParc> {
 
     private View getPhotoMessageLayout(PhotoMessageParc message) {
         Log.d(LOG_TAG, "getPhotoMessageLayout()");
-        LayoutInflater inflater = LayoutInflater.from(getContext());
+        LayoutInflater inflater = LayoutInflater.from(this);
         View v = inflater.inflate(R.layout.photo_message_list_item, null);
 
         // check if the case_item exists
@@ -251,7 +222,7 @@ public class CaseDataListAdapter extends ArrayAdapter<CaseDataParc> {
 
     private View getTextMessageLayout(TextMessageParc message) {
         Log.d(LOG_TAG, "getTextMessageLayout()");
-        LayoutInflater inflater = LayoutInflater.from(getContext());
+        LayoutInflater inflater = LayoutInflater.from(this);
         View v = inflater.inflate(R.layout.text_message_list_item, null);
 
         // check if the case_item exists
@@ -264,7 +235,7 @@ public class CaseDataListAdapter extends ArrayAdapter<CaseDataParc> {
 
     private View getAdviceLayout(AdviceParc message) {
         Log.d(LOG_TAG, "getAdviceLayout()");
-        LayoutInflater inflater = LayoutInflater.from(getContext());
+        LayoutInflater inflater = LayoutInflater.from(this);
         View v = inflater.inflate(R.layout.advanced_message_list_item, null);
 
         // check if the case_item exists
@@ -281,9 +252,13 @@ public class CaseDataListAdapter extends ArrayAdapter<CaseDataParc> {
             List<MedicationParc> medicationList = message.getMedications();
             if (medicationList != null && medicationList.size() > 0) {
                 Log.d(LOG_TAG, "medicationList is > 0");
+
+                listHeaderTextView.setVisibility(View.VISIBLE);
+                listHeaderTextView.setText(R.string.list_header_medication);
+
                 for (MedicationParc med : medicationList) {
                     // add elements to the list
-                    LayoutInflater inflater2 = LayoutInflater.from(getContext());
+                    LayoutInflater inflater2 = LayoutInflater.from(this);
                     View medRootView = inflater2.inflate(R.layout.simple_text_list_item, null);
 
                     TextView diagnosisText = (TextView) medRootView.findViewById(R.id.msg_text);
@@ -297,8 +272,8 @@ public class CaseDataListAdapter extends ArrayAdapter<CaseDataParc> {
     }
 
     private View getCaseinfoLayout(CaseInfoParc message) {
-        Log.d(LOG_TAG, "getCaseinfoLayout()");
-        LayoutInflater inflater = LayoutInflater.from(getContext());
+        Log.d(LOG_TAG, "getCaseInfoLayout()");
+        LayoutInflater inflater = LayoutInflater.from(this);
         View v = inflater.inflate(R.layout.advanced_message_list_item, null);
 
         // check if the case_item exists
@@ -309,22 +284,24 @@ public class CaseDataListAdapter extends ArrayAdapter<CaseDataParc> {
             TextView listHeaderTextView = (TextView) v.findViewById(R.id.list_header_text_view);
             listHeaderTextView.setVisibility(View.GONE);
 
-            itemMessage.setText(context.getString(R.string.hint_case_info_message));
+            itemMessage.setText(getString(R.string.hint_case_info_message));
 
-            // icd10 list
+            // info-list
             List<String> infos = new ArrayList<>();
 
-            infos.add(context.getString(R.string.label_size) + " " + message.getSize()
-                    + context.getString(R.string.size_type));
+            infos.add(getString(R.string.label_size) + " " + message.getSize()
+                    + getString(R.string.size_type));
 
-            infos.add( context.getString(PainIntensityMapper.getTitleResource(message.getPain())));
+            infos.add( getString(PainIntensityMapper.getTitleResource(message.getPain())));
             infos.add( "Body Localizations: " + message.getLocalizations().size());
+            infos.add( "Symptom Description: \n" + message.getSymptomDescription());
 
             if (infos.size() > 0) {
                 Log.d(LOG_TAG, "infos is > 0");
+
                 for (String info : infos) {
                     // add elements to the list
-                    LayoutInflater inflater2 = LayoutInflater.from(getContext());
+                    LayoutInflater inflater2 = LayoutInflater.from(this);
                     View infoRootView = inflater2.inflate(R.layout.simple_text_list_item, null);
 
                     TextView diagnosisText = (TextView) infoRootView.findViewById(R.id.msg_text);
@@ -339,7 +316,7 @@ public class CaseDataListAdapter extends ArrayAdapter<CaseDataParc> {
 
     private View getAnamnesisLayout(AnamnesisParc message) {
         Log.d(LOG_TAG, "getAnamnesisLayout()");
-        LayoutInflater inflater = LayoutInflater.from(getContext());
+        LayoutInflater inflater = LayoutInflater.from(this);
         View v = inflater.inflate(R.layout.advanced_message_list_item, null);
 
         // check if the case_item exists
@@ -356,8 +333,12 @@ public class CaseDataListAdapter extends ArrayAdapter<CaseDataParc> {
             List<AnamnesisQuestionParc> questionList = message.getQuestions();
             if (questionList != null && questionList.size() > 0) {
                 Log.d(LOG_TAG, "questionList is > 0");
+
+                listHeaderTextView.setVisibility(View.VISIBLE);
+                listHeaderTextView.setText(R.string.list_header_question);
+
                 for (AnamnesisQuestionParc q : questionList) {
-                    LayoutInflater inflater2 = LayoutInflater.from(getContext());
+                    LayoutInflater inflater2 = LayoutInflater.from(this);
                     View qRootView = qRootView = inflater2.inflate(R.layout.anamnesis_question_answered_item, null);
 
                     TextView questionTextView = (TextView) qRootView.findViewById(R.id.question_text_view);
@@ -380,4 +361,5 @@ public class CaseDataListAdapter extends ArrayAdapter<CaseDataParc> {
         }
         return v;
     }
+
 }

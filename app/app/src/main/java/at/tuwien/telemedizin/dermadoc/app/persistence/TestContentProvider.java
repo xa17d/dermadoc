@@ -55,7 +55,30 @@ public class TestContentProvider implements ContentProvider {
 
     @Override
     public List<PhysicianParc> getNearbyPhysicians(GeoLocationParc geoLocation) {
-        return null;
+                PhysicianParc a = new PhysicianParc(); // TODO remove
+        a.setId(0);
+        a.setName("a");
+
+        PhysicianParc b = new PhysicianParc();
+        b.setId(1);
+        b.setName("b");
+
+        PhysicianParc c = new PhysicianParc();
+        c.setId(2);
+        c.setName("c");
+
+        List<PhysicianParc> list = new ArrayList<PhysicianParc>();
+        list.add(a);
+        list.add(b);
+        list.add(c);
+
+        for(int i = 0; i < 5; i++) {
+            PhysicianParc p = new PhysicianParc();
+            int aAsChar = (int) 'd';
+            p.setName("" + (char) (aAsChar + i));
+            list.add(p);
+        }
+        return list;
     }
 
     @Override

@@ -12,6 +12,8 @@
 
     <color name="back_grey">#c4c4c4</color>
 
+    <color name="list_point">#ababab</color>
+
     <color name="colorPrimaryDarkDeselected">#6391ab</color>
     <!-- for the tabLayout in MyCases -->
     <color name="tab_text">#c7ceff</color>

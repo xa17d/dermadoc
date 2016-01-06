@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -32,31 +31,34 @@ import java.util.Calendar;
 import java.util.List;
 
 import at.tuwien.telemedizin.dermadoc.app.R;
-import at.tuwien.telemedizin.dermadoc.app.activities_fragments.DummyContentFragment;
+import at.tuwien.telemedizin.dermadoc.app.activities_fragments.create_case.EditCaseActivity;
 import at.tuwien.telemedizin.dermadoc.app.activities_fragments.create_case.EditLocationFragment;
+import at.tuwien.telemedizin.dermadoc.app.activities_fragments.create_case.EditSymptomsFragment;
 import at.tuwien.telemedizin.dermadoc.app.activities_fragments.edit_case.AddPictureActivity;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.CaseParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.PatientParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.PhysicianParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.CaseDataParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.CaseInfoParc;
-import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.PhotoMessageParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.TextMessageParc;
 import at.tuwien.telemedizin.dermadoc.app.helper.CaseDataExtractionHelper;
 import at.tuwien.telemedizin.dermadoc.app.helper.FormatHelper;
 import at.tuwien.telemedizin.dermadoc.app.server_interface.ServerInterface;
 import at.tuwien.telemedizin.dermadoc.app.server_interface.ServerInterfaceFactory;
 import at.tuwien.telemedizin.dermadoc.entities.BodyLocalization;
-import at.tuwien.telemedizin.dermadoc.entities.casedata.TextMessage;
+import at.tuwien.telemedizin.dermadoc.entities.PainIntensity;
+import at.tuwien.telemedizin.dermadoc.entities.casedata.CaseInfo;
 
 
 public class CaseActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, CaseDataCallbackInterface, EditLocationFragment.BodyLocationCallbackInterface {
+        implements NavigationView.OnNavigationItemSelectedListener, CaseDataCallbackInterface,
+        EditLocationFragment.BodyLocationCallbackInterface {
 
     public static final String LOG_TAG = CaseActivity.class.getSimpleName();
 
     public static final String USER_INTENT_KEY = CaseActivity.class.getSimpleName() + "UserIntent";
     public static final int PICTURE_REQUEST_KEY = 1;
+    public static final int UPDATE_CASE_REQUEST_KEY = 2;
 
 
     private CaseParc caseItem;
@@ -79,7 +81,7 @@ public class CaseActivity extends AppCompatActivity
 
     private SendMessagesAsyncTask sendMessageTask;
 
-    private MenuItem overviewMenuItem;
+    private CaseOverviewFragment overviewFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +95,10 @@ public class CaseActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                // Edit CaseInfo
+                Intent editCaseIntent = new Intent(CaseActivity.this, EditCaseActivity.class);
+                editCaseIntent.putExtra(EditCaseActivity.NEW_CASE_FLAG_INTENT_KEY, false);
+                editCaseIntent.putExtra(EditCaseActivity.CASE_FLAG_INTENT_KEY, caseItem);
+                startActivityForResult(editCaseIntent, UPDATE_CASE_REQUEST_KEY);
 
             }
         });
@@ -107,12 +113,12 @@ public class CaseActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         // default content is case-list
-        Fragment fragment = CaseOverviewFragment.newInstance();
+        overviewFragment = CaseOverviewFragment.newInstance();
         String title = getString(R.string.nav_case_overview);
 
-        if (fragment != null) {
+        if (overviewFragment != null) {
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.contentFrame,fragment);
+            fragmentTransaction.replace(R.id.contentFrame,overviewFragment);
             fragmentTransaction.commit();
             setTitle(title);
         }
@@ -205,6 +211,7 @@ public class CaseActivity extends AppCompatActivity
 
 
         attachItem = menu.findItem(R.id.action_attach);
+        attachItem.setVisible(false); // hide initially
         return true;
     }
 
@@ -244,7 +251,26 @@ public class CaseActivity extends AppCompatActivity
                 // TODO
                 if (photoRelatedMessageList != null && photoRelatedMessageList.size() > 0) {
                     Log.d(LOG_TAG, "pictureMessageList=" + photoRelatedMessageList.size());
-                    sendPhotoMessages(photoRelatedMessageList);
+                    sendCaseDataMessages(photoRelatedMessageList);
+
+                }
+            } else if (requestCode == UPDATE_CASE_REQUEST_KEY) {
+                Log.d(LOG_TAG, "UPDATE_CASE_REQUEST_KEY");
+                List<CaseDataParc> updatedCaseDataElements = data.getParcelableArrayListExtra(EditCaseActivity.CASE_DATA_LIST_INTENT_KEY);
+
+                if (updatedCaseDataElements != null && updatedCaseDataElements.size() > 0) {
+                    Log.d(LOG_TAG, "updatedCaseDataElements=" + updatedCaseDataElements.size());
+                    sendCaseDataMessages(updatedCaseDataElements);
+                    // update the overview - view TODO besser einbinden
+                    overviewFragment = CaseOverviewFragment.newInstance();
+                    String title = getString(R.string.nav_case_overview);
+
+                    if (overviewFragment != null) {
+                        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                        fragmentTransaction.replace(R.id.contentFrame,overviewFragment);
+                        fragmentTransaction.commit();
+                        setTitle(title);
+                    }
 
                 }
             }
@@ -253,13 +279,14 @@ public class CaseActivity extends AppCompatActivity
 
     }
 
-    private void sendPhotoMessages(List<CaseDataParc> messages) {
+    private void sendCaseDataMessages(List<CaseDataParc> messages) {
 
         // add to case
-        // TODO remove perhaps?
+        // TODO remove perhaps? START
         for(CaseDataParc pM : messages) {
             caseItem.addDataElement(pM);
         }
+        // TODO remove END
 
         showProgress(true, getString(R.string.hint_sending));
         sendMessageTask = new SendMessagesAsyncTask(this);
@@ -296,6 +323,7 @@ public class CaseActivity extends AppCompatActivity
 
         if (id == R.id.nav_case_overview) {
             fragment = CaseOverviewFragment.newInstance(); //
+            overviewFragment = (CaseOverviewFragment) fragment;
             title = getString(R.string.nav_case_overview);
             fab.setVisibility(View.VISIBLE);
             fab.setImageResource(R.drawable.ic_action_edit_white_18dp);
@@ -414,6 +442,8 @@ public class CaseActivity extends AppCompatActivity
             mainContentLayout.setVisibility(show ? View.GONE : View.VISIBLE);
         }
     }
+
+
 
 
     /**

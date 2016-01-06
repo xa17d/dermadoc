@@ -28,6 +28,7 @@ import java.util.List;
 
 import at.tuwien.telemedizin.dermadoc.app.R;
 import at.tuwien.telemedizin.dermadoc.app.activities_fragments.create_case.EditCaseActivity;
+import at.tuwien.telemedizin.dermadoc.app.activities_fragments.login.LoginActivity;
 import at.tuwien.telemedizin.dermadoc.app.adapters.MyCasesPagerEnum;
 import at.tuwien.telemedizin.dermadoc.app.comparators.CaseSortCategory;
 import at.tuwien.telemedizin.dermadoc.app.helper.ToStringHelper;
@@ -240,7 +241,7 @@ public class MainActivity extends AppCompatActivity
             title = oldTitle.toString();
         } else if (id == R.id.nav_logout) {
             Toast.makeText(getBaseContext(), "You are not even logged in yet!", Toast.LENGTH_LONG).show(); // TODO replace with real fragment/function
-            title = oldTitle.toString();
+            performLogout();
         }
 
         // logout does not return a fragment != null
@@ -257,6 +258,17 @@ public class MainActivity extends AppCompatActivity
         setTitle(title);
 
         return true;
+    }
+
+    /**
+     * finishes the current activity and starts the login_Activity
+     */
+    private void performLogout() {
+        // Server - Logout TODO!!
+        finish();
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+
     }
 
     @Override
