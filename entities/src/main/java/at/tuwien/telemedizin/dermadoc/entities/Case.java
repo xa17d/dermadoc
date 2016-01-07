@@ -6,6 +6,13 @@ import java.util.Calendar;
 /**
  * Created by daniel on 11.11.2015.
  */
+@NamedNativeQueries({
+        @NamedNativeQuery(
+                name = "Case.findOpenCases",
+                query = "select * from issue i where i.status = 0 AND physician_person_id is not null",
+                resultClass = Case.class
+        )
+})
 @Entity
 @Table(name = "issue")
 public class Case {

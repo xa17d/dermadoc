@@ -3,6 +3,7 @@ package at.tuwien.telemedizin.dermadoc.server.persistence.dao.hibernate;
 import at.tuwien.telemedizin.dermadoc.entities.Case;
 import at.tuwien.telemedizin.dermadoc.entities.Patient;
 import at.tuwien.telemedizin.dermadoc.entities.Physician;
+import at.tuwien.telemedizin.dermadoc.entities.User;
 import at.tuwien.telemedizin.dermadoc.server.Application;
 import junit.framework.Assert;
 import org.junit.Test;
@@ -54,6 +55,21 @@ public class CaseRepositoryTest {
 
 		Case returnedCase = caseRepository.getById(3);
 		Assert.assertEquals(returnedCase, c);
+
+	}
+
+	@Test
+	public void findByPatient() throws Exception {
+		User u = userRepository.getUserById(33);
+		Iterable<Case> c = caseRepository.findByPatient(u);
+		for (Case ca : c) {
+			System.out.println(ca);
+		}
+	}
+
+	@Test
+	public void findOpenCases() throws Exception {
+		Iterable<Case> c = caseRepository.findOpenCases();
 
 	}
 

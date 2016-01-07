@@ -1,14 +1,23 @@
 package at.tuwien.telemedizin.dermadoc.server.persistence.dao.hibernate;
 
 import at.tuwien.telemedizin.dermadoc.entities.Case;
-import org.springframework.data.repository.PagingAndSortingRepository;
+import at.tuwien.telemedizin.dermadoc.entities.User;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  * Created by Lilly on 31.12.2015.
  */
-public interface CaseRepository extends PagingAndSortingRepository<Case, Long> {
+public interface CaseRepository extends JpaRepository<Case, Long> {
 
-	Case getById(long id);
-	Case getByName(String name);
+	Case getCaseById(long id);
+
+	Case getCaseByName(String name);
+
+	Iterable<Case> findByPatient(User p);
+
+	//Case findByUser(User u);
+	Iterable<Case> findOpenCases();
+
+	Iterable<Case> findByPhysician(User p);
 
 }

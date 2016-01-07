@@ -64,8 +64,11 @@ public class CaseDataRepositoryTest {
 //
 //	}
 //
-//	@Test
-//	public void testGetByAuthor() throws Exception {
-//
-//	}
+@Test
+public void testGetByAuthor() throws Exception {
+	User author = userRepository.getUserById(26);
+	CaseData caseByAuthor = caseDataRepository.getByAuthor(author);
+	Case checkCase = caseRepository.getById(3);
+	Assert.assertEquals(caseByAuthor.getCase(), checkCase);
+}
 }
