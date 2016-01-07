@@ -1,5 +1,6 @@
 package at.tuwien.telemedizin.dermadoc.server.persistence.dao.hibernate;
 
+import at.tuwien.telemedizin.dermadoc.entities.User;
 import at.tuwien.telemedizin.dermadoc.entities.casedata.CaseData;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
@@ -9,5 +10,6 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 public interface CaseDataRepository extends PagingAndSortingRepository<CaseData, Long> {
 	CaseData getByCaseId(long caseId);
 	CaseData getById(long id);
-	CaseData getByAuthor(long authorId);
+
+	CaseData getByAuthor(User author);
 }

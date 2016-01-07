@@ -15,4 +15,12 @@ public class CaseList extends ArrayList<Case> {
         super(original);
     }
 
+    public CaseList(Iterable<Case> original) {
+        for (Case item : original) {
+            add(item);
+        }
+    }
+
+
+
 }
