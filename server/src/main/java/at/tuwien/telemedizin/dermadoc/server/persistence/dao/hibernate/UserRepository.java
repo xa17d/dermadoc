@@ -10,7 +10,6 @@ public interface UserRepository extends PagingAndSortingRepository<User, Long> {
 
 	User getUserByMail(String mail);
 
-	//List<Physician> listPhysicians();
 
 }
 
