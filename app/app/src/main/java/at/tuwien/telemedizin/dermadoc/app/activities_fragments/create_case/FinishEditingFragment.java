@@ -4,12 +4,14 @@ package at.tuwien.telemedizin.dermadoc.app.activities_fragments.create_case;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -19,6 +21,8 @@ import java.util.List;
 
 import at.tuwien.telemedizin.dermadoc.app.R;
 import at.tuwien.telemedizin.dermadoc.app.adapters.PainAssessmentArrayAdapter;
+import at.tuwien.telemedizin.dermadoc.app.entities.CaseValidationError;
+import at.tuwien.telemedizin.dermadoc.app.entities.CaseValidationErrorLevel;
 import at.tuwien.telemedizin.dermadoc.entities.PainIntensity;
 
 /**
@@ -35,6 +39,7 @@ public class FinishEditingFragment extends Fragment {
     private static final String ARG_NEW_CASE = "newCase";
 
     private OnTabChangedInFragmentInterface tabChangeInterface;
+    private OnCaseDataRequestAndUpdateInterface caseDataInterface;
 
     private boolean newCase; // if it is a new case, no symptom information has to be loaded and the layout switches into edit-mode
     private boolean finishCaseHintIsVisible;
@@ -47,6 +52,8 @@ public class FinishEditingFragment extends Fragment {
 
     private ImageView caseNameHelpIcon;
     private TextView caseNameHelpText;
+
+    private LinearLayout errorMessagesLayout;
 
 
     /**
@@ -86,6 +93,12 @@ public class FinishEditingFragment extends Fragment {
             throw new ClassCastException(context.toString() + " must implement " + OnTabChangedInFragmentInterface.class.getSimpleName());
         }
 
+        try {
+            caseDataInterface = (OnCaseDataRequestAndUpdateInterface) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString() + " must implement " + OnCaseDataRequestAndUpdateInterface.class.getSimpleName());
+        }
+
     }
 
     @Override
@@ -95,6 +108,11 @@ public class FinishEditingFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_finish_editing_layout, container, false);
 
         caseNameEditText = (EditText) v.findViewById(R.id.edit_case_name_edit_text);
+
+        if (!newCase) {
+            caseNameEditText.setText(caseDataInterface.getCase().getName());
+            caseNameEditText.setEnabled(false);
+        }
 
         finishCaseHelpIcon = (ImageView) v.findViewById(R.id.finish_editing_help_icon_view);
         finishCaseHelpText = (TextView) v.findViewById(R.id.finish_editing_help_hint_text_view);
@@ -142,20 +160,48 @@ public class FinishEditingFragment extends Fragment {
         finishButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // check all required fields
-                // TODO
 
-                // create a case-object with all the actual parameters
-                // TODO
-
-                // save the new case-object on the server
-                // TODO
-
-                ((NewCaseActivity)getActivity()).collectCaseData(); // TODO better without cast! (onAttach etc.)
+                 caseDataInterface.finishEditing(); // TODO better without cast! (onAttach etc.)
             }
         });
 
+        errorMessagesLayout = (LinearLayout) v.findViewById(R.id.error_list_layout);
+        addErrorMessages(caseDataInterface.getCaseValidationErrors());
+
         return v;
+    }
+
+    public void resetErrorMessages() {
+        errorMessagesLayout.removeAllViewsInLayout();
+    }
+
+    /**
+     * adds the error-items and displays them
+     * @param errorList
+     */
+    public void addErrorMessages(List<CaseValidationError> errorList) {
+        for (CaseValidationError e : errorList) {
+            addDataViewToList(e, errorMessagesLayout, getActivity().getLayoutInflater());
+        }
+    }
+
+    private void addDataViewToList(CaseValidationError errorItem, LinearLayout root, LayoutInflater inflater) {
+        View errorView = inflater.inflate(R.layout.case_error_list_item, null, false);
+        // set textElements
+        TextView headerTextView = (TextView) errorView.findViewById(R.id.element_header_textView);
+        TextView infoTextView = (TextView) errorView.findViewById(R.id.element_info_textView);
+
+        headerTextView.setText(errorItem.getLevel().toString());
+        infoTextView.setText(errorItem.getMessage());
+
+        // setBackgroundColor according to error-level
+        if (errorItem.getLevel() == CaseValidationErrorLevel.ERROR) {
+            errorView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.error_color));
+        } else {
+            errorView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.warning_color));
+        }
+
+        root.addView(errorView);
     }
 
 
@@ -187,4 +233,6 @@ public class FinishEditingFragment extends Fragment {
     public String getCaseName() {
         return caseNameEditText.getText().toString();
     }
+
+
 }

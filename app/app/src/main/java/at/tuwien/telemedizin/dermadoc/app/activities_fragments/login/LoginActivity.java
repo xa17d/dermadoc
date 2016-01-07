@@ -3,6 +3,7 @@ package at.tuwien.telemedizin.dermadoc.app.activities_fragments.login;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -19,6 +20,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -33,6 +35,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import at.tuwien.telemedizin.dermadoc.app.R;
+import at.tuwien.telemedizin.dermadoc.app.activities_fragments.MainActivity;
+import at.tuwien.telemedizin.dermadoc.app.server_interface.ServerInterface;
+import at.tuwien.telemedizin.dermadoc.app.server_interface.ServerInterfaceFactory;
+import at.tuwien.telemedizin.dermadoc.entities.rest.AuthenticationData;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -41,12 +47,16 @@ import static android.Manifest.permission.READ_CONTACTS;
  */
 public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
+    public static final String LOG_TAG = LoginActivity.class.getSimpleName();
+
     public static final String ARG_ACCOUNT_TYPE =
             LoginActivity.class.getName() + "_ACCOUNT_TYPE";
     public static final String ARG_AUTH_TYPE =
             LoginActivity.class.getName() + "_AUTH_TYPE";
     public static final String ARG_IS_ADDING_NEW_ACCOUNT =
             LoginActivity.class.getName() + "_IS_ADDING_NEW_ACCOUNT";
+
+    private TextView testOutput;
 
     /**
      * Id to identity READ_CONTACTS permission request.
@@ -63,7 +73,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
-    private UserLoginTask mAuthTask = null;
+    private ULoginTask mAuthTask = null;
+    private ULoginTask mRetrieveUserTask = null;
 
     // UI references.
     private AutoCompleteTextView mEmailView;
@@ -91,6 +102,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
+        testOutput =(TextView) findViewById(R.id.server_output_text);
+
         Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -109,6 +122,16 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
 
         getLoaderManager().initLoader(0, null, this);
+    }
+
+    private void addOutput(String output) {
+        String s = testOutput.getText().toString();
+        if (s.trim().length() > 0) {
+            s += "\n";
+        }
+
+        s += output;
+        testOutput.setText(s);
     }
 
     private boolean mayRequestContacts() {
@@ -194,20 +217,42 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
+            mAuthTask = new ULoginTask(email, password, this);
             mAuthTask.execute((Void) null);
         }
     }
 
     private boolean isEmailValid(String email) {
         //TODO: Replace this with your own logic
-        return email.contains("@");
+//        return email.contains("@");
+        return (email.length() > 0);
     }
 
     private boolean isPasswordValid(String password) {
         //TODO: Replace this with your own logic
-        return password.length() > 4;
+        return password != null
+                && password.trim().length() > 0;
     }
+
+    private void loginTaskFinished(boolean success) {
+        Log.d(LOG_TAG,"loginTaskFinished() success: " + success);
+        mAuthTask = null;
+        showProgress(false);
+
+
+        if (success) {
+            // start main activity
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+            LoginActivity.this.finish();
+
+        } else {
+            mPasswordView.setError(getString(R.string.error_incorrect_password));
+            mPasswordView.requestFocus();
+        }
+
+    }
+
 
     /**
      * Shows the progress UI and hides the login form.
@@ -303,50 +348,43 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+    public class ULoginTask extends AsyncTask<Void, Void, Boolean> {
 
         private final String mEmail;
         private final String mPassword;
+        private LoginActivity activity;
 
-        UserLoginTask(String email, String password) {
+        private String outp;
+
+        ULoginTask(String email, String password, LoginActivity activity) {
             mEmail = email;
             mPassword = password;
+            this.activity = activity;
         }
 
         @Override
         protected Boolean doInBackground(Void... params) {
+            Log.d(LOG_TAG,"doInBackground()");
             // TODO: attempt authentication against a network service.
 
-            try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
-            }
+            AuthenticationData aData = new AuthenticationData();
+            aData.setMail(mEmail);
+            aData.setPassword(mPassword);
 
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
-            }
+            ServerInterface sI = ServerInterfaceFactory.getInstance();
+            boolean success = sI.login(aData);
 
-            // TODO: register the new account here.
-            return true;
+            // retrieve User data
+
+            return success;
         }
 
         @Override
         protected void onPostExecute(final Boolean success) {
+            Log.d(LOG_TAG,"onPostExecute() success: " + success);
             mAuthTask = null;
             showProgress(false);
-
-            if (success) {
-                finish();
-            } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
-            }
+            activity.loginTaskFinished(success);
         }
 
         @Override

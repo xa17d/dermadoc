@@ -11,6 +11,7 @@ import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.CursorLoader;
@@ -24,11 +25,15 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import at.tuwien.telemedizin.dermadoc.app.R;
+import at.tuwien.telemedizin.dermadoc.app.activities_fragments.edit_case.AddPictureActivity;
 import at.tuwien.telemedizin.dermadoc.app.adapters.CasePictureListAdapter;
 import at.tuwien.telemedizin.dermadoc.app.adapters.EmbedableListViewUtility;
 import at.tuwien.telemedizin.dermadoc.app.entities.PictureHelperEntity;
@@ -42,12 +47,16 @@ public class EditPicturesFragment extends Fragment implements PictureReceiver, C
 
     public static final String LOG_TAG = EditPicturesFragment.class.getSimpleName();
 
+    private String mCurrentPhotoPath;
+
     private OnTabChangedInFragmentInterface tabChangeInterface;
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_NEW_CASE = "newCase";
+    private static final String ARG_EMBEDDED = "embedded";
 
     private boolean newCase; // if it is a new case, no symptom information has to be loaded and the layout switches into edit-mode
+    private boolean embedded; // gets rid of the button and therefore the requirement for tab-change listener
     private boolean addPicturesHintIsVisible;
 
 
@@ -69,10 +78,11 @@ public class EditPicturesFragment extends Fragment implements PictureReceiver, C
      * @return A new instance of fragment EditSymptomsFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static EditPicturesFragment newInstance(boolean newCase) {
+    public static EditPicturesFragment newInstance(boolean newCase, boolean embedded) {
         EditPicturesFragment fragment = new EditPicturesFragment();
         Bundle args = new Bundle();
         args.putBoolean(ARG_NEW_CASE, newCase);
+        args.putBoolean(ARG_EMBEDDED, embedded);
 //        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
@@ -85,11 +95,16 @@ public class EditPicturesFragment extends Fragment implements PictureReceiver, C
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        try {
-            tabChangeInterface = (OnTabChangedInFragmentInterface) context;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString() + " must implement " + OnTabChangedInFragmentInterface.class.getSimpleName());
+        boolean embeddedA = getArguments().getBoolean(ARG_EMBEDDED);
+
+        if (!embeddedA) {
+            try {
+                tabChangeInterface = (OnTabChangedInFragmentInterface) context;
+            } catch (ClassCastException e) {
+                throw new ClassCastException(context.toString() + " must implement " + OnTabChangedInFragmentInterface.class.getSimpleName());
+            }
         }
+
 
     }
 
@@ -98,12 +113,15 @@ public class EditPicturesFragment extends Fragment implements PictureReceiver, C
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             newCase = getArguments().getBoolean(ARG_NEW_CASE);
+            embedded = getArguments().getBoolean(ARG_EMBEDDED);
             // TODO remove - START - test data
             pictures = new ArrayList<>();
             PictureHelperEntity testPicture1 = new PictureHelperEntity();
             testPicture1.setDescription("Test Picture!");
             // TODO remove - END
         }
+
+//        mCurrentPhotoPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getPath();
 
     }
 
@@ -178,13 +196,30 @@ public class EditPicturesFragment extends Fragment implements PictureReceiver, C
 
         // button to get to the next part
         Button nextButton = (Button) v.findViewById(R.id.next_section_button);
-        nextButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // go to the next section
-                tabChangeInterface.switchToTheNextTab();
-            }
-        });
+
+        if (embedded) {
+            // next = finish
+            nextButton.setText(R.string.label_finish_editing);
+            nextButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // finish
+                    // TODO besser machen
+                    ((AddPictureActivity)getActivity()).collectPictureDataAndFinish();
+                }
+            });
+
+        } else {
+            nextButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // go to the next section
+                    tabChangeInterface.switchToTheNextTab();
+                }
+            });
+        }
+
+
 
         return v;
     }
@@ -202,6 +237,53 @@ public class EditPicturesFragment extends Fragment implements PictureReceiver, C
         }
     }
 
+
+    /**
+     * method to prepare output-file for image-capture
+     * see: http://developer.android.com/training/camera/photobasics.html
+     * @return
+     * @throws IOException
+     */
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        mCurrentPhotoPath = "file:" + image.getAbsolutePath();
+        return image;
+    }
+
+    /**
+     * method - send intent to camera to take picture
+     */
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(getContext().getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+                Log.d(LOG_TAG, "cant create file: " + ex.getStackTrace().toString());
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
+                        Uri.fromFile(photoFile));
+                startActivityForResult(takePictureIntent, EditCaseActivity.REQUEST_CAMERA);
+            }
+        }
+    }
 
     /**
      * shows a selection-dialog to the user
@@ -226,12 +308,16 @@ public class EditPicturesFragment extends Fragment implements PictureReceiver, C
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (textItems[which].equals(optionTakePhoto)) {
+
                     // open camera app
-                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE); // old-method should be replaced by dispatchTakePictureIntent() TODO
                     // ensure, that some app can handle this intent - this app would crash otherwise
                     if (intent.resolveActivity(getContext().getPackageManager()) != null) {
-                        startActivityForResult(intent, NewCaseActivity.REQUEST_CAMERA);
+                        startActivityForResult(intent, EditCaseActivity.REQUEST_CAMERA);
                     }
+
+//                    dispatchTakePictureIntent(); // should start camera-app to get a full-size image - does not work yet
+
                 } else if (textItems[which].equals(optionChooseFromLibrary)) {
                     // open galery
                     Intent intent = new Intent(
@@ -240,7 +326,7 @@ public class EditPicturesFragment extends Fragment implements PictureReceiver, C
                     intent.setType("image/*");
                     startActivityForResult(
                             Intent.createChooser(intent, "Select File"),
-                            NewCaseActivity.SELECT_FILE);
+                            EditCaseActivity.SELECT_FILE);
                 } else if (textItems[which].equals(optionCancel)) {
                     // cancel operation
                     dialog.dismiss();
@@ -250,44 +336,53 @@ public class EditPicturesFragment extends Fragment implements PictureReceiver, C
         builder.show();
     }
 
+    private Bitmap setPic() {
+        // Get the dimensions of the View
+        int targetW = 200; // mImageView.getWeight();
+        int targetH = 200; // mImageView.getHeight();
+
+        // Get the dimensions of the bitmap
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+        int photoW = bmOptions.outWidth;
+        int photoH = bmOptions.outHeight;
+
+        // Determine how much to scale down the image
+        int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
+
+        // Decode the image file into a Bitmap sized to fill the View
+        bmOptions.inJustDecodeBounds = false;
+        bmOptions.inSampleSize = scaleFactor;
+//        bmOptions.inPurgeable = true;
+
+        Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+        return bitmap;
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Log.d(LOG_TAG, "onActivityResult() requestCode: " + requestCode + ", resultCode: " + resultCode);
 
-        if (resultCode == NewCaseActivity.RESULT_OK) {
+        if (resultCode == EditCaseActivity.RESULT_OK) {
 
-            if (requestCode == NewCaseActivity.REQUEST_CAMERA) {
+            if (requestCode == EditCaseActivity.REQUEST_CAMERA) {
                 Log.d(LOG_TAG, "Request Picture from Camera");
                 // handle results of camera-picture requests
-                Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
-//                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-//
-//                // make a thumbnail to display in a list - save
-//                thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
-//                File destination = new File(Environment.getExternalStorageDirectory(),
-//                        System.currentTimeMillis() + ".jpg");
-//                FileOutputStream fo;
-//                try {
-//                    destination.createNewFile();
-//                    fo = new FileOutputStream(destination);
-//                    fo.write(bytes.toByteArray());
-//                    fo.close();
-//                } catch (FileNotFoundException e) {
-//                    e.printStackTrace();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
+                Bitmap thumbnail = (Bitmap) data.getExtras().get("data"); // not with the new method
+//                Bitmap thumbnail = setPic(); // TODO
+
                 PictureHelperEntity newPicture = new PictureHelperEntity();
                 newPicture.setThumbnail(thumbnail);
                 newPicture.setPicture(thumbnail);
+                newPicture.setPictureFileReference(mCurrentPhotoPath);
 //                imageView.setImageBitmap(thumbnail);
                 addNewPicture(newPicture); // add the new PictureEntity to the List-data-set
                 // TODO
-//                ivImage.setImageBitmap(thumbnail);
 
 
-            } else if (requestCode == NewCaseActivity.SELECT_FILE) {
+            } else if (requestCode == EditCaseActivity.SELECT_FILE) {
                 Log.d(LOG_TAG, "Request Picture from Select file");
                 // handle results of library-picture requests
                 Uri selectedImageUri = data.getData();
@@ -316,6 +411,7 @@ public class EditPicturesFragment extends Fragment implements PictureReceiver, C
                 PictureHelperEntity newPicture = new PictureHelperEntity();
                 newPicture.setThumbnail(bm);
                 newPicture.setPicture(bm);
+                newPicture.setPictureFileReference(selectedImagePath);
                 addNewPicture(newPicture); // add the new PictureEntity to the List-data-set
 //                imageView.setImageBitmap(bm);
                 // TODO

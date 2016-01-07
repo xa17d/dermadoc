@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -43,11 +44,14 @@ public class EditLocationFragment extends Fragment {
     public static final String LOG_TAG = EditLocationFragment.class.getSimpleName();
 
     private OnTabChangedInFragmentInterface tabChangeInterface;
+    private BodyLocationCallbackInterface bodyLocationSourceInterface;
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_NEW_CASE = "newCase";
+    private static final String ARG_EMBEDDED_MODE = "embeddedMode";
 
     private boolean newCase; // if it is a new case, no symptom information has to be loaded and the layout switches into edit-mode
+    private boolean embeddedMode; // if this is true, the click-listeners are active
     private boolean addPicturesHintIsVisible;
 
     private FrameLayout locationImagesFrameLayout;
@@ -67,10 +71,11 @@ public class EditLocationFragment extends Fragment {
      * @return A new instance of fragment EditSymptomsFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static EditLocationFragment newInstance(boolean newCase) {
+    public static EditLocationFragment newInstance(boolean newCase, boolean embeddedMode) {
         EditLocationFragment fragment = new EditLocationFragment();
         Bundle args = new Bundle();
         args.putBoolean(ARG_NEW_CASE, newCase);
+        args.putBoolean(ARG_EMBEDDED_MODE, embeddedMode);
 //        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
@@ -83,11 +88,18 @@ public class EditLocationFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(LOG_TAG, "onCrate()");
         if (getArguments() != null) {
             newCase = getArguments().getBoolean(ARG_NEW_CASE);
+            embeddedMode = getArguments().getBoolean(ARG_EMBEDDED_MODE);
         }
         selectedBodyParts = new ArrayList<>(); // TODO fill with values, when this is not within a new case
         localizationToImageMap = new HashMap<>();
+
+        if (!newCase) {
+            // load localizations
+            selectedBodyParts = bodyLocationSourceInterface.getBodyLocations();
+        }
 
     }
 
@@ -121,9 +133,13 @@ public class EditLocationFragment extends Fragment {
         locationImagesFrameLayout = (FrameLayout) v.findViewById(R.id.location_image_frame_layout);
         ImageView mainLocationFrontImage = (ImageView) v.findViewById(R.id.main_location_picture_image_view);
 
-        LocationImageTouchListener mainListener =
-                new LocationImageTouchListener(R.id.location_helper_image_view, R.id.location_details_helper_image_view);
-        mainLocationFrontImage.setOnTouchListener(mainListener);
+        // do not add a touch listener, in embedded-mode
+        if (!embeddedMode) {
+            LocationImageTouchListener mainListener =
+                    new LocationImageTouchListener(R.id.location_helper_image_view, R.id.location_details_helper_image_view);
+            mainLocationFrontImage.setOnTouchListener(mainListener);
+        }
+
 
         // button to get to the next part
         Button nextButton = (Button) v.findViewById(R.id.next_section_button);
@@ -144,6 +160,12 @@ public class EditLocationFragment extends Fragment {
 
         }
 
+        // if embedded, hide header and next-button
+        RelativeLayout headerL = (RelativeLayout) v.findViewById(R.id.header_relative_layout);
+        RelativeLayout buttonL = (RelativeLayout) v.findViewById(R.id.button_relative_layout);
+        headerL.setVisibility(View.GONE);
+        buttonL.setVisibility(View.GONE);
+
         return v;
     }
 
@@ -152,11 +174,36 @@ public class EditLocationFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        try {
-            tabChangeInterface = (OnTabChangedInFragmentInterface) context;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString() + " must implement " + OnTabChangedInFragmentInterface.class.getSimpleName());
+        Log.d(LOG_TAG, "onAttach()");
+
+        boolean eMode = false;
+        boolean nCase = true;
+
+        Log.d(LOG_TAG, "arguments " + getArguments());
+        if (getArguments() != null) {
+            nCase = getArguments().getBoolean(ARG_NEW_CASE);
+            eMode = getArguments().getBoolean(ARG_EMBEDDED_MODE);
         }
+
+        Log.d(LOG_TAG, "arguments: " + "newCase=" + nCase + ", embeddedMode=" + eMode);
+
+        if (!eMode) {
+            try {
+                tabChangeInterface = (OnTabChangedInFragmentInterface) context;
+            } catch (ClassCastException e) {
+                throw new ClassCastException(context.toString() + " must implement " + OnTabChangedInFragmentInterface.class.getSimpleName());
+            }
+        }
+
+        // if not newCase, we have to load the old localizations
+        if (!nCase) {
+            try {
+                bodyLocationSourceInterface = (BodyLocationCallbackInterface) context;
+            } catch (ClassCastException e) {
+                throw new ClassCastException(context.toString() + " must implement " + BodyLocationCallbackInterface.class.getSimpleName());
+            }
+        }
+
 
     }
 
@@ -271,7 +318,7 @@ public class EditLocationFragment extends Fragment {
                     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     // ensure, that some app can handle this intent - this app would crash otherwise
                     if (intent.resolveActivity(getContext().getPackageManager()) != null) {
-                        startActivityForResult(intent, NewCaseActivity.REQUEST_CAMERA);
+                        startActivityForResult(intent, EditCaseActivity.REQUEST_CAMERA);
                     }
                 } else if (textItems[which].equals(optionChooseFromLibrary)) {
                     // open galery
@@ -281,7 +328,7 @@ public class EditLocationFragment extends Fragment {
                     intent.setType("image/*");
                     startActivityForResult(
                             Intent.createChooser(intent, "Select File"),
-                            NewCaseActivity.SELECT_FILE);
+                            EditCaseActivity.SELECT_FILE);
                 } else if (textItems[which].equals(optionCancel)) {
                     // cancel operation
                     dialog.dismiss();
@@ -296,7 +343,7 @@ public class EditLocationFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         Log.d(LOG_TAG, "onActivityResult() requestCode: " + requestCode + ", resultCode: " + resultCode);
 
-        if (resultCode == NewCaseActivity.RESULT_OK) {
+        if (resultCode == EditCaseActivity.RESULT_OK) {
 
         }
     }
@@ -628,5 +675,9 @@ public class EditLocationFragment extends Fragment {
             return hotspots.getPixel(x, y);
         }
 
+    }
+
+    public interface BodyLocationCallbackInterface {
+        public List<BodyLocalization> getBodyLocations();
     }
 }

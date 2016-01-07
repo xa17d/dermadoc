@@ -43,11 +43,11 @@ public class NewCasePagerAdapter extends FragmentPagerAdapter {
         fragmentList.add(EditSymptomsFragment.newInstance(true));
         titleList.add(context.getString(NewCasePagerEnum.SYMPTOMS.getTitleResId()));
 
-        EditPicturesFragment pictureReceiver = EditPicturesFragment.newInstance(true);
+        EditPicturesFragment pictureReceiver = EditPicturesFragment.newInstance(true, false);
         fragmentList.add(pictureReceiver);
         titleList.add(context.getString(NewCasePagerEnum.PICTURE.getTitleResId()));
 
-        fragmentList.add(EditLocationFragment.newInstance(true));
+        fragmentList.add(EditLocationFragment.newInstance(true, false));
         titleList.add(context.getString(NewCasePagerEnum.LOCATION.getTitleResId()));
 
         fragmentList.add(EditAnamnesisFragment.newInstance());

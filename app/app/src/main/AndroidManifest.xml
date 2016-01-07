@@ -8,6 +8,8 @@
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <!-- to take a picture and store it -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
 
     <application
         android:allowBackup="true"
@@ -27,7 +29,12 @@
         </activity>
         <activity
             android:name=".activities_fragments.case_specific.CaseActivity"
-            android:label="Case"
+            android:label="@string/activity_label_case"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
+        <activity
+            android:name=".activities_fragments.edit_case.AddPictureActivity"
+            android:label="@string/activity_label_add_pic"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
         <activity
@@ -40,7 +47,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities_fragments.create_case.NewCaseActivity"
+            android:name=".activities_fragments.create_case.EditCaseActivity"
             android:label="@string/title_activity_create_case"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" >

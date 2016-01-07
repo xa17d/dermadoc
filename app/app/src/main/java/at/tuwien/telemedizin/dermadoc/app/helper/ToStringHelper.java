@@ -80,7 +80,9 @@ public class ToStringHelper {
     public static String toString(Anamnesis anamnesis) {
         String s = "";
         s += "Anamnesis {";
-
+        if (anamnesis == null) {
+            return s + "null}";
+        }
         for(AnamnesisQuestion q : anamnesis.getQuestions()) {
             s += "q: " + q.getQuestion() + "\n";
             if (q instanceof AnamnesisQuestionBool) {
@@ -98,7 +100,11 @@ public class ToStringHelper {
 
 
     public static String toStringPics(List<PictureHelperEntity> pictures) {
+
         String s = "Pictures{";
+        if (pictures == null) {
+            return s + "null}";
+        }
         for (PictureHelperEntity p : pictures) {
             s += "Picture Description: " + p.getDescription() + ",\n" +
                     "pic != null " + (p.getPicture() != null)
@@ -111,6 +117,10 @@ public class ToStringHelper {
 
     public static String toStringLoc(List<BodyLocalization> bodyLocalizations) {
         String s = "BodyLocalizations{";
+
+        if (bodyLocalizations == null) {
+            return s + "null}";
+        }
         for (BodyLocalization p : bodyLocalizations) {
             s += p.name() + ", \n";
         }

@@ -3,7 +3,6 @@ package at.tuwien.telemedizin.dermadoc.app.activities_fragments.create_case;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v4.app.DialogFragment;
@@ -11,12 +10,12 @@ import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import at.tuwien.telemedizin.dermadoc.app.R;
+import at.tuwien.telemedizin.dermadoc.app.activities_fragments.edit_case.AddPictureActivity;
 import at.tuwien.telemedizin.dermadoc.app.entities.PictureHelperEntity;
 
 /**
@@ -172,8 +171,11 @@ public class EditPictureDescriptionFragment extends DialogFragment {
                             public void onClick(DialogInterface dialog, int whichButton) {
 
                                 // TODO: find a better way of communication
-                                if (getActivity() instanceof NewCaseActivity) {
-                                    ((NewCaseActivity)getActivity()).notifyEditPictureDescription(picture,
+                                if (getActivity() instanceof EditCaseActivity) {
+                                    ((EditCaseActivity)getActivity()).notifyEditPictureDescription(picture,
+                                            descriptionEditText.getText().toString());
+                                } else if (getActivity() instanceof AddPictureActivity) {
+                                    ((AddPictureActivity)getActivity()).notifyEditPictureDescription(picture,
                                             descriptionEditText.getText().toString());
                                 }
 

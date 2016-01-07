@@ -1,6 +1,11 @@
 package at.tuwien.telemedizin.dermadoc.app.activities_fragments.case_specific;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
@@ -17,24 +22,45 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.List;
+
 import at.tuwien.telemedizin.dermadoc.app.R;
 import at.tuwien.telemedizin.dermadoc.app.activities_fragments.DummyContentFragment;
-import at.tuwien.telemedizin.dermadoc.app.entities.CaseEntity;
+import at.tuwien.telemedizin.dermadoc.app.activities_fragments.create_case.EditLocationFragment;
+import at.tuwien.telemedizin.dermadoc.app.activities_fragments.edit_case.AddPictureActivity;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.CaseParc;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.PatientParc;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.PhysicianParc;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.CaseDataParc;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.CaseInfoParc;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.PhotoMessageParc;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.TextMessageParc;
+import at.tuwien.telemedizin.dermadoc.app.helper.CaseDataExtractionHelper;
 import at.tuwien.telemedizin.dermadoc.app.helper.FormatHelper;
-import at.tuwien.telemedizin.dermadoc.entities.Case;
-import at.tuwien.telemedizin.dermadoc.entities.Patient;
-import at.tuwien.telemedizin.dermadoc.entities.Physician;
+import at.tuwien.telemedizin.dermadoc.app.server_interface.ServerInterface;
+import at.tuwien.telemedizin.dermadoc.app.server_interface.ServerInterfaceFactory;
+import at.tuwien.telemedizin.dermadoc.entities.BodyLocalization;
+import at.tuwien.telemedizin.dermadoc.entities.casedata.TextMessage;
 
 
 public class CaseActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, CaseDataCallbackInterface {
+        implements NavigationView.OnNavigationItemSelectedListener, CaseDataCallbackInterface, EditLocationFragment.BodyLocationCallbackInterface {
 
     public static final String LOG_TAG = CaseActivity.class.getSimpleName();
 
-    private Case caseItem;
+    public static final String USER_INTENT_KEY = CaseActivity.class.getSimpleName() + "UserIntent";
+    public static final int PICTURE_REQUEST_KEY = 1;
+
+
+    private CaseParc caseItem;
+    private PatientParc currentUser;
 
     private NavigationView navigationView;
     private TextView navHeaderMainTextView;
@@ -43,6 +69,18 @@ public class CaseActivity extends AppCompatActivity
     private TextView navHeaderPhysicianTextView;
     private TextView navHeaderDateOfCreationTextView;
 
+    private MenuItem attachItem;
+
+    private RelativeLayout mainContentLayout;
+    private RelativeLayout loadingProgressLayout;
+    private TextView loadingProgressInfoTextView;
+
+    private FloatingActionButton fab;
+
+    private SendMessagesAsyncTask sendMessageTask;
+
+    private MenuItem overviewMenuItem;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,12 +88,12 @@ public class CaseActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+               // Edit CaseInfo
+
             }
         });
 
@@ -69,7 +107,7 @@ public class CaseActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         // default content is case-list
-        Fragment fragment = CaseOverviewFragment.newInstance(); // TODO replace with real fragment/function
+        Fragment fragment = CaseOverviewFragment.newInstance();
         String title = getString(R.string.nav_case_overview);
 
         if (fragment != null) {
@@ -81,14 +119,20 @@ public class CaseActivity extends AppCompatActivity
 
         // load case
         Intent intent = getIntent();
-        Parcelable caseParcel = intent.getParcelableExtra(CaseEntity.INTENT_KEY);
+        Parcelable caseParcel = intent.getParcelableExtra(CaseParc.INTENT_KEY);
+        Parcelable currentUserParcel = intent.getParcelableExtra(USER_INTENT_KEY);
         if (caseParcel != null) {
 //            Log.d(LOG_TAG, "case-parcelable in intent != null -> casting");
-            caseItem = (Case) caseParcel;
+            caseItem = (CaseParc) caseParcel;
         } else {
 //            Log.d(LOG_TAG, "case-parcelable == null -> exiting activity");
             Toast.makeText(getBaseContext(), getString(R.string.msg_err_item_not_received), Toast.LENGTH_LONG).show();
             this.finish();
+        }
+
+        if (currentUserParcel != null) {
+//            Log.d(LOG_TAG, "case-parcelable in intent != null -> casting");
+            currentUser = (PatientParc) currentUserParcel;
         }
 
         Log.d(LOG_TAG, "caseItem == null? " + (caseItem == null));
@@ -100,7 +144,10 @@ public class CaseActivity extends AppCompatActivity
         // set up navigation drawer - header
         setUpNavigationViewHeader();
 
-
+        mainContentLayout = (RelativeLayout) findViewById(R.id.contentFrame);
+        loadingProgressLayout = (RelativeLayout) findViewById(R.id.loading_data_progress_layout);
+        loadingProgressLayout.setVisibility(View.GONE);
+        loadingProgressInfoTextView = (TextView) findViewById(R.id.loading_data_info_text);
 
 
 
@@ -118,13 +165,13 @@ public class CaseActivity extends AppCompatActivity
 
         // TODO patient info is less interesting for the patient -> remove
         navHeaderPatientTextView = (TextView)
-                navigationView.getHeaderView(0).findViewById(R.id.case_overview_patient);
-        Patient patient = caseItem.getPatient();
-        navHeaderPatientTextView.setText(patient != null ? patient.getName() : "No Info");
+                navigationView.getHeaderView(0).findViewById(R.id.case_overview_id);
+        PatientParc patient = caseItem.getPatient();
+        navHeaderPatientTextView.setText(caseItem.getId() + "");
 
         navHeaderPhysicianTextView = (TextView)
                 navigationView.getHeaderView(0).findViewById(R.id.case_overview_physician);
-        Physician physician = caseItem.getPhysician();
+        PhysicianParc physician = caseItem.getPhysician();
         navHeaderPhysicianTextView.setText(physician != null ?
                 physician.getName() : getString(R.string.msg_no_physician_info_found));
 
@@ -156,6 +203,8 @@ public class CaseActivity extends AppCompatActivity
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.case_menu, menu);
 
+
+        attachItem = menu.findItem(R.id.action_attach);
         return true;
     }
 
@@ -172,37 +221,95 @@ public class CaseActivity extends AppCompatActivity
             return true;
         } else if (id == R.id.action_syncronize) {
             Toast.makeText(getBaseContext(), "Synchronisation with server coming soon!", Toast.LENGTH_LONG).show(); // TODO replace with real fragment/function
+        } else if (id == R.id.action_attach) {
+            // start the activity for result to return a list of pictures
+            Intent intent = new Intent(this, AddPictureActivity.class);
+            startActivityForResult(intent, AddPictureActivity.PICTURES_RESULT_INTENT_KEY);
         }
 
         return super.onOptionsItemSelected(item);
     }
 
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d(LOG_TAG, "onActivityResult() requestCode: " + requestCode + ", resultCode: " + resultCode);
+
+        if (resultCode == RESULT_OK) {
+
+            if (requestCode == PICTURE_REQUEST_KEY) {
+                Log.d(LOG_TAG, "PICTURE_REQUEST_KEY");
+                List<CaseDataParc> photoRelatedMessageList = data.getParcelableArrayListExtra(AddPictureActivity.PICTURE_LIST_INTENT);
+                // TODO
+                if (photoRelatedMessageList != null && photoRelatedMessageList.size() > 0) {
+                    Log.d(LOG_TAG, "pictureMessageList=" + photoRelatedMessageList.size());
+                    sendPhotoMessages(photoRelatedMessageList);
+
+                }
+            }
+        }
+
+
+    }
+
+    private void sendPhotoMessages(List<CaseDataParc> messages) {
+
+        // add to case
+        // TODO remove perhaps?
+        for(CaseDataParc pM : messages) {
+            caseItem.addDataElement(pM);
+        }
+
+        showProgress(true, getString(R.string.hint_sending));
+        sendMessageTask = new SendMessagesAsyncTask(this);
+
+        CaseDataParc[] msgArray = new CaseDataParc[messages.size()];
+        msgArray = messages.toArray(msgArray);
+
+        sendMessageTask.execute(msgArray);
+    }
+
+
+
+    public void switchToOverview() {
+        onNavigationItemSelected(R.id.nav_case_overview);
+    }
+
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
-        int id = item.getItemId();
+        onNavigationItemSelected(item.getItemId());
+
+        return true;
+    }
+
+    public boolean onNavigationItemSelected(int id) {
+        // Handle navigation view item clicks here.
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         Fragment fragment = null;
         String title = "" + caseItem.getId(); // TODO change to name or something
         CharSequence oldTitle = getTitle();
 
+
         if (id == R.id.nav_case_overview) {
             fragment = CaseOverviewFragment.newInstance(); //
             title = getString(R.string.nav_case_overview);
+            fab.setVisibility(View.VISIBLE);
+            fab.setImageResource(R.drawable.ic_action_edit_white_18dp);
 
-        } else if (id == R.id.nav_case_advice) {
-            fragment = DummyContentFragment.newInstance("Advice"); // TODO replace with real fragment/function
-            title = getString(R.string.nav_case_advice);
+            attachItem.setVisible(false); // hide
 
-        } else if (id == R.id.nav_case_diagnoses) {
-            fragment = DummyContentFragment.newInstance("Diagnoses"); // TODO replace with real fragment/function
+        } else if (id == R.id.nav_case_conversation) {
+            fragment = CaseDataListFragment.newInstance();
             title = getString(R.string.nav_case_diagnoses);
-        } else if (id == R.id.nav_case_etc) {
-            fragment = DummyContentFragment.newInstance("etc..."); // TODO replace with real fragment/function
-            title = "ETC";
+            fab.setVisibility(View.GONE);
+//            fab.setImageResource(R.drawable.ic_add_white_24dp);
+
+            attachItem.setVisible(true); // hide
+
         } else if (id == R.id.nav_back_to_main) {
             // finish this activity
             CaseActivity.this.finish();
@@ -225,8 +332,135 @@ public class CaseActivity extends AppCompatActivity
     }
 
 
+
     @Override
-    public Case getCase() {
+    public CaseParc getCase() {
         return caseItem;
+    }
+
+    @Override
+    public List<BodyLocalization> getBodyLocations() {
+        // provide the localizations to the fragment
+        CaseInfoParc cI = CaseDataExtractionHelper.getLatestCaseInfo(caseItem.getDataElements());
+        if (cI != null) {
+            return cI.getLocalizations();
+        } else {
+            return new ArrayList<BodyLocalization>();
+        }
+    }
+
+    /**
+     * creates and send the text message
+     * @param text
+     */
+    public void sendTextMessage(String text) {
+        TextMessageParc newMessage = new TextMessageParc(-1, Calendar.getInstance(), currentUser, text);
+
+        // add to case
+        // TODO remove perhaps?
+        caseItem.addDataElement(newMessage);
+
+        showProgress(true, getString(R.string.hint_sending));
+        sendMessageTask = new SendMessagesAsyncTask(this);
+        sendMessageTask.execute(newMessage);
+
+    }
+
+    /**
+     * this method supplements the showProgress(boolean, String) method
+     * @param show
+     */
+    private void showProgress(boolean show) {
+        showProgress(show, getString(R.string.label_loading_data_static));
+    }
+
+    /**
+     * Shows the progress UI and hides the login form.
+     * @param show - should the progress view be visible or not
+     * @param infoText - the text that should be displayed along with the progress-view
+     */
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    private void showProgress(final boolean show, String infoText) {
+        // set the info-text in the text-view
+        loadingProgressInfoTextView.setText(infoText);
+
+        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
+        // for very easy animations. If available, use these APIs to fade-in
+        // the progress spinner.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+            mainContentLayout.setVisibility(show ? View.GONE : View.VISIBLE);
+            mainContentLayout.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mainContentLayout.setVisibility(show ? View.GONE : View.VISIBLE);
+                }
+            });
+
+            loadingProgressLayout.setVisibility(show ? View.VISIBLE : View.GONE);
+            loadingProgressLayout.animate().setDuration(shortAnimTime).alpha(
+                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    loadingProgressLayout.setVisibility(show ? View.VISIBLE : View.GONE);
+                }
+            });
+        } else {
+            // The ViewPropertyAnimator APIs are not available, so simply show
+            // and hide the relevant UI components.
+            loadingProgressLayout.setVisibility(show ? View.VISIBLE : View.GONE);
+            mainContentLayout.setVisibility(show ? View.GONE : View.VISIBLE);
+        }
+    }
+
+
+    /**
+     * Represents an asynchronous login/registration task used to authenticate
+     * the user.
+     */
+    public class SendMessagesAsyncTask extends AsyncTask<CaseDataParc, Void, Void> {
+        private CaseActivity activity;
+
+        private String outp;
+
+        SendMessagesAsyncTask(CaseActivity activity) {
+            this.activity = activity;
+        }
+
+        @Override
+        protected Void doInBackground(CaseDataParc... params) {
+            Log.d(LOG_TAG, "doInBackground() " + params.length);
+
+            List<CaseDataParc> caseDataList = new ArrayList<CaseDataParc>(Arrays.asList(params));
+
+            ServerInterface sI = ServerInterfaceFactory.getInstance();
+            // TODO POST /cases/{caseId}/data
+
+            // TODO remoeve
+            try {
+                Thread.sleep(3000);                 //1000 milliseconds is one second.
+            } catch(InterruptedException ex) {
+                Thread.currentThread().interrupt();
+            }
+
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void param) {
+            Log.d(LOG_TAG, "onPostExecute()");
+            // TODO start sync task back
+            sendMessageTask = null;
+            showProgress(false);
+        }
+
+        @Override
+        protected void onCancelled() {
+            sendMessageTask = null;
+            showProgress(false);
+        }
     }
 }
