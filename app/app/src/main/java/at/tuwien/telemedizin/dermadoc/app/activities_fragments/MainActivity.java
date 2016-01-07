@@ -24,6 +24,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import at.tuwien.telemedizin.dermadoc.app.R;
@@ -33,12 +34,10 @@ import at.tuwien.telemedizin.dermadoc.app.adapters.MyCasesPagerEnum;
 import at.tuwien.telemedizin.dermadoc.app.comparators.CaseSortCategory;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.CaseParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.PatientParc;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.Case;
 import at.tuwien.telemedizin.dermadoc.app.general_entities.Patient;
 import at.tuwien.telemedizin.dermadoc.app.general_entities.User;
-import at.tuwien.telemedizin.dermadoc.app.general_entities.rest.AuthenticationToken;
-import at.tuwien.telemedizin.dermadoc.app.helper.ToStringHelper;
-import at.tuwien.telemedizin.dermadoc.app.persistence.ContentProvider;
-import at.tuwien.telemedizin.dermadoc.app.persistence.ContentProviderFactory;
+import at.tuwien.telemedizin.dermadoc.app.helper.ParcelableHelper;
 import at.tuwien.telemedizin.dermadoc.app.server_interface.RestServerInterface;
 import at.tuwien.telemedizin.dermadoc.app.server_interface.ServerInterface;
 import at.tuwien.telemedizin.dermadoc.app.server_interface.ServerInterfaceFactory;
@@ -55,11 +54,6 @@ public class MainActivity extends AppCompatActivity
     private List<CaseParc> closedCaseList;
     private ServerInterface serverInterface;
 
-    public static final String TOKEN_INTENT_KEY = MainActivity.class.getName() + "TOKEN_INTENT";
-    public static final String TOKEN_TYPE_INTENT_KEY = MainActivity.class.getName() + "TOKEN_TYPE_INTENT";
-
-    private AuthenticationToken authenticationToken;
-
 
     private CaseSortCategory caseListSortCategory; // set when a sort is executed
 
@@ -71,7 +65,12 @@ public class MainActivity extends AppCompatActivity
     private TextView loadingProgressInfoTextView;
 
     private LoadUserDataTask loadUserDataTask;
+    private LoadCaseListDataTask loadCurrentCaseListDataTask;
+
     private PatientParc currentUser;
+
+    private CaseListFragment fragmentCurrentCaseList;
+    private CaseListFragment fragmentOldCaseList;
 
 
     @Override
@@ -132,20 +131,19 @@ public class MainActivity extends AppCompatActivity
 
         serverInterface = ServerInterfaceFactory.getInstance();
 
-        Log.d(LOG_TAG, "serverInterface - authToken?: " + ((RestServerInterface)serverInterface).hasAuthToken());
+        Log.d(LOG_TAG, "serverInterface - authToken?: " + ((RestServerInterface) serverInterface).hasAuthToken());
 
         // TODO
 
-        getDataFromServer();
+//        getDataFromServer(); // in onResume
 
-
-        // TODO replace
-        ContentProvider cP = ContentProviderFactory.getContentProvider();
-        currentCaseList = cP.getCurrentCasesOfUser();
-        closedCaseList = cP.getCurrentCasesOfUser(); // TODO for testing purpose - remove or replace
-
-        // TODO load User Data
-        currentUser = cP.getCurrentUser();
+        // TODO for testing purpose - remove or replace
+//        ContentProvider cP = ContentProviderFactory.getContentProvider();
+//        currentCaseList = cP.getCurrentCasesOfUser();
+//        closedCaseList = cP.getCurrentCasesOfUser();
+//
+//
+//        currentUser = cP.getCurrentUser();
     }
 
     /**
@@ -159,20 +157,30 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void getDataFromServer() {
-        // TODO
-        // 1. load Patient data
 
-        // 2. Load Case-List
+        // 1. Load Case-List
+        currentCaseList = new ArrayList<>();
+        closedCaseList = new ArrayList<>();
+        loadCaseListData();
 
-        // 3. load user Data
+        // 2. load user Data
         loadUserData();
     }
 
     private void loadUserData() {
+        Log.d(LOG_TAG, "loadUserData()");
         String infoText = getString(R.string.label_loading_data_dynamic, getString(R.string.option_loading_user_data_insert));
         showProgress(true, infoText);
         loadUserDataTask = new LoadUserDataTask(this);
         loadUserDataTask.execute((Void) null);
+    }
+
+    private void loadCaseListData() {
+        Log.d(LOG_TAG, "loadCaseListData()");
+        String infoText = getString(R.string.label_loading_data_dynamic, getString(R.string.option_loading_case_list_data_insert));
+        showProgress(true, infoText);
+        loadCurrentCaseListDataTask = new LoadCaseListDataTask(this);
+        loadCurrentCaseListDataTask.execute((Void) null);
     }
 
     @Override
@@ -183,6 +191,12 @@ public class MainActivity extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getDataFromServer();
     }
 
     @Override
@@ -206,8 +220,9 @@ public class MainActivity extends AppCompatActivity
             Toast.makeText(getBaseContext(), "There will be a Settings-activity", Toast.LENGTH_LONG).show(); // TODO replace with real fragment/function
             return true;
         } else if (id == R.id.action_syncronize) {
-            Toast.makeText(getBaseContext(), "Synchronisation with server coming soon!", Toast.LENGTH_LONG).show(); // TODO replace with real fragment/function
             syncData();
+            Toast.makeText(getBaseContext(), "User-Data and Case-List synchronized!", Toast.LENGTH_LONG).show();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -273,10 +288,12 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public List<CaseParc> onListRequest(long listKey) {
+    public List<CaseParc> onListRequest(long listKey, CaseListFragment fragment) {
         if (listKey == MyCasesPagerEnum.CURRENT.getKey()) {
+            fragmentCurrentCaseList = fragment; // set the fragment for list-change-events
             return currentCaseList;
         } else if (listKey == MyCasesPagerEnum.OLD.getKey()) {
+            fragmentOldCaseList = fragment; // set the fragment for list-change-events
             return closedCaseList;
         } else {
             // nothing matched ...
@@ -344,6 +361,25 @@ public class MainActivity extends AppCompatActivity
     }
 
     /**
+     * sets the task = null and deactivates showProgess, if all tasks are null
+     * @param task
+     */
+    private synchronized void asyncTaskFinished(AsyncTask task) {
+        if (task instanceof LoadUserDataTask) {
+           loadUserDataTask = null;
+        } else if (task instanceof LoadCaseListDataTask) {
+            loadCurrentCaseListDataTask = null;
+            // inform adapter that case list has changed
+
+        }
+
+        if (loadUserDataTask == null
+                && loadCurrentCaseListDataTask == null) {
+            showProgress(false);
+        }
+    }
+
+    /**
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
@@ -369,13 +405,6 @@ public class MainActivity extends AppCompatActivity
 
             }
 
-            // TODO remoeve
-//            try {
-//                Thread.sleep(3000);                 //1000 milliseconds is one second.
-//            } catch(InterruptedException ex) {
-//                Thread.currentThread().interrupt();
-//            }
-
             return null;
         }
 
@@ -392,14 +421,67 @@ public class MainActivity extends AppCompatActivity
             }
 
 
-            loadUserDataTask = null;
-            showProgress(false);
+            asyncTaskFinished(LoadUserDataTask.this);
         }
 
         @Override
         protected void onCancelled() {
-            loadUserDataTask = null;
-            showProgress(false);
+            asyncTaskFinished(LoadUserDataTask.this);
+        }
+    }
+
+    /**
+     * Represents an asynchronous login/registration task used to authenticate
+     * the user.
+     */
+    public class LoadCaseListDataTask extends AsyncTask<Void, Void, List<Case>> {
+        private MainActivity activity;
+
+        LoadCaseListDataTask(MainActivity activity) {
+            this.activity = activity;
+        }
+
+        @Override
+        protected List<Case> doInBackground(Void... params) {
+            Log.d(LOG_TAG, "doInBackground()");
+
+
+            ServerInterface sI = ServerInterfaceFactory.getInstance();
+            List<Case> caseListRaw = sI.getCases();
+            if (caseListRaw != null) {
+                Log.d(LOG_TAG, "casesListRaw.size(): " + caseListRaw.size());
+                return caseListRaw;
+
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(final List<Case> list) {
+            Log.d(LOG_TAG,"onPostExecute() list!=null: " + (list!=null));
+
+            if (list == null) {
+                Log.d(LOG_TAG,"list == null -> finish activity");
+                // TODO
+
+            } else {
+                currentCaseList = ParcelableHelper.mapCaseListToParc(list);
+                Log.d(LOG_TAG, "currentCaseList.size(): " + currentCaseList.size());
+                // inform the list-holde fragment, that the list changed
+                if (fragmentCurrentCaseList != null) {
+                    fragmentCurrentCaseList.informCaseListChanged();
+                }
+
+            }
+
+
+            asyncTaskFinished(LoadCaseListDataTask.this);
+        }
+
+        @Override
+        protected void onCancelled() {
+            asyncTaskFinished(LoadCaseListDataTask.this);
         }
     }
 

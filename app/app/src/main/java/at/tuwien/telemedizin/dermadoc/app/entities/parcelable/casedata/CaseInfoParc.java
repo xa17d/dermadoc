@@ -10,9 +10,7 @@ import java.util.List;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.UserParc;
 import at.tuwien.telemedizin.dermadoc.app.helper.ParcelableHelper;
 import at.tuwien.telemedizin.dermadoc.app.general_entities.BodyLocalization;
-import at.tuwien.telemedizin.dermadoc.app.general_entities.CaseStatus;
 import at.tuwien.telemedizin.dermadoc.app.general_entities.PainIntensity;
-import at.tuwien.telemedizin.dermadoc.app.general_entities.User;
 import at.tuwien.telemedizin.dermadoc.app.general_entities.casedata.CaseInfo;
 
 /**
@@ -20,13 +18,13 @@ import at.tuwien.telemedizin.dermadoc.app.general_entities.casedata.CaseInfo;
  */
 public class CaseInfoParc extends CaseDataParc {
 
-    public CaseInfoParc(long id, Calendar created, UserParc author, List<BodyLocalization> localizations, PainIntensity pain, double size, String symptromDescription) {
+    public CaseInfoParc(long id, Calendar created, UserParc author, List<BodyLocalization> localizations, PainIntensity pain, double size) {
         super(id, created, author);
 
         this.localizations = localizations;
         this.pain = pain;
         this.size = size;
-        this.symptomDescription = symptromDescription;
+//        this.symptomDescription = symptomDescription;
     }
 
     private List<BodyLocalization> localizations;
@@ -38,8 +36,8 @@ public class CaseInfoParc extends CaseDataParc {
     private double size;
     public double getSize() { return size; }
 
-    private String symptomDescription;
-    public String getSymptomDescription() { return this.symptomDescription; }
+//    private String symptomDescription;
+//    public String getSymptomDescription() { return this.symptomDescription; }
 
     @Override
     public String toString() {
@@ -48,7 +46,7 @@ public class CaseInfoParc extends CaseDataParc {
                 "localizations=" + localizations.size() +
                 ", pain=" + pain +
                 ", size=" + size +
-                ", symptomDescription=" + symptomDescription +
+//                ", symptomDescription=" + symptomDescription +
                 '}';
     }
 
@@ -61,12 +59,9 @@ public class CaseInfoParc extends CaseDataParc {
         this(caseInfo.getId(),
                 caseInfo.getCreated(),
                 ParcelableHelper.mapUserToUserParc(caseInfo.getAuthor()),
-
-                // TODO change in entities to list
-                ParcelableHelper.mapLocalizationToList(caseInfo.getLocalization()),
+                caseInfo.getLocalizations(),
                 caseInfo.getPain(),
-                caseInfo.getSize(),
-                null); // TODO add in entities
+                caseInfo.getSize());
     }
 
 
@@ -90,7 +85,7 @@ public class CaseInfoParc extends CaseDataParc {
 
         this.size = in.readDouble();
 
-        this.symptomDescription = in.readString();
+//        this.symptomDescription = in.readString();
     }
 
     @Override
@@ -116,7 +111,7 @@ public class CaseInfoParc extends CaseDataParc {
 
         dest.writeDouble(size);
 
-        dest.writeString(symptomDescription);
+//        dest.writeString(symptomDescription);
     }
 
     // this is used to regenerate your object. All Parcelables must have a CREATOR that implements these two methods

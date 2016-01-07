@@ -294,7 +294,7 @@ public class CaseDataActivity extends AppCompatActivity {
 
             infos.add( getString(PainIntensityMapper.getTitleResource(message.getPain())));
             infos.add( "Body Localizations: " + message.getLocalizations().size());
-            infos.add( "Symptom Description: \n" + message.getSymptomDescription());
+//            infos.add( "Symptom Description: \n" + message.getSymptomDescription());
 
             if (infos.size() > 0) {
                 Log.d(LOG_TAG, "infos is > 0");

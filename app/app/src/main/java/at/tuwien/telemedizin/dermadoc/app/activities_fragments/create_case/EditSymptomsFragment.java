@@ -257,7 +257,7 @@ public class EditSymptomsFragment extends Fragment {
             currentSelectedSize = symptomsSourceInterface.getSize();
             updateSizeTextView();
 
-            symptomDescriptionEditText.setText(symptomsSourceInterface.getSymptomDescription());
+//            symptomDescriptionEditText.setText(symptomsSourceInterface.getSymptomDescription());
 
             int indexOfPI = spinnerValues.indexOf(symptomsSourceInterface.getPainIntensity());
             if (indexOfPI >= 0) {
@@ -321,8 +321,6 @@ public class EditSymptomsFragment extends Fragment {
 
     public interface SymptomsSourceInterface {
         public double getSize();
-
-        public String getSymptomDescription();
 
         public PainIntensity getPainIntensity();
     }

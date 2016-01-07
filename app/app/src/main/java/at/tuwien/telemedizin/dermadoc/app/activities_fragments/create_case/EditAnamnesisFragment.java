@@ -9,15 +9,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import at.tuwien.telemedizin.dermadoc.app.R;
@@ -25,11 +22,6 @@ import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.Anamnesis
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.AnamnesisQuestionBoolParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.AnamnesisQuestionParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.AnamnesisQuestionTextParc;
-import at.tuwien.telemedizin.dermadoc.app.general_entities.Physician;
-import at.tuwien.telemedizin.dermadoc.app.general_entities.casedata.Anamnesis;
-import at.tuwien.telemedizin.dermadoc.app.general_entities.casedata.AnamnesisQuestion;
-import at.tuwien.telemedizin.dermadoc.app.general_entities.casedata.AnamnesisQuestionBool;
-import at.tuwien.telemedizin.dermadoc.app.general_entities.casedata.AnamnesisQuestionText;
 
 /**
  * A simple {@link Fragment} subclass.

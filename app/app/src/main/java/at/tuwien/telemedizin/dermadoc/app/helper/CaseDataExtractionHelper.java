@@ -3,10 +3,8 @@ package at.tuwien.telemedizin.dermadoc.app.helper;
 import java.util.LinkedList;
 import java.util.List;
 
-import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.AdviceParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.CaseDataParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.CaseInfoParc;
-import at.tuwien.telemedizin.dermadoc.app.general_entities.casedata.CaseData;
 
 /**
  * Created by FAUser on 04.01.2016.

@@ -38,6 +38,8 @@ public class CaseOverviewFragment extends Fragment {
 
     private TextView caseNameTextView;
 
+    private TextView localizationHeaderTextView;
+
     private LinearLayout basicDataListLayout;
 
     private CaseParc caseItem;
@@ -75,9 +77,26 @@ public class CaseOverviewFragment extends Fragment {
         physicianNameTextView = (TextView) v.findViewById(R.id.case_overview_physician);
         creationDateTextView = (TextView) v.findViewById(R.id.case_overview_date_of_creation);
         caseStatusTextView = (TextView) v.findViewById(R.id.case_overview_status);
+        localizationHeaderTextView = (TextView) v.findViewById(R.id.element_header_textView);
+        caseNameTextView = (TextView) v.findViewById(R.id.case_name_text_view);
 
-        // load caseData
+        basicDataListLayout = (LinearLayout) v.findViewById(R.id.basic_data_list_layout);
+
+
+        // get Data and fill views
+        updateDataViews();
+
+        return v;
+    }
+
+    public void updateDataViews() {
         caseItem = caseDataCallbackInterface.getCase();
+        setUpBasicData();
+        basicDataListLayout.removeAllViewsInLayout();
+        setUpBasicDataList(LayoutInflater.from(getContext()));
+    }
+
+    private void setUpBasicData() {
         caseIdTextView.setText(caseItem.getId() + "");
         PhysicianParc physician = caseItem.getPhysician();
         physicianNameTextView.setText(physician != null ?
@@ -87,39 +106,35 @@ public class CaseOverviewFragment extends Fragment {
                 FormatHelper.calendarToDateFormatString(caseItem.getCreated(), getContext()));
 
         caseStatusTextView.setText(caseItem.getStatus() + "");
-
-        caseNameTextView = (TextView) v.findViewById(R.id.case_name_text_view);
         caseNameTextView.setText(caseItem.getName());
 
-        basicDataListLayout = (LinearLayout) v.findViewById(R.id.basic_data_list_layout);
-        // add basic-data elements (pain Intensity, localization)
-        setUpBasicDataList(inflater);
-
-        return v;
     }
 
     private void setUpBasicDataList(LayoutInflater inflater) {
-
+        // add basic-data elements (pain Intensity, localization)
 
         CaseDataExtractionHelper<CaseInfoParc> caseInfoExtractor = new CaseDataExtractionHelper<>(CaseInfoParc.class);
         // get all caseInfo-objects
         List<CaseInfoParc> caseInfos = caseInfoExtractor.extractElements(caseItem.getDataElements());
         if (caseInfos.size() == 0) {
+            localizationHeaderTextView.setVisibility(View.GONE);
             return;
+        } else {
+            localizationHeaderTextView.setVisibility(View.VISIBLE);
         }
         CaseInfoParc cI = caseInfos.get(0);
 
         // symptom description
-        View basicSymptomDescription = inflater.inflate(R.layout.overview_basic_data_item, null, false);
-        TextView dHeaderTextView = (TextView) basicSymptomDescription.findViewById(R.id.element_header_textView);
-        ImageView dIconView = (ImageView) basicSymptomDescription.findViewById(R.id.icon_view);
-        TextView dInfoTextView = (TextView) basicSymptomDescription.findViewById(R.id.element_info_textView);
-
-        dHeaderTextView.setText(getString(R.string.label_symptoms));
-        dIconView.setVisibility(View.GONE);
-        dInfoTextView.setText(cI.getSymptomDescription());
-
-        basicDataListLayout.addView(basicSymptomDescription);
+//        View basicSymptomDescription = inflater.inflate(R.layout.overview_basic_data_item, null, false);
+//        TextView dHeaderTextView = (TextView) basicSymptomDescription.findViewById(R.id.element_header_textView);
+//        ImageView dIconView = (ImageView) basicSymptomDescription.findViewById(R.id.icon_view);
+//        TextView dInfoTextView = (TextView) basicSymptomDescription.findViewById(R.id.element_info_textView);
+//
+//        dHeaderTextView.setText(getString(R.string.label_symptoms));
+//        dIconView.setVisibility(View.GONE);
+//        dInfoTextView.setText(cI.getSymptomDescription());
+//
+//        basicDataListLayout.addView(basicSymptomDescription);
 
         // Pain intensity
         View basicPainIntensity = inflater.inflate(R.layout.overview_basic_data_item, null, false);

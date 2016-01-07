@@ -86,8 +86,6 @@ public class CaseListFragment extends Fragment {
 
         listView = (ListView) root.findViewById(R.id.caseListView);
 
-        listValues = ((OnCaseListEventListener)getActivity()).onListRequest(listKey);
-        Log.d(LOG_TAG, "listValues -size = " + listValues.size());
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -98,16 +96,14 @@ public class CaseListFragment extends Fragment {
                 intent.putExtra(CaseParc.INTENT_KEY, adapter.getItem(position));
 
                 // TODO change
-                PatientParc currentUser = ((MainActivity)getActivity()).getUser();
+                PatientParc currentUser = ((MainActivity) getActivity()).getUser();
                 intent.putExtra(CaseActivity.USER_INTENT_KEY, currentUser);
                 startActivity(intent);
             }
         });
 
 
-        adapter = new CaseListAdapter(getContext(), listValues);
-        listView.setAdapter(adapter);
-        checkSortingCategory();
+        setUpListAndAdapter();
 
         return root;
     }
@@ -154,6 +150,19 @@ public class CaseListFragment extends Fragment {
     private void checkSortingCategory() {
         CaseSortCategory sortCategory = ((OnCaseListEventListener)getActivity()).onCaseSortCategoryRequest();
         sortCaseList(sortCategory);
+    }
+
+    private void setUpListAndAdapter() {
+        listValues = ((OnCaseListEventListener)getActivity()).onListRequest(listKey, this);
+        Log.d(LOG_TAG, "listValues -size = " + listValues.size());
+        adapter = new CaseListAdapter(getContext(), listValues);
+        listView.setAdapter(adapter);
+        checkSortingCategory();
+    }
+
+    public void informCaseListChanged() {
+//        ((OnCaseListEventListener)getActivity()).onListRequest(listKey, this);
+        setUpListAndAdapter();
     }
 
 
@@ -212,7 +221,7 @@ public class CaseListFragment extends Fragment {
          * @param listKey listKey from the MyCasesPagerEnum
          * @return
          */
-        public List<CaseParc> onListRequest(long listKey);
+        public List<CaseParc> onListRequest(long listKey, CaseListFragment fragment);
 
         /**
          * the fragment requests the active case-sort-category

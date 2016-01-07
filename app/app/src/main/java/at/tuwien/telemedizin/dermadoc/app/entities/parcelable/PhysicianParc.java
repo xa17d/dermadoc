@@ -4,7 +4,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import at.tuwien.telemedizin.dermadoc.app.general_entities.Physician;
-import at.tuwien.telemedizin.dermadoc.app.general_entities.User;
 
 /**
  * Physician
@@ -20,6 +19,7 @@ public class PhysicianParc extends UserParc {
 
 
     }
+
 
     @Override
     public String toString() {

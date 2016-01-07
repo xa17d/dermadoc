@@ -145,7 +145,12 @@
     <string name="label_loading_data_dynamic">Loading %1$s-Data</string> <!-- placeholder string - fill at runtime -->
     <string name="option_loading_user_data_insert">User</string> <!-- content for placeholder string - select this option at runtime -->
     <string name="option_loading_case_list_data_insert">Case-List</string> <!-- content for placeholder string - select this option at runtime -->
+    <string name="option_loading_physician_list_insert">Physician-List</string>
+    <string name="option_loading_case_data_insert">Case-Data</string>
     <string name="option_loading_physician_data_insert">Physician-List</string> <!-- content for placeholder string - select this option at runtime -->
+
+    <string name="label_symtom_description_text_header">Symptom Description: \n %1$s</string> <!-- placeholder string - fill at runtime -->
+    <string name="symptom_description_validation_helper_text">Symptom Description: </string> <!-- should be the above string without placeholder. For validation purpose -->
 
     <string name="hint_progress_collecting_data">collecting data</string>
     <string name="hint_progress_checking_data">checking data</string>

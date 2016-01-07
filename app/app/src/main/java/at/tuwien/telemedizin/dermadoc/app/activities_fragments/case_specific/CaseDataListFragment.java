@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +20,6 @@ import android.widget.RelativeLayout;
 import android.widget.Space;
 import android.widget.TextView;
 
-import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -197,9 +195,9 @@ public class CaseDataListFragment extends Fragment {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 // check if the text is empty
                 if (s.length() > 0) {
-                    adjustHight(true);
+                    adjustHeight(true);
                 } else {
-                    adjustHight(false);
+                    adjustHeight(false);
                 }
             }
 
@@ -226,17 +224,10 @@ public class CaseDataListFragment extends Fragment {
             }
         });
 
-//        attachButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                // open dialog to take picture or add from galery
-//            }
-//        });
-
         return v;
     }
 
-    private void adjustHight(boolean maxHeight) {
+    private void adjustHeight(boolean maxHeight) {
 
         if (maxHeight) {
             spaceForHeightAdjustment.setVisibility(View.VISIBLE);

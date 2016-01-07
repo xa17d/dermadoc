@@ -1,16 +1,10 @@
 package at.tuwien.telemedizin.dermadoc.app.helper;
 
-import android.util.Log;
-import android.widget.RadioButton;
-import android.widget.TextView;
-
 import java.util.List;
 
-import at.tuwien.telemedizin.dermadoc.app.R;
 import at.tuwien.telemedizin.dermadoc.app.entities.PictureHelperEntity;
 import at.tuwien.telemedizin.dermadoc.app.general_entities.BodyLocalization;
 import at.tuwien.telemedizin.dermadoc.app.general_entities.Case;
-import at.tuwien.telemedizin.dermadoc.app.general_entities.GeoLocation;
 import at.tuwien.telemedizin.dermadoc.app.general_entities.Patient;
 import at.tuwien.telemedizin.dermadoc.app.general_entities.Physician;
 import at.tuwien.telemedizin.dermadoc.app.general_entities.casedata.Anamnesis;

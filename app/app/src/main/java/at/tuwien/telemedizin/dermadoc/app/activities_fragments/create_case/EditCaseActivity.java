@@ -49,8 +49,11 @@ import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.CaseDataP
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.CaseInfoParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.PhotoMessageParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.TextMessageParc;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.Case;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.Physician;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.casedata.CaseData;
 import at.tuwien.telemedizin.dermadoc.app.helper.CaseDataExtractionHelper;
-import at.tuwien.telemedizin.dermadoc.app.helper.ToStringHelper;
+import at.tuwien.telemedizin.dermadoc.app.helper.ParcelableHelper;
 import at.tuwien.telemedizin.dermadoc.app.persistence.ContentProvider;
 import at.tuwien.telemedizin.dermadoc.app.persistence.ContentProviderFactory;
 import at.tuwien.telemedizin.dermadoc.app.server_interface.ServerInterface;
@@ -174,6 +177,7 @@ public class EditCaseActivity extends AppCompatActivity implements OnCaseDataReq
     }
 
     private void addFragmentsToAdapter(NewCasePagerAdapter adapter, boolean bNewCase) {
+        Log.d(LOG_TAG, "addFragmentsToAdapter(newCase= " + bNewCase + ")");
 
         List<Fragment> fragmentList = new ArrayList<>();
         List<String> titleList = new ArrayList<>();
@@ -224,9 +228,7 @@ public class EditCaseActivity extends AppCompatActivity implements OnCaseDataReq
         // TODO get data from server
         nearbyPhysicians = new ArrayList<>();
         if (newCase) {
-            showProgress(true, getString(R.string.hint_loading));
-            loadPhysicianListAsyncTask = new LoadPhysicianListAsyncTask(this);
-            loadPhysicianListAsyncTask.execute();
+            loadPhysicianList();
         }
 
 
@@ -335,6 +337,7 @@ public class EditCaseActivity extends AppCompatActivity implements OnCaseDataReq
      */
     @Override
     public CaseParc finishEditing() {
+        Log.d(LOG_TAG, "finishEditing() newCase= " + newCase);
         String infoText = getString(R.string.hint_progress_collecting_data);
         // 1) collecting all input data
         // show progress
@@ -509,10 +512,15 @@ public class EditCaseActivity extends AppCompatActivity implements OnCaseDataReq
 
         // CaseInfo
         CaseInfoParc caseInfo = new CaseInfoParc(-1, timestamp,
-                caseItem.getPatient(), localizations, painIntensity, size, symptomDescription);
+                caseItem.getPatient(), localizations, painIntensity, size);
 
 
         newCaseDataElements.add(caseInfo);
+
+        // symptom description as TextMessage
+        TextMessageParc symptomMessageParc = new TextMessageParc(-1,
+                timestamp, caseItem.getPatient(), getString(R.string.label_symtom_description_text_header, symptomDescription));
+        newCaseDataElements.add(symptomMessageParc);
 
         // add picture elements
         for (PictureHelperEntity p : pictures) {
@@ -564,14 +572,6 @@ public class EditCaseActivity extends AppCompatActivity implements OnCaseDataReq
         if (caseInfos.size() > 0) {
             CaseInfoParc lastCaseInfo = caseInfos.get(0);
 
-            // symptom description?
-            String symptomDescription = lastCaseInfo.getSymptomDescription();
-            int minimalDescriptionLength = 1;
-            if (symptomDescription == null || symptomDescription.trim().length() < minimalDescriptionLength) {
-                validationErrors.add(new CaseValidationError(
-                        getString(R.string.msg_validation_error_description), CaseValidationErrorLevel.ERROR));
-            }
-
             // pain-intensity selected?
             PainIntensity painIntensity = lastCaseInfo.getPain();
             if (painIntensity == null || painIntensity == PainIntensity.Undefined) {
@@ -593,6 +593,34 @@ public class EditCaseActivity extends AppCompatActivity implements OnCaseDataReq
                         getString(R.string.msg_validation_error_localizations), CaseValidationErrorLevel.ERROR));
             }
         }
+
+        // symptom description?
+        CaseDataExtractionHelper<TextMessageParc> textMessageExtractor = new CaseDataExtractionHelper<>(TextMessageParc.class);
+        List<TextMessageParc> allTextMessages = textMessageExtractor.extractElements(caseItemToValidate.getDataElements());
+
+        boolean symptDfound = false;
+        for(TextMessageParc m : allTextMessages) {
+            // check, if the key-phrase is in one of the messages
+            if (m.getMessage() != null && m.getMessage().contains(getString(R.string.symptom_description_validation_helper_text))) {
+                // the key-phrase was found = there is at least one symptom description - element
+                symptDfound = true;
+                // validate it
+                String symptomDescription = m.getMessage();
+                int minimalDescriptionLength = 5;
+                int minimalLength = minimalDescriptionLength + getString(R.string.symptom_description_validation_helper_text).length();
+                if (symptomDescription == null || symptomDescription.trim().length() < minimalLength) {
+                    validationErrors.add(new CaseValidationError(
+                            getString(R.string.msg_validation_error_description), CaseValidationErrorLevel.ERROR));
+                }
+            }
+        }
+        if (!symptDfound) {
+            // no descripton element -> error
+            validationErrors.add(new CaseValidationError(
+                    getString(R.string.msg_validation_error_description), CaseValidationErrorLevel.ERROR));
+        }
+
+
 
         // case name set?
         String name = caseItemToValidate.getName();
@@ -695,11 +723,51 @@ public class EditCaseActivity extends AppCompatActivity implements OnCaseDataReq
         return new ArrayList<BodyLocalization>();
     }
 
+    private void syncData() {
+        // send data TODO
+        // get data
+        getDataFromServer();
+    }
+
+    private void getDataFromServer() {
+        // load Case Data
+
+        if (newCase) {
+            loadPhysicianList();
+        }
+
+    }
+
+    private void loadPhysicianList() {
+        Log.d(LOG_TAG, "loadPhysicianList()");
+        String infoText = getString(R.string.label_loading_data_dynamic, getString(R.string.option_loading_physician_list_insert));
+        showProgress(true, infoText);
+        loadPhysicianListAsyncTask = new LoadPhysicianListAsyncTask(this);
+        loadPhysicianListAsyncTask.execute();
+    }
+
+    /**
+     * sets the task = null and deactivates showProgess, if all tasks are null
+     * @param task
+     */
+    private synchronized void asyncTaskFinished(AsyncTask task) {
+        if (task instanceof LoadPhysicianListAsyncTask) {
+            loadPhysicianListAsyncTask = null;
+            physicianSelectionFragment.updatePhysicianList();
+        } else if (task instanceof SendingEditedCaseAsyncTask) {
+            sendingEditedCaseAsyncTask = null;
+        }
+
+        if (loadPhysicianListAsyncTask == null && sendingEditedCaseAsyncTask == null) {
+            showProgress(false);
+        }
+    }
+
     /**
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
-    public class LoadPhysicianListAsyncTask extends AsyncTask<Void, Void, List<PhysicianParc>> {
+    public class LoadPhysicianListAsyncTask extends AsyncTask<Void, Void, List<Physician>> {
         private EditCaseActivity activity;
 
         private String outp;
@@ -709,41 +777,33 @@ public class EditCaseActivity extends AppCompatActivity implements OnCaseDataReq
         }
 
         @Override
-        protected List<PhysicianParc> doInBackground(Void... params) {
+        protected List<Physician> doInBackground(Void... params) {
             Log.d(LOG_TAG, "doInBackground()");
 
-            List<PhysicianParc> physicianList = new ArrayList<>();
+            List<Physician> physicianList = new ArrayList<>();
 
             ServerInterface sI = ServerInterfaceFactory.getInstance();
-            // TODO
+            physicianList = sI.getPhysicians();
 
-            // TODO remoeve #####
-            ContentProvider cP = ContentProviderFactory.getContentProvider();
-            physicianList = cP.getNearbyPhysicians(cP.getCurrentUser().getLocation());
-            try {
-                Thread.sleep(3000);                 //1000 milliseconds is one second.
-            } catch(InterruptedException ex) {
-                Thread.currentThread().interrupt();
+            if (physicianList != null) {
+                Log.d(LOG_TAG, "retrieved physicians: " + physicianList.size());
+            } else {
+                Log.d(LOG_TAG, "physicianList == null");
             }
-
-            Log.d(LOG_TAG, "retrieved physicians: " + "TODO");
 
             return physicianList;
         }
 
         @Override
-        protected void onPostExecute(final List<PhysicianParc> physicianList) {
+        protected void onPostExecute(final List<Physician> physicianList) {
             Log.d(LOG_TAG,"onPostExecute() physicianList: " + (physicianList != null ? physicianList.size() : null));
-            nearbyPhysicians = physicianList;
-            loadPhysicianListAsyncTask = null;
-            showProgress(false);
-            // TODO check result etc.
+            nearbyPhysicians = ParcelableHelper.mapPhysicianListToParc(physicianList);
+            asyncTaskFinished(LoadPhysicianListAsyncTask.this);
         }
 
         @Override
         protected void onCancelled() {
-            loadPhysicianListAsyncTask = null;
-            showProgress(false);
+            asyncTaskFinished(LoadPhysicianListAsyncTask.this);
         }
     }
 
@@ -764,25 +824,63 @@ public class EditCaseActivity extends AppCompatActivity implements OnCaseDataReq
         protected Boolean doInBackground(CaseParc... params) {
             Log.d(LOG_TAG, "doInBackground()");
 
-            ServerInterface sI = ServerInterfaceFactory.getInstance();
-            // TODO
+            if (params == null || params.length <= 0) {
+                Log.d(LOG_TAG, "Insufficient Parameters! ABORT!");
+                return false;
+            }
+            CaseParc caseParcToSend = params[0];
 
-            // TODO remoeve
-            try {
-                Thread.sleep(3000);                 //1000 milliseconds is one second.
-            } catch(InterruptedException ex) {
-                Thread.currentThread().interrupt();
+            ServerInterface sI = ServerInterfaceFactory.getInstance();
+            // TODO send case, retrieve new case-id
+            Case caseToSend = ParcelableHelper.mapToCase(caseParcToSend);
+            Case caseResultFromServer = null;
+            long caseId = -1;
+            // check if it is a new case that should be created or an old case, which data should be sent
+            if (newCase) {
+                caseResultFromServer = sI.createCase(caseToSend);
+
+                if (caseResultFromServer == null) {
+                    Log.d(LOG_TAG, "null returned from server for case");
+                    return false;
+                } else {
+                    Log.d(LOG_TAG, "case returned from server with Id: " + caseResultFromServer.getId());
+                    caseId = caseResultFromServer.getId();
+                }
+            } else {
+                caseId = caseToSend.getId(); // "old" cases already have IDs
+
             }
 
+            // send case-data elements
+            List<CaseData> caseDataToSend = ParcelableHelper.mapToCaseDataList(caseParcToSend.getDataElements());
+            if (caseDataToSend == null) {
+                Log.d(LOG_TAG, "CaseData - List is nulL! ABORT");
+                return false;
+            }
+
+
+            boolean successfulSentAllCaseData = true;
+            for (CaseData cd : caseDataToSend) {
+                CaseData resultFromServerCaseData = sI.addCaseData(cd, caseId); // TODO check result?
+
+                if (resultFromServerCaseData == null) {
+                    Log.d(LOG_TAG, "null returned from server for caseData");
+                    successfulSentAllCaseData = false;
+                } else {
+                    Log.d(LOG_TAG, "caseData returned from server with Id: " + resultFromServerCaseData.getId());
+                }
+            }
+
+
+
             Log.d(LOG_TAG, "end doInBackground()");
-            return null;
+            return successfulSentAllCaseData;
         }
 
         @Override
         protected void onPostExecute(Boolean success) {
             Log.d(LOG_TAG,"onPostExecute() " + success);
-            sendingEditedCaseAsyncTask = null;
-            showProgress(false);
+            asyncTaskFinished(SendingEditedCaseAsyncTask.this);
             Toast.makeText(getBaseContext(), "Data was sent to the server", Toast.LENGTH_LONG).show();
             finishActivity();
 
@@ -790,8 +888,7 @@ public class EditCaseActivity extends AppCompatActivity implements OnCaseDataReq
 
         @Override
         protected void onCancelled() {
-            sendingEditedCaseAsyncTask = null;
-            showProgress(false);
+            asyncTaskFinished(SendingEditedCaseAsyncTask.this);
             Toast.makeText(getBaseContext(), "Sending data to the server was cancelled", Toast.LENGTH_LONG).show();
         }
     }
@@ -805,16 +902,6 @@ public class EditCaseActivity extends AppCompatActivity implements OnCaseDataReq
         }
 
         return 0.0;
-    }
-
-    @Override
-    public String getSymptomDescription() {
-        CaseDataExtractionHelper<CaseInfoParc> infoExtractor = new CaseDataExtractionHelper<>(CaseInfoParc.class);
-        List<CaseInfoParc> infoList = infoExtractor.extractElements(caseItem.getDataElements());
-        if (infoList.size() > 0) {
-            return infoList.get(0).getSymptomDescription();
-        }
-        return "";
     }
 
     @Override

@@ -3,8 +3,6 @@ package at.tuwien.telemedizin.dermadoc.app.comparators;
 import java.util.Calendar;
 import java.util.Comparator;
 
-import at.tuwien.telemedizin.dermadoc.app.general_entities.CaseStatus;
-
 /**
  * Created by FAUser on 18.11.2015.
  */

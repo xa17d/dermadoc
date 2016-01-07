@@ -9,13 +9,11 @@ import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
-import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.AdviceParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.CaseDataParc;
 import at.tuwien.telemedizin.dermadoc.app.helper.FormatHelper;
 import at.tuwien.telemedizin.dermadoc.app.helper.ParcelableHelper;
 import at.tuwien.telemedizin.dermadoc.app.general_entities.Case;
 import at.tuwien.telemedizin.dermadoc.app.general_entities.CaseStatus;
-import at.tuwien.telemedizin.dermadoc.app.general_entities.Physician;
 
 /**
  * Created by daniel on 11.11.2015.
@@ -79,7 +77,7 @@ public class CaseParc implements Parcelable {
     public CaseParc(Case caseItem) {
 
         this(caseItem.getId(), new PatientParc(caseItem.getPatient()), caseItem.getCreated());
-        this.physician = new PhysicianParc(caseItem.getPhysician());
+        this.physician = caseItem.getPhysician() != null ? new PhysicianParc(caseItem.getPhysician()) : null;
         this.status = caseItem.getStatus();
         this.name = caseItem.getName();
         // dataElements // TODO!!!!!

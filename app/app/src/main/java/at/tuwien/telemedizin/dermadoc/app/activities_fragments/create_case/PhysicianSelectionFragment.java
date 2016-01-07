@@ -4,6 +4,7 @@ package at.tuwien.telemedizin.dermadoc.app.activities_fragments.create_case;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +29,8 @@ import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.PhysicianParc;
  * create an instance of this fragment.
  */
 public class PhysicianSelectionFragment extends Fragment {
+
+    public static final String LOG_TAG = PhysicianSelectionFragment.class.getSimpleName();
 
     private static final String ARG_NEW_CASE = "newCase";
     private boolean newCase;
@@ -68,21 +71,22 @@ public class PhysicianSelectionFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        Log.d(LOG_TAG, "onCreate()");
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             newCase = getArguments().getBoolean(ARG_NEW_CASE);
         }
 
-        if (newCase) {
-            nearbyPhysicianList = getPhysicianList();
-        }
+//        if (newCase) {
+//            nearbyPhysicianList = loadPhysicianList();
+//        }
 
         nearbyPhysicianRadioButtonList = new ArrayList<>();
     }
 
 
-    private List<PhysicianParc> getPhysicianList() {
-
+    private List<PhysicianParc> loadPhysicianList() {
+        Log.d(LOG_TAG, "loadPhysicianList() ");
         return caseDataInterface.getNearbyPhysicians();
     }
 
@@ -96,17 +100,23 @@ public class PhysicianSelectionFragment extends Fragment {
             throw new ClassCastException(context.toString() + " must implement " + OnTabChangedInFragmentInterface.class.getSimpleName());
         }
 
-        try {
-            caseDataInterface = (OnCaseDataRequestAndUpdateInterface) context;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString() + " must implement " + OnCaseDataRequestAndUpdateInterface.class.getSimpleName());
+        boolean oANewCase = getArguments().getBoolean(ARG_NEW_CASE);
+
+        if (oANewCase) {
+            try {
+                caseDataInterface = (OnCaseDataRequestAndUpdateInterface) context;
+            } catch (ClassCastException e) {
+                throw new ClassCastException(context.toString() + " must implement " + OnCaseDataRequestAndUpdateInterface.class.getSimpleName());
+            }
         }
+
 
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.d(LOG_TAG, "onCreateView()");
         // Inflate the layout for this fragment
         View v = null;
         if (newCase) {
@@ -130,7 +140,25 @@ public class PhysicianSelectionFragment extends Fragment {
         return v;
     }
 
+    /**
+     * called by content provider (activity) to update the list
+     * has to check, if the fragment was already initialized
+     */
+    public void updatePhysicianList() {
+        Log.d(LOG_TAG, "updatePhysicianList() ");
+        if (caseDataInterface != null) { // if called before it is attached/initialized ...prevent
+            nearbyPhysicianList = loadPhysicianList();
+            setUpPhysicianList(LayoutInflater.from(getContext()), nearbyPhysicianListLayout);
+
+        }
+
+
+    }
+
     private void setUpPhysicianList(LayoutInflater inflater, LinearLayout listRoot) {
+        Log.d(LOG_TAG, "setUpPhysicianList() ");
+        listRoot.removeAllViewsInLayout(); // reset
+
         for (PhysicianParc p : nearbyPhysicianList) {
             // use a inflater to get utilise the right theme
             RadioButton rBtn = (RadioButton) inflater.inflate(R.layout.physician_list_item_radio_button, null, false);
@@ -171,7 +199,8 @@ public class PhysicianSelectionFragment extends Fragment {
 
 
         nearbyPhysicianListLayout = (RadioGroup) v.findViewById(R.id.nearby_physician_list_linlayout);
-        setUpPhysicianList(inflater, nearbyPhysicianListLayout);
+        updatePhysicianList();
+//        setUpPhysicianList(inflater, nearbyPhysicianListLayout);
 
 
         nextPhysicianAvailableCheckbox = (CheckBox) v.findViewById(R.id.next_available_physician_checkbox);

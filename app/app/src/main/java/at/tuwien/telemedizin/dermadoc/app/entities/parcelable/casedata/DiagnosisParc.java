@@ -10,7 +10,6 @@ import java.util.List;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.Icd10DiagnosisParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.UserParc;
 import at.tuwien.telemedizin.dermadoc.app.helper.ParcelableHelper;
-import at.tuwien.telemedizin.dermadoc.app.general_entities.User;
 import at.tuwien.telemedizin.dermadoc.app.general_entities.casedata.Diagnosis;
 
 /**

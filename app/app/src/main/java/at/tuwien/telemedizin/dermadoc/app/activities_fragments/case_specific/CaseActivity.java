@@ -41,8 +41,11 @@ import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.CaseDataP
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.CaseInfoParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.TextMessageParc;
 import at.tuwien.telemedizin.dermadoc.app.general_entities.BodyLocalization;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.Case;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.casedata.CaseData;
 import at.tuwien.telemedizin.dermadoc.app.helper.CaseDataExtractionHelper;
 import at.tuwien.telemedizin.dermadoc.app.helper.FormatHelper;
+import at.tuwien.telemedizin.dermadoc.app.helper.ParcelableHelper;
 import at.tuwien.telemedizin.dermadoc.app.server_interface.ServerInterface;
 import at.tuwien.telemedizin.dermadoc.app.server_interface.ServerInterfaceFactory;
 
@@ -63,7 +66,7 @@ public class CaseActivity extends AppCompatActivity
 
     private NavigationView navigationView;
     private TextView navHeaderMainTextView;
-    private TextView navHeaderPatientTextView;
+    private TextView navHeaderIdTextView;
     private TextView navHeaderStatusTextView;
     private TextView navHeaderPhysicianTextView;
     private TextView navHeaderDateOfCreationTextView;
@@ -79,6 +82,9 @@ public class CaseActivity extends AppCompatActivity
     private SendMessagesAsyncTask sendMessageTask;
 
     private CaseOverviewFragment overviewFragment;
+    private CaseDataListFragment caseDataListFragment;
+
+    private LoadCaseTask loadCaseTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,7 +158,7 @@ public class CaseActivity extends AppCompatActivity
         loadingProgressLayout.setVisibility(View.GONE);
         loadingProgressInfoTextView = (TextView) findViewById(R.id.loading_data_info_text);
 
-
+        syncData();
 
     }
 
@@ -166,11 +172,10 @@ public class CaseActivity extends AppCompatActivity
                 navigationView.getHeaderView(0).findViewById(R.id.case_nav_header_primary_text);
         navHeaderMainTextView.setText(getString(R.string.nav_case) + ": " + caseItem.getName());
 
-        // TODO patient info is less interesting for the patient -> remove
-        navHeaderPatientTextView = (TextView)
+        navHeaderIdTextView = (TextView)
                 navigationView.getHeaderView(0).findViewById(R.id.case_overview_id);
         PatientParc patient = caseItem.getPatient();
-        navHeaderPatientTextView.setText(caseItem.getId() + "");
+        navHeaderIdTextView.setText(caseItem.getId() + "");
 
         navHeaderPhysicianTextView = (TextView)
                 navigationView.getHeaderView(0).findViewById(R.id.case_overview_physician);
@@ -224,7 +229,8 @@ public class CaseActivity extends AppCompatActivity
             Toast.makeText(getBaseContext(), "There will be a Settings-activity", Toast.LENGTH_LONG).show(); // TODO replace with real fragment/function
             return true;
         } else if (id == R.id.action_syncronize) {
-            Toast.makeText(getBaseContext(), "Synchronisation with server coming soon!", Toast.LENGTH_LONG).show(); // TODO replace with real fragment/function
+            syncData();
+            Toast.makeText(getBaseContext(), "data synchronized!", Toast.LENGTH_LONG).show(); // TODO replace with real fragment/function
         } else if (id == R.id.action_attach) {
             // start the activity for result to return a list of pictures
             Intent intent = new Intent(this, AddPictureActivity.class);
@@ -276,6 +282,26 @@ public class CaseActivity extends AppCompatActivity
 
     }
 
+    private void syncData() {
+        // send data TODO
+        // get data
+        getDataFromServer();
+    }
+
+    private void getDataFromServer() {
+        // load Case Data
+
+        loadCaseData();
+    }
+
+    private void loadCaseData() {
+        Log.d(LOG_TAG, "loadCaseData()");
+        String infoText = getString(R.string.label_loading_data_dynamic, getString(R.string.option_loading_case_data_insert));
+        showProgress(true, infoText);
+        loadCaseTask = new LoadCaseTask(this);
+        loadCaseTask.execute(caseItem.getId());
+    }
+
     private void sendCaseDataMessages(List<CaseDataParc> messages) {
 
         // add to case
@@ -319,8 +345,8 @@ public class CaseActivity extends AppCompatActivity
 
 
         if (id == R.id.nav_case_overview) {
-            fragment = CaseOverviewFragment.newInstance(); //
-            overviewFragment = (CaseOverviewFragment) fragment;
+            overviewFragment = CaseOverviewFragment.newInstance(); //
+            fragment = overviewFragment;
             title = getString(R.string.nav_case_overview);
             fab.setVisibility(View.VISIBLE);
             fab.setImageResource(R.drawable.ic_action_edit_white_18dp);
@@ -328,7 +354,8 @@ public class CaseActivity extends AppCompatActivity
             attachItem.setVisible(false); // hide
 
         } else if (id == R.id.nav_case_conversation) {
-            fragment = CaseDataListFragment.newInstance();
+            caseDataListFragment = CaseDataListFragment.newInstance();
+            fragment = caseDataListFragment;
             title = getString(R.string.nav_case_diagnoses);
             fab.setVisibility(View.GONE);
 //            fab.setImageResource(R.drawable.ic_add_white_24dp);
@@ -346,8 +373,6 @@ public class CaseActivity extends AppCompatActivity
             fragmentTransaction.replace(R.id.contentFrame,fragment);
             fragmentTransaction.commit();
         }
-
-
 
         drawer.closeDrawer(GravityCompat.START);
 
@@ -440,7 +465,21 @@ public class CaseActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * sets the task = null and deactivates showProgess, if all tasks are null
+     * @param task
+     */
+    private synchronized void asyncTaskFinished(AsyncTask task) {
+        if (task instanceof LoadCaseTask) {
+            loadCaseTask = null;
+        } else if (task instanceof SendMessagesAsyncTask) {
+            sendMessageTask = null;
+        }
 
+        if (loadCaseTask == null && sendMessageTask == null) {
+            showProgress(false);
+        }
+    }
 
 
     /**
@@ -480,14 +519,85 @@ public class CaseActivity extends AppCompatActivity
         protected void onPostExecute(Void param) {
             Log.d(LOG_TAG, "onPostExecute()");
             // TODO start sync task back
-            sendMessageTask = null;
-            showProgress(false);
+            asyncTaskFinished(SendMessagesAsyncTask.this);
         }
 
         @Override
         protected void onCancelled() {
-            sendMessageTask = null;
-            showProgress(false);
+            asyncTaskFinished(SendMessagesAsyncTask.this);
+        }
+    }
+
+    /**
+     * Represents an asynchronous login/registration task used to authenticate
+     * the user.
+     */
+    public class LoadCaseTask extends AsyncTask<Long, Void, CaseParc> {
+        private CaseActivity activity;
+
+        LoadCaseTask(CaseActivity activity) {
+            this.activity = activity;
+        }
+
+        @Override
+        protected CaseParc doInBackground(Long... params) {
+            Log.d(LOG_TAG, "doInBackground()");
+
+            long id = -1;
+            if (params != null && params.length > 0) {
+                id = params[0];
+                Log.d(LOG_TAG, "Case-ID = " + id);
+            } else {
+                Log.d(LOG_TAG, "Insufficient Parameters - Abort");
+                return null; // TODO
+            }
+
+            ServerInterface sI = ServerInterfaceFactory.getInstance();
+            Case fullCase = sI.getCase(id);
+            if (fullCase != null) {
+                CaseParc fullCaseParc = new CaseParc(fullCase);
+
+                // load caseData-List
+                List<CaseData> caseDataList = sI.getCaseData(id);
+
+                if (caseDataList != null) {
+                    Log.d(LOG_TAG, "Mapped case-data list with size: " + caseDataList.size());
+                    fullCaseParc.setDataElements(ParcelableHelper.mapCaseDataListToParc(caseDataList));
+                }
+
+                return fullCaseParc;
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(final CaseParc fullCase) {
+            Log.d(LOG_TAG,"onPostExecute() case!=null: " + (fullCase!=null));
+
+            if (fullCase == null) {
+                Log.d(LOG_TAG,"fullCase == null -> finish activity");
+                // TODO
+
+            } else {
+                caseItem = fullCase;
+                Log.d(LOG_TAG,"caseItem.getDataElements().size(): " + caseItem.getDataElements().size());
+
+                // update fragments
+                if (overviewFragment != null) {
+                    overviewFragment.updateDataViews();
+                }
+                if (caseDataListFragment != null) {
+                    caseDataListFragment.updateMessageList();
+                }
+            }
+
+            asyncTaskFinished(LoadCaseTask.this);
+        }
+
+        @Override
+        protected void onCancelled() {
+            asyncTaskFinished(LoadCaseTask.this);
         }
     }
 }
