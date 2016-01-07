@@ -13,6 +13,7 @@ import javax.persistence.*;
         @JsonSubTypes.Type(value = Patient.class),
         @JsonSubTypes.Type(value = Physician.class)
 })
+
 @Entity
 @Table(name = "person")
 @Inheritance(strategy = InheritanceType.JOINED)

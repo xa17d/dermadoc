@@ -1,6 +1,5 @@
 package at.tuwien.telemedizin.dermadoc.entities.rest;
 
-import at.tuwien.telemedizin.dermadoc.entities.Case;
 import at.tuwien.telemedizin.dermadoc.entities.casedata.CaseData;
 
 import java.util.ArrayList;
@@ -14,6 +13,12 @@ public class CaseDataList extends ArrayList<CaseData> {
     public CaseDataList() {}
     public CaseDataList(Collection<CaseData> original) {
         super(original);
+    }
+
+    public CaseDataList(Iterable<CaseData> original) {
+        for (CaseData item : original) {
+            add(item);
+        }
     }
 
 }

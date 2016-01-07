@@ -5,7 +5,7 @@ import at.tuwien.telemedizin.dermadoc.entities.rest.AuthenticationData;
 import at.tuwien.telemedizin.dermadoc.entities.rest.AuthenticationToken;
 import at.tuwien.telemedizin.dermadoc.server.exceptions.AuthenticationInvalidException;
 import at.tuwien.telemedizin.dermadoc.server.exceptions.EntityNotFoundException;
-import at.tuwien.telemedizin.dermadoc.server.persistence.dao.UserDao;
+import at.tuwien.telemedizin.dermadoc.server.persistence.dao.hibernate.UserRepository;
 import at.tuwien.telemedizin.dermadoc.server.security.AccessUser;
 import at.tuwien.telemedizin.dermadoc.server.security.CurrentUser;
 import at.tuwien.telemedizin.dermadoc.server.security.SecurityConfig;
@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
     @Autowired
-    private UserDao userDao;
+    UserRepository userRepository;
 
     @Autowired
     private TokenService tokenService;
@@ -34,7 +34,7 @@ public class UserController {
         User user;
 
         try {
-            user = userDao.getUserByMail(authenticationData.getMail());
+            user = userRepository.getUserByMail(authenticationData.getMail());
         }
         catch (EntityNotFoundException e) {
             // User not found

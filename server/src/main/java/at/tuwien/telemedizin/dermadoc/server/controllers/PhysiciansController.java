@@ -1,7 +1,7 @@
 package at.tuwien.telemedizin.dermadoc.server.controllers;
 
 import at.tuwien.telemedizin.dermadoc.entities.rest.UserList;
-import at.tuwien.telemedizin.dermadoc.server.persistence.dao.UserDao;
+import at.tuwien.telemedizin.dermadoc.server.persistence.dao.hibernate.UserRepository;
 import at.tuwien.telemedizin.dermadoc.server.security.AccessUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,12 +13,13 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 public class PhysiciansController {
-    @Autowired
-    private UserDao userDao;
 
+
+    @Autowired
+    UserRepository userRepository;
     @RequestMapping(value = "/physicians", method = RequestMethod.GET)
     @AccessUser
     public UserList listPhysicians() {
-        return new UserList(userDao.listPhysicians());
+        return new UserList(userRepository.listPhysicians());
     }
 }

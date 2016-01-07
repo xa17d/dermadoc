@@ -73,4 +73,17 @@ public class UserRepositoryTest {
 		Assert.assertEquals(userRepository.count(), i);
 
 	}
+
+	@Test
+	public void testListPhysicians() throws Exception {
+
+		Iterable<Physician> physiciansList = userRepository.listPhysicians();
+		int i = 0;
+		for (Physician ph : physiciansList) {
+			i++;
+		}
+
+		Assert.assertEquals(i, 4);
+
+	}
 }

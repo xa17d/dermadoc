@@ -21,6 +21,12 @@ import java.util.Calendar;
         @JsonSubTypes.Type(value = PhotoMessage.class),
         @JsonSubTypes.Type(value = TextMessage.class)
 })
+@NamedNativeQueries({
+        @NamedNativeQuery(
+                name = "CaseData.listCaseDataByUserAndCase",
+                query = "select * from case_data cd where cd.case_id_case_id = ?1  AND (cd.is_private = FALSE or cd.author_id=?2)"
+        )
+})
 @Entity
 @Table(name = "case_data")
 @Inheritance(strategy = InheritanceType.JOINED)

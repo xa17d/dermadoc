@@ -53,7 +53,7 @@ public class CaseRepositoryTest {
 
 		caseRepository.save(c);
 
-		Case returnedCase = caseRepository.getById(3);
+		Case returnedCase = caseRepository.getCaseById(3);
 		Assert.assertEquals(returnedCase, c);
 
 	}
