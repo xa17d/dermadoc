@@ -1,13 +1,17 @@
 package at.tuwien.telemedizin.dermadoc.entities;
 
-import javax.persistence.Embeddable;
-import javax.persistence.Entity;
-import javax.persistence.PrimaryKeyJoinColumn;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * Physician
  */
+@NamedNativeQueries({
+        @NamedNativeQuery(
+                name = "Physician.listPhysicians",
+                query = "select p.* from person p right join physician ph on p.person_id = ph.person_id",
+                resultClass = Physician.class
+        )
+})
 @Entity
 @Embeddable
 @Table(name = "physician")

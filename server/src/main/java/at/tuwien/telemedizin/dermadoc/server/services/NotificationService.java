@@ -1,8 +1,8 @@
 package at.tuwien.telemedizin.dermadoc.server.services;
 
 import at.tuwien.telemedizin.dermadoc.entities.*;
-import at.tuwien.telemedizin.dermadoc.server.persistence.dao.NotificationDao;
-import at.tuwien.telemedizin.dermadoc.server.persistence.dao.UserDao;
+import at.tuwien.telemedizin.dermadoc.server.persistence.dao.hibernate.NotificationRepository;
+import at.tuwien.telemedizin.dermadoc.server.persistence.dao.hibernate.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,11 +12,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class NotificationService {
 
-    @Autowired
-    private NotificationDao notificationDao;
+
 
     @Autowired
-    private UserDao userDao;
+    NotificationRepository notificationRepository;
+
+
+    @Autowired
+    UserRepository userRepository;
 
     public void notifyCase(Case theCase, User sender, String message) {
 
@@ -46,7 +49,8 @@ public class NotificationService {
             notification.setUserId(receiver.getId());
 
             // add to DAO
-            notificationDao.insert(notification);
+            //notificationDao.insert(notification);
+            notificationRepository.save(notification);
 
             // TODO: send out Android notification?
         }
@@ -55,7 +59,7 @@ public class NotificationService {
     public void notifyNewCase(Case newCase) {
 
         if (newCase.getStatus() == CaseStatus.LookingForPhysician) {
-            for (Physician physician : userDao.listPhysicians()) {
+            for (Physician physician : userRepository.listPhysicians()) {
                 // TODO: only for nearby physicians?
 
                 Notification notification = new Notification();
@@ -64,7 +68,7 @@ public class NotificationService {
                 notification.setText(newCase.getPatient().getName() + " created a new case: \"" + newCase.getName()+"\"");
 
                 // add to DAO
-                notificationDao.insert(notification);
+                notificationRepository.save(notification);
             }
         }
         else {
@@ -83,7 +87,7 @@ public class NotificationService {
             );
 
             // add to DAO
-            notificationDao.insert(notification);
+            notificationRepository.save(notification);
         }
     }
 }

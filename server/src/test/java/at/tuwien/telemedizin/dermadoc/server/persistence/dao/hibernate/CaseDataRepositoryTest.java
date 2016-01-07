@@ -53,6 +53,12 @@ public class CaseDataRepositoryTest {
 		Assert.assertEquals(c.getCase(), testCaseData.getCase());
 	}
 
+	@Test
+	public void listCaseDataByUserAndCaseTest() throws Exception {
+		long caseId = 3;
+		long authorId = 26;
+		Iterable<CaseData> c = caseDataRepository.listCaseDataByUserAndCase(caseId, authorId);
+	}
 
 //	@Test
 //	public void testGetByCaseId() throws Exception {

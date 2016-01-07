@@ -5,9 +5,7 @@ import at.tuwien.telemedizin.dermadoc.entities.rest.CaseList;
 import at.tuwien.telemedizin.dermadoc.server.exceptions.EntityNotFoundException;
 import at.tuwien.telemedizin.dermadoc.server.exceptions.InvalidCaseStatusException;
 import at.tuwien.telemedizin.dermadoc.server.exceptions.InvalidUserTypeException;
-import at.tuwien.telemedizin.dermadoc.server.persistence.dao.CaseDao;
 import at.tuwien.telemedizin.dermadoc.server.persistence.dao.hibernate.CaseRepository;
-import at.tuwien.telemedizin.dermadoc.server.persistence.dao.hibernate.UserRepository;
 import at.tuwien.telemedizin.dermadoc.server.security.*;
 import at.tuwien.telemedizin.dermadoc.server.services.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,14 +19,10 @@ import java.util.GregorianCalendar;
 @RestController
 public class CaseController {
 
-    @Autowired
-    private CaseDao caseDao;
 
     @Autowired
     CaseRepository caseRepository;
 
-    @Autowired
-    UserRepository userRepository;
     @Autowired
     private NotificationService notificationService;
 
