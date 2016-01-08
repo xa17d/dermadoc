@@ -25,6 +25,14 @@ public class PhotoMessage extends CaseData {
     private String mime;
     public String getMime() { return mime; }
 
+    public void setMime(String mime) {
+        this.mime = mime;
+    }
+
+    public void setPhotoData(byte[] photoData) {
+        this.photoData = photoData;
+    }
+
     private byte[] photoData;
     public byte[] getPhotoData() { return photoData; }
  }

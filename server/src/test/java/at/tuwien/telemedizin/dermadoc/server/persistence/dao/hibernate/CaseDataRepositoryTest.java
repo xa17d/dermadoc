@@ -4,6 +4,8 @@ import at.tuwien.telemedizin.dermadoc.entities.Case;
 import at.tuwien.telemedizin.dermadoc.entities.Physician;
 import at.tuwien.telemedizin.dermadoc.entities.casedata.CaseData;
 import at.tuwien.telemedizin.dermadoc.entities.casedata.CaseInfo;
+import at.tuwien.telemedizin.dermadoc.entities.casedata.PhotoMessage;
+import at.tuwien.telemedizin.dermadoc.entities.casedata.TextMessage;
 import at.tuwien.telemedizin.dermadoc.server.Application;
 import junit.framework.Assert;
 import org.junit.Test;
@@ -138,6 +140,62 @@ public class CaseDataRepositoryTest {
 
 	@Test
 	public void testPhotoMessage() {
+
+		Physician author = new Physician();
+		author.setName("physicianTest");
+		author.setMail("3@hey");
+		author.setPassword("123213");
+
+		author = userRepository.save(author);
+
+		Case c = new Case();
+		c.setName("testCase3");
+		c.setPhysician(author);
+		Calendar today = Calendar.getInstance();
+		today.set(Calendar.HOUR_OF_DAY, 0);
+		c.setCreated(today);
+		c = caseRepository.save(c);
+
+		PhotoMessage pm = new PhotoMessage();
+		pm.setAuthor(author);
+		pm.setCase(c);
+		pm.setCreated(today);
+		pm.setMime("HI");
+
+		pm = caseDataRepository.save(pm);
+
+		Assert.assertNotNull(pm.getId());
+
+	}
+
+	@Test
+	public void testTestMessage() {
+
+		Physician author = new Physician();
+		author.setName("physicianTest");
+		author.setMail("35@hey");
+		author.setPassword("123213");
+
+		author = userRepository.save(author);
+
+		Case c = new Case();
+		c.setName("testCase3");
+		c.setPhysician(author);
+		Calendar today = Calendar.getInstance();
+		today.set(Calendar.HOUR_OF_DAY, 0);
+		c.setCreated(today);
+		c = caseRepository.save(c);
+
+		TextMessage t = new TextMessage();
+		t.setAuthor(author);
+		t.setCase(c);
+		t.setCreated(today);
+		t.setMessage("Hello World");
+
+
+		t = caseDataRepository.save(t);
+
+		Assert.assertNotNull(t.getId());
 
 	}
 
