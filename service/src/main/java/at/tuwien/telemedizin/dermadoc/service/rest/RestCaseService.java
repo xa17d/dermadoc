@@ -16,8 +16,8 @@ import java.util.List;
  */
 public class RestCaseService implements IRestCaseService {
 
-    //private static final String URL_ = "http://dermadoc.xa1.at:82/";
-    private static final String URL_ = "http://localhost:8080/";
+    private static final String URL_ = "http://dermadoc.xa1.at:82/";
+    //private static final String URL_ = "http://localhost:8080/";
     private static final String CASES_ = "cases/";
     private static final String NOTIFICATIONS_ = "notifications/";
     private static final String OPEN = "open";

@@ -172,7 +172,7 @@ public class CaseService implements ICaseService {
         return obsNotificationList;
     }
 
-
+    private boolean stopPollingNotifications = false;
     private void startPollingNotifications() {
 
         new Thread(new NotificationPoller(new DermadocNotificationHandler() {
@@ -214,6 +214,10 @@ public class CaseService implements ICaseService {
         })).start();
     }
 
+    public void stopPolling() {
+        stopPollingNotifications = true;
+    }
+
 
 
     private class NotificationPoller implements Runnable {
@@ -227,9 +231,9 @@ public class CaseService implements ICaseService {
 
         @Override
         public void run() {
-            while(true) {
+            while(!stopPollingNotifications) {
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(10000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
