@@ -17,7 +17,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @SpringBootApplication
 @Configuration
 @EnableWebMvc
-@ComponentScan
+@ComponentScan(basePackageClasses = { User.class, Application.class })
 @EnableAutoConfiguration
 @EnableConfigurationProperties
 @EntityScan(basePackageClasses=User.class)
