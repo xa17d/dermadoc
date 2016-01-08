@@ -81,46 +81,4 @@ public class CaseDataDaoImplTest {
 
 
 		}
-
-	@Test
-	public void TestIcd10 () {
-		Physician author1 = new Physician();
-		author1.setMail("authorMail98998");
-		author1.setPassword("qweqwe");
-		author1 = userRepository.save(author1);
-
-
-		Case testCase = new Case();
-		testCase.setPhysician(author1);
-		testCase.setName("sldjflsdjf");
-		testCase = caseRepository.save(testCase);
-
-		Diagnosis a = new Diagnosis();
-		a.setCase(testCase);
-		a.setAuthor(author1);
-		a.setMessage("slfjlsdfjlsdjfl");
-		Calendar today = Calendar.getInstance();
-		today.set(Calendar.HOUR_OF_DAY, 0);
-		a.setCreated(today);
-
-		List<Icd10Diagnosis> m = new ArrayList<>();
-
-		for (int i= 0; i<5; i++) {
-			Icd10Diagnosis med = new Icd10Diagnosis();
-			med.getIcd10Code("404");
-			med.getIcd10Name("illness"+i)
-			m.add(med);
-		}
-		a.setDiagnosisList(m);
-
-		caseDataDao.insert(a);
-
-		Advice c = (Advice) caseDataRepository.getByAuthor(author1);
-		List<Medication> testMed = c.getMedications();
-
-		Assert.assertNotNull(testMed);
-
-
-
-	}
 	}

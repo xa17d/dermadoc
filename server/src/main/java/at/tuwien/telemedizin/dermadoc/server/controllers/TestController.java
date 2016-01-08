@@ -1,4 +1,3 @@
-/*
 package at.tuwien.telemedizin.dermadoc.server.controllers;
 
 import at.tuwien.telemedizin.dermadoc.entities.Case;
@@ -17,10 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-*/
 /**
  * Created by daniel on 11.11.2015.
- *//*
+ */
 
 @RestController
 public class TestController {
@@ -55,7 +53,7 @@ public class TestController {
 
         Patient p = new Patient();
 
-        p.setId(123);
+        p.setId(new Long(123));
         p.setName("John Doe");
         p.setBirthTime(Calendar.getInstance());
         p.setGender(Gender.Male);
@@ -68,4 +66,3 @@ public class TestController {
     }
 
 }
-*/
