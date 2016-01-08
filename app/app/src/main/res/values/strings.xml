@@ -221,6 +221,9 @@
     <string name="message_type_advice">A</string>
     <string name="message_type_anamnesis">Q</string>
 
+    <string name="mail_subject">DermaDoc - AndroidApp - Question</string>
+    <string name="mail_intent_chooser_title">Send Mail</string>
+
     <!-- case data headers -->
     <string name="header_type_diagnosis">Diagnosis</string>
     <string name="header_type_message">Message</string>
