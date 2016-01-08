@@ -122,9 +122,10 @@ public class TestContentProvider implements ContentProvider {
 
 
         long startNumber = 100000;
+        long startNumberCD = 1;
 
         currentCaseList = new ArrayList<CaseParc>();
-        CaseParc testCase1 = new CaseParc(startNumber+2045, patient, new GregorianCalendar());
+        CaseParc testCase1 = new CaseParc(startNumber, patient, new GregorianCalendar());
         testCase1.setStatus(CaseStatus.Active);
         testCase1.setName("First Case");
 
@@ -145,7 +146,7 @@ public class TestContentProvider implements ContentProvider {
         Calendar timestamp = Calendar.getInstance();
         timestamp.add(Calendar.DAY_OF_MONTH, -7);
 
-        CaseInfoParc caseInfo = new CaseInfoParc(-1, timestamp, patient, localizations, PainIntensity.Mild, 2);
+        CaseInfoParc caseInfo = new CaseInfoParc(startNumberCD, timestamp, patient, localizations, PainIntensity.Mild, 2);
         testCase1.addDataElement(caseInfo);
 
         timestamp = Calendar.getInstance();
@@ -154,7 +155,7 @@ public class TestContentProvider implements ContentProvider {
         List<Icd10DiagnosisParc> d1_icList = new ArrayList<>();
         d1_icList.add(new Icd10DiagnosisParc("101010", "Hühnerauge"));
         d1_icList.add(new Icd10DiagnosisParc("02221", "Nase im Gesicht"));
-        DiagnosisParc d1 = new DiagnosisParc(-1, timestamp, physician,"test Diagnose 1 ", d1_icList);
+        DiagnosisParc d1 = new DiagnosisParc(startNumberCD+1, timestamp, physician,"test Diagnose 1 ", d1_icList);
         testCase1.addDataElement(d1);
 
         timestamp = Calendar.getInstance();
@@ -162,7 +163,7 @@ public class TestContentProvider implements ContentProvider {
         timestamp.add(Calendar.HOUR_OF_DAY, -2);
 
         // text msg
-        TextMessageParc textMsg1 = new TextMessageParc(-1, timestamp, physician,"Ich schicke Ihnen gleich ein paar Ratschläge und Medikamenten liste.");
+        TextMessageParc textMsg1 = new TextMessageParc(startNumberCD+2, timestamp, physician,"Ich schicke Ihnen gleich ein paar Ratschläge und Medikamenten liste.");
         testCase1.addDataElement(textMsg1);
 
         timestamp = Calendar.getInstance();
@@ -174,7 +175,7 @@ public class TestContentProvider implements ContentProvider {
         MedicationParc med2 = new MedicationParc("Bilill");
         mediacations1.add(med1);
         mediacations1.add(med2);
-        AdviceParc advice1 = new AdviceParc(-1, timestamp, physician,"Bleiben aus der Sonne. Immer nur 60 Hz Strahlung ", mediacations1);
+        AdviceParc advice1 = new AdviceParc(startNumberCD+3, timestamp, physician,"Bleiben aus der Sonne. Immer nur 60 Hz Strahlung ", mediacations1);
 
         testCase1.addDataElement(advice1);
 
@@ -182,14 +183,14 @@ public class TestContentProvider implements ContentProvider {
         timestamp.add(Calendar.DAY_OF_MONTH, -5);
 
         // text msg
-        TextMessageParc textMsg2 = new TextMessageParc(-1, timestamp, physician,"Falls Sie fragen haben, schreiben Sie mir bitte oder rufen Sie in der Ordination an.");
+        TextMessageParc textMsg2 = new TextMessageParc(startNumberCD+4, timestamp, physician,"Falls Sie fragen haben, schreiben Sie mir bitte oder rufen Sie in der Ordination an.");
         testCase1.addDataElement(textMsg2);
 
         timestamp = Calendar.getInstance();
         timestamp.add(Calendar.DAY_OF_MONTH, -3);
 
         // text msg
-        TextMessageParc textMsg3 = new TextMessageParc(-1, timestamp, patient,"Danke!.");
+        TextMessageParc textMsg3 = new TextMessageParc(startNumberCD+5, timestamp, patient,"Danke!.");
         testCase1.addDataElement(textMsg3);
 
         // pic
@@ -203,11 +204,11 @@ public class TestContentProvider implements ContentProvider {
 
 
         List<Icd10DiagnosisParc> d2_icList = new ArrayList<>();
-        DiagnosisParc d2 = new DiagnosisParc(-1, timestamp, physician,"Das ist, wie als würden Sie eine Tasse Rohrfrei trinken. Natürlich reinigt das einen - aber mit der Zeit wird man hohl. ", d2_icList);
+        DiagnosisParc d2 = new DiagnosisParc(startNumberCD+6, timestamp, physician,"Das ist, wie als würden Sie eine Tasse Rohrfrei trinken. Natürlich reinigt das einen - aber mit der Zeit wird man hohl. ", d2_icList);
         testCase1.addDataElement(d2);
 
         currentCaseList.add(testCase1);
-        CaseParc testCase2 = new CaseParc(startNumber+451, patient, new GregorianCalendar());
+        CaseParc testCase2 = new CaseParc(startNumber+1, patient, new GregorianCalendar());
         testCase2.setStatus(CaseStatus.Active);
         testCase2.setName("Second Case");
         currentCaseList.add(testCase2);

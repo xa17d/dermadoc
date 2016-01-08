@@ -26,6 +26,7 @@
     <string name="action_sort">Sort</string>
     <string name="action_sort_name">Name</string>
     <string name="action_sort_date_of_creation">Date of creation</string>
+    <string name="action_sort_notification">Notification</string>
     <string name="action_sort_id">ID-number</string>
     <string name="action_sort_status">Status</string>
     <string name="action_sort_last_modified">Last modified</string>

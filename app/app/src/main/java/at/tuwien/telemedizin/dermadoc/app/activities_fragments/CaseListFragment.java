@@ -142,12 +142,13 @@ public class CaseListFragment extends Fragment {
             item.setChecked(true);
             sortCaseList(CaseSortCategory.DATE_OF_CREATION);
             return true;
-//        } else if (id == R.id.action_sort_last_modified) {
-//            item.setChecked(true);
-//            return true;
         } else if (id == R.id.action_sort_status) {
             item.setChecked(true);
             sortCaseList(CaseSortCategory.STATUS);
+            return true;
+        } else if (id == R.id.action_sort_notification) {
+            item.setChecked(true);
+            sortCaseList(CaseSortCategory.NOTIFICATIONS);
             return true;
         }
 
@@ -171,16 +172,17 @@ public class CaseListFragment extends Fragment {
     }
 
     public void informCaseListChanged() {
-//        ((OnCaseListEventListener)getActivity()).onListRequest(listKey, this);
+        Log.d(LOG_TAG, "informCaseListChanged");
         setUpListAndAdapter();
     }
 
     public void informNotificationListChanged() {
-//        setUpListAndAdapter(); // TODO
+        Log.d(LOG_TAG, "informNotificationListChanged");
+        setUpListAndAdapter();
     }
 
     private List<CaseListItem> caseListToItemList(List<CaseParc> caseList, List<NotificationParc> notificationList) {
-
+        Log.d(LOG_TAG, "caseListToItemList()");
         // map the notifications to the caseParc-objects
         List<CaseListItem> itemList = new ArrayList<>();
         if (caseList == null) {
@@ -197,6 +199,7 @@ public class CaseListFragment extends Fragment {
             // iterate through notifications and filter the according notifications
             for (NotificationParc nP : notifications) {
                 if (nP.getCaseId() == c.getId()) {
+
                     caseNotifications.add(nP);
                 }
             }
