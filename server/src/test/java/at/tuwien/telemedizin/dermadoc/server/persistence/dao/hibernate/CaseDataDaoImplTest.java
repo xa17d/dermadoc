@@ -4,8 +4,7 @@ import at.tuwien.telemedizin.dermadoc.entities.Case;
 import at.tuwien.telemedizin.dermadoc.entities.Icd10Diagnosis;
 import at.tuwien.telemedizin.dermadoc.entities.Medication;
 import at.tuwien.telemedizin.dermadoc.entities.Physician;
-import at.tuwien.telemedizin.dermadoc.entities.casedata.Advice;
-import at.tuwien.telemedizin.dermadoc.entities.casedata.Diagnosis;
+import at.tuwien.telemedizin.dermadoc.entities.casedata.*;
 import at.tuwien.telemedizin.dermadoc.server.Application;
 import junit.framework.Assert;
 import org.junit.Test;
@@ -13,7 +12,9 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -25,6 +26,8 @@ import java.util.List;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
+@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
+@Transactional
 public class CaseDataDaoImplTest {
 
 	@Autowired
@@ -77,13 +80,13 @@ public class CaseDataDaoImplTest {
 			List<Medication> testMed = c.getMedications();
 
 			Assert.assertNotNull(testMed);
-
+			Assert.assertEquals(testMed.size(), 5);
 
 
 		}
 
 	@Test
-	public void TestIcd10 () {
+	public void TestDiagonse() {
 		Physician author1 = new Physician();
 		author1.setMail("authorMail98998");
 		author1.setPassword("qweqwe");
@@ -105,20 +108,67 @@ public class CaseDataDaoImplTest {
 
 		List<Icd10Diagnosis> m = new ArrayList<>();
 
-		for (int i= 0; i<5; i++) {
+		for (int i = 0; i < 5; i++) {
 			Icd10Diagnosis med = new Icd10Diagnosis();
-			med.getIcd10Code("404");
-			med.getIcd10Name("illness"+i)
+			med.setIcd10Code("404");
+			med.setIcd10Name("illness" + i);
 			m.add(med);
 		}
 		a.setDiagnosisList(m);
 
 		caseDataDao.insert(a);
 
-		Advice c = (Advice) caseDataRepository.getByAuthor(author1);
-		List<Medication> testMed = c.getMedications();
+		Diagnosis c = (Diagnosis) caseDataRepository.getByAuthor(author1);
+		List<Icd10Diagnosis> testMed = c.getDiagnosisList();
 
 		Assert.assertNotNull(testMed);
+		Assert.assertEquals(testMed.size(), 5);
+
+
+	}
+
+	@Test
+	public void TestAnamnesis() {
+		Physician author1 = new Physician();
+		author1.setMail("authorMail1228");
+		author1.setPassword("qweqwe");
+		author1 = userRepository.save(author1);
+
+
+		Case testCase = new Case();
+		testCase.setPhysician(author1);
+		testCase.setName("sldjflsdjf");
+		testCase = caseRepository.save(testCase);
+
+		Anamnesis a = new Anamnesis();
+		a.setCase(testCase);
+		a.setAuthor(author1);
+		a.setMessage("slfjlsdfjlsdjfl");
+		Calendar today = Calendar.getInstance();
+		today.set(Calendar.HOUR_OF_DAY, 0);
+		a.setCreated(today);
+
+		List<AnamnesisQuestion> m = new ArrayList<>();
+
+		for (int i= 0; i<5; i++) {
+			AnamnesisQuestionText med = new AnamnesisQuestionText();
+			AnamnesisQuestionBool med2 = new AnamnesisQuestionBool();
+			med2.setQuestion(i + ": ????????????");
+			med2.setAnswer(true);
+			med.setQuestion(i + ": ????????????");
+			med.setAnswer(i + ": !!!!!!!!!!!!!!!!!!!");
+			m.add(med);
+			m.add(med2);
+		}
+		a.setQuestions(m);
+
+		caseDataDao.insert(a);
+
+		Anamnesis c = (Anamnesis) caseDataRepository.getByAuthor(author1);
+		List<AnamnesisQuestion> testMed = c.getQuestions();
+
+		Assert.assertNotNull(testMed);
+		Assert.assertEquals(testMed.size(), 10);
 
 
 

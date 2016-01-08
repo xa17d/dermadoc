@@ -11,7 +11,9 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Calendar;
 
@@ -23,6 +25,8 @@ import java.util.Calendar;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
+@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
+@Transactional
 public class CaseDataRepositoryTest {
 
 	@Autowired
@@ -71,25 +75,70 @@ public class CaseDataRepositoryTest {
 		Assert.assertEquals(c.getCase(), savedCaseData.getCase());
 	}
 
-//	@Test
-//	public void listCaseDataByUserAndCaseTest() throws Exception {
-//		Physician author = new Physician();
-//		author = (Physician) userRepository.getUserByMail("authorMail2");
-//
-//		long caseId = 2;
-//		long authorId = author.getId();
-//		Iterable<CaseData> c = caseDataRepository.listCaseDataByUserAndCase(caseId, authorId);
-//		Assert.assertNotNull(c);
-//	}
 
-//
-//@Test
-//public void testGetByAuthor() throws Exception {
-//	User author = userRepository.getUserByMail("authorMail1");
-//
-//	CaseData caseByAuthor = caseDataRepository.getByAuthor(author);
-//	Assert.assertNotNull(caseByAuthor);
-//}
+	@Test
+	public void listCaseDataByUserAndCaseTest() throws Exception {
+		Physician author = new Physician();
+		author.setName("physicianTest");
+		author.setMail("phuuu@hey");
+		author.setPassword("123213");
 
+		author = userRepository.save(author);
+
+		Case c = new Case();
+		c.setName("testCase3");
+		c.setPhysician(author);
+		Calendar today = Calendar.getInstance();
+		today.set(Calendar.HOUR_OF_DAY, 0);
+		c.setCreated(today);
+		c = caseRepository.save(c);
+		CaseData testCaseData = new CaseInfo();
+
+		testCaseData.setCase(c);
+		testCaseData.setAuthor(author);
+
+		testCaseData = caseDataRepository.save(testCaseData);
+
+		long caseId = c.getId();
+		long authorId = author.getId();
+		Iterable<CaseData> caseList = caseDataRepository.listCaseDataByUserAndCase(caseId, authorId);
+
+		Assert.assertNotNull(caseList);
+
+
+	}
+
+
+	@Test
+	public void testGetByAuthor() throws Exception {
+		Physician author = new Physician();
+		author.setName("physicianTest");
+		author.setMail("phuuu2@hey");
+		author.setPassword("123213");
+
+		author = userRepository.save(author);
+
+		Case c = new Case();
+		c.setName("testCase3");
+		c.setPhysician(author);
+		Calendar today = Calendar.getInstance();
+		today.set(Calendar.HOUR_OF_DAY, 0);
+		c.setCreated(today);
+		c = caseRepository.save(c);
+		CaseData testCaseData = new CaseInfo();
+
+		testCaseData.setCase(c);
+		testCaseData.setAuthor(author);
+
+		testCaseData = caseDataRepository.save(testCaseData);
+
+		CaseData caseByAuthor = caseDataRepository.getByAuthor(author);
+		Assert.assertEquals(testCaseData, caseByAuthor);
+	}
+
+	@Test
+	public void testPhotoMessage() {
+
+	}
 
 }
