@@ -93,7 +93,7 @@ public class TestContentProvider implements ContentProvider {
         qList.add(q3);
         qList.add(q4);
 
-        return new AnamnesisParc(0, Calendar.getInstance(), new PhysicianParc(), "what message", qList);
+        return new AnamnesisParc(0, Calendar.getInstance(), new PhysicianParc(), "Please fill out this form - be honest!", qList);
     }
 
     @Override

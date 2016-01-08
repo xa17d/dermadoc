@@ -99,6 +99,8 @@ public class EditAnamnesisFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_edit_anamnesis_layout, container, false);
 
+        TextView messageTextView = (TextView) v.findViewById(R.id.message_text_view);
+
         anamnesisHelpIcon = (ImageView) v.findViewById(R.id.anamnesis_help_icon_view);
         anamnesisHelpText = (TextView) v.findViewById(R.id.anamnesis_help_hint_text_view);
 
@@ -130,6 +132,8 @@ public class EditAnamnesisFragment extends Fragment {
                 tabChangeInterface.switchToTheNextTab();
             }
         });
+
+        messageTextView.setText(anamnesisItem.getMessage());
 
         anamnesisQuestionListLayout = (LinearLayout) v.findViewById(R.id.anamnesis_question_list_linlayout);
         setUpQuestionList(inflater, anamnesisQuestionListLayout);

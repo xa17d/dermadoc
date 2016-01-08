@@ -30,6 +30,7 @@ import java.util.List;
 
 import at.tuwien.telemedizin.dermadoc.app.R;
 import at.tuwien.telemedizin.dermadoc.app.activities_fragments.create_case.EditCaseActivity;
+import at.tuwien.telemedizin.dermadoc.app.activities_fragments.help.HelpActivity;
 import at.tuwien.telemedizin.dermadoc.app.activities_fragments.login.LoginActivity;
 import at.tuwien.telemedizin.dermadoc.app.adapters.MyCasesPagerEnum;
 import at.tuwien.telemedizin.dermadoc.app.comparators.CaseSortCategory;
@@ -303,7 +304,7 @@ public class MainActivity extends AppCompatActivity
         Fragment fragment = null;
         String title = getString(R.string.app_name);
         CharSequence oldTitle = getTitle();
-        fab.setVisibility(View.GONE);
+
 
         if (id == R.id.nav_my_cases) {
             fragment = MyCasesFragment.newInstance();
@@ -316,10 +317,13 @@ public class MainActivity extends AppCompatActivity
             fragment = UserDataOverviewFragment.newInstance();
 //            Toast.makeText(getBaseContext(), "There will be a User-Fragment", Toast.LENGTH_LONG).show(); // TODO
             title = getString(R.string.nav_my_account);
+            fab.setVisibility(View.GONE);
             sortMenuItem.setVisible(false);
         } else if (id == R.id.nav_help) {
-            Toast.makeText(getBaseContext(), "There will be a Help-activity", Toast.LENGTH_LONG).show();
-            // TODO not as fragment - implement as own activity
+//            Toast.makeText(getBaseContext(), "There will be a Help-activity", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(this, HelpActivity.class);
+            startActivity(intent);
+
             title = oldTitle.toString();
         } else if (id == R.id.nav_logout) {
             performLogout();

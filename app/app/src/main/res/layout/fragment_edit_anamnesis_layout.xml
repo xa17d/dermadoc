@@ -65,6 +65,14 @@
 
         </LinearLayout>
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/hint_no_message"
+            android:id="@+id/message_text_view"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp" />
+
         <LinearLayout
             android:id="@+id/anamnesis_question_list_linlayout"
             android:layout_width="match_parent"

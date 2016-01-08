@@ -207,7 +207,11 @@
     <string name="title_help">Help</string>
     <string name="header_help">Help</string>
 
+    <string name="hint_no_message">no message from the doctor</string>
+
     <string name="help_explanation">Please touch the question marks spread across the app for little hints and explanations. If that information is not sufficient, feel free to contact our support team. </string>
+    <string name="help_regards_from_the_team">Kind regards,</string>
+    <string name="help_regards_your_team">Your Derma-Doc Team!</string>
 
     <string name="message_type_diagnosis">D</string>
     <string name="message_type_message">M</string>
@@ -252,6 +256,7 @@
     <string name="list_header_question">questions</string>
 
     <string name="nav_header_message_1">Facebook plugin coming soon!</string>
+    <string name="title_activity_help">Help</string>
 
 
 

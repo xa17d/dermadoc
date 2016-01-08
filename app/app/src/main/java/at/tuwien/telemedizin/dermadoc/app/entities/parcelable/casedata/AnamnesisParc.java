@@ -60,7 +60,7 @@ public class AnamnesisParc extends CaseDataParc {
 
         this.message = in.readString();
         this.questions = new ArrayList<>();
-        in.readList(this.questions, null); // does that work?! null for class loader -> default, but is there a default?! TODO
+        in.readList(this.questions, AnamnesisQuestionParc.class.getClassLoader());
     }
 
     @Override
