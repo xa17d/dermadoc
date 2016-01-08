@@ -1,8 +1,6 @@
 package at.tuwien.telemedizin.dermadoc.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * Medication
@@ -24,6 +22,7 @@ public class Medication {
 
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long medicationId;
 
     public Long getMedicationId() {
