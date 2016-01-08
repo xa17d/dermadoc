@@ -34,6 +34,7 @@ public class NotificationController {
     @AccessUser
     public void deleteNotification(@CurrentUser User user, @PathVariable long notificationId) {
         Notification notification = notificationRepository.getNotificationById(notificationId);
+        if (notification == null) { throw new EntityNotFoundException("id does not exist"); }
 
         if (Access.canAccess(user, notification)) {
             notificationRepository.delete(notificationId);

@@ -59,7 +59,6 @@ public class PostRequest<Trequest, Tresponse> {
 
         } catch (MalformedURLException e) {
             listener.onError(new Error(e));
-            e.printStackTrace();
         } catch (IOException e) {
             listener.onError(new Error(e));
         }

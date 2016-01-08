@@ -30,7 +30,6 @@ public class Case {
     private Long id;
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
-    public void setId(long id) { setId(new Long(id)); }
 
     @OneToOne
     private Patient patient;

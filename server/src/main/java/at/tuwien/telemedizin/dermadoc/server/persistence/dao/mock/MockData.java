@@ -1,4 +1,3 @@
-/*
 package at.tuwien.telemedizin.dermadoc.server.persistence.dao.mock;
 
 import at.tuwien.telemedizin.dermadoc.entities.*;
@@ -6,10 +5,9 @@ import at.tuwien.telemedizin.dermadoc.entities.casedata.*;
 
 import java.util.*;
 
-*/
 /**
  * Created by daniel on 27.11.2015.
- *//*
+ */
 
 public class MockData {
 
@@ -24,7 +22,7 @@ public class MockData {
         drAcula.setName("Dr. Acula");
         drAcula.setPassword("a");
         drAcula.setMail("a");
-        drAcula.setId(0);
+        //drAcula.setId(new Long(0));
         drAcula.setLocation(new GeoLocation("Transsilvanien", 45.7340837, 21.1990513));
         users.add(drAcula);
 
@@ -37,7 +35,7 @@ public class MockData {
         johnD.setSvnr("1234010190");
         johnD.setMail("p");
         johnD.setPassword("p");
-        johnD.setId(1);
+        //johnD.setId(new Long(1));
         users.add(johnD);
 
         Case caseJohnRash = new Case(100, johnD, GregorianCalendar.getInstance());
@@ -106,4 +104,3 @@ public class MockData {
     }
 
 }
-*/
