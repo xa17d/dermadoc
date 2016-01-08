@@ -4,6 +4,8 @@ import at.tuwien.telemedizin.dermadoc.entities.Patient;
 import at.tuwien.telemedizin.dermadoc.entities.Physician;
 import at.tuwien.telemedizin.dermadoc.entities.User;
 import at.tuwien.telemedizin.dermadoc.server.exceptions.InvalidUserTypeException;
+import at.tuwien.telemedizin.dermadoc.server.exceptions.InvalidSubtypeTypeException;
+import at.tuwien.telemedizin.dermadoc.server.persistence.dao.mock.MockData;
 import at.tuwien.telemedizin.dermadoc.server.security.SecurityToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,7 +55,7 @@ public class TokenService {
             authorities = AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_USER,ROLE_PHYSICIAN");
         }
         else {
-            throw new InvalidUserTypeException(user.getClass());
+            throw new InvalidSubtypeTypeException(User.class, user.getClass());
         }
 
         SecurityToken token = new SecurityToken(tokenId, user, null, authorities);
@@ -70,5 +72,9 @@ public class TokenService {
 
     public Authentication retrieve(String token) {
         return tokens.get(token);
+    }
+
+    public void evict(String token) {
+        tokens.remove(token);
     }
 }

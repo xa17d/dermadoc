@@ -4,7 +4,7 @@ import at.tuwien.telemedizin.dermadoc.entities.*;
 import at.tuwien.telemedizin.dermadoc.entities.rest.CaseList;
 import at.tuwien.telemedizin.dermadoc.server.exceptions.EntityNotFoundException;
 import at.tuwien.telemedizin.dermadoc.server.exceptions.InvalidCaseStatusException;
-import at.tuwien.telemedizin.dermadoc.server.exceptions.InvalidUserTypeException;
+import at.tuwien.telemedizin.dermadoc.server.exceptions.InvalidSubtypeTypeException;
 import at.tuwien.telemedizin.dermadoc.server.persistence.dao.hibernate.CaseRepository;
 import at.tuwien.telemedizin.dermadoc.server.security.*;
 import at.tuwien.telemedizin.dermadoc.server.services.NotificationService;
@@ -38,7 +38,7 @@ public class CaseController {
             return new CaseList(caseRepository.findByPhysician(user));
         }
         else {
-            throw new InvalidUserTypeException(user.getClass());
+            throw new InvalidSubtypeTypeException(User.class, user.getClass());
         }
     }
 
