@@ -90,6 +90,10 @@ public class CaseOverviewFragment extends Fragment {
     }
 
     public void updateDataViews() {
+
+        if (getContext() == null) {
+            return;
+        }
         caseItem = caseDataCallbackInterface.getCase();
         setUpBasicData();
         basicDataListLayout.removeAllViewsInLayout();

@@ -40,15 +40,18 @@ import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.CaseInfoP
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.DiagnosisParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.PhotoMessageParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.TextMessageParc;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.BodyLocalization;
 import at.tuwien.telemedizin.dermadoc.app.helper.FormatHelper;
 
-public class CaseDataActivity extends AppCompatActivity {
+public class CaseDataActivity extends AppCompatActivity implements EditLocationFragment.BodyLocationCallbackInterface {
 
     public static final String LOG_TAG = CaseDataActivity.class.getSimpleName();
 
     public static final String CASE_DATA_INTENT_KEY = CaseDataActivity.class.getSimpleName() + "caseData";
 
     private CaseDataParc data;
+
+    private   LinearLayout locationFragmentContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +89,7 @@ public class CaseDataActivity extends AppCompatActivity {
         TextView idText = (TextView) findViewById(R.id.id_text);
         RelativeLayout backgroundHolder = (RelativeLayout)findViewById(R.id.background_holder_layout);
         RelativeLayout marginHolder = (RelativeLayout) findViewById(R.id.margin_holder_layout);
+        locationFragmentContainer = (LinearLayout) findViewById(R.id.location_fragment_container);
 
 
         // set Background according to author
@@ -284,6 +288,7 @@ public class CaseDataActivity extends AppCompatActivity {
             TextView listHeaderTextView = (TextView) v.findViewById(R.id.list_header_text_view);
             listHeaderTextView.setVisibility(View.GONE);
 
+
             itemMessage.setText(getString(R.string.hint_case_info_message));
 
             // info-list
@@ -293,8 +298,8 @@ public class CaseDataActivity extends AppCompatActivity {
                     + getString(R.string.size_type));
 
             infos.add( getString(PainIntensityMapper.getTitleResource(message.getPain())));
-            infos.add( "Body Localizations: " + message.getLocalizations().size());
 //            infos.add( "Symptom Description: \n" + message.getSymptomDescription());
+            infos.add( "Body Localizations: " + message.getLocalizations().size());
 
             if (infos.size() > 0) {
                 Log.d(LOG_TAG, "infos is > 0");
@@ -309,6 +314,16 @@ public class CaseDataActivity extends AppCompatActivity {
                     infoListView.addView(infoRootView);
                 }
             }
+
+            Fragment fragment = EditLocationFragment.newInstance(false, true);
+
+            if (fragment != null) {
+                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.location_fragment_container,fragment);
+                fragmentTransaction.commit();
+                locationFragmentContainer.setVisibility(View.VISIBLE);
+            }
+
 
         }
         return v;
@@ -362,4 +377,19 @@ public class CaseDataActivity extends AppCompatActivity {
         return v;
     }
 
+    @Override
+    public List<BodyLocalization> getBodyLocations() {
+        Log.d(LOG_TAG, "getBodyLocations()");
+        List<BodyLocalization> localizations = new ArrayList<>();
+
+        // first check, if the caseData contains location-data
+
+        if (this.data != null && this.data instanceof CaseInfoParc) {
+            CaseInfoParc cI = (CaseInfoParc)this.data;
+            if (cI.getLocalizations() != null) {
+                localizations = cI.getLocalizations();
+            }
+        }
+        return localizations;
+    }
 }

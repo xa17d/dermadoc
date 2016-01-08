@@ -143,8 +143,7 @@ public class CaseDataListFragment extends Fragment {
         listView.setAdapter(adapter);
 
         // scroll to the bottom
-//        listView.scrollTo(0, listView.getHeight()); //did not work
-        listView.setSelection(adapter.getCount() - 1);
+        scrollToBottomOfList();
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -227,6 +226,10 @@ public class CaseDataListFragment extends Fragment {
         return v;
     }
 
+    private void scrollToBottomOfList() {
+        listView.setSelection(adapter.getCount() - 1);
+    }
+
     private void adjustHeight(boolean maxHeight) {
 
         if (maxHeight) {
@@ -242,56 +245,69 @@ public class CaseDataListFragment extends Fragment {
      * should be called by the activity, when the dataset changes
      */
     public void updateMessageList() {
+        if (caseDataInterface == null || getContext() == null) {
+            return; // prevent exceptions, when this fragment has not been initialized or is not active
+        }
         caseItem = caseDataInterface.getCase();
         applyFilterToList(); // activate the list through activating the filter
         adapter.notifyDataSetChanged();
+        scrollToBottomOfList();
 
     }
 
     /**
-     * switches boolean values
+     * switch boolean values and set background resource of the views
      * @param view
+     * @param longTouch
      */
-    private void handleTouchedFilterElement(View view, boolean disableOther) {
+    private void handleTouchedFilterElement(View view, boolean longTouch) {
 
-        if (disableOther) {
+        boolean allActive = false;
+        // check if all filters are active
+        allActive = showTextMsg && showPhotoMsg && showdiagnosisMsg
+                && showAdviceMsg && showCaseInfoMsg && showAnamnesisMsg;
+
+        // if all are active -> disable all, so that only the selected one is active afterwards
+        // if not all are active -> activate all
+
+        if (longTouch) {
             // all are disabled, only one will be active
-            showTextMsg = false;
-            showPhotoMsg = false;
-            showdiagnosisMsg = false;
-            showAdviceMsg = false;
-            showCaseInfoMsg = false;
-            showAnamnesisMsg = false;
+            showTextMsg = !allActive;
+            showPhotoMsg = !allActive;
+            showdiagnosisMsg = !allActive;
+            showAdviceMsg = !allActive;
+            showCaseInfoMsg = !allActive;
+            showAnamnesisMsg = !allActive;
         }
 
         // switch the boolean values
         if (view.getId() == filterTextMsg.getId()) {
-            showTextMsg = !showTextMsg;
+            showTextMsg = !showTextMsg || (longTouch && !allActive); // activate all, if longTouch and all should be activated
             filterTextMsg.setBackgroundResource(showTextMsg ?
                     R.drawable.message_type_selected_background_shape : R.drawable.message_type_background_shape);
 
         } else if (view.getId() == filterPhotoMsg.getId()) {
-            showPhotoMsg = !showPhotoMsg;
+            showPhotoMsg = !showPhotoMsg || (longTouch && !allActive); // activate all, if longTouch and all should be activated
             filterPhotoMsg.setBackgroundResource(showPhotoMsg ?
                     R.drawable.message_type_selected_background_shape : R.drawable.message_type_background_shape);
 
         } else if (view.getId() == filterDiagnosisMsg.getId()) {
-            showdiagnosisMsg = !showdiagnosisMsg;
+            showdiagnosisMsg = !showdiagnosisMsg || (longTouch && !allActive); // activate all, if longTouch and all should be activated
             filterDiagnosisMsg.setBackgroundResource(showdiagnosisMsg ?
                     R.drawable.message_type_selected_background_shape : R.drawable.message_type_background_shape);
 
         } else if (view.getId() == filterAdviceMsg.getId()) {
-            showAdviceMsg = !showAdviceMsg;
+            showAdviceMsg = !showAdviceMsg || (longTouch && !allActive); // activate all, if longTouch and all should be activated
             filterAdviceMsg.setBackgroundResource(showAdviceMsg ?
                     R.drawable.message_type_selected_background_shape : R.drawable.message_type_background_shape);
 
         } else if (view.getId() == filterCaseInfoMsg.getId()) {
-            showCaseInfoMsg = !showCaseInfoMsg;
+            showCaseInfoMsg = !showCaseInfoMsg || (longTouch && !allActive); // activate all, if longTouch and all should be activated
             filterCaseInfoMsg.setBackgroundResource(showCaseInfoMsg ?
                     R.drawable.message_type_selected_background_shape : R.drawable.message_type_background_shape);
 
         } else if (view.getId() == filterAnamnesisMsg.getId()) {
-            showAnamnesisMsg = !showAnamnesisMsg;
+            showAnamnesisMsg = !showAnamnesisMsg || (longTouch && !allActive); // activate all, if longTouch and all should be activated
             filterAnamnesisMsg.setBackgroundResource(showAnamnesisMsg ?
                     R.drawable.message_type_selected_background_shape : R.drawable.message_type_background_shape);
 

@@ -265,15 +265,16 @@ public class CaseActivity extends AppCompatActivity
                     Log.d(LOG_TAG, "updatedCaseDataElements=" + updatedCaseDataElements.size());
                     sendCaseDataMessages(updatedCaseDataElements);
                     // update the overview - view TODO besser einbinden
-                    overviewFragment = CaseOverviewFragment.newInstance();
-                    String title = getString(R.string.nav_case_overview);
-
-                    if (overviewFragment != null) {
-                        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                        fragmentTransaction.replace(R.id.contentFrame,overviewFragment);
-                        fragmentTransaction.commit();
-                        setTitle(title);
-                    }
+//                    if (overviewFragment != null)
+//                    overviewFragment = CaseOverviewFragment.newInstance();
+//                    String title = getString(R.string.nav_case_overview);
+//
+//                    if (overviewFragment != null) {
+//                        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+//                        fragmentTransaction.replace(R.id.contentFrame,overviewFragment);
+//                        fragmentTransaction.commit();
+//                        setTitle(title);
+//                    }
 
                 }
             }
@@ -303,13 +304,10 @@ public class CaseActivity extends AppCompatActivity
     }
 
     private void sendCaseDataMessages(List<CaseDataParc> messages) {
-
-        // add to case
-        // TODO remove perhaps? START
-        for(CaseDataParc pM : messages) {
-            caseItem.addDataElement(pM);
+        Log.d(LOG_TAG, "sendCaseDataMessages()");
+        if (messages == null) {
+            return;
         }
-        // TODO remove END
 
         showProgress(true, getString(R.string.hint_sending));
         sendMessageTask = new SendMessagesAsyncTask(this);
@@ -404,11 +402,8 @@ public class CaseActivity extends AppCompatActivity
      * @param text
      */
     public void sendTextMessage(String text) {
+        Log.d(LOG_TAG, "sendTextMessage(" + text + ")");
         TextMessageParc newMessage = new TextMessageParc(-1, Calendar.getInstance(), currentUser, text);
-
-        // add to case
-        // TODO remove perhaps?
-        caseItem.addDataElement(newMessage);
 
         showProgress(true, getString(R.string.hint_sending));
         sendMessageTask = new SendMessagesAsyncTask(this);
@@ -461,7 +456,7 @@ public class CaseActivity extends AppCompatActivity
             // The ViewPropertyAnimator APIs are not available, so simply show
             // and hide the relevant UI components.
             loadingProgressLayout.setVisibility(show ? View.VISIBLE : View.GONE);
-            mainContentLayout.setVisibility(show ? View.GONE : View.VISIBLE);
+//            mainContentLayout.setVisibility(show ? View.GONE : View.VISIBLE);
         }
     }
 
@@ -474,57 +469,17 @@ public class CaseActivity extends AppCompatActivity
             loadCaseTask = null;
         } else if (task instanceof SendMessagesAsyncTask) {
             sendMessageTask = null;
+            // refresh caseDataList-Fragment
+            if (caseDataListFragment != null) {
+                caseDataListFragment.updateMessageList();
+            }
+            if (overviewFragment != null) {
+                overviewFragment.updateDataViews();
+            }
         }
 
         if (loadCaseTask == null && sendMessageTask == null) {
             showProgress(false);
-        }
-    }
-
-
-    /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
-     */
-    public class SendMessagesAsyncTask extends AsyncTask<CaseDataParc, Void, Void> {
-        private CaseActivity activity;
-
-        private String outp;
-
-        SendMessagesAsyncTask(CaseActivity activity) {
-            this.activity = activity;
-        }
-
-        @Override
-        protected Void doInBackground(CaseDataParc... params) {
-            Log.d(LOG_TAG, "doInBackground() " + params.length);
-
-            List<CaseDataParc> caseDataList = new ArrayList<CaseDataParc>(Arrays.asList(params));
-
-            ServerInterface sI = ServerInterfaceFactory.getInstance();
-            // TODO POST /cases/{caseId}/data
-
-            // TODO remoeve
-            try {
-                Thread.sleep(3000);                 //1000 milliseconds is one second.
-            } catch(InterruptedException ex) {
-                Thread.currentThread().interrupt();
-            }
-
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void param) {
-            Log.d(LOG_TAG, "onPostExecute()");
-            // TODO start sync task back
-            asyncTaskFinished(SendMessagesAsyncTask.this);
-        }
-
-        @Override
-        protected void onCancelled() {
-            asyncTaskFinished(SendMessagesAsyncTask.this);
         }
     }
 
@@ -598,6 +553,86 @@ public class CaseActivity extends AppCompatActivity
         @Override
         protected void onCancelled() {
             asyncTaskFinished(LoadCaseTask.this);
+        }
+    }
+
+    /**
+     * sending the case to the server
+     * the user.
+     */
+    public class SendMessagesAsyncTask extends AsyncTask<CaseDataParc, Void, List<CaseData>> {
+        private CaseActivity activity;
+
+        private String outp;
+
+        SendMessagesAsyncTask(CaseActivity activity) {
+            this.activity = activity;
+        }
+
+        @Override
+        protected List<CaseData> doInBackground(CaseDataParc... params) {
+            Log.d(LOG_TAG, "doInBackground()");
+
+            List<CaseData> caseDataResultList = new ArrayList<>();
+
+            if (params == null || params.length <= 0) {
+                Log.d(LOG_TAG, "Insufficient Parameters! ABORT!");
+                return null;
+            }
+
+            List<CaseDataParc> caseDataParcToSend = Arrays.asList(params);
+            Log.d(LOG_TAG, "caseDataParcToSend.size() = " + caseDataParcToSend.size());
+
+            ServerInterface sI = ServerInterfaceFactory.getInstance();
+
+            long caseId = caseItem.getId();
+
+            // send case-data elements
+            List<CaseData> caseDataToSend = ParcelableHelper.mapToCaseDataList(caseDataParcToSend);
+            if (caseDataToSend == null) {
+                Log.d(LOG_TAG, "CaseData - List is null! ABORT");
+                return null;
+            }
+
+            for (CaseData cd : caseDataToSend) {
+                CaseData resultFromServerCaseData = sI.addCaseData(cd, caseId); // TODO check result?
+
+                if (resultFromServerCaseData == null) {
+                    Log.d(LOG_TAG, "null returned from server for caseData");
+                } else {
+                    Log.d(LOG_TAG, "caseData returned from server with Id: " + resultFromServerCaseData.getId());
+                    caseDataResultList.add(resultFromServerCaseData);
+                }
+            }
+
+
+
+            Log.d(LOG_TAG, "end doInBackground(), caseDataResultList.size()=" + caseDataResultList.size());
+            return caseDataResultList;
+        }
+
+        @Override
+        protected void onPostExecute(List<CaseData> caseDataList) {
+            Log.d(LOG_TAG, "onPostExecute() ");
+
+            if (caseDataList!=null) {
+                Log.d(LOG_TAG, "caseDataList!= null");
+                // add the new case-datas to the case
+                List<CaseDataParc> caseDataParcList = ParcelableHelper.mapCaseDataListToParc(caseDataList);
+                for (CaseDataParc cdp : caseDataParcList) {
+                    caseItem.addDataElement(cdp);
+                }
+            }
+
+            asyncTaskFinished(SendMessagesAsyncTask.this);
+            Toast.makeText(getBaseContext(), "Data was sent to the server", Toast.LENGTH_LONG).show();
+
+        }
+
+        @Override
+        protected void onCancelled() {
+            asyncTaskFinished(SendMessagesAsyncTask.this);
+            Toast.makeText(getBaseContext(), "Sending data to the server was cancelled", Toast.LENGTH_LONG).show();
         }
     }
 }

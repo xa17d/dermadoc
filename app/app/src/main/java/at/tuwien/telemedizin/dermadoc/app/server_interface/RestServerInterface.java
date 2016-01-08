@@ -388,9 +388,11 @@ public class RestServerInterface implements ServerInterface {
 
         HttpEntity<CaseData> requestEntity = new HttpEntity<>(caseData, getAuthHeaders());
 
+        Log.d(LOG_TAG, "requestEntity caseData: " + requestEntity.toString());
+
         try {
 
-            String urlStr = url + POST_CASE_DATA_URL;
+            String urlStr = url + POST_CASE_URL + "/" +  caseId + POST_CASE_DATA_URL;
             responseEntity = restTemplate.exchange(urlStr, HttpMethod.POST, requestEntity, CaseData.class);
 
             if (responseEntity != null) {

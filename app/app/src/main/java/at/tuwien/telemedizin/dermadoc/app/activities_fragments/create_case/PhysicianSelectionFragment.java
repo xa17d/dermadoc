@@ -100,14 +100,11 @@ public class PhysicianSelectionFragment extends Fragment {
             throw new ClassCastException(context.toString() + " must implement " + OnTabChangedInFragmentInterface.class.getSimpleName());
         }
 
-        boolean oANewCase = getArguments().getBoolean(ARG_NEW_CASE);
 
-        if (oANewCase) {
-            try {
-                caseDataInterface = (OnCaseDataRequestAndUpdateInterface) context;
-            } catch (ClassCastException e) {
-                throw new ClassCastException(context.toString() + " must implement " + OnCaseDataRequestAndUpdateInterface.class.getSimpleName());
-            }
+        try {
+            caseDataInterface = (OnCaseDataRequestAndUpdateInterface) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString() + " must implement " + OnCaseDataRequestAndUpdateInterface.class.getSimpleName());
         }
 
 
@@ -170,7 +167,10 @@ public class PhysicianSelectionFragment extends Fragment {
 
     private View initializeForDisplay(View v, LayoutInflater inflater) {
         TextView physicianTextView = (TextView) v.findViewById(R.id.selected_physician_text_view);
-        physicianTextView.setText(caseDataInterface.getCase().getPhysician().getName());
+        Log.d(LOG_TAG, "caseDataInterface != null" + (caseDataInterface != null));
+        Log.d(LOG_TAG, "case != null" + (caseDataInterface.getCase() != null));
+        Log.d(LOG_TAG, "physician != null" + (caseDataInterface.getCase().getPhysician() != null));
+                physicianTextView.setText(caseDataInterface.getCase().getPhysician().getName());
         return v;
     }
 

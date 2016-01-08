@@ -36,6 +36,8 @@
 
     <color name="secondary_light_color">#63d8fc</color>
 
+    <color name="transparent_half">#99e6d6d6</color>
+
 
     <!-- colors for the clickable-areas in location-image-fragment -->
     <color name="location_area_1">#009eff</color> <!-- full body: head; but reused for other zoomed-parts -->
