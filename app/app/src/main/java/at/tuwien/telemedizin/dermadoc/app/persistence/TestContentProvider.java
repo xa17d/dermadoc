@@ -26,6 +26,8 @@ import at.tuwien.telemedizin.dermadoc.app.general_entities.PainIntensity;
 
 /**
  * Created by FAUser on 02.12.2015.
+ *
+ * provides mocked data for testing purpose
  */
 public class TestContentProvider implements ContentProvider {
     @Override
@@ -74,10 +76,10 @@ public class TestContentProvider implements ContentProvider {
 
     @Override
     public AnamnesisParc getAnamnesisForm() {
-        return mockAnamnesis();
+        return mockAnamnesis2();
     }
 
-    private AnamnesisParc mockAnamnesis() {
+    private AnamnesisParc mockAnamnesis1() {
 
         AnamnesisQuestionParc q1 = new AnamnesisQuestionBoolParc();
         q1.setQuestion("Has your cat shown similar symptoms?");
@@ -96,14 +98,50 @@ public class TestContentProvider implements ContentProvider {
         return new AnamnesisParc(0, Calendar.getInstance(), new PhysicianParc(), "Please fill out this form - be honest!", qList);
     }
 
+    private AnamnesisParc mockAnamnesis2() {
+
+        AnamnesisQuestionParc q1 = new AnamnesisQuestionBoolParc();
+        q1.setQuestion("Have you ever encounterd similar symptoms before?");
+        AnamnesisQuestionParc q1b = new AnamnesisQuestionTextParc();
+        q1b.setQuestion("Have there ever been or are there similar cases within you family?");
+
+        AnamnesisQuestionParc q2 = new AnamnesisQuestionTextParc();
+        q2.setQuestion("If you ever had problems concerning your skin, pleas describe them here:");
+
+        AnamnesisQuestionParc q3 = new AnamnesisQuestionBoolParc();
+        q3.setQuestion("Are you taking any medication at the moment concerning skin-related problems?");
+
+        AnamnesisQuestionParc q4 = new AnamnesisQuestionBoolParc();
+        q4.setQuestion("Do you have any allergies?");
+
+        AnamnesisQuestionParc q5 = new AnamnesisQuestionBoolParc();
+        q5.setQuestion("Do you smoke?");
+
+        AnamnesisQuestionParc q6 = new AnamnesisQuestionTextParc();
+        q6.setQuestion("Please cite any encounters with the following: Skin diseases, diabetes, cancer therapy, cardiovascular diseases, lovesickness.");
+
+        AnamnesisQuestionParc q7 = new AnamnesisQuestionBoolParc();
+        q7.setQuestion("Do you want an excellent mark for \"Telemedizin\"?");
+
+        List<AnamnesisQuestionParc> qList = new ArrayList<>();
+        qList.add(q1);
+        qList.add(q2);
+        qList.add(q3);
+        qList.add(q4);
+        qList.add(q5);
+        qList.add(q6);
+        qList.add(q7);
+
+        return new AnamnesisParc(0, Calendar.getInstance(), new PhysicianParc(), "Please fill out this form - be honest!", qList);
+    }
+
     @Override
     public List<CaseParc> getCurrentCasesOfUser() {
         return loadCurrentCaseLists();
     }
 
     /**
-     * loads the case-list(s) from the server
-     * TODO
+     * loads the mocked case-list(s)
      */
     private List<CaseParc> loadCurrentCaseLists() {
 
