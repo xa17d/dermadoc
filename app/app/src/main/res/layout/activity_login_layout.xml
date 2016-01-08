@@ -19,7 +19,7 @@
 
     <ScrollView android:id="@+id/login_form"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <LinearLayout android:id="@+id/email_login_form"
             android:layout_width="match_parent"
@@ -71,4 +71,10 @@
 
         </LinearLayout>
     </ScrollView>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_margin="10dp"
+        android:src="@drawable/derma_doc_icon_big_1" />
 </LinearLayout>

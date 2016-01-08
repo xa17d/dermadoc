@@ -11,15 +11,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import at.tuwien.telemedizin.dermadoc.app.R;
 import at.tuwien.telemedizin.dermadoc.app.activities_fragments.case_specific.CaseActivity;
 import at.tuwien.telemedizin.dermadoc.app.adapters.CaseListAdapter;
-import at.tuwien.telemedizin.dermadoc.app.comparators.CaseParcComparator;
+import at.tuwien.telemedizin.dermadoc.app.comparators.CaseListItemComparator;
 import at.tuwien.telemedizin.dermadoc.app.comparators.CaseSortCategory;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.CaseListItem;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.CaseParc;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.NotificationParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.PatientParc;
 
 /**
@@ -35,7 +39,7 @@ public class CaseListFragment extends Fragment {
     private static final String ARG_LIST_KEY = "listKey";
     private long listKey;
 
-    private List<CaseParc> listValues;
+    private List<CaseListItem> listValues;
 
     private ListView listView;
     private CaseListAdapter adapter;
@@ -84,7 +88,10 @@ public class CaseListFragment extends Fragment {
 //        TextView testTextView = (TextView) root.findViewById(R.id.testTextView_A); // TODO remove
 //        testTextView.setText(param1);
 
+        TextView emptyView = (TextView) root.findViewById(R.id.empty_view);
+
         listView = (ListView) root.findViewById(R.id.caseListView);
+        listView.setEmptyView(emptyView);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -93,7 +100,7 @@ public class CaseListFragment extends Fragment {
 
                 Intent intent = new Intent(getContext(), CaseActivity.class);
 
-                intent.putExtra(CaseParc.INTENT_KEY, adapter.getItem(position));
+                intent.putExtra(CaseListItem.INTENT_KEY, adapter.getItem(position));
 
                 // TODO change
                 PatientParc currentUser = ((MainActivity) getActivity()).getUser();
@@ -148,13 +155,16 @@ public class CaseListFragment extends Fragment {
     }
 
     private void checkSortingCategory() {
-        CaseSortCategory sortCategory = ((OnCaseListEventListener)getActivity()).onCaseSortCategoryRequest();
+        CaseSortCategory sortCategory = mListener.onCaseSortCategoryRequest();
         sortCaseList(sortCategory);
     }
 
     private void setUpListAndAdapter() {
-        listValues = ((OnCaseListEventListener)getActivity()).onListRequest(listKey, this);
-        Log.d(LOG_TAG, "listValues -size = " + listValues.size());
+        List<CaseParc> caseList = mListener.onListRequest(listKey, this);
+        List<NotificationParc> notificationList = mListener.onNotificationsRequest();
+        Log.d(LOG_TAG, "caseList -size = " + caseList.size());
+        Log.d(LOG_TAG, "notificationList -size = " + notificationList.size());
+        listValues = caseListToItemList(caseList, notificationList);
         adapter = new CaseListAdapter(getContext(), listValues);
         listView.setAdapter(adapter);
         checkSortingCategory();
@@ -165,11 +175,41 @@ public class CaseListFragment extends Fragment {
         setUpListAndAdapter();
     }
 
+    public void informNotificationListChanged() {
+//        setUpListAndAdapter(); // TODO
+    }
+
+    private List<CaseListItem> caseListToItemList(List<CaseParc> caseList, List<NotificationParc> notificationList) {
+
+        // map the notifications to the caseParc-objects
+        List<CaseListItem> itemList = new ArrayList<>();
+        if (caseList == null) {
+            return itemList;
+        }
+
+        List<NotificationParc> notifications = new ArrayList<>();
+        if (notificationList != null) {
+            notifications = notificationList;
+        }
+
+        for (CaseParc c : caseList) {
+            List<NotificationParc> caseNotifications = new ArrayList<>();
+            // iterate through notifications and filter the according notifications
+            for (NotificationParc nP : notifications) {
+                if (nP.getCaseId() == c.getId()) {
+                    caseNotifications.add(nP);
+                }
+            }
+            itemList.add(new CaseListItem(c, caseNotifications));
+        }
+        return itemList;
+    }
+
 
     private void sortCaseList(CaseSortCategory sortCategory) {
         Log.d(LOG_TAG, "Fragment " + listKey + " sortCaseList(" + sortCategory + ")");
 
-        CaseParcComparator caseComparator = new CaseParcComparator();
+        CaseListItemComparator caseComparator = new CaseListItemComparator();
         if (sortCategory != null) {
             caseComparator.setActiveCategory(sortCategory);
         }
@@ -222,6 +262,14 @@ public class CaseListFragment extends Fragment {
          * @return
          */
         public List<CaseParc> onListRequest(long listKey, CaseListFragment fragment);
+
+        /**
+         * the fragment requests the notification list (not filtered)
+         *
+         * @return
+         */
+        public List<NotificationParc> onNotificationsRequest();
+
 
         /**
          * the fragment requests the active case-sort-category

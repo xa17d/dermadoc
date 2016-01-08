@@ -27,24 +27,48 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-            <TextView
-                style="@style/HeaderLevel2Style"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentLeft="true"
-                android:id="@+id/basic_case_data_header"
-                android:text="@string/header_case_basic_infos" />
+        <TextView
+            android:id="@+id/basic_case_notification_header"
+            style="@style/HeaderLevel2Style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:text="@string/header_case_notification_infos" />
 
-            <!--<ImageView-->
-                <!--android:layout_width="20dp"-->
-                <!--android:layout_height="20dp"-->
-                <!--android:layout_marginTop="20dp"-->
-                <!--android:layout_marginLeft="20dp"-->
-                <!--android:layout_alignParentTop="true"-->
-                <!--android:layout_toRightOf="@id/basic_case_data_header"-->
-                <!--android:id="@+id/imageView2"-->
-                <!--android:src="@drawable/ic_action_edit_white_18dp"-->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <!-- hold the notification listLayout and the button to delte the notifications -->
+
+
+            <LinearLayout
+                android:id="@+id/notification_list_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+            </LinearLayout>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/label_delete_notifications"
+                android:id="@+id/notifications_delete_button" />
+
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/basic_case_data_header"
+            style="@style/HeaderLevel2Style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:text="@string/header_case_basic_infos" />
+
 
         <LinearLayout
             android:id="@+id/basic_data_list_layout"
@@ -56,18 +80,18 @@
         </LinearLayout>
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/label_localizations"
             android:id="@+id/element_header_textView"
             style="@style/OverviewTableTextStyle"
-            android:paddingBottom="4dp" />
-
-        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="-25dp"
-            android:id="@+id/location_fragment_container">
+            android:paddingBottom="4dp"
+            android:text="@string/label_localizations" />
+
+        <RelativeLayout
+            android:id="@+id/location_fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-25dp">
             <!-- this relative layout is used to nest a fragment dynamically -->
         </RelativeLayout>
 

@@ -124,6 +124,11 @@
         <!-- todo -->
     </style>
 
+    <style name="EmptyListText" >
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
     <style name="UserDataListItemText" >
         <item name="android:textSize">18sp</item>
         <!-- todo -->

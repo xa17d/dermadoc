@@ -4,9 +4,11 @@ package at.tuwien.telemedizin.dermadoc.app.activities_fragments.case_specific;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -17,6 +19,7 @@ import at.tuwien.telemedizin.dermadoc.app.R;
 import at.tuwien.telemedizin.dermadoc.app.activities_fragments.create_case.EditLocationFragment;
 import at.tuwien.telemedizin.dermadoc.app.adapters.PainIntensityMapper;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.CaseParc;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.NotificationParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.PhysicianParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.CaseInfoParc;
 import at.tuwien.telemedizin.dermadoc.app.helper.CaseDataExtractionHelper;
@@ -41,8 +44,12 @@ public class CaseOverviewFragment extends Fragment {
     private TextView localizationHeaderTextView;
 
     private LinearLayout basicDataListLayout;
+    private LinearLayout notificationListLayout;
 
     private CaseParc caseItem;
+    private List<NotificationParc> notificationList;
+
+    private Button deleteNotificationsButton;
 
     /**
      * Use this factory method to create a new instance of
@@ -81,7 +88,15 @@ public class CaseOverviewFragment extends Fragment {
         caseNameTextView = (TextView) v.findViewById(R.id.case_name_text_view);
 
         basicDataListLayout = (LinearLayout) v.findViewById(R.id.basic_data_list_layout);
+        notificationListLayout = (LinearLayout) v.findViewById(R.id.notification_list_layout);
 
+        deleteNotificationsButton = (Button) v.findViewById(R.id.notifications_delete_button);
+        deleteNotificationsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                caseDataCallbackInterface.deleteNotifications();
+            }
+        });
 
         // get Data and fill views
         updateDataViews();
@@ -96,6 +111,10 @@ public class CaseOverviewFragment extends Fragment {
         }
         caseItem = caseDataCallbackInterface.getCase();
         setUpBasicData();
+        notificationList = caseDataCallbackInterface.getNotifications();
+        notificationListLayout.removeAllViewsInLayout();
+        setUpNotificationList(LayoutInflater.from(getContext()));
+
         basicDataListLayout.removeAllViewsInLayout();
         setUpBasicDataList(LayoutInflater.from(getContext()));
     }
@@ -112,6 +131,43 @@ public class CaseOverviewFragment extends Fragment {
         caseStatusTextView.setText(caseItem.getStatus() + "");
         caseNameTextView.setText(caseItem.getName());
 
+    }
+
+    private void setUpNotificationList(LayoutInflater inflater) {
+        Log.d(LOG_TAG, "setUpNotificationList() with list.size()=" + notificationList.size());
+        // only one label, if empty list
+        if (notificationList.size() == 0) {
+            // hide the delte-button
+            deleteNotificationsButton.setVisibility(View.GONE);
+
+            // add an "is empty" view
+            View simpleNotificationView = inflater.inflate(R.layout.overview_basic_data_item, null, false);
+            TextView nHeaderTextView = (TextView) simpleNotificationView.findViewById(R.id.element_header_textView);
+            ImageView nIconView = (ImageView) simpleNotificationView.findViewById(R.id.icon_view);
+            TextView nInfoTextView = (TextView) simpleNotificationView.findViewById(R.id.element_info_textView);
+
+            nHeaderTextView.setVisibility(View.GONE);
+            nIconView.setVisibility(View.GONE);
+            nInfoTextView.setText(getString(R.string.hint_no_notifications));
+            notificationListLayout.addView(simpleNotificationView);
+        } else {
+
+            // show button
+            // hide the delte-button
+            deleteNotificationsButton.setVisibility(View.VISIBLE);
+
+            for (NotificationParc nP : notificationList) {
+                View simpleNotificationView = inflater.inflate(R.layout.overview_basic_data_item, null, false);
+                TextView nHeaderTextView = (TextView) simpleNotificationView.findViewById(R.id.element_header_textView);
+                ImageView nIconView = (ImageView) simpleNotificationView.findViewById(R.id.icon_view);
+                TextView nInfoTextView = (TextView) simpleNotificationView.findViewById(R.id.element_info_textView);
+
+                nHeaderTextView.setVisibility(View.GONE);
+                nIconView.setImageResource(R.drawable.ic_action_flag_red_light_18dp);
+                nInfoTextView.setText(nP.getText());
+                notificationListLayout.addView(simpleNotificationView);
+            }
+        }
     }
 
     private void setUpBasicDataList(LayoutInflater inflater) {

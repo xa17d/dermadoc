@@ -3,6 +3,7 @@ package at.tuwien.telemedizin.dermadoc.app.server_interface;
 import java.util.List;
 
 import at.tuwien.telemedizin.dermadoc.app.general_entities.Case;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.Notification;
 import at.tuwien.telemedizin.dermadoc.app.general_entities.Physician;
 import at.tuwien.telemedizin.dermadoc.app.general_entities.User;
 import at.tuwien.telemedizin.dermadoc.app.general_entities.casedata.CaseData;
@@ -37,5 +38,9 @@ public interface ServerInterface {
     public CaseData addCaseData(CaseData caseData, long caseId);
 
     public List<Physician> getPhysicians();
+
+    public List<Notification> getNotifications();
+
+    public Boolean deleteNotification(long notificationId);
 
 }

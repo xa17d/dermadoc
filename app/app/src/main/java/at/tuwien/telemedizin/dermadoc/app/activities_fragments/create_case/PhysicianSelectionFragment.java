@@ -170,7 +170,13 @@ public class PhysicianSelectionFragment extends Fragment {
         Log.d(LOG_TAG, "caseDataInterface != null" + (caseDataInterface != null));
         Log.d(LOG_TAG, "case != null" + (caseDataInterface.getCase() != null));
         Log.d(LOG_TAG, "physician != null" + (caseDataInterface.getCase().getPhysician() != null));
-                physicianTextView.setText(caseDataInterface.getCase().getPhysician().getName());
+        PhysicianParc phP = caseDataInterface.getCase().getPhysician();
+        if (phP != null) {
+            physicianTextView.setText(phP.getName());
+        } else {
+            physicianTextView.setText(getString(R.string.msg_no_physician_info_found));
+        }
+
         return v;
     }
 

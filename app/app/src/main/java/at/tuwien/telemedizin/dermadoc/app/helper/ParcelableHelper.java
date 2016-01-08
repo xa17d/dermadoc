@@ -8,6 +8,7 @@ import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.CaseParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.GeoLocationParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.Icd10DiagnosisParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.MedicationParc;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.NotificationParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.PatientParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.PhysicianParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.UserParc;
@@ -25,6 +26,7 @@ import at.tuwien.telemedizin.dermadoc.app.general_entities.Case;
 import at.tuwien.telemedizin.dermadoc.app.general_entities.GeoLocation;
 import at.tuwien.telemedizin.dermadoc.app.general_entities.Icd10Diagnosis;
 import at.tuwien.telemedizin.dermadoc.app.general_entities.Medication;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.Notification;
 import at.tuwien.telemedizin.dermadoc.app.general_entities.Patient;
 import at.tuwien.telemedizin.dermadoc.app.general_entities.Physician;
 import at.tuwien.telemedizin.dermadoc.app.general_entities.User;
@@ -86,9 +88,9 @@ public class ParcelableHelper {
     public static UserParc mapUserToUserParc(User user) {
         // as user is abstract, its type has to be considered
         if (user instanceof Patient) {
-            return new PatientParc((Patient)user);
+            return new PatientParc((Patient) user);
         } else {
-           return new PhysicianParc((Physician)user);
+            return new PhysicianParc((Physician) user);
         }
     }
 
@@ -105,6 +107,46 @@ public class ParcelableHelper {
         return medParcList;
     }
 
+    public static List<NotificationParc> mapToNotificationParcList(List<Notification> notifications) {
+
+        if (notifications == null) {
+            return null;
+        }
+
+        List<NotificationParc> medParcList = new ArrayList<>();
+        for (Notification m : notifications) {
+            medParcList.add(new NotificationParc(m));
+        }
+        return medParcList;
+    }
+
+    public static List<Notification> mapToNotificationList(List<NotificationParc> notificationsParc) {
+
+        if (notificationsParc == null) {
+            return null;
+        }
+
+        List<Notification> medParcList = new ArrayList<>();
+        for (NotificationParc m : notificationsParc) {
+            medParcList.add(mapNotificationParc(m));
+        }
+        return medParcList;
+    }
+
+    public static Notification mapNotificationParc(NotificationParc notificationParc) {
+
+        if (notificationParc == null) {
+            return null;
+        }
+        Notification nf = new Notification();
+        nf.setId(notificationParc.getId());
+        nf.setCaseId(notificationParc.getCaseId());
+        nf.setText(notificationParc.getText());
+        nf.setUserId(notificationParc.getUserId());
+
+        return nf;
+    }
+
     public static List<AnamnesisQuestionParc> mapAnamnesisQuestionsToParc(List<AnamnesisQuestion> anamnesisQuestions) {
 
         if (anamnesisQuestions == null) {
@@ -114,9 +156,9 @@ public class ParcelableHelper {
         List<AnamnesisQuestionParc> questionsParcList = new ArrayList<>();
         for (AnamnesisQuestion q : anamnesisQuestions) {
             if (q instanceof AnamnesisQuestionBool) {
-                questionsParcList.add(new AnamnesisQuestionBoolParc((AnamnesisQuestionBool)q));
-            } else{
-                questionsParcList.add(new AnamnesisQuestionTextParc((AnamnesisQuestionText)q));
+                questionsParcList.add(new AnamnesisQuestionBoolParc((AnamnesisQuestionBool) q));
+            } else {
+                questionsParcList.add(new AnamnesisQuestionTextParc((AnamnesisQuestionText) q));
             }
 
         }
@@ -167,17 +209,17 @@ public class ParcelableHelper {
 
             CaseDataParc cP = null;
             if (c instanceof TextMessage) {
-                cP = new TextMessageParc((TextMessage)c);
+                cP = new TextMessageParc((TextMessage) c);
             } else if (c instanceof PhotoMessage) {
-                cP = new PhotoMessageParc((PhotoMessage)c);
+                cP = new PhotoMessageParc((PhotoMessage) c);
             } else if (c instanceof Diagnosis) {
-                cP = new DiagnosisParc((Diagnosis)c);
-            }else if (c instanceof Advice) {
-                cP = new AdviceParc((Advice)c);
-            }else if (c instanceof Anamnesis) {
-                cP = new AnamnesisParc((Anamnesis)c);
-            }else if (c instanceof CaseInfo) {
-                cP = new CaseInfoParc((CaseInfo)c);
+                cP = new DiagnosisParc((Diagnosis) c);
+            } else if (c instanceof Advice) {
+                cP = new AdviceParc((Advice) c);
+            } else if (c instanceof Anamnesis) {
+                cP = new AnamnesisParc((Anamnesis) c);
+            } else if (c instanceof CaseInfo) {
+                cP = new CaseInfoParc((CaseInfo) c);
             }
 
             caseParcList.add(cP);
@@ -216,27 +258,27 @@ public class ParcelableHelper {
             return null;
         }
 
-        if (caseDataParc instanceof  TextMessageParc) {
+        if (caseDataParc instanceof TextMessageParc) {
             TextMessageParc cdP = (TextMessageParc) caseDataParc;
             TextMessage export = new TextMessage(cdP.getId(), cdP.getCreated(), mapToUser(cdP.getAuthor()), cdP.getMessage());
             return export;
-        } else if (caseDataParc instanceof  PhotoMessageParc) {
+        } else if (caseDataParc instanceof PhotoMessageParc) {
             PhotoMessageParc cdP = (PhotoMessageParc) caseDataParc;
             PhotoMessage export = new PhotoMessage(cdP.getId(), cdP.getCreated(), mapToUser(cdP.getAuthor()), cdP.getMime(), cdP.getPhotoData());
             return export;
-        } else if (caseDataParc instanceof  DiagnosisParc) {
+        } else if (caseDataParc instanceof DiagnosisParc) {
             DiagnosisParc cdP = (DiagnosisParc) caseDataParc;
             Diagnosis export = new Diagnosis(cdP.getId(), cdP.getCreated(), mapToUser(cdP.getAuthor()), cdP.getMessage(), mapToIcd10DiagnosisList(cdP.getDiagnosisList()));
             return export;
-        } else if (caseDataParc instanceof  AdviceParc) {
+        } else if (caseDataParc instanceof AdviceParc) {
             AdviceParc cdP = (AdviceParc) caseDataParc;
             Advice export = new Advice(cdP.getId(), cdP.getCreated(), mapToUser(cdP.getAuthor()), cdP.getMessage(), mapToMedicationList(cdP.getMedications()));
             return export;
-        } else if (caseDataParc instanceof  CaseInfoParc) {
+        } else if (caseDataParc instanceof CaseInfoParc) {
             CaseInfoParc cdP = (CaseInfoParc) caseDataParc;
             CaseInfo export = new CaseInfo(cdP.getId(), cdP.getCreated(), mapToUser(cdP.getAuthor()), cdP.getLocalizations(), cdP.getPain(), cdP.getSize());
             return export;
-        } else if (caseDataParc instanceof  AnamnesisParc) {
+        } else if (caseDataParc instanceof AnamnesisParc) {
             AnamnesisParc cdP = (AnamnesisParc) caseDataParc;
             Anamnesis export = new Anamnesis(cdP.getId(), cdP.getCreated(), mapToUser(cdP.getAuthor()), cdP.getMessage(), mapToQuestionList(cdP.getQuestions()));
             return export;
@@ -265,7 +307,7 @@ public class ParcelableHelper {
 
         if (questionParc instanceof AnamnesisQuestionBoolParc) {
             return mapToQuestionBool((AnamnesisQuestionBoolParc) questionParc);
-        } else if (questionParc instanceof  AnamnesisQuestionTextParc){
+        } else if (questionParc instanceof AnamnesisQuestionTextParc) {
             return mapToQuestionBool((AnamnesisQuestionTextParc) questionParc);
         } else {
             return null;
@@ -346,8 +388,8 @@ public class ParcelableHelper {
         }
 
         if (userParc instanceof PatientParc) {
-            return mapToPatient((PatientParc)userParc);
-        } else if (userParc instanceof  PhysicianParc){
+            return mapToPatient((PatientParc) userParc);
+        } else if (userParc instanceof PhysicianParc) {
             return mapToPhysician((PhysicianParc) userParc);
         } else {
             return null;
@@ -392,7 +434,6 @@ public class ParcelableHelper {
         GeoLocation export = new GeoLocation(geoLocationParc.getName(), geoLocationParc.getLatitude(), geoLocationParc.getLongitude());
         return export;
     }
-
 
 
 }

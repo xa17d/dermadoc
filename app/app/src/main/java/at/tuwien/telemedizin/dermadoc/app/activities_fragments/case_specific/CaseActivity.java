@@ -34,7 +34,9 @@ import at.tuwien.telemedizin.dermadoc.app.R;
 import at.tuwien.telemedizin.dermadoc.app.activities_fragments.create_case.EditCaseActivity;
 import at.tuwien.telemedizin.dermadoc.app.activities_fragments.create_case.EditLocationFragment;
 import at.tuwien.telemedizin.dermadoc.app.activities_fragments.edit_case.AddPictureActivity;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.CaseListItem;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.CaseParc;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.NotificationParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.PatientParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.PhysicianParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.CaseDataParc;
@@ -42,6 +44,7 @@ import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.CaseInfoP
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.TextMessageParc;
 import at.tuwien.telemedizin.dermadoc.app.general_entities.BodyLocalization;
 import at.tuwien.telemedizin.dermadoc.app.general_entities.Case;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.Notification;
 import at.tuwien.telemedizin.dermadoc.app.general_entities.casedata.CaseData;
 import at.tuwien.telemedizin.dermadoc.app.helper.CaseDataExtractionHelper;
 import at.tuwien.telemedizin.dermadoc.app.helper.FormatHelper;
@@ -62,6 +65,7 @@ public class CaseActivity extends AppCompatActivity
 
 
     private CaseParc caseItem;
+    private List<NotificationParc> notifications;
     private PatientParc currentUser;
 
     private NavigationView navigationView;
@@ -80,6 +84,7 @@ public class CaseActivity extends AppCompatActivity
     private FloatingActionButton fab;
 
     private SendMessagesAsyncTask sendMessageTask;
+    private DeleteNotificationsAsyncTask deleteNotificationsAsyncTask;
 
     private CaseOverviewFragment overviewFragment;
     private CaseDataListFragment caseDataListFragment;
@@ -126,13 +131,16 @@ public class CaseActivity extends AppCompatActivity
             setTitle(title);
         }
 
+        notifications = new ArrayList<>();
         // load case
         Intent intent = getIntent();
-        Parcelable caseParcel = intent.getParcelableExtra(CaseParc.INTENT_KEY);
+        Parcelable caseListItemParcel = intent.getParcelableExtra(CaseListItem.INTENT_KEY);
         Parcelable currentUserParcel = intent.getParcelableExtra(USER_INTENT_KEY);
-        if (caseParcel != null) {
+        if (caseListItemParcel != null) {
 //            Log.d(LOG_TAG, "case-parcelable in intent != null -> casting");
-            caseItem = (CaseParc) caseParcel;
+            CaseListItem cli = (CaseListItem) caseListItemParcel;
+            caseItem = cli.getCaseItem();
+            notifications = cli.getNotifications();
         } else {
 //            Log.d(LOG_TAG, "case-parcelable == null -> exiting activity");
             Toast.makeText(getBaseContext(), getString(R.string.msg_err_item_not_received), Toast.LENGTH_LONG).show();
@@ -284,7 +292,9 @@ public class CaseActivity extends AppCompatActivity
     }
 
     private void syncData() {
-        // send data TODO
+        // send data
+        // -- only sent on request --
+
         // get data
         getDataFromServer();
     }
@@ -301,6 +311,16 @@ public class CaseActivity extends AppCompatActivity
         showProgress(true, infoText);
         loadCaseTask = new LoadCaseTask(this);
         loadCaseTask.execute(caseItem.getId());
+    }
+
+    public void deleteNotifications() {
+        Log.d(LOG_TAG, "deleteNotifications()");
+        String infoText = getString(R.string.option_delete_notifications);
+        showProgress(true, infoText);
+        deleteNotificationsAsyncTask = new DeleteNotificationsAsyncTask(this);
+        NotificationParc[] notificationsArray = new NotificationParc[notifications.size()];
+        notificationsArray = notifications.toArray(notificationsArray);
+        deleteNotificationsAsyncTask.execute(notificationsArray);
     }
 
     private void sendCaseDataMessages(List<CaseDataParc> messages) {
@@ -385,6 +405,12 @@ public class CaseActivity extends AppCompatActivity
     public CaseParc getCase() {
         return caseItem;
     }
+
+    @Override
+    public List<NotificationParc> getNotifications() {
+        return notifications;
+    }
+
 
     @Override
     public List<BodyLocalization> getBodyLocations() {
@@ -476,9 +502,14 @@ public class CaseActivity extends AppCompatActivity
             if (overviewFragment != null) {
                 overviewFragment.updateDataViews();
             }
+        } else if (task instanceof  DeleteNotificationsAsyncTask) {
+            deleteNotificationsAsyncTask = null;
+            if (overviewFragment != null) {
+                overviewFragment.updateDataViews();
+            }
         }
 
-        if (loadCaseTask == null && sendMessageTask == null) {
+        if (loadCaseTask == null && sendMessageTask == null && deleteNotificationsAsyncTask == null) {
             showProgress(false);
         }
     }
@@ -557,7 +588,7 @@ public class CaseActivity extends AppCompatActivity
     }
 
     /**
-     * sending the case to the server
+     * sending the caseData to the server
      * the user.
      */
     public class SendMessagesAsyncTask extends AsyncTask<CaseDataParc, Void, List<CaseData>> {
@@ -633,6 +664,81 @@ public class CaseActivity extends AppCompatActivity
         protected void onCancelled() {
             asyncTaskFinished(SendMessagesAsyncTask.this);
             Toast.makeText(getBaseContext(), "Sending data to the server was cancelled", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    /**
+     * sending the case to the server
+     * the user.
+     */
+    public class DeleteNotificationsAsyncTask extends AsyncTask<NotificationParc, Void, List<Notification>> {
+        private CaseActivity activity;
+
+        DeleteNotificationsAsyncTask(CaseActivity activity) {
+            this.activity = activity;
+        }
+
+        @Override
+        protected List<Notification> doInBackground(NotificationParc... params) {
+            Log.d(LOG_TAG, "doInBackground()");
+
+            List<NotificationParc> notificationToDeleteList = new ArrayList<>();
+
+            if (params == null || params.length <= 0) {
+                Log.d(LOG_TAG, "Insufficient Parameters! ABORT!");
+                return null;
+            }
+
+            notificationToDeleteList = Arrays.asList(params);
+            Log.d(LOG_TAG, "notificationToDeleteList.size() = " + notificationToDeleteList.size());
+
+            ServerInterface sI = ServerInterfaceFactory.getInstance();
+
+            // send case-data elements
+            List<Notification> notificationsToDelete = ParcelableHelper.mapToNotificationList(notificationToDeleteList);
+            List<Notification> notificationsNotDeleted = new ArrayList<>();
+            if (notificationsToDelete == null) {
+                Log.d(LOG_TAG, "notificationsToDelete - List is null! ABORT");
+                return null;
+            }
+
+            for (Notification nT : notificationsToDelete) {
+                Boolean resultSuccess = sI.deleteNotification(nT.getId()); // TODO check result?
+
+                if (resultSuccess == null || !resultSuccess) {
+                    Log.d(LOG_TAG, "not successful for " + nT.getId());
+                    notificationsNotDeleted.add(nT);
+                } else {
+                    Log.d(LOG_TAG, resultSuccess + "returned from server for " + nT.getId());
+                }
+            }
+
+
+
+            Log.d(LOG_TAG, "end doInBackground(), notificationsNotDeleted.size()=" + notificationsNotDeleted.size());
+            return notificationsNotDeleted;
+        }
+
+        @Override
+        protected void onPostExecute(List<Notification> notificationsNotDeleted) {
+            Log.d(LOG_TAG, "onPostExecute() ");
+
+            if (notificationsNotDeleted!=null) {
+                Log.d(LOG_TAG, "notificationsNotDeleted!= null");
+
+                List<NotificationParc> notificationsNotDeletedParc = ParcelableHelper.mapToNotificationParcList(notificationsNotDeleted);
+                CaseActivity.this.notifications = notificationsNotDeletedParc;
+            }
+
+            asyncTaskFinished(DeleteNotificationsAsyncTask.this);
+            Toast.makeText(getBaseContext(), "Notifications were delted from the server", Toast.LENGTH_LONG).show();
+
+        }
+
+        @Override
+        protected void onCancelled() {
+            asyncTaskFinished(DeleteNotificationsAsyncTask.this);
+            Toast.makeText(getBaseContext(), "Deleting notifications was cancelled", Toast.LENGTH_LONG).show();
         }
     }
 }

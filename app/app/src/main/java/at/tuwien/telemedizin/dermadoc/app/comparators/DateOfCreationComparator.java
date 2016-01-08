@@ -6,7 +6,12 @@ import java.util.Comparator;
 /**
  * Created by FAUser on 18.11.2015.
  */
-public class CaseDateOfCreationComparator implements Comparator<Calendar> {
+public class DateOfCreationComparator implements Comparator<Calendar> {
+
+    boolean newestFirst = false;
+    public DateOfCreationComparator(boolean newestFirst) {
+        this.newestFirst = newestFirst;
+    }
 
 
     @Override
@@ -24,6 +29,11 @@ public class CaseDateOfCreationComparator implements Comparator<Calendar> {
                 compResult = -1;
             } else {
                 compResult = lhs.compareTo(rhs);
+                // if newest first switch
+                if (newestFirst) {
+                    compResult = compResult * (-1);
+                }
+
             }
         }
         return compResult;

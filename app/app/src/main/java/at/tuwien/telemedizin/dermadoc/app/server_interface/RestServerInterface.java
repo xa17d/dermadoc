@@ -16,6 +16,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.List;
 
 import at.tuwien.telemedizin.dermadoc.app.general_entities.Case;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.Notification;
 import at.tuwien.telemedizin.dermadoc.app.general_entities.Physician;
 import at.tuwien.telemedizin.dermadoc.app.general_entities.User;
 import at.tuwien.telemedizin.dermadoc.app.general_entities.casedata.CaseData;
@@ -23,6 +24,7 @@ import at.tuwien.telemedizin.dermadoc.app.general_entities.rest.AuthenticationDa
 import at.tuwien.telemedizin.dermadoc.app.general_entities.rest.AuthenticationToken;
 import at.tuwien.telemedizin.dermadoc.app.general_entities.rest.CaseDataList;
 import at.tuwien.telemedizin.dermadoc.app.general_entities.rest.CaseList;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.rest.NotificationList;
 import at.tuwien.telemedizin.dermadoc.app.general_entities.rest.PhysicianList;
 
 /**
@@ -38,10 +40,13 @@ public class RestServerInterface implements ServerInterface {
     public static final String GET_CASES_URL = "/cases";
     public static final String GET_CASE_DATA_URL = "/data";
     public static final String GET_PHYSICIANS = "/physicians";
+    public static final String GET_NOTIFICATIONS = "/notifications";
     public static final String AUTHORIZATION_HEADER_PREFIX = "Authorization";
 
     public static final String POST_CASE_URL = "/cases";
     public static final String POST_CASE_DATA_URL = "/data";
+
+    public static final String DELETE_NOTIFICATIONS = "/notifications";
 
     public static final String HEADER_AUTH_TYPE_ELEMENT = "type";
     public static final String HEADER_AUTH_TOKEN_ELEMENT = "token";
@@ -462,6 +467,104 @@ public class RestServerInterface implements ServerInterface {
             Log.e(LOG_TAG, "exception: " + e.getLocalizedMessage(), e);
             return null;
         }
+
+        return null;
+    }
+
+    @Override
+    public List<Notification> getNotifications() {
+        Log.d(LOG_TAG, "getNotifications()");
+        // check if an authentication-token exists
+        if (authToken == null || authToken.getToken() == null) {
+            Log.d(LOG_TAG, "No Authentication Token - ABORT!");
+            // TODO error? msg?
+            return null;
+        }
+
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+
+
+        ResponseEntity<NotificationList> responseEntity;
+
+        try {
+
+            responseEntity = restTemplate.exchange(url + GET_NOTIFICATIONS, HttpMethod.GET, getAuthGETEntity(), NotificationList.class);
+
+            if (responseEntity!=null) {
+                Log.d(LOG_TAG, "responseEntity!=null " + responseEntity.getStatusCode());
+                if (responseEntity.getStatusCode() == HttpStatus.OK) {
+                    Log.d(LOG_TAG, "NotificationList != null:" + (responseEntity.getBody() != null));
+                    return responseEntity.getBody();
+                }
+
+            } else {
+                Log.d(LOG_TAG, "responseEntity==null ");
+                return null;
+            }
+
+
+        } catch (HttpClientErrorException e) {
+            Log.e(LOG_TAG, "exception: " + e.getLocalizedMessage(), e);
+            return null;
+        } catch (ResourceAccessException e) {
+            Log.e(LOG_TAG, "exception: " + e.getLocalizedMessage(), e);
+            return null;
+        } catch (Exception e) {
+            // catch all other exception to prevent the app from crashing
+            Log.e(LOG_TAG, "exception: " + e.getLocalizedMessage(), e);
+            return null;
+        }
+
+
+        return null;
+    }
+
+    @Override
+    public Boolean deleteNotification(long notificationId) {
+        Log.d(LOG_TAG, "deleteNotification(): " + notificationId);
+        // check if an authentication-token exists
+        if (authToken == null || authToken.getToken() == null) {
+            Log.d(LOG_TAG, "No Authentication Token - ABORT!");
+            // TODO error? msg?
+            return null;
+        }
+
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+
+
+        ResponseEntity<Boolean> responseEntity;
+
+        try {
+
+            String deleteNoUrl = url + GET_NOTIFICATIONS + "/" + notificationId;
+            responseEntity = restTemplate.exchange(deleteNoUrl, HttpMethod.DELETE, getAuthGETEntity(), Boolean.class);
+
+            if (responseEntity!=null) {
+                Log.d(LOG_TAG, "responseEntity!=null " + responseEntity.getStatusCode());
+                if (responseEntity.getStatusCode() == HttpStatus.OK) {
+                    return responseEntity.getBody();
+                }
+
+            } else {
+                Log.d(LOG_TAG, "responseEntity==null ");
+                return null;
+            }
+
+
+        } catch (HttpClientErrorException e) {
+            Log.e(LOG_TAG, "exception: " + e.getLocalizedMessage(), e);
+            return null;
+        } catch (ResourceAccessException e) {
+            Log.e(LOG_TAG, "exception: " + e.getLocalizedMessage(), e);
+            return null;
+        } catch (Exception e) {
+            // catch all other exception to prevent the app from crashing
+            Log.e(LOG_TAG, "exception: " + e.getLocalizedMessage(), e);
+            return null;
+        }
+
 
         return null;
     }

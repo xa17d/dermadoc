@@ -44,6 +44,7 @@ import at.tuwien.telemedizin.dermadoc.app.entities.PictureHelperEntity;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.CaseParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.PatientParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.PhysicianParc;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.UserParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.AnamnesisParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.CaseDataParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.CaseInfoParc;
@@ -70,6 +71,7 @@ public class EditCaseActivity extends AppCompatActivity implements OnCaseDataReq
 
     public static final String NEW_CASE_FLAG_INTENT_KEY = EditCaseActivity.class.getSimpleName() + "newCase";
     public static final String CASE_FLAG_INTENT_KEY = EditCaseActivity.class.getSimpleName() + "case";
+    public static final String USER_FLAG_INTENT_KEY = EditCaseActivity.class.getSimpleName() + "user";
     public static final String CASE_DATA_LIST_INTENT_KEY = EditCaseActivity.class.getSimpleName() + "caseDataList";
 
     public static final int REQUEST_CAMERA = 1;
@@ -125,6 +127,7 @@ public class EditCaseActivity extends AppCompatActivity implements OnCaseDataReq
         // get the newCase Flag
         Intent intent = getIntent();
         newCase = intent.getBooleanExtra(NEW_CASE_FLAG_INTENT_KEY, true);
+        PatientParc cUser = null;
 
         if (!newCase) {
             // get Case info
@@ -132,8 +135,20 @@ public class EditCaseActivity extends AppCompatActivity implements OnCaseDataReq
             if (caseParcel != null) {
                 Log.d(LOG_TAG, "caseParcel != null");
                 caseItem = (CaseParc) caseParcel;
+                cUser = caseItem.getPatient();
+            }
+        } else {
+            // get Case info
+            Parcelable userParcel = intent.getParcelableExtra(USER_FLAG_INTENT_KEY);
+            if (userParcel != null) {
+                Log.d(LOG_TAG, "userParcel != null");
+                cUser = (PatientParc) userParcel;
             }
         }
+
+
+
+
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -173,7 +188,7 @@ public class EditCaseActivity extends AppCompatActivity implements OnCaseDataReq
         currentErrorList = new ArrayList<>(); // empty list
 
         // TODO change to this user
-        setUpData();
+        setUpData(cUser);
     }
 
     private void addFragmentsToAdapter(NewCasePagerAdapter adapter, boolean bNewCase) {
@@ -213,19 +228,16 @@ public class EditCaseActivity extends AppCompatActivity implements OnCaseDataReq
         adapter.addFragments(fragmentList, titleList);
     }
 
-    private void setUpData() {
+    private void setUpData(PatientParc cUser) {
         ContentProvider cP = ContentProviderFactory.getContentProvider();
 
         defaultAnamnesis = cP.getAnamnesisForm(); // TODO get data from server?
-        PatientParc user = cP.getCurrentUser(); // TODO get data from ?
         Calendar cal = Calendar.getInstance();
 
         if (newCase) {
-            caseItem = new CaseParc(-1, user, cal);
+            caseItem = new CaseParc(-1, cUser, cal);
         }
 
-
-        // TODO get data from server
         nearbyPhysicians = new ArrayList<>();
         if (newCase) {
             loadPhysicianList();

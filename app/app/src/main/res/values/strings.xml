@@ -37,6 +37,8 @@
     <string name="label_date_of_author">Author</string>
     <string name="label_date_of_id">ID</string>
     <string name="label_last_modified">Last modified</string>
+    <string name="label_nb_notifications">Nb of notifications</string>
+
     <string name="label_physician">Physician</string>
     <string name="label_case_status">Status</string>
     <string name="label_patient">Patient</string>
@@ -48,6 +50,10 @@
     <string name="msg_err_item_not_received">There was an error receiving the selected Item</string>
     <string name="msg_err_no_status">no status</string>
     <string name="title_activity_login">Sign in</string>
+
+    <string name="msg_press_back_to_exit">Press BACK again to logout and exit</string>
+    <string name="msg_no_internet_connection_available">No Internet Connection!</string>
+    <string name="label_no_results">No Results</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
@@ -147,10 +153,14 @@
     <string name="option_loading_case_list_data_insert">Case-List</string> <!-- content for placeholder string - select this option at runtime -->
     <string name="option_loading_physician_list_insert">Physician-List</string>
     <string name="option_loading_case_data_insert">Case-Data</string>
+    <string name="option_delete_notifications">Deleting Notifications</string>
     <string name="option_loading_physician_data_insert">Physician-List</string> <!-- content for placeholder string - select this option at runtime -->
+    <string name="option_loading_notification_list_insert">Notification-List</string>
 
     <string name="label_symtom_description_text_header">Symptom Description: \n %1$s</string> <!-- placeholder string - fill at runtime -->
     <string name="symptom_description_validation_helper_text">Symptom Description: </string> <!-- should be the above string without placeholder. For validation purpose -->
+
+    <string name="label_delete_notifications">Delete Notifications</string>
 
     <string name="hint_progress_collecting_data">collecting data</string>
     <string name="hint_progress_checking_data">checking data</string>
@@ -182,6 +192,9 @@
     <string name="option_continue">Continue</string>
 
     <string name="header_case_basic_infos">Basic Data</string>
+    <string name="header_case_notification_infos">Notifications</string>
+
+    <string name="hint_no_notifications">no notifications</string>
 
     <string name="label_edit_basic_case_data_button">Edit Basic Data</string>
 

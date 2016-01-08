@@ -1,9 +1,7 @@
 package at.tuwien.telemedizin.dermadoc.app.comparators;
 
-import java.util.Calendar;
 import java.util.Comparator;
 
-import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.CaseParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.CaseDataParc;
 
 /**
@@ -11,7 +9,7 @@ import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.CaseDataP
  */
 public class CaseDataDateOfCreationComparator implements Comparator<CaseDataParc> {
 
-    private CaseDateOfCreationComparator dateOfCreationComparator = new CaseDateOfCreationComparator();
+    private DateOfCreationComparator dateOfCreationComparator = new DateOfCreationComparator(false);
 
     @Override
     public int compare(CaseDataParc lhs, CaseDataParc rhs) {
@@ -22,4 +20,7 @@ public class CaseDataDateOfCreationComparator implements Comparator<CaseDataParc
     private int compareDateOfCreation(CaseDataParc lhs, CaseDataParc rhs) {
         return dateOfCreationComparator.compare(lhs.getCreated(), rhs.getCreated());
     }
+
+
+
 }

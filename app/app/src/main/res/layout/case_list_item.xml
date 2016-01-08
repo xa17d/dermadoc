@@ -148,16 +148,16 @@
             <TableRow>
 
                 <TextView
-                    android:id="@+id/case_item_last_modified_label"
+                    android:id="@+id/case_item_nb_notifications_label"
                     style="@style/CaseListItemSecondaryInfo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:singleLine="true"
-                    android:text="@string/label_last_modified" />
+                    android:text="@string/label_nb_notifications" />
 
                 <TextView
-                    android:id="@+id/case_item_last_modified"
+                    android:id="@+id/case_item_nb_notifications"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

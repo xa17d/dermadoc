@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -33,11 +34,12 @@ import at.tuwien.telemedizin.dermadoc.app.activities_fragments.login.LoginActivi
 import at.tuwien.telemedizin.dermadoc.app.adapters.MyCasesPagerEnum;
 import at.tuwien.telemedizin.dermadoc.app.comparators.CaseSortCategory;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.CaseParc;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.NotificationParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.PatientParc;
 import at.tuwien.telemedizin.dermadoc.app.general_entities.Case;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.Notification;
 import at.tuwien.telemedizin.dermadoc.app.general_entities.Patient;
 import at.tuwien.telemedizin.dermadoc.app.general_entities.User;
-import at.tuwien.telemedizin.dermadoc.app.general_entities.casedata.TextMessage;
 import at.tuwien.telemedizin.dermadoc.app.helper.ParcelableHelper;
 import at.tuwien.telemedizin.dermadoc.app.server_interface.RestServerInterface;
 import at.tuwien.telemedizin.dermadoc.app.server_interface.ServerInterface;
@@ -49,11 +51,15 @@ public class MainActivity extends AppCompatActivity
 
     public static final String LOG_TAG = MainActivity.class.getSimpleName();
 
+    boolean doubleBackToExitPressedOnce = false;
+
     private Patient user; // the currently active user
 
     private List<CaseParc> currentCaseList;
     private List<CaseParc> closedCaseList;
     private ServerInterface serverInterface;
+
+    private List<NotificationParc> currentNotificationList;
 
 
     private CaseSortCategory caseListSortCategory; // set when a sort is executed
@@ -65,8 +71,11 @@ public class MainActivity extends AppCompatActivity
     private RelativeLayout loadingProgressLayout;
     private TextView loadingProgressInfoTextView;
 
+    private FloatingActionButton fab;
+
     private LoadUserDataTask loadUserDataTask;
     private LoadCaseListDataTask loadCurrentCaseListDataTask;
+    private LoadNotificationsTask loadCurrentNotificationsTask;
 
     private PatientParc currentUser;
 
@@ -83,7 +92,7 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -136,17 +145,7 @@ public class MainActivity extends AppCompatActivity
 
         Log.d(LOG_TAG, "serverInterface - authToken?: " + ((RestServerInterface) serverInterface).hasAuthToken());
 
-        // TODO
-
-//        getDataFromServer(); // in onResume
-
-        // TODO for testing purpose - remove or replace
-//        ContentProvider cP = ContentProviderFactory.getContentProvider();
-//        currentCaseList = cP.getCurrentCasesOfUser();
-//        closedCaseList = cP.getCurrentCasesOfUser();
-//
-//
-//        currentUser = cP.getCurrentUser();
+        currentNotificationList = new ArrayList<>();
     }
 
     /**
@@ -168,6 +167,9 @@ public class MainActivity extends AppCompatActivity
 
         // 2. load user Data
         loadUserData();
+
+        // 3. load Notifications
+        loadNotificationList();
     }
 
     private void loadUserData() {
@@ -186,13 +188,38 @@ public class MainActivity extends AppCompatActivity
         loadCurrentCaseListDataTask.execute((Void) null);
     }
 
+    private void loadNotificationList() {
+        Log.d(LOG_TAG, "loadNotificationList()");
+        String infoText = getString(R.string.label_loading_data_dynamic, getString(R.string.option_loading_notification_list_insert));
+        showProgress(true, infoText);
+        loadCurrentNotificationsTask = new LoadNotificationsTask(this);
+        loadCurrentNotificationsTask.execute((Void) null);
+    }
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            // press twice to exit
+            if (doubleBackToExitPressedOnce) {
+//                super.onBackPressed();
+                performLogout();
+                return;
+            }
+
+            this.doubleBackToExitPressedOnce = true;
+            Toast.makeText(this, getString(R.string.msg_press_back_to_exit), Toast.LENGTH_SHORT).show();
+
+            new Handler().postDelayed(new Runnable() {
+
+                @Override
+                public void run() {
+                    doubleBackToExitPressedOnce=false;
+                }
+            }, 2000);
+
         }
     }
 
@@ -242,11 +269,13 @@ public class MainActivity extends AppCompatActivity
         Fragment fragment = null;
         String title = getString(R.string.app_name);
         CharSequence oldTitle = getTitle();
+        fab.setVisibility(View.GONE);
 
         if (id == R.id.nav_my_cases) {
             fragment = MyCasesFragment.newInstance();
             title = getString(R.string.nav_my_cases);
             sortMenuItem.setVisible(true);
+            fab.setVisibility(View.VISIBLE);
 
         } else if (id == R.id.nav_my_account) {
 
@@ -259,7 +288,6 @@ public class MainActivity extends AppCompatActivity
             // TODO not as fragment - implement as own activity
             title = oldTitle.toString();
         } else if (id == R.id.nav_logout) {
-            Toast.makeText(getBaseContext(), "You are not even logged in yet!", Toast.LENGTH_LONG).show(); // TODO replace with real fragment/function
             performLogout();
         }
 
@@ -302,6 +330,11 @@ public class MainActivity extends AppCompatActivity
             // nothing matched ...
             return null;
         }
+    }
+
+    @Override
+    public List<NotificationParc> onNotificationsRequest() {
+        return currentNotificationList;
     }
 
     @Override
@@ -372,24 +405,23 @@ public class MainActivity extends AppCompatActivity
            loadUserDataTask = null;
         } else if (task instanceof LoadCaseListDataTask) {
             loadCurrentCaseListDataTask = null;
-            // inform adapter that case list has changed
 
+        } else if (task instanceof LoadNotificationsTask) {
+            loadCurrentNotificationsTask = null;
         }
 
         if (loadUserDataTask == null
-                && loadCurrentCaseListDataTask == null) {
+                && loadCurrentCaseListDataTask == null
+                && loadCurrentNotificationsTask == null) {
             showProgress(false);
         }
     }
 
     /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
+     * Represents an asynchronous taks that laods the detailed user data of the current user
      */
     public class LoadUserDataTask extends AsyncTask<Void, Void, Patient> {
         private MainActivity activity;
-
-        private String outp;
 
         LoadUserDataTask(MainActivity activity) {
             this.activity = activity;
@@ -434,8 +466,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
+     * Represents an asynchronous task that loads the case list for the current user
      */
     public class LoadCaseListDataTask extends AsyncTask<Void, Void, List<Case>> {
         private MainActivity activity;
@@ -475,6 +506,9 @@ public class MainActivity extends AppCompatActivity
                 if (fragmentCurrentCaseList != null) {
                     fragmentCurrentCaseList.informCaseListChanged();
                 }
+                if (fragmentOldCaseList != null) {
+                    fragmentOldCaseList.informCaseListChanged();
+                }
 
             }
 
@@ -491,5 +525,61 @@ public class MainActivity extends AppCompatActivity
     @Override
     public PatientParc getUser() {
         return currentUser;
+    }
+
+    /**
+     * Represents an asynchronous taks that loads all notifications
+     */
+    public class LoadNotificationsTask extends AsyncTask<Void, Void, List<Notification>> {
+        private MainActivity activity;
+
+        LoadNotificationsTask(MainActivity activity) {
+            this.activity = activity;
+        }
+
+        @Override
+        protected List<Notification> doInBackground(Void... params) {
+            Log.d(LOG_TAG, "doInBackground()");
+
+
+            ServerInterface sI = ServerInterfaceFactory.getInstance();
+            List<Notification> notificationList = sI.getNotifications();
+            if (notificationList != null) {
+                Log.d(LOG_TAG, "notificationList.size(): " + notificationList.size());
+                return notificationList;
+
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(final List<Notification> list) {
+            Log.d(LOG_TAG,"onPostExecute()");
+
+            if (list == null) {
+                Log.d(LOG_TAG,"list == null");
+
+            } else {
+                currentNotificationList = ParcelableHelper.mapToNotificationParcList(list);
+                Log.d(LOG_TAG, "currentNotificationList.size(): " + currentNotificationList.size());
+                // inform the list-holde fragment, that the list changed
+                if (fragmentCurrentCaseList != null) {
+                    fragmentCurrentCaseList.informNotificationListChanged();
+                }
+                if (fragmentOldCaseList != null) {
+                    fragmentOldCaseList.informNotificationListChanged();
+                }
+
+            }
+
+
+            asyncTaskFinished(LoadNotificationsTask.this);
+        }
+
+        @Override
+        protected void onCancelled() {
+            asyncTaskFinished(LoadNotificationsTask.this);
+        }
     }
 }
