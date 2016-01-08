@@ -43,12 +43,14 @@ public class CaseDataController {
     private void prepareInsert(User user, CaseData caseData) {
         caseData.setAuthor(user);
         caseData.setCreated(GregorianCalendar.getInstance());
+        caseData.setId(null); // create automatically
     }
 
     @RequestMapping(value = "/cases/{caseId}/data", method = RequestMethod.GET)
     @AccessUser
     public CaseDataList getCaseData(@CurrentUser User user, @PathVariable long caseId) {
         Case c = caseRepository.getCaseById(caseId);
+        if (c == null) { throw new EntityNotFoundException("id does not exist"); }
         checkAccess(user, c);
         return new CaseDataList(caseDataRepository.listCaseDataByUserAndCase(caseId, user.getId()));
     }
@@ -57,11 +59,11 @@ public class CaseDataController {
     @AccessUser
     public CaseData insertCaseData(@CurrentUser User user, @PathVariable long caseId, @RequestBody CaseData caseData) {
         Case c = caseRepository.getCaseById(caseId);
+        if (c == null) { throw new EntityNotFoundException("id does not exist"); }
         checkAccess(user, c);
         prepareInsert(user, caseData);
         caseData.setCase(c);
         caseData = caseDataRepository.save(caseData);
-        // caseDataDao.insert(caseId, caseData);
 
         // send notification
         notificationService.notifyCase(c, user, user.getName()+" posted in \""+c.getName()+"\"");

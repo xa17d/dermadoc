@@ -54,6 +54,7 @@ public class CaseController {
     public Case listCases(@CurrentUser User user, @PathVariable long caseId) {
 
         Case c = caseRepository.getCaseById(caseId);
+        if (c == null) { throw new EntityNotFoundException("id does not exist"); }
 
         if (Access.canAccess(user, c)) {
             return c;
@@ -100,6 +101,7 @@ public class CaseController {
 
         newCase.setPatient(patient); // just to be sure the user doesn't fake this property
         newCase.setCreated(GregorianCalendar.getInstance()); // set to now
+        newCase.setId(null); // create id automatically
 
         // set correct status
         if (newCase.getPhysician() == null) {

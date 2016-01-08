@@ -72,4 +72,8 @@ public class TokenService {
     public Authentication retrieve(String token) {
         return tokens.get(token);
     }
+
+    public void evict(String token) {
+        tokens.remove(token);
+    }
 }

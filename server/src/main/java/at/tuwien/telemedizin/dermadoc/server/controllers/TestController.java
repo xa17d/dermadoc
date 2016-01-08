@@ -34,18 +34,7 @@ public class TestController {
 
     @RequestMapping(value = "/")
     public String helloWorld() {
-
         return "<html><h1>Hello Derma Doc</h1><p>JSON + DB</p></html>";
-
-    }
-
-    private void mockDataToDb() {
-        userRepository.save(MockData.users);
-        for (Case c: MockData.cases) {
-            caseRepository.save(c);
-
-            caseDataRepository.save(MockData.caseData.get(c.getId()));
-        }
     }
 
     @RequestMapping(value = "/testpatient")
