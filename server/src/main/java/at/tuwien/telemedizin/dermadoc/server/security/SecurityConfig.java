@@ -15,6 +15,7 @@ import org.springframework.security.config.annotation.web.servlet.configuration.
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -43,6 +44,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 and().
                 //anonymous().disable().
                 exceptionHandling().authenticationEntryPoint(unauthorizedEntryPoint());
+
+        http.logout().disable(); // i want to handle logout in my controller, and not use the spring security logout
 
         http.addFilterBefore(new AuthenticationFilter(authenticationManager(), tokenService), BasicAuthenticationFilter.class);
     }
