@@ -1,6 +1,7 @@
 package at.tuwien.telemedizin.dermadoc.server.persistence.dao.hibernate;
 
 import at.tuwien.telemedizin.dermadoc.entities.Case;
+import at.tuwien.telemedizin.dermadoc.entities.Physician;
 import at.tuwien.telemedizin.dermadoc.entities.User;
 import at.tuwien.telemedizin.dermadoc.entities.casedata.CaseData;
 import at.tuwien.telemedizin.dermadoc.entities.casedata.CaseInfo;
@@ -15,9 +16,11 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.util.Calendar;
 
-/**
- * Created by Lilly on 22.12.2015.
- */
+/*
+*
+ * Created by Lilly on 22.12.2015.*/
+
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
@@ -32,40 +35,56 @@ public class CaseDataRepositoryTest {
 	@Autowired
 	CaseRepository caseRepository;
 
+	CaseData savedCaseData;
+
 	@Test
 	public void testSaveCaseData() throws  Exception {
+
+		Physician author1 = new Physician();
+		author1.setMail("authorMail1");
+		author1.setPassword("qweqwe");
+		author1 = userRepository.save(author1);
+
+		Case testCase = new Case();
+		testCase.setPhysician(author1);
+		testCase.setName("sldjflsdjf");
+		testCase = caseRepository.save(testCase);
+
 		CaseData testCaseData = new CaseInfo();
 
-		User author =  userRepository.getUserById(26);
-		testCaseData.setAuthor(author);
+		testCaseData.setAuthor(author1);
 		Calendar today = Calendar.getInstance();
 		today.set(Calendar.HOUR_OF_DAY, 0);
 		testCaseData.setCreated(today);
 		testCaseData.setPrivate(false);
-		Case testCase = caseRepository.getCaseById(3);
+
+
+		//	CaseInfo version = (CaseInfo) caseDataRepository.getById(1);
+		//	testCaseData.setNextVersion(version);
 		testCaseData.setCase(testCase);
-	//	CaseInfo version = (CaseInfo) caseDataRepository.getById(1);
-	//	testCaseData.setNextVersion(version);
+		savedCaseData = caseDataRepository.save(testCaseData);
 
-		caseDataRepository.save(testCaseData);
-
-		CaseData c = caseDataRepository.getById(1);
-		Assert.assertEquals(c.getCase(), testCaseData.getCase());
+		CaseData c = caseDataRepository.getById(savedCaseData.getId());
+		Assert.assertEquals(c.getCase(), savedCaseData.getCase());
 	}
 
-	@Test
-	public void listCaseDataByUserAndCaseTest() throws Exception {
-		long caseId = 3;
-		long authorId = 26;
-		Iterable<CaseData> c = caseDataRepository.listCaseDataByUserAndCase(caseId, authorId);
-	}
+//	@Test
+//	public void listCaseDataByUserAndCaseTest() throws Exception {
+//		Physician author = new Physician();
+//		author = (Physician) userRepository.getUserByMail("authorMail2");
+//
+//		long caseId = 2;
+//		long authorId = author.getId();
+//		Iterable<CaseData> c = caseDataRepository.listCaseDataByUserAndCase(caseId, authorId);
+//		Assert.assertNotNull(c);
+//	}
 
 @Test
 public void testGetByAuthor() throws Exception {
-	User author = userRepository.getUserById(26);
+	User author = userRepository.getUserByMail("authorMail1");
+
 	CaseData caseByAuthor = caseDataRepository.getByAuthor(author);
-	Case checkCase = caseRepository.getCaseById(3);
-	Assert.assertEquals(caseByAuthor.getCase(), checkCase);
+	Assert.assertNotNull(caseByAuthor);
 }
 
 }

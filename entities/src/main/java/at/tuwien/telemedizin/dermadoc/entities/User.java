@@ -20,14 +20,14 @@ import javax.persistence.*;
 public abstract class User {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "person_id")
     private Long id;
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
-    public void setId(long id) { setId(new Long(id)); }
+    // public void setId(long id) { setId(new Long(id)); }
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String mail;
     public String getMail() { return mail; }
     public void setMail(String mail) { this.mail = mail; }

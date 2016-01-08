@@ -25,6 +25,7 @@ public class Case {
     public Case() { }
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "case_id")
     private Long id;
     public Long getId() { return id; }

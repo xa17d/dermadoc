@@ -5,7 +5,7 @@ import at.tuwien.telemedizin.dermadoc.entities.Patient;
 import at.tuwien.telemedizin.dermadoc.entities.Physician;
 import at.tuwien.telemedizin.dermadoc.entities.User;
 import at.tuwien.telemedizin.dermadoc.server.Application;
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +16,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 /**
  * Created by Lilly on 31.12.2015.
  */
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
@@ -39,20 +40,20 @@ public class CaseRepositoryTest {
 		patient.setMail("testmail244");
 		patient.setPassword("12345");
 		patient.setSvnr("4016");
-		userRepository.save(patient);
+		patient = userRepository.save(patient);
 
 
 		physician.setMail("testmail3344");
 		physician.setPassword("12345");
-		userRepository.save(physician);
+		physician = userRepository.save(physician);
 
 		c.setPatient(patient);
 		c.setPhysician(physician);
 
 
-		caseRepository.save(c);
+		c = caseRepository.save(c);
 
-		Case returnedCase = caseRepository.getCaseById(3);
+		Case returnedCase = caseRepository.getCaseById(c.getId());
 		Assert.assertEquals(returnedCase, c);
 
 	}

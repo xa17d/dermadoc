@@ -42,6 +42,7 @@ public abstract class CaseData {
     public CaseData() { }
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "casedata_id")
     private Long id;
     public Long getId() { return id; }

@@ -1,3 +1,4 @@
+/*
 package at.tuwien.telemedizin.dermadoc.server.persistence.dao.mock;
 
 import at.tuwien.telemedizin.dermadoc.entities.Case;
@@ -10,9 +11,11 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.List;
 
+*/
 /**
  * Created by daniel on 01.12.2015.
- */
+ *//*
+
 @Repository
 public class NotificationDaoMock implements NotificationDao {
 
@@ -67,3 +70,4 @@ public class NotificationDaoMock implements NotificationDao {
     }
 
 }
+*/

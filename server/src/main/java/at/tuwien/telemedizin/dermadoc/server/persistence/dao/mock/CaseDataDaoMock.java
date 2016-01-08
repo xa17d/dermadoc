@@ -1,3 +1,4 @@
+/*
 package at.tuwien.telemedizin.dermadoc.server.persistence.dao.mock;
 
 import at.tuwien.telemedizin.dermadoc.entities.Case;
@@ -7,9 +8,11 @@ import org.springframework.stereotype.Repository;
 
 import java.util.*;
 
+*/
 /**
  * Created by daniel on 30.11.2015.
- */
+ *//*
+
 @Repository
 public class CaseDataDaoMock implements CaseDataDao {
 
@@ -80,3 +83,4 @@ public class CaseDataDaoMock implements CaseDataDao {
     }
 
 }
+*/

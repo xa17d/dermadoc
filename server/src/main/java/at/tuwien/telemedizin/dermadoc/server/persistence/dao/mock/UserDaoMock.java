@@ -1,3 +1,4 @@
+/*
 package at.tuwien.telemedizin.dermadoc.server.persistence.dao.mock;
 
 import at.tuwien.telemedizin.dermadoc.entities.Physician;
@@ -9,9 +10,11 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.List;
 
+*/
 /**
  * Created by daniel on 23.11.2015.
- */
+ *//*
+
 @Repository
 public class UserDaoMock implements UserDao {
     public UserDaoMock() {
@@ -54,3 +57,4 @@ public class UserDaoMock implements UserDao {
         return result;
     }
 }
+*/

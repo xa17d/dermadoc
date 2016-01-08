@@ -1,3 +1,4 @@
+/*
 package at.tuwien.telemedizin.dermadoc.server.persistence.dao.mock;
 
 import at.tuwien.telemedizin.dermadoc.entities.*;
@@ -5,9 +6,11 @@ import at.tuwien.telemedizin.dermadoc.entities.casedata.*;
 
 import java.util.*;
 
+*/
 /**
  * Created by daniel on 27.11.2015.
- */
+ *//*
+
 public class MockData {
 
     // Create Mocked data
@@ -103,3 +106,4 @@ public class MockData {
     }
 
 }
+*/

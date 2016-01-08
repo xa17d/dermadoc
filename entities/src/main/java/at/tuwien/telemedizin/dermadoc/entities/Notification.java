@@ -1,8 +1,6 @@
 package at.tuwien.telemedizin.dermadoc.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * Created by Lucas on 17.11.2015.
@@ -12,6 +10,7 @@ import javax.persistence.Table;
 public class Notification {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
