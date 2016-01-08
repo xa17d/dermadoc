@@ -85,6 +85,19 @@ public class ParcelableHelper {
         return userParcList;
     }
 
+    public static List<Physician> mapPhysicianParcList(List<PhysicianParc> userParcList) {
+
+        if (userParcList == null) {
+            return null;
+        }
+
+        List<Physician> userList = new ArrayList<>();
+        for (PhysicianParc u : userParcList) {
+            userList.add(mapToPhysician(u));
+        }
+        return userList;
+    }
+
     public static UserParc mapUserToUserParc(User user) {
         // as user is abstract, its type has to be considered
         if (user instanceof Patient) {
@@ -93,6 +106,7 @@ public class ParcelableHelper {
             return new PhysicianParc((Physician) user);
         }
     }
+
 
     public static List<MedicationParc> mapMedicationToParc(List<Medication> medications) {
 

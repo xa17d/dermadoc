@@ -16,6 +16,7 @@ public class CaseListItemComparator implements Comparator<CaseListItem> {
     // multiple Comparators, because multiple ways to sort case-items
     private CaseStatusComparator statusComparator = new CaseStatusComparator();
     private DateOfCreationComparator dateOfCreationComparator = new DateOfCreationComparator(true);
+    private CaseListItemNotificationComparator notificationComparator = new CaseListItemNotificationComparator();
 
     private CaseSortCategory activeCategory = CaseSortCategory.STATUS; // default category
 
@@ -38,6 +39,8 @@ public class CaseListItemComparator implements Comparator<CaseListItem> {
             compResult = compareDateOfCreation(lhs, rhs);
         } else if (activeCategory == CaseSortCategory.LAST_MODIFIED) {
             compResult = compareLastModified(lhs, rhs);
+        } else if (activeCategory == CaseSortCategory.NOTIFICATIONS) {
+            compResult = notificationComparator.compare(lhsCLI.getNotifications(), rhsCLI.getNotifications());
         }
 
         // if equal, take ID as secondary parameter

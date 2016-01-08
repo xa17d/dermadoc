@@ -9,5 +9,6 @@ public enum CaseSortCategory {
     ID,
     STATUS,
     DATE_OF_CREATION,
-    LAST_MODIFIED;
+    LAST_MODIFIED,
+    NOTIFICATIONS;
 }

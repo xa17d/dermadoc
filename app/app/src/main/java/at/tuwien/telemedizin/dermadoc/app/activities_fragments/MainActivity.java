@@ -59,7 +59,6 @@ public class MainActivity extends AppCompatActivity
 
     private List<CaseParc> currentCaseList;
     private List<CaseParc> closedCaseList;
-    private ServerInterface serverInterface;
 
     private List<NotificationParc> currentNotificationList;
 
@@ -143,9 +142,6 @@ public class MainActivity extends AppCompatActivity
         loadingProgressLayout.setVisibility(View.GONE);
         loadingProgressInfoTextView = (TextView) findViewById(R.id.loading_data_info_text);
 
-        serverInterface = ServerInterfaceFactory.getInstance();
-
-        Log.d(LOG_TAG, "serverInterface - authToken?: " + ((RestServerInterface) serverInterface).hasAuthToken());
 
         currentNotificationList = new ArrayList<>();
     }

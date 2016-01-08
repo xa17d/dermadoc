@@ -61,7 +61,7 @@ public class NotificationParc implements Parcelable {
 
     public NotificationParc(Notification notification) {
         this.setId(notification.getId());
-        this.setCaseId(notification.getId());
+        this.setCaseId(notification.getCaseId());
         this.setText(notification.getText());
         this.setUserId(notification.getUserId());
     }
