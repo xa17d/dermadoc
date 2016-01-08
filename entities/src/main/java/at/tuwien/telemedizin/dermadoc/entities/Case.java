@@ -16,7 +16,7 @@ import java.util.Calendar;
 @Entity
 @Table(name = "issue")
 public class Case {
-    public Case(long id, Patient patient, Calendar created) {
+    public Case(Long id, Patient patient, Calendar created) {
         this.id = id;
         this.patient = patient;
         this.created = created;
@@ -26,9 +26,9 @@ public class Case {
 
     @Id
     @Column(name = "case_id")
-    private long id;
-    public long getId() { return id; }
-    public void setId(long id) { this.id = id; }
+    private Long id;
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
     @OneToOne
     private Patient patient;

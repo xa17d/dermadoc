@@ -13,7 +13,7 @@ import java.util.Calendar;
 @Table(name = "text_message")
 public class TextMessage extends CaseData {
 
-    public TextMessage(long id, Calendar created, User author, String message) {
+    public TextMessage(Long id, Calendar created, User author, String message) {
         super(id, created, author);
 
         this.message = message;

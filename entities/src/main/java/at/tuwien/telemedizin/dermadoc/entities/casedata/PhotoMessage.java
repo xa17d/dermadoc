@@ -13,7 +13,7 @@ import java.util.Calendar;
 @Table(name = "photo_message")
 public class PhotoMessage extends CaseData {
 
-    public PhotoMessage(long id, Calendar created, User author, String mime, byte[] photoData) {
+    public PhotoMessage(Long id, Calendar created, User author, String mime, byte[] photoData) {
         super(id, created, author);
 
         this.mime = mime;

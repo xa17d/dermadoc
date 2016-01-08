@@ -17,7 +17,7 @@ import java.util.List;
 @PrimaryKeyJoinColumn(name = "id")
 public class CaseInfo extends CaseData {
 
-    public CaseInfo(long id, Calendar created, User author, List<BodyLocalization> localizations, PainIntensity pain, double size) {
+    public CaseInfo(Long id, Calendar created, User author, List<BodyLocalization> localizations, PainIntensity pain, double size) {
         super(id, created, author);
 
         this.localizations = localizations;
@@ -49,7 +49,7 @@ public class CaseInfo extends CaseData {
 
     //TODO delete
     @Deprecated
-    public CaseInfo(long id, Calendar created, User author, BodyLocalization localization, PainIntensity pain, double size) {
+    public CaseInfo(Long id, Calendar created, User author, BodyLocalization localization, PainIntensity pain, double size) {
         super(id, created, author);
 
         this.localization = localization;

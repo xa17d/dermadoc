@@ -33,7 +33,7 @@ import java.util.Calendar;
 public abstract class CaseData {
 
 
-    public CaseData(long id, Calendar created, User author) {
+    public CaseData(Long id, Calendar created, User author) {
         this.id = id;
         this.created = created;
         this.author = author;
@@ -43,9 +43,9 @@ public abstract class CaseData {
 
     @Id
     @Column(name = "casedata_id")
-    private long id;
-    public long getId() { return id; }
-    public void setId(long id) { this.id = id; }
+    private Long id;
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
 
     @OneToOne
