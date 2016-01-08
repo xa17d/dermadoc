@@ -47,6 +47,7 @@ import at.tuwien.telemedizin.dermadoc.app.general_entities.Case;
 import at.tuwien.telemedizin.dermadoc.app.general_entities.Notification;
 import at.tuwien.telemedizin.dermadoc.app.general_entities.casedata.CaseData;
 import at.tuwien.telemedizin.dermadoc.app.helper.CaseDataExtractionHelper;
+import at.tuwien.telemedizin.dermadoc.app.helper.ConnectionDetector;
 import at.tuwien.telemedizin.dermadoc.app.helper.FormatHelper;
 import at.tuwien.telemedizin.dermadoc.app.helper.ParcelableHelper;
 import at.tuwien.telemedizin.dermadoc.app.server_interface.ServerInterface;
@@ -238,7 +239,7 @@ public class CaseActivity extends AppCompatActivity
             return true;
         } else if (id == R.id.action_syncronize) {
             syncData();
-            Toast.makeText(getBaseContext(), "data synchronized!", Toast.LENGTH_LONG).show(); // TODO replace with real fragment/function
+
         } else if (id == R.id.action_attach) {
             // start the activity for result to return a list of pictures
             Intent intent = new Intent(this, AddPictureActivity.class);
@@ -307,6 +308,11 @@ public class CaseActivity extends AppCompatActivity
 
     private void loadCaseData() {
         Log.d(LOG_TAG, "loadCaseData()");
+        // check internet connection
+        if (!checkInternetConnection()) {
+            return;
+        }
+
         String infoText = getString(R.string.label_loading_data_dynamic, getString(R.string.option_loading_case_data_insert));
         showProgress(true, infoText);
         loadCaseTask = new LoadCaseTask(this);
@@ -315,6 +321,11 @@ public class CaseActivity extends AppCompatActivity
 
     public void deleteNotifications() {
         Log.d(LOG_TAG, "deleteNotifications()");
+        // check internet connection
+        if (!checkInternetConnection()) {
+            return;
+        }
+
         String infoText = getString(R.string.option_delete_notifications);
         showProgress(true, infoText);
         deleteNotificationsAsyncTask = new DeleteNotificationsAsyncTask(this);
@@ -326,6 +337,11 @@ public class CaseActivity extends AppCompatActivity
     private void sendCaseDataMessages(List<CaseDataParc> messages) {
         Log.d(LOG_TAG, "sendCaseDataMessages()");
         if (messages == null) {
+            return;
+        }
+
+        // check internet connection
+        if (!checkInternetConnection()) {
             return;
         }
 
@@ -431,6 +447,11 @@ public class CaseActivity extends AppCompatActivity
         Log.d(LOG_TAG, "sendTextMessage(" + text + ")");
         TextMessageParc newMessage = new TextMessageParc(-1, Calendar.getInstance(), currentUser, text);
 
+        // check internet connection
+        if (!checkInternetConnection()) {
+            return;
+        }
+
         showProgress(true, getString(R.string.hint_sending));
         sendMessageTask = new SendMessagesAsyncTask(this);
         sendMessageTask.execute(newMessage);
@@ -512,6 +533,21 @@ public class CaseActivity extends AppCompatActivity
         if (loadCaseTask == null && sendMessageTask == null && deleteNotificationsAsyncTask == null) {
             showProgress(false);
         }
+    }
+
+    /**
+     * checks, if internet-connection is possible and returns a boolean value
+     * if no connection is available, it shows a info-message to the user
+     * @return
+     */
+    private boolean checkInternetConnection() {
+        boolean connected = ConnectionDetector.isConnectingToInternet(this);
+        Log.d(LOG_TAG, "checkInternetConnection: " + connected);
+        if (!connected) {
+            // show message to user
+            Toast.makeText(this, getString(R.string.msg_no_internet_connection_available), Toast.LENGTH_SHORT).show();
+        }
+        return connected;
     }
 
     /**

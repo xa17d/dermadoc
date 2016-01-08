@@ -30,6 +30,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -215,6 +216,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // form field with an error.
             focusView.requestFocus();
         } else {
+
+            // check internet connection
+            if (!checkInternetConnection()) {
+                return;
+            }
+
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
@@ -343,6 +350,21 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
 
         mEmailView.setAdapter(adapter);
+    }
+
+    /**
+     * checks, if internet-connection is possible and returns a boolean value
+     * if no connection is available, it shows a info-message to the user
+     * @return
+     */
+    private boolean checkInternetConnection() {
+        boolean connected = ConnectionDetector.isConnectingToInternet(this);
+        Log.d(LOG_TAG, "checkInternetConnection: " + connected);
+        if (!connected) {
+            // show message to user
+            Toast.makeText(this, getString(R.string.msg_no_internet_connection_available), Toast.LENGTH_SHORT).show();
+        }
+        return connected;
     }
 
     /**

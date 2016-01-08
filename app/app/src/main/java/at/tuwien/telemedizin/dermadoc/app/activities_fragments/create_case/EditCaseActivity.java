@@ -54,6 +54,7 @@ import at.tuwien.telemedizin.dermadoc.app.general_entities.Case;
 import at.tuwien.telemedizin.dermadoc.app.general_entities.Physician;
 import at.tuwien.telemedizin.dermadoc.app.general_entities.casedata.CaseData;
 import at.tuwien.telemedizin.dermadoc.app.helper.CaseDataExtractionHelper;
+import at.tuwien.telemedizin.dermadoc.app.helper.ConnectionDetector;
 import at.tuwien.telemedizin.dermadoc.app.helper.ParcelableHelper;
 import at.tuwien.telemedizin.dermadoc.app.persistence.ContentProvider;
 import at.tuwien.telemedizin.dermadoc.app.persistence.ContentProviderFactory;
@@ -242,8 +243,22 @@ public class EditCaseActivity extends AppCompatActivity implements OnCaseDataReq
         if (newCase) {
             loadPhysicianList();
         }
+    }
 
 
+    /**
+     * checks, if internet-connection is possible and returns a boolean value
+     * if no connection is available, it shows a info-message to the user
+     * @return
+     */
+    private boolean checkInternetConnection() {
+        boolean connected = ConnectionDetector.isConnectingToInternet(this);
+        Log.d(LOG_TAG, "checkInternetConnection: " + connected);
+        if (!connected) {
+            // show message to user
+            Toast.makeText(this, getString(R.string.msg_no_internet_connection_available), Toast.LENGTH_SHORT).show();
+        }
+        return connected;
     }
 
     /**
@@ -668,6 +683,12 @@ public class EditCaseActivity extends AppCompatActivity implements OnCaseDataReq
      * starts a async-task and send the data to the server
      */
     private void sendDataToServer(CaseParc caseItem) {
+
+        // check internet connection
+        if (!checkInternetConnection()) {
+            return;
+        }
+
         sendingEditedCaseAsyncTask = new SendingEditedCaseAsyncTask(this);
         sendingEditedCaseAsyncTask.execute(caseItem);
     }
@@ -752,6 +773,12 @@ public class EditCaseActivity extends AppCompatActivity implements OnCaseDataReq
 
     private void loadPhysicianList() {
         Log.d(LOG_TAG, "loadPhysicianList()");
+
+        // check internet connection
+        if (!checkInternetConnection()) {
+            return;
+        }
+
         String infoText = getString(R.string.label_loading_data_dynamic, getString(R.string.option_loading_physician_list_insert));
         showProgress(true, infoText);
         loadPhysicianListAsyncTask = new LoadPhysicianListAsyncTask(this);

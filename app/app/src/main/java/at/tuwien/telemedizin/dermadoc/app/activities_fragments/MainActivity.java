@@ -40,6 +40,7 @@ import at.tuwien.telemedizin.dermadoc.app.general_entities.Case;
 import at.tuwien.telemedizin.dermadoc.app.general_entities.Notification;
 import at.tuwien.telemedizin.dermadoc.app.general_entities.Patient;
 import at.tuwien.telemedizin.dermadoc.app.general_entities.User;
+import at.tuwien.telemedizin.dermadoc.app.helper.ConnectionDetector;
 import at.tuwien.telemedizin.dermadoc.app.helper.ParcelableHelper;
 import at.tuwien.telemedizin.dermadoc.app.server_interface.RestServerInterface;
 import at.tuwien.telemedizin.dermadoc.app.server_interface.ServerInterface;
@@ -174,6 +175,12 @@ public class MainActivity extends AppCompatActivity
 
     private void loadUserData() {
         Log.d(LOG_TAG, "loadUserData()");
+
+        // check internet connection
+        if (!checkInternetConnection()) {
+            return;
+        }
+
         String infoText = getString(R.string.label_loading_data_dynamic, getString(R.string.option_loading_user_data_insert));
         showProgress(true, infoText);
         loadUserDataTask = new LoadUserDataTask(this);
@@ -182,6 +189,12 @@ public class MainActivity extends AppCompatActivity
 
     private void loadCaseListData() {
         Log.d(LOG_TAG, "loadCaseListData()");
+
+        // check internet connection
+        if (!checkInternetConnection()) {
+            return;
+        }
+
         String infoText = getString(R.string.label_loading_data_dynamic, getString(R.string.option_loading_case_list_data_insert));
         showProgress(true, infoText);
         loadCurrentCaseListDataTask = new LoadCaseListDataTask(this);
@@ -190,6 +203,12 @@ public class MainActivity extends AppCompatActivity
 
     private void loadNotificationList() {
         Log.d(LOG_TAG, "loadNotificationList()");
+
+        // check internet connection
+        if (!checkInternetConnection()) {
+            return;
+        }
+
         String infoText = getString(R.string.label_loading_data_dynamic, getString(R.string.option_loading_notification_list_insert));
         showProgress(true, infoText);
         loadCurrentNotificationsTask = new LoadNotificationsTask(this);
@@ -223,6 +242,21 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * checks, if internet-connection is possible and returns a boolean value
+     * if no connection is available, it shows a info-message to the user
+     * @return
+     */
+    private boolean checkInternetConnection() {
+        boolean connected = ConnectionDetector.isConnectingToInternet(this);
+        Log.d(LOG_TAG, "checkInternetConnection: " + connected);
+        if (!connected) {
+            // show message to user
+            Toast.makeText(this, getString(R.string.msg_no_internet_connection_available), Toast.LENGTH_SHORT).show();
+        }
+        return connected;
+    }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -251,7 +285,7 @@ public class MainActivity extends AppCompatActivity
             return true;
         } else if (id == R.id.action_syncronize) {
             syncData();
-            Toast.makeText(getBaseContext(), "User-Data and Case-List synchronized!", Toast.LENGTH_LONG).show();
+
             return true;
         }
 
