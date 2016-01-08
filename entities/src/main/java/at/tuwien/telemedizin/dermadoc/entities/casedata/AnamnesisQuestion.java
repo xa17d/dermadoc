@@ -23,6 +23,19 @@ public abstract class AnamnesisQuestion {
     public AnamnesisQuestion() { }
 
     @Id
+    private Long anamnesisQuestionId;
+
+    public Long getanamnesisQuestionId() {
+        return anamnesisQuestionId;
+    }
+
+    public void setanamnesisQuestionId(Long id) {
+        this.anamnesisQuestionId = id;
+    }
+
+
+
+
     private String question;
     public String getQuestion() { return question; }
     public void setQuestion(String question) { this.question = question; }

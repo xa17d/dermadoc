@@ -35,7 +35,7 @@ public class CaseDataRepositoryTest {
 	@Test
 	public void testSaveCaseData() throws  Exception {
 		CaseData testCaseData = new CaseInfo();
-		testCaseData.setId(1);
+
 		User author =  userRepository.getUserById(26);
 		testCaseData.setAuthor(author);
 		Calendar today = Calendar.getInstance();
@@ -60,16 +60,6 @@ public class CaseDataRepositoryTest {
 		Iterable<CaseData> c = caseDataRepository.listCaseDataByUserAndCase(caseId, authorId);
 	}
 
-//	@Test
-//	public void testGetByCaseId() throws Exception {
-//
-//	}
-//
-//	@Test
-//	public void testGetById() throws Exception {
-//
-//	}
-//
 @Test
 public void testGetByAuthor() throws Exception {
 	User author = userRepository.getUserById(26);
@@ -77,4 +67,5 @@ public void testGetByAuthor() throws Exception {
 	Case checkCase = caseRepository.getCaseById(3);
 	Assert.assertEquals(caseByAuthor.getCase(), checkCase);
 }
+
 }

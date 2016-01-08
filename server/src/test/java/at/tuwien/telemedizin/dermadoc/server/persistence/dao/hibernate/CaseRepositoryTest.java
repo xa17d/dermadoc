@@ -30,19 +30,18 @@ public class CaseRepositoryTest {
 	@Test
 	public void testSave() throws Exception {
 		Case c = new Case();
-		c.setId(3);
 		c.setName("test Case");
 		c.setDescription("this is for testing");
 		Patient patient = new Patient();
 		Physician physician = new Physician();
 
-		patient.setId(33);
+
 		patient.setMail("testmail244");
 		patient.setPassword("12345");
 		patient.setSvnr("4016");
 		userRepository.save(patient);
 
-		physician.setId(32);
+
 		physician.setMail("testmail3344");
 		physician.setPassword("12345");
 		userRepository.save(physician);

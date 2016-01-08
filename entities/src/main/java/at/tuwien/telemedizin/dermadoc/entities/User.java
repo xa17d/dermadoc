@@ -20,6 +20,7 @@ import javax.persistence.*;
 public abstract class User {
 
     @Id
+    @GeneratedValue
     @Column(name = "person_id")
     private Long id;
     public Long getId() { return id; }

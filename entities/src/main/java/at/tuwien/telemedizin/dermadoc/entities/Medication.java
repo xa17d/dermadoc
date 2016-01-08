@@ -22,8 +22,16 @@ public class Medication {
         this.dosis = dosis;
     }
 
-
     @Id
+    private Long medicationId;
+
+    public Long getMedicationId() {
+        return medicationId;
+    }
+
+
+
+
     private String name;
     public String getName() { return name; }
 

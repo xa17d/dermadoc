@@ -23,7 +23,7 @@ public class NotificationRepositoryTest {
 	@Test
 	public void testGetNotificationById() throws Exception {
 		Notification n = new Notification();
-		n.setId(1);
+
 		n.setText("BLABLABLA");
 		n.setCaseId(3);
 		n.setUserId(26);

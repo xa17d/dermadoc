@@ -26,7 +26,6 @@ public class UserRepositoryTest {
 	public void saveTest() throws Exception {
 		Assert.assertNotNull(userRepository);
 		User testUser = new Physician();
-		testUser.setId(27);
 		testUser.setName("test");
 		testUser.setPassword("test");
 		testUser.setMail("test@mail4.com");
@@ -38,14 +37,11 @@ public class UserRepositoryTest {
 		Assert.assertEquals(mailUser, idUser);
 
 
-
-
 	}
 
 	@Test
 	public void savePhysicianTest() {
 		Physician p = new Physician();
-		p.setId(22);
 		p.setPassword("12345");
 		p.setMail("testPhysicianMail");
 		p.setName("dr.test");
