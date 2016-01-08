@@ -34,7 +34,9 @@ public abstract class AnamnesisQuestion {
     }
 
 
-
+    public void setAnamnesisQuestionId(Long anamnesisQuestionId) {
+        this.anamnesisQuestionId = anamnesisQuestionId;
+    }
 
     private String question;
     public String getQuestion() { return question; }

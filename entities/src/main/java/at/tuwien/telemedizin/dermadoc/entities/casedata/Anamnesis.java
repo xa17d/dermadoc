@@ -26,6 +26,15 @@ public class Anamnesis extends CaseData {
     }
 
     private String message;
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public void setQuestions(List<AnamnesisQuestion> questions) {
+        this.questions = questions;
+    }
+
     public String getMessage() { return message; }
 
     @ElementCollection

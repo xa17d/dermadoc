@@ -26,8 +26,16 @@ public class Diagnosis extends CaseData {
 
     public Diagnosis() { }
 
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
     private String message;
     public String getMessage() { return message; }
+
+    public void setDiagnosisList(List<Icd10Diagnosis> diagnosisList) {
+        this.diagnosisList = diagnosisList;
+    }
 
     @ElementCollection
     private List<Icd10Diagnosis> diagnosisList = new ArrayList<>();

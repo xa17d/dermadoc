@@ -1,8 +1,9 @@
 package at.tuwien.telemedizin.dermadoc.server.persistence.dao.hibernate;
 
 import at.tuwien.telemedizin.dermadoc.entities.Case;
+import at.tuwien.telemedizin.dermadoc.entities.Medication;
 import at.tuwien.telemedizin.dermadoc.entities.Physician;
-import at.tuwien.telemedizin.dermadoc.entities.User;
+import at.tuwien.telemedizin.dermadoc.entities.casedata.Advice;
 import at.tuwien.telemedizin.dermadoc.entities.casedata.CaseData;
 import at.tuwien.telemedizin.dermadoc.entities.casedata.CaseInfo;
 import at.tuwien.telemedizin.dermadoc.server.Application;
@@ -14,7 +15,9 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 /*
 *
@@ -34,6 +37,9 @@ public class CaseDataRepositoryTest {
 
 	@Autowired
 	CaseRepository caseRepository;
+
+	@Autowired
+	MedicationRepository medicationRepository;
 
 	CaseData savedCaseData;
 
@@ -79,12 +85,41 @@ public class CaseDataRepositoryTest {
 //		Assert.assertNotNull(c);
 //	}
 
-@Test
-public void testGetByAuthor() throws Exception {
-	User author = userRepository.getUserByMail("authorMail1");
+//
+//@Test
+//public void testGetByAuthor() throws Exception {
+//	User author = userRepository.getUserByMail("authorMail1");
+//
+//	CaseData caseByAuthor = caseDataRepository.getByAuthor(author);
+//	Assert.assertNotNull(caseByAuthor);
+//}
 
-	CaseData caseByAuthor = caseDataRepository.getByAuthor(author);
-	Assert.assertNotNull(caseByAuthor);
-}
+	@Test
+	public void TestAdvice() {
+		Physician author1 = new Physician();
+		author1.setMail("authorMail5");
+		author1.setPassword("qweqwe");
+		author1 = userRepository.save(author1);
+
+
+		Case testCase = new Case();
+		testCase.setPhysician(author1);
+		testCase.setName("sldjflsdjf");
+		testCase = caseRepository.save(testCase);
+
+		Advice a = new Advice();
+		a.setCase(testCase);
+
+		List<Medication> mList = new ArrayList<>();
+
+		for (int i = 0; i < 5; i++) {
+			Medication m = new Medication();
+			m.setName("med" + i);
+			m.setDosis("200mg");
+			mList.add(m);
+
+		}
+
+	}
 
 }

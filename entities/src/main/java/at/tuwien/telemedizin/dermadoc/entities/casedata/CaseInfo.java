@@ -28,6 +28,18 @@ public class CaseInfo extends CaseData {
     public CaseInfo() {   }
 
 
+    public void setLocalizations(List<BodyLocalization> localizations) {
+        this.localizations = localizations;
+    }
+
+    public void setPain(PainIntensity pain) {
+        this.pain = pain;
+    }
+
+    public void setSize(double size) {
+        this.size = size;
+    }
+
     @ElementCollection
     private List<BodyLocalization> localizations;
     public List<BodyLocalization> getLocalizations() { return localizations; }

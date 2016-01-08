@@ -3,9 +3,6 @@ package at.tuwien.telemedizin.dermadoc.server.services;
 import at.tuwien.telemedizin.dermadoc.entities.Patient;
 import at.tuwien.telemedizin.dermadoc.entities.Physician;
 import at.tuwien.telemedizin.dermadoc.entities.User;
-import at.tuwien.telemedizin.dermadoc.server.exceptions.InvalidUserTypeException;
-import at.tuwien.telemedizin.dermadoc.server.exceptions.InvalidSubtypeTypeException;
-import at.tuwien.telemedizin.dermadoc.server.persistence.dao.mock.MockData;
 import at.tuwien.telemedizin.dermadoc.server.security.SecurityToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +16,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
+//import at.tuwien.telemedizin.dermadoc.server.exceptions.InvalidUserTypeException;
+//import at.tuwien.telemedizin.dermadoc.server.persistence.dao.mock.MockData;
+
 /**
  * Created by daniel on 26.11.2015.
  */
@@ -26,8 +26,8 @@ import java.util.UUID;
 public class TokenService {
 
     private TokenService() {
-//        store(generateNewToken(MockData.users.get(0), "test"));
-//        store(generateNewToken(MockData.users.get(1), "test2"));
+        store(generateNewToken(MockData.users.get(0), "test"));
+        store(generateNewToken(MockData.users.get(1), "test2"));
     }
 
     private static final Logger logger = LoggerFactory.getLogger(TokenService.class);
@@ -54,9 +54,9 @@ public class TokenService {
         else if (user instanceof Physician) {
             authorities = AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_USER,ROLE_PHYSICIAN");
         }
-        else {
-            throw new InvalidSubtypeTypeException(User.class, user.getClass());
-        }
+//        else {
+//            throw new InvalidUserTypeException(user.getClass());
+//        }
 
         SecurityToken token = new SecurityToken(tokenId, user, null, authorities);
         return token;
@@ -72,9 +72,5 @@ public class TokenService {
 
     public Authentication retrieve(String token) {
         return tokens.get(token);
-    }
-
-    public void evict(String token) {
-        tokens.remove(token);
     }
 }

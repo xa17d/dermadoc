@@ -22,6 +22,7 @@ public class Medication {
         this.dosis = dosis;
     }
 
+
     @Id
     private Long medicationId;
 
@@ -29,11 +30,19 @@ public class Medication {
         return medicationId;
     }
 
+    public void setMedicationId(Long medicationId) {
+        this.medicationId = medicationId;
+    }
+
 
 
 
     private String name;
     public String getName() { return name; }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     private String dosis;
     public String getDosis() { return dosis; }
