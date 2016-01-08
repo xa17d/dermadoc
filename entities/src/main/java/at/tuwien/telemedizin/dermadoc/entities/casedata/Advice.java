@@ -15,6 +15,14 @@ import java.util.List;
 @Entity
 public class Advice extends CaseData {
 
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public void setMedications(List<Medication> medications) {
+        this.medications = medications;
+    }
+
     public Advice(long id, Calendar created, User author, String message, List<Medication> medications) {
         super(id, created, author);
 

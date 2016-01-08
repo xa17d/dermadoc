@@ -26,6 +26,7 @@ public class Diagnosis extends CaseData {
 
     public Diagnosis() { }
 
+
     public void setMessage(String message) {
         this.message = message;
     }

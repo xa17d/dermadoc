@@ -63,6 +63,7 @@ public class GCCaseDataList extends VBox {
             }
         });
 
+        /*
         //------------------
         //MOCK
         try {
@@ -74,6 +75,7 @@ public class GCCaseDataList extends VBox {
         } catch (DermadocConversionException e) {
             e.printStackTrace();
         }
+
 
         Patient p = new Patient();
         p.setName("John Doe");
@@ -112,6 +114,7 @@ public class GCCaseDataList extends VBox {
         CaseInfo ci3 = new CaseInfo(-3l, Calendar.getInstance(), p, localizations, PainIntensity.Mild, 5);
         gcCaseInfo.addCaseInfo(ci3);
         //-----------
+        */
 
         this.setFillWidth(true);
     }

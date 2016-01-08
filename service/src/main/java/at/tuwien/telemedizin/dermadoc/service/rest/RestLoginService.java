@@ -10,8 +10,8 @@ import at.tuwien.telemedizin.dermadoc.service.rest.listener.RestListener;
  */
 public class RestLoginService implements IRestLoginService {
 
-    //private static final String URL_ = "http://dermadoc.xa1.at:82/";
-    private static final String URL_ = "http://localhost:8080/";
+    private static final String URL_ = "http://dermadoc.xa1.at:82/";
+    //private static final String URL_ = "http://localhost:8080/";
     private static final String LOGIN = "login";
     private static final String LOGOUT = "logout";
     private static final String USER = "user";

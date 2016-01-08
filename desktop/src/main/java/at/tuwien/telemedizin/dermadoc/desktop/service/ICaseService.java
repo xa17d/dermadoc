@@ -92,5 +92,10 @@ public interface ICaseService {
      */
     ObservableList<Notification> getNotificationList() throws DermadocException;
 
+    /**
+     * stop polling the backend
+     */
+    void stopPolling();
+
     Case getCaseById(long caseId);
 }
