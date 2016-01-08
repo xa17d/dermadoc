@@ -14,7 +14,7 @@ import java.util.List;
 @Entity
 public class Anamnesis extends CaseData {
 
-    public Anamnesis(Long id, Calendar created, User author, String message, List<AnamnesisQuestion> questions) {
+    public Anamnesis(long id, Calendar created, User author, String message, List<AnamnesisQuestion> questions) {
         super(id, created, author);
 
         this.message = message;

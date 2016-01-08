@@ -17,7 +17,7 @@ import java.util.List;
 @Table(name = "diagnosis")
 public class Diagnosis extends CaseData {
 
-    public Diagnosis(Long id, Calendar created, User author, String message, List<Icd10Diagnosis> diagnosisList) {
+    public Diagnosis(long id, Calendar created, User author, String message, List<Icd10Diagnosis> diagnosisList) {
         super(id, created, author);
 
         this.message = message;

@@ -15,6 +15,7 @@ public class Notification {
     private Long id;
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
+    public void setId(long id) { setId(new Long(id)); }
 
     private long userId;
     public long getUserId() { return userId; }
@@ -43,7 +44,8 @@ public class Notification {
 
     @Override
     public int hashCode() {
-        return (int)this.getId();
+        if (getId() == null) { return 0; }
+        return this.getId().intValue();
     }
 
     @Override

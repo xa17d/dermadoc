@@ -16,7 +16,7 @@ import java.util.Calendar;
 @Entity
 @Table(name = "issue")
 public class Case {
-    public Case(Long id, Patient patient, Calendar created) {
+    public Case(long id, Patient patient, Calendar created) {
         this.id = id;
         this.patient = patient;
         this.created = created;
@@ -29,6 +29,7 @@ public class Case {
     private Long id;
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
+    public void setId(long id) { setId(new Long(id)); }
 
     @OneToOne
     private Patient patient;
@@ -60,7 +61,8 @@ public class Case {
 
     @Override
     public int hashCode() {
-        return (int)this.getId();
+        if (getId() == null) { return 0; }
+        return this.getId().intValue();
     }
 
     @Override
