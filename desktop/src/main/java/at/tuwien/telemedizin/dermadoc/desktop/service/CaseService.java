@@ -1,5 +1,6 @@
 package at.tuwien.telemedizin.dermadoc.desktop.service;
 
+import at.tuwien.telemedizin.dermadoc.desktop.gui.main.Controller;
 import at.tuwien.telemedizin.dermadoc.service.exception.DermadocException;
 import at.tuwien.telemedizin.dermadoc.desktop.service.dto.PatientCaseMap;
 import at.tuwien.telemedizin.dermadoc.entities.*;
@@ -29,9 +30,13 @@ public class CaseService implements ICaseService {
 
     private HashMap<Case, ObservableList<CaseData>> caseCaseDataMap= new HashMap<>();
 
-    public CaseService(AuthenticationToken token) {
+    private Controller controller;
+
+    public CaseService(Controller controller, AuthenticationToken token) {
 
         rest = new RestCaseService(token);
+
+        this.controller = controller;
 
         startPollingNotifications();
     }
@@ -74,7 +79,7 @@ public class CaseService implements ICaseService {
 
             @Override
             public void onError(Error error) {
-                //TODO
+                controller.showErrorMessage(error.getMessage());
             }
         };
 
@@ -105,7 +110,7 @@ public class CaseService implements ICaseService {
 
         @Override
         public void onError(Error error) {
-            //TODO
+            controller.showErrorMessage(error.getMessage());
         }
     };
 
@@ -119,7 +124,7 @@ public class CaseService implements ICaseService {
 
         @Override
         public void onError(Error error) {
-            //TODO
+            controller.showErrorMessage(error.getMessage());
         }
     };
 
@@ -132,31 +137,31 @@ public class CaseService implements ICaseService {
 
         @Override
         public void onError(Error error) {
-            //TODO
+            controller.showErrorMessage(error.getMessage());
         }
     };
 
     private RestListener<Void> acceptCaseListener = new RestListener<Void>() {
         @Override
         public void onRequestComplete(Void requestResult) {
-            //TODO
+            //do nothing
         }
 
         @Override
         public void onError(Error error) {
-            //TODO
+            controller.showErrorMessage(error.getMessage());
         }
     };
 
     private RestListener<CaseData> caseDataListener = new RestListener<CaseData>() {
         @Override
         public void onRequestComplete(CaseData requestResult) {
-            //TODO
+            //do nothing
         }
 
         @Override
         public void onError(Error error) {
-            //TODO
+            controller.showErrorMessage(error.getMessage());
         }
     };
 
@@ -232,13 +237,14 @@ public class CaseService implements ICaseService {
         @Override
         public void run() {
             while(!stopPollingNotifications) {
+
+                rest.getNotifications(notificationListener);
+
                 try {
                     Thread.sleep(10000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-
-                rest.getNotifications(notificationListener);
             }
         }
 
@@ -250,7 +256,7 @@ public class CaseService implements ICaseService {
 
             @Override
             public void onError(Error error) {
-                //TODO
+                controller.showErrorMessage(error.getMessage());
             }
         };
     }

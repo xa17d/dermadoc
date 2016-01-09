@@ -26,19 +26,10 @@ public abstract class AnamnesisQuestion {
     public Long getId() {
         return id;
     }
-<<<<<<< HEAD
-    public void setAnamnesisQuestionId(Long anamnesisQuestionId) {
-        this.anamnesisQuestionId = anamnesisQuestionId;
-    }
-
-=======
-
     public void setId(Long id) {
         this.id = id;
     }
 
-
->>>>>>> e6f06ab86097a364988b7101b6a1cf70bb050322
     private String question;
     public String getQuestion() { return question; }
     public void setQuestion(String question) { this.question = question; }

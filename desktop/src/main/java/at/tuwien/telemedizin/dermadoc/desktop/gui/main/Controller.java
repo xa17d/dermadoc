@@ -57,7 +57,7 @@ public class Controller {
         patientCaseMap = new PatientCaseMap();
 
         //initialize service layer
-        caseService = new CaseService(token);
+        caseService = new CaseService(this, token);
 
 
         //initialize physician view on top
@@ -87,9 +87,10 @@ public class Controller {
         //manage open tabs in main window
         mainTabList = tpMain.getTabs();
 
+        /*
+        //TODO
         //register window closing
-        Stage s = getStage();
-        s.setOnHiding(new EventHandler<WindowEvent>() {
+        getStage().setOnHiding(new EventHandler<WindowEvent>() {
 
             @Override
             public void handle(WindowEvent event) {
@@ -101,6 +102,7 @@ public class Controller {
                 });
             }
         });
+        */
     }
 
 
@@ -128,29 +130,36 @@ public class Controller {
 
     public void showErrorMessage(String errorMessage) {
 
-        NotificationPane errorPane = new ErrorPane(bpMain, errorMessage);
-        errorPane.setShowFromTop(false);
-        errorPane.getStyleClass().add(NotificationPane.STYLE_CLASS_DARK);
-
-        //TODO what the fucking fuck???
-        //why is the pane showing, when running in another thread with a short sleep,
-        //but not in the fx thread (also not with a sleep)???
-
-        //errorPane.show();
-
-        Thread t1 = new Thread(new Runnable() {
+        Platform.runLater(new Runnable() {
             @Override
             public void run() {
+                NotificationPane errorPane = new ErrorPane(bpMain, errorMessage);
+                errorPane.setShowFromTop(false);
+                errorPane.getStyleClass().add(NotificationPane.STYLE_CLASS_DARK);
 
-                try {
-                    Thread.sleep(50);
-                } catch (InterruptedException e1) {
-                    e1.printStackTrace();
-                }
+                //TODO what the fucking fuck???
+                //why is the pane showing, when running in another thread with a short sleep,
+                //but not in the fx thread (also not with a sleep)???
+
                 errorPane.show();
+
+                /*
+                Thread t1 = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        try {
+                            Thread.sleep(50);
+                        } catch (InterruptedException e1) {
+                            e1.printStackTrace();
+                        }
+                        errorPane.show();
+                    }
+                });
+                t1.start();
+                */
             }
         });
-        t1.start();
     }
 
     public PatientCaseMap searchPatientCaseMap(String searchText) {

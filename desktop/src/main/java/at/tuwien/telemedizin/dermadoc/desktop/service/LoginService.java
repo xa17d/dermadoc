@@ -1,5 +1,7 @@
 package at.tuwien.telemedizin.dermadoc.desktop.service;
 
+import at.tuwien.telemedizin.dermadoc.desktop.gui.login.LoginController;
+import at.tuwien.telemedizin.dermadoc.desktop.gui.login.LoginStage;
 import at.tuwien.telemedizin.dermadoc.desktop.service.dto.AuthenticationListener;
 import at.tuwien.telemedizin.dermadoc.entities.Physician;
 import at.tuwien.telemedizin.dermadoc.entities.rest.AuthenticationData;

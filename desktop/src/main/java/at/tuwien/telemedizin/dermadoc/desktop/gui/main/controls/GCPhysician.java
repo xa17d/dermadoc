@@ -52,6 +52,7 @@ public class GCPhysician extends GridPane {
         gcNotification = new GCNotification(controller, notificationList);
         popOverNotification = new PopOver(gcNotification);
         popOverNotification.setArrowLocation(PopOver.ArrowLocation.TOP_CENTER);
+        popOverNotification.setMinWidth(250);
         gcNotification.setPopOver(popOverNotification);
 
         notificationList.addListener(new ListChangeListener<Notification>() {
@@ -72,7 +73,7 @@ public class GCPhysician extends GridPane {
     private void initialize() {
 
         lbName.setText(physician.getName());
-        lbAdditionalInfo.setText("TODO // " + physician.getMail());
+        lbAdditionalInfo.setText(physician.getMail());
         ivDoctor.setImage(new Image(DesktopApplication.class.getResourceAsStream("dracula.png")));
 
         this.getStylesheets().add(getClass().getResource("notification.css").toExternalForm());
