@@ -9,7 +9,12 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Lilly on 16.12.2015.
@@ -17,6 +22,8 @@ import org.springframework.test.context.web.WebAppConfiguration;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
+@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
+@Transactional
 public class UserRepositoryTest {
 
 	@Autowired
@@ -73,13 +80,24 @@ public class UserRepositoryTest {
 	@Test
 	public void testListPhysicians() throws Exception {
 
+		List<Physician> pList = new ArrayList<>();
+		for (int k = 0; k < 5; k++) {
+			Physician p = new Physician();
+			p.setPassword("12345");
+			p.setMail("physician" + k + "@mail.com");
+			p.setName("physician" + k);
+			pList.add(p);
+		}
+
+		userRepository.save(pList);
+
 		Iterable<Physician> physiciansList = userRepository.listPhysicians();
 		int i = 0;
 		for (Physician ph : physiciansList) {
 			i++;
 		}
 
-		Assert.assertTrue(i > 0);
+		Assert.assertEquals(i, pList.size());
 
 	}
 }

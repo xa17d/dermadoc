@@ -40,13 +40,8 @@ public class UserController {
     public AuthenticationToken login(@RequestBody AuthenticationData authenticationData) throws AuthenticationInvalidException {
         User user;
 
-        try {
-            user = userRepository.getUserByMail(authenticationData.getMail());
-        }
-        catch (EntityNotFoundException e) {
-            // User not found
-            throw new AuthenticationInvalidException();
-        }
+        user = userRepository.getUserByMail(authenticationData.getMail());
+        if (user == null) { throw new AuthenticationInvalidException(); }
 
         if (user.getPassword().equals(authenticationData.getPassword())) {
             // Login successful
@@ -66,7 +61,7 @@ public class UserController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication instanceof SecurityToken) {
             SecurityToken token = (SecurityToken)authentication;
-            //tokenService.evict(token.getToken());
+            tokenService.evict(token.getToken());
         }
         else {
             throw new InvalidSubtypeTypeException(Authentication.class, authentication.getClass());

@@ -1,4 +1,3 @@
-/*
 package at.tuwien.telemedizin.dermadoc.server.controllers;
 
 import at.tuwien.telemedizin.dermadoc.entities.Case;
@@ -9,7 +8,6 @@ import at.tuwien.telemedizin.dermadoc.entities.casedata.CaseData;
 import at.tuwien.telemedizin.dermadoc.server.persistence.dao.hibernate.CaseDataRepository;
 import at.tuwien.telemedizin.dermadoc.server.persistence.dao.hibernate.CaseRepository;
 import at.tuwien.telemedizin.dermadoc.server.persistence.dao.hibernate.UserRepository;
-import at.tuwien.telemedizin.dermadoc.server.persistence.dao.mock.MockData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,37 +15,16 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-*/
 /**
  * Created by daniel on 11.11.2015.
- *//*
+ */
 
 @RestController
 public class TestController {
 
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private CaseRepository caseRepository;
-
-    @Autowired
-    private CaseDataRepository caseDataRepository;
-
     @RequestMapping(value = "/")
     public String helloWorld() {
-
         return "<html><h1>Hello Derma Doc</h1><p>JSON + DB</p></html>";
-
-    }
-
-    private void mockDataToDb() {
-        userRepository.save(MockData.users);
-        for (Case c: MockData.cases) {
-            caseRepository.save(c);
-
-            caseDataRepository.save(MockData.caseData.get(c.getId()));
-        }
     }
 
     @RequestMapping(value = "/testpatient")
@@ -55,7 +32,7 @@ public class TestController {
 
         Patient p = new Patient();
 
-        p.setId(123);
+        p.setId(new Long(123));
         p.setName("John Doe");
         p.setBirthTime(Calendar.getInstance());
         p.setGender(Gender.Male);
@@ -68,4 +45,3 @@ public class TestController {
     }
 
 }
-*/

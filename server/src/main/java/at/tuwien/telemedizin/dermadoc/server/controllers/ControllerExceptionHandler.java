@@ -24,7 +24,7 @@ public class ControllerExceptionHandler {
     @ExceptionHandler(value = Throwable.class)
     public @ResponseBody Error defaultExceptionHandler(HttpServletRequest request, HttpServletResponse response, Exception exception) {
 
-        Log.error("Handle exception: "+exception.getMessage());
+        Log.error("Handle exception: "+exception.getClass().getSimpleName()+": "+exception.getMessage());
 
         if (exception instanceof RestException) {
             response.setStatus(((RestException)exception).getStatusCode().value());
