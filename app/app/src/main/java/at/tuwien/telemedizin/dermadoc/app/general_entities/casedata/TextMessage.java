@@ -11,7 +11,7 @@ import at.tuwien.telemedizin.dermadoc.app.general_entities.User;
 
 public class TextMessage extends CaseData {
 
-    public TextMessage(long id, Calendar created, User author, String message) {
+    public TextMessage(Long id, Calendar created, User author, String message) {
         super(id, created, author);
 
         this.message = message;

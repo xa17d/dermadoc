@@ -117,7 +117,6 @@ public class CaseDataListAdapter extends ArrayAdapter<CaseDataParc> {
         if (caseData instanceof DiagnosisParc) {
 
             messageTypeText = context.getString(R.string.message_type_diagnosis);
-
             specificView = getDiagnosisLayout((DiagnosisParc)caseData);
         } else if (caseData instanceof PhotoMessageParc) {
             messageTypeText = context.getString(R.string.message_type_photo);
@@ -151,7 +150,6 @@ public class CaseDataListAdapter extends ArrayAdapter<CaseDataParc> {
             specificView = getAnamnesisLayout((AnamnesisParc) caseData);
         }
 
-        // TODO other types
 
         messageTypeTextView.setText(messageTypeText);
 
@@ -283,7 +281,12 @@ public class CaseDataListAdapter extends ArrayAdapter<CaseDataParc> {
                     View medRootView = inflater2.inflate(R.layout.simple_text_list_item, null);
 
                     TextView diagnosisText = (TextView) medRootView.findViewById(R.id.msg_text);
-                    diagnosisText.setText(med.getName());
+                    String medText = med.getName();
+                    if (med.getDosis() != null && med.getDosis().trim().length() > 0) {
+                        medText += "\n" + context.getString(R.string.label_medication_dosis)
+                                + " " + med.getDosis();
+                    }
+                    diagnosisText.setText(medText);
                     medicationListView.addView(medRootView);
                 }
             }

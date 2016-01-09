@@ -266,7 +266,12 @@ public class CaseDataActivity extends AppCompatActivity implements EditLocationF
                     View medRootView = inflater2.inflate(R.layout.simple_text_list_item, null);
 
                     TextView diagnosisText = (TextView) medRootView.findViewById(R.id.msg_text);
-                    diagnosisText.setText(med.getName());
+                    String medText = med.getName();
+                    if (med.getDosis() != null && med.getDosis().trim().length() > 0) {
+                        medText += "\n" + getString(R.string.label_medication_dosis)
+                                + " " + med.getDosis();
+                    }
+                    diagnosisText.setText(medText);
                     medicationListView.addView(medRootView);
                 }
             }

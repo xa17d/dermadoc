@@ -686,7 +686,7 @@ public class CaseActivity extends AppCompatActivity
 
             ServerInterface sI = ServerInterfaceFactory.getInstance();
 
-            long caseId = caseItem.getId();
+            Long caseId = caseItem.getId();
 
             // send case-data elements
             List<CaseData> caseDataToSend = ParcelableHelper.mapToCaseDataList(caseDataParcToSend);
