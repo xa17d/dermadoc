@@ -1,5 +1,6 @@
 package at.tuwien.telemedizin.dermadoc.server.persistence.dao.hibernate;
 
+import at.tuwien.telemedizin.dermadoc.entities.Case;
 import at.tuwien.telemedizin.dermadoc.entities.Icd10Diagnosis;
 import at.tuwien.telemedizin.dermadoc.entities.Medication;
 import at.tuwien.telemedizin.dermadoc.entities.casedata.*;
@@ -7,6 +8,7 @@ import at.tuwien.telemedizin.dermadoc.server.persistence.dao.CaseDataDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,7 +31,24 @@ public class CaseDataDaoImpl implements CaseDataDao {
 	AnamnesisQuestionRepository anamnesisQuestionRepository;
 
 	@Override
-	public void insert(CaseData caseData) {
+	public Iterable<CaseData> listCaseDataByUserAndCase(long caseId, long userId) {
+		Case parentCase = new Case();
+		parentCase.setId(caseId);
+
+		Iterable<CaseData> cases = caseDataRepository.findByCaseId(parentCase);
+		ArrayList<CaseData> result = new ArrayList<CaseData>();
+
+		for (CaseData c : cases) {
+			if (!c.getPrivate() || c.getAuthor().getId() == userId) {
+				result.add(c);
+			}
+		}
+
+		return result;
+	}
+
+	@Override
+	public CaseData insert(CaseData caseData) {
 
 		if(caseData instanceof Advice) {
 			List<Medication> m = ((Advice) caseData).getMedications();
@@ -37,7 +56,7 @@ public class CaseDataDaoImpl implements CaseDataDao {
 				medicationRepository.save(m);
 			}
 
-			caseDataRepository.save(caseData);
+			caseData = caseDataRepository.save(caseData);
 
 		}
 		else if (caseData instanceof Diagnosis) {
@@ -47,7 +66,7 @@ public class CaseDataDaoImpl implements CaseDataDao {
 				icd10Repository.save(icd);
 			}
 
-			caseDataRepository.save(caseData);
+			caseData = caseDataRepository.save(caseData);
 
 
 
@@ -57,11 +76,12 @@ public class CaseDataDaoImpl implements CaseDataDao {
 				anamnesisQuestionRepository.save(aq);
 			}
 
-			caseDataRepository.save(caseData);
+			caseData = caseDataRepository.save(caseData);
 
 		} else {
-			caseDataRepository.save(caseData);
+			caseData = caseDataRepository.save(caseData);
 		}
 
+		return caseData;
 	}
 }

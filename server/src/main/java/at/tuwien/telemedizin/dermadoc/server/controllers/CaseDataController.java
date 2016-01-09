@@ -5,6 +5,7 @@ import at.tuwien.telemedizin.dermadoc.entities.User;
 import at.tuwien.telemedizin.dermadoc.entities.casedata.CaseData;
 import at.tuwien.telemedizin.dermadoc.entities.rest.CaseDataList;
 import at.tuwien.telemedizin.dermadoc.server.exceptions.EntityNotFoundException;
+import at.tuwien.telemedizin.dermadoc.server.persistence.dao.CaseDataDao;
 import at.tuwien.telemedizin.dermadoc.server.persistence.dao.hibernate.CaseDataRepository;
 import at.tuwien.telemedizin.dermadoc.server.persistence.dao.hibernate.CaseRepository;
 import at.tuwien.telemedizin.dermadoc.server.security.Access;
@@ -23,7 +24,7 @@ import java.util.GregorianCalendar;
 public class CaseDataController {
 
     @Autowired
-    CaseDataRepository caseDataRepository;
+    CaseDataDao caseDataDao;
 
     @Autowired
     CaseRepository caseRepository;
@@ -52,7 +53,7 @@ public class CaseDataController {
         Case c = caseRepository.getCaseById(caseId);
         if (c == null) { throw new EntityNotFoundException("id does not exist"); }
         checkAccess(user, c);
-        return new CaseDataList(caseDataRepository.listCaseDataByUserAndCase(caseId, user.getId()));
+        return new CaseDataList(caseDataDao.listCaseDataByUserAndCase(caseId, user.getId()));
     }
 
     @RequestMapping(value = "/cases/{caseId}/data", method = RequestMethod.POST)
@@ -63,7 +64,7 @@ public class CaseDataController {
         checkAccess(user, c);
         prepareInsert(user, caseData);
         caseData.setCase(c);
-        caseData = caseDataRepository.save(caseData);
+        caseData = caseDataDao.insert(caseData);
 
         // send notification
         notificationService.notifyCase(c, user, user.getName()+" posted in \""+c.getName()+"\"");
