@@ -8,7 +8,6 @@ import at.tuwien.telemedizin.dermadoc.entities.casedata.CaseData;
 import at.tuwien.telemedizin.dermadoc.server.persistence.dao.hibernate.CaseDataRepository;
 import at.tuwien.telemedizin.dermadoc.server.persistence.dao.hibernate.CaseRepository;
 import at.tuwien.telemedizin.dermadoc.server.persistence.dao.hibernate.UserRepository;
-import at.tuwien.telemedizin.dermadoc.server.persistence.dao.mock.MockData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,15 +21,6 @@ import java.util.Calendar;
 
 @RestController
 public class TestController {
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private CaseRepository caseRepository;
-
-    @Autowired
-    private CaseDataRepository caseDataRepository;
 
     @RequestMapping(value = "/")
     public String helloWorld() {
