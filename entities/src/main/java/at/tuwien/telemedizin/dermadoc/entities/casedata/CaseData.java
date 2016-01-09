@@ -21,12 +21,17 @@ import java.util.Calendar;
         @JsonSubTypes.Type(value = PhotoMessage.class),
         @JsonSubTypes.Type(value = TextMessage.class)
 })
+/*
+ ---> this does not work propertly, because only with the table case_data,
+      hibernate can not determine which subtype of CaseData the item is
+      and throws an cannot be cast exception.
 @NamedNativeQueries({
         @NamedNativeQuery(
                 name = "CaseData.listCaseDataByUserAndCase",
                 query = "select * from case_data cd where cd.case_id_case_id = ?1  AND (cd.is_private = FALSE or cd.author_id=?2)"
         )
 })
+*/
 @Entity
 @Table(name = "case_data")
 @Inheritance(strategy = InheritanceType.JOINED)

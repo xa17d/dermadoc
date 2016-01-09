@@ -173,4 +173,46 @@ public class CaseDataDaoImplTest {
 
 
 	}
+
+	@Test
+	public void listCaseDataByUserAndCaseTest() throws Exception {
+		Physician author = new Physician();
+		author.setName("physicianTest");
+		author.setMail("phuuu@hey");
+		author.setPassword("123213");
+
+		author = userRepository.save(author);
+
+		Case c = new Case();
+		c.setName("testCase3");
+		c.setPhysician(author);
+		Calendar today = Calendar.getInstance();
+		today.set(Calendar.HOUR_OF_DAY, 0);
+		c.setCreated(today);
+		c = caseRepository.save(c);
+		CaseData testCaseData = new CaseInfo();
+
+		testCaseData.setCase(c);
+		testCaseData.setAuthor(author);
+
+		testCaseData = caseDataDao.insert(testCaseData);
+
+		long caseId = c.getId();
+		long authorId = author.getId();
+		Iterable<CaseData> caseList = caseDataDao.listCaseDataByUserAndCase(caseId, authorId);
+
+		Assert.assertNotNull(caseList);
+
+		int count = 0;
+		for (CaseData d : caseList) {
+			count++;
+
+			Assert.assertTrue("Instance of Data",d instanceof CaseInfo);
+		}
+
+		Assert.assertEquals(1, count);
+
+
+	}
+
 	}
