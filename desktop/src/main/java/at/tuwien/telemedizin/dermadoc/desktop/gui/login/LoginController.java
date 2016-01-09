@@ -1,5 +1,6 @@
 package at.tuwien.telemedizin.dermadoc.desktop.gui.login;
 
+import at.tuwien.telemedizin.dermadoc.desktop.gui.DesktopApplication;
 import at.tuwien.telemedizin.dermadoc.desktop.gui.main.MainStage;
 import at.tuwien.telemedizin.dermadoc.desktop.service.ILoginService;
 import at.tuwien.telemedizin.dermadoc.desktop.service.LoginService;
@@ -12,7 +13,10 @@ import at.tuwien.telemedizin.dermadoc.entities.rest.Error;
 import at.tuwien.telemedizin.dermadoc.service.rest.listener.RestListener;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.DialogPane;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 /**
@@ -64,7 +68,19 @@ public class LoginController {
 
         @Override
         public void onAuthenticationError(Error error) {
-            //TODO
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("OOOPS");
+                    alert.setHeaderText("Login Credentials Are Incorrect");
+                    alert.setContentText("please check your email address and password and try again...");
+                    DialogPane dialogPane = alert.getDialogPane();
+                    dialogPane.getStylesheets().add(DesktopApplication.class.getResource("main.css").toExternalForm());
+                    ((Stage) dialogPane.getScene().getWindow()).getIcons().add(new Image(DesktopApplication.class.getResourceAsStream("dermadoc_icon_c_96.png")));
+                    alert.showAndWait();
+                }
+            });
         }
     }
 }
