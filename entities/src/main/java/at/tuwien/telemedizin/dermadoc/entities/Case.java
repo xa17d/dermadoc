@@ -78,6 +78,6 @@ public class Case {
             return false;
 
         Case c = (Case) o;
-        return this.getId() == c.getId();
+        return this.getId().equals(c.getId());
     }
 }
