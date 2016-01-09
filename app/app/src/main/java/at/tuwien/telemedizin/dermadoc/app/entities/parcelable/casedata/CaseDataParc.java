@@ -17,14 +17,15 @@ import at.tuwien.telemedizin.dermadoc.app.general_entities.casedata.CaseData;
  */
 public abstract class CaseDataParc implements Parcelable {
 
-    public CaseDataParc(long id, Calendar created, UserParc author) {
+    public CaseDataParc(Long id, Calendar created, UserParc author) {
         this.id = id;
         this.created = created;
         this.author = author;
     }
 
-    private long id;
-    public long getId() { return id; }
+    private Long id;
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
     private Calendar created;
     public Calendar getCreated() { return created; }

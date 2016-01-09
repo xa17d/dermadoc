@@ -8,7 +8,7 @@ import java.util.Calendar;
  */
 
 public class Case {
-    public Case(long id, Patient patient, Calendar created) {
+    public Case(Long id, Patient patient, Calendar created) {
         this.id = id;
         this.patient = patient;
         this.created = created;
@@ -16,9 +16,9 @@ public class Case {
 
     public Case() { }
 
-    private long id;
-    public long getId() { return id; }
-    public void setId(long id) { this.id = id; }
+    private Long id;
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
 
     private Patient patient;
@@ -49,7 +49,8 @@ public class Case {
 
     @Override
     public int hashCode() {
-        return (int)this.getId();
+        if (getId() == null) { return 0; }
+        return this.getId().intValue();
     }
 
     @Override
@@ -65,6 +66,6 @@ public class Case {
             return false;
 
         Case c = (Case) o;
-        return this.getId() == c.getId();
+        return this.getId().equals(c.getId());
     }
 }

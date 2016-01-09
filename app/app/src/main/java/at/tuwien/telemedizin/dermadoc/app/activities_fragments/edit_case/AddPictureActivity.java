@@ -132,13 +132,13 @@ public class AddPictureActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            PhotoMessageParc pM = new PhotoMessageParc(-1, Calendar.getInstance(), currentUser, "JPEG", byteArray);
+            PhotoMessageParc pM = new PhotoMessageParc(null, Calendar.getInstance(), currentUser, "JPEG", byteArray);
             photoRelatedMessages.add(pM);
 
             String picDescriptionStr = pH.getDescription();
             if (picDescriptionStr.trim().length() > 0) {
                 picDescriptionStr = "Picture: \n" + picDescriptionStr;
-                TextMessageParc pDescription = new TextMessageParc(-1, Calendar.getInstance(), currentUser,picDescriptionStr);
+                TextMessageParc pDescription = new TextMessageParc(null, Calendar.getInstance(), currentUser,picDescriptionStr);
                 photoRelatedMessages.add(pDescription);
             }
 

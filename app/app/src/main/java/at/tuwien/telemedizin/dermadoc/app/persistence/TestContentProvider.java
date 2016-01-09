@@ -49,15 +49,15 @@ public class TestContentProvider implements ContentProvider {
     @Override
     public List<PhysicianParc> getNearbyPhysicians(GeoLocationParc geoLocation) {
                 PhysicianParc a = new PhysicianParc(); // TODO remove
-        a.setId(0);
+        a.setId(0L);
         a.setName("a");
 
         PhysicianParc b = new PhysicianParc();
-        b.setId(1);
+        b.setId(1L);
         b.setName("b");
 
         PhysicianParc c = new PhysicianParc();
-        c.setId(2);
+        c.setId(2L);
         c.setName("c");
 
         List<PhysicianParc> list = new ArrayList<PhysicianParc>();
@@ -95,7 +95,7 @@ public class TestContentProvider implements ContentProvider {
         qList.add(q3);
         qList.add(q4);
 
-        return new AnamnesisParc(0, Calendar.getInstance(), new PhysicianParc(), "Please fill out this form - be honest!", qList);
+        return new AnamnesisParc(0L, Calendar.getInstance(), new PhysicianParc(), "Please fill out this form - be honest!", qList);
     }
 
     private AnamnesisParc mockAnamnesis2() {
@@ -132,7 +132,7 @@ public class TestContentProvider implements ContentProvider {
         qList.add(q6);
         qList.add(q7);
 
-        return new AnamnesisParc(0, Calendar.getInstance(), new PhysicianParc(), "Please fill out this form - be honest!", qList);
+        return new AnamnesisParc(1L, Calendar.getInstance(), new PhysicianParc(), "Please fill out this form - be honest!", qList);
     }
 
     @Override

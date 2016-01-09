@@ -16,7 +16,7 @@ import at.tuwien.telemedizin.dermadoc.app.general_entities.casedata.Anamnesis;
  */
 public class AnamnesisParc extends CaseDataParc {
 
-    public AnamnesisParc(long id, Calendar created, UserParc author, String message, List<AnamnesisQuestionParc> questions) {
+    public AnamnesisParc(Long id, Calendar created, UserParc author, String message, List<AnamnesisQuestionParc> questions) {
         super(id, created, author);
 
         this.message = message;

@@ -7,9 +7,9 @@ package at.tuwien.telemedizin.dermadoc.app.general_entities;
 
 public class Notification {
 
-    private long id;
-    public long getId() { return id; }
-    public void setId(long id) { this.id = id; }
+    private Long id;
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
     private long userId;
     public long getUserId() { return userId; }
@@ -38,7 +38,8 @@ public class Notification {
 
     @Override
     public int hashCode() {
-        return (int)this.getId();
+        if (getId() == null) { return 0; }
+        return this.getId().intValue();
     }
 
     @Override
@@ -54,6 +55,6 @@ public class Notification {
             return false;
 
         Notification n = (Notification) o;
-        return this.getId() == n.getId();
+        return this.getId().equals(n.getId());
     }
 }

@@ -14,9 +14,9 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 })
 public abstract class User {
 
-    private long id;
-    public long getId() { return id; }
-    public void setId(long id) { this.id = id; }
+    private Long id;
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
 
     private String mail;
@@ -43,7 +43,8 @@ public abstract class User {
 
     @Override
     public int hashCode() {
-        return (int)this.getId();
+        if (getId() == null) { return 0; }
+        return this.getId().intValue();
     }
 
     @Override
@@ -59,6 +60,6 @@ public abstract class User {
             return false;
 
         User u = (User) o;
-        return this.getId() == u.getId();
+        return this.getId().equals(u.getId());
     }
 }

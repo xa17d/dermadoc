@@ -118,15 +118,15 @@ public class TestServerInterface implements ServerInterface {
 
     private List<Physician> createPhysicianList() {
         Physician a = new Physician(); // TODO remove
-        a.setId(0);
+        a.setId(0L);
         a.setName("ALbert");
 
         Physician b = new Physician();
-        b.setId(1);
+        b.setId(1L);
         b.setName("Berta");
 
         Physician c = new Physician();
-        c.setId(2);
+        c.setId(2L);
         c.setName("Charlie");
 
         List<Physician> list = new ArrayList<Physician>();

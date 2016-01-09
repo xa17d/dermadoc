@@ -17,7 +17,7 @@ import at.tuwien.telemedizin.dermadoc.app.general_entities.casedata.Advice;
  */
 public class AdviceParc extends CaseDataParc {
 
-    public AdviceParc(long id, Calendar created, UserParc author, String message, List<MedicationParc> medications) {
+    public AdviceParc(Long id, Calendar created, UserParc author, String message, List<MedicationParc> medications) {
         super(id, created, author);
 
         this.message = message;

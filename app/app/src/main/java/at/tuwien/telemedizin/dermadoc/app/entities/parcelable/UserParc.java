@@ -9,9 +9,9 @@ import at.tuwien.telemedizin.dermadoc.app.general_entities.User;
  * Abstract User
  */
 public abstract class UserParc implements Parcelable {
-    private long id;
-    public long getId() { return id; }
-    public void setId(long id) { this.id = id; }
+    private Long id;
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
     private String mail;
     public String getMail() { return mail; }
@@ -53,7 +53,7 @@ public abstract class UserParc implements Parcelable {
 
     }
 
-    private UserParc(long id, String mail, String password, String name, GeoLocationParc location) {
+    private UserParc(Long id, String mail, String password, String name, GeoLocationParc location) {
         setId(id);
         setMail(mail);
         setPassword(password);

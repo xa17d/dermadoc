@@ -236,7 +236,7 @@ public class EditCaseActivity extends AppCompatActivity implements OnCaseDataReq
         Calendar cal = Calendar.getInstance();
 
         if (newCase) {
-            caseItem = new CaseParc(-1, cUser, cal);
+            caseItem = new CaseParc(null, cUser, cal);
         }
 
         nearbyPhysicians = new ArrayList<>();
@@ -538,14 +538,14 @@ public class EditCaseActivity extends AppCompatActivity implements OnCaseDataReq
         Calendar timestamp = Calendar.getInstance();
 
         // CaseInfo
-        CaseInfoParc caseInfo = new CaseInfoParc(-1, timestamp,
+        CaseInfoParc caseInfo = new CaseInfoParc(null, timestamp,
                 caseItem.getPatient(), localizations, painIntensity, size);
 
 
         newCaseDataElements.add(caseInfo);
 
         // symptom description as TextMessage
-        TextMessageParc symptomMessageParc = new TextMessageParc(-1,
+        TextMessageParc symptomMessageParc = new TextMessageParc(null,
                 timestamp, caseItem.getPatient(), getString(R.string.label_symtom_description_text_header, symptomDescription));
         newCaseDataElements.add(symptomMessageParc);
 
@@ -561,7 +561,7 @@ public class EditCaseActivity extends AppCompatActivity implements OnCaseDataReq
                 e.printStackTrace();
             }
             // PictureHelperEntity to PhotoMessage
-            PhotoMessageParc photoMessageParc = new PhotoMessageParc(-1,
+            PhotoMessageParc photoMessageParc = new PhotoMessageParc(null,
                     timestamp, caseItem.getPatient(), "JPEG", byteArray);
             // add photoMessage to caseItem
             newCaseDataElements.add(photoMessageParc);
@@ -570,7 +570,7 @@ public class EditCaseActivity extends AppCompatActivity implements OnCaseDataReq
             String picDescriptionStr = p.getDescription();
             if (picDescriptionStr.trim().length() > 0) {
                 picDescriptionStr = "Picture: \n" + picDescriptionStr;
-                TextMessageParc photoRelatedMessageParc = new TextMessageParc(-1,
+                TextMessageParc photoRelatedMessageParc = new TextMessageParc(null,
                         timestamp, caseItem.getPatient(), picDescriptionStr);
                 newCaseDataElements.add(photoRelatedMessageParc);
             }
@@ -873,7 +873,7 @@ public class EditCaseActivity extends AppCompatActivity implements OnCaseDataReq
             // TODO send case, retrieve new case-id
             Case caseToSend = ParcelableHelper.mapToCase(caseParcToSend);
             Case caseResultFromServer = null;
-            long caseId = -1;
+            Long caseId = null;
             // check if it is a new case that should be created or an old case, which data should be sent
             if (newCase) {
                 caseResultFromServer = sI.createCase(caseToSend);

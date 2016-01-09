@@ -14,7 +14,7 @@ import at.tuwien.telemedizin.dermadoc.app.general_entities.User;
 
 public class Diagnosis extends CaseData {
 
-    public Diagnosis(long id, Calendar created, User author, String message, List<Icd10Diagnosis> diagnosisList) {
+    public Diagnosis(Long id, Calendar created, User author, String message, List<Icd10Diagnosis> diagnosisList) {
         super(id, created, author);
 
         this.message = message;

@@ -18,7 +18,7 @@ import at.tuwien.telemedizin.dermadoc.app.general_entities.casedata.CaseInfo;
  */
 public class CaseInfoParc extends CaseDataParc {
 
-    public CaseInfoParc(long id, Calendar created, UserParc author, List<BodyLocalization> localizations, PainIntensity pain, double size) {
+    public CaseInfoParc(Long id, Calendar created, UserParc author, List<BodyLocalization> localizations, PainIntensity pain, double size) {
         super(id, created, author);
 
         this.localizations = localizations;

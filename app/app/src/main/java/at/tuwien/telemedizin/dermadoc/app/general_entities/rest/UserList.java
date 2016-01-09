@@ -15,4 +15,10 @@ public class UserList extends ArrayList<User> {
         super(original);
     }
 
+    public UserList(Iterable<? extends User> original) {
+        for (User item : original) {
+            add(item);
+        }
+    }
+
 }

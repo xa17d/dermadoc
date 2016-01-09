@@ -16,6 +16,20 @@ public class Icd10Diagnosis {
         this.icd10Name = icd10Name;
     }
 
+    Long id;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+
+
+
+
     private String icd10Code;
     public void setIcd10Code(String icd10Code) { this.icd10Code = icd10Code; }
     public String getIcd10Code() { return icd10Code; }

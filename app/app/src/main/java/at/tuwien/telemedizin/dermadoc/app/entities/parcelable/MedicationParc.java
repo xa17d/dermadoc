@@ -16,10 +16,30 @@ public class MedicationParc implements Parcelable {
     private String name;
     public String getName() { return name; }
 
+    private Long medicationId;
+    public Long getMedicationId() {
+        return medicationId;
+    }
+
+    public MedicationParc(String name, String dosis) {
+        this.name = name;
+        this.dosis = dosis;
+    }
+
+    private String dosis;
+    public String getDosis() { return dosis; }
+    public void setDosis(String dosis) { this.dosis = dosis; }
+
+    public void setMedicationId(Long medicationId) {
+        this.medicationId = medicationId;
+    }
+
     @Override
     public String toString() {
         return "MedicationParc{" +
                 "name='" + name + '\'' +
+                ", medicationId=" + medicationId +
+                ", dosis='" + dosis + '\'' +
                 '}';
     }
 
@@ -28,15 +48,17 @@ public class MedicationParc implements Parcelable {
      * @param medication
      */
     public MedicationParc(Medication medication) {
-        this(medication.getName());
+        this(medication.getName(), medication.getDosis());
+        this.dosis = medication.getDosis();
     }
 
     // parcelable ################################
 
     public  MedicationParc(Parcel in) {
-
+        medicationId = in.readLong();
         String nameIn = in.readString();
         this.name = nameIn;
+        dosis = in.readString();
     }
 
     @Override
@@ -47,7 +69,9 @@ public class MedicationParc implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
 
+        dest.writeLong(medicationId);
         dest.writeString(getName());
+        dest.writeString(dosis);
     }
 
     // this is used to regenerate your object. All Parcelables must have a CREATOR that implements these two methods

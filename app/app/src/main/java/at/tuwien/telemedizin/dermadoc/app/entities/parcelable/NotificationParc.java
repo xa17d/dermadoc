@@ -14,9 +14,9 @@ public class NotificationParc implements Parcelable {
 
     }
 
-    private long id;
-    public long getId() { return id; }
-    public void setId(long id) { this.id = id; }
+    private Long id;
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
     private long userId;
     public long getUserId() { return userId; }
@@ -56,7 +56,7 @@ public class NotificationParc implements Parcelable {
             return false;
 
         Notification n = (Notification) o;
-        return this.getId() == n.getId();
+        return this.getId().equals(n.getId());
     }
 
     public NotificationParc(Notification notification) {

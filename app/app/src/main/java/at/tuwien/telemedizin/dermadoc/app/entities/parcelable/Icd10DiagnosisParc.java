@@ -19,6 +19,14 @@ public class Icd10DiagnosisParc implements Parcelable {
         this.icd10Name = icd10Name;
     }
 
+    private Long id;
+    public Long getId() {
+        return id;
+    }
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     private String icd10Code;
     public void setIcd10Code(String icd10Code) { this.icd10Code = icd10Code; }
     public String getIcd10Code() { return icd10Code; }
@@ -33,6 +41,7 @@ public class Icd10DiagnosisParc implements Parcelable {
     }
 
     public Icd10DiagnosisParc(Icd10Diagnosis icd10Diagnosis) {
+        this.id = icd10Diagnosis.getId();
         this.icd10Code = icd10Diagnosis.getIcd10Code();
         this.icd10Name = icd10Diagnosis.getIcd10Name();
     }
@@ -40,7 +49,7 @@ public class Icd10DiagnosisParc implements Parcelable {
     // parcelable ################################
 
     public Icd10DiagnosisParc(Parcel in) {
-
+        this.id = in.readLong();
         this.icd10Code = in.readString();
         this.icd10Name = in.readString();
     }
@@ -52,7 +61,7 @@ public class Icd10DiagnosisParc implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-
+        dest.writeLong(id);
         dest.writeString(icd10Code);
         dest.writeString(icd10Name);
     }

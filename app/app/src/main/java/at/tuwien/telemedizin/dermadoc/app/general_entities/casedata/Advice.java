@@ -15,7 +15,7 @@ import at.tuwien.telemedizin.dermadoc.app.general_entities.User;
 
 public class Advice extends CaseData {
 
-    public Advice(long id, Calendar created, User author, String message, List<Medication> medications) {
+    public Advice(Long id, Calendar created, User author, String message, List<Medication> medications) {
         super(id, created, author);
 
         this.message = message;

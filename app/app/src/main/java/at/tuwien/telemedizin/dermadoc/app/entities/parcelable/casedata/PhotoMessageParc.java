@@ -14,7 +14,7 @@ import at.tuwien.telemedizin.dermadoc.app.general_entities.casedata.PhotoMessage
  */
 public class PhotoMessageParc extends CaseDataParc {
 
-    public PhotoMessageParc(long id, Calendar created, UserParc author, String mime, byte[] photoData) {
+    public PhotoMessageParc(Long id, Calendar created, UserParc author, String mime, byte[] photoData) {
         super(id, created, author);
 
         this.mime = mime;

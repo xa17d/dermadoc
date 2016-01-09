@@ -23,15 +23,15 @@ public class CaseParc implements Parcelable {
     // key for the intent
     public static final String INTENT_KEY = CaseParc.class.getName() + "_INTENT_KEY";
 
-    public CaseParc(long id, PatientParc patient, Calendar created) {
+    public CaseParc(Long id, PatientParc patient, Calendar created) {
         this.id = id;
         this.patient = patient;
         this.created = created;
         this.dataElements = new LinkedList<>();
     }
 
-    private long id;
-    public long getId() { return id; }
+    private Long id;
+    public Long getId() { return id; }
 
     private PatientParc patient;
     public PatientParc getPatient() { return patient; }

@@ -22,4 +22,12 @@ public abstract class AnamnesisQuestion {
     public String getQuestion() { return question; }
     public void setQuestion(String question) { this.question = question; }
 
+    private Long id;
+    public Long getId() {
+        return id;
+    }
+    public void setId(Long id) {
+        this.id = id;
+    }
+
 }

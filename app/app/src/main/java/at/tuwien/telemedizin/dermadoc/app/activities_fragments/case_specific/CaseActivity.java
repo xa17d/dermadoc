@@ -475,7 +475,7 @@ public class CaseActivity extends AppCompatActivity
      */
     public void sendTextMessage(String text) {
         Log.d(LOG_TAG, "sendTextMessage(" + text + ")");
-        TextMessageParc newMessage = new TextMessageParc(-1, Calendar.getInstance(), currentUser, text);
+        TextMessageParc newMessage = new TextMessageParc(null, Calendar.getInstance(), currentUser, text);
 
         // check internet connection
         if (!checkInternetConnection()) {

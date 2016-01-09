@@ -16,10 +16,19 @@ public abstract class AnamnesisQuestionParc implements Parcelable {
     public String getQuestion() { return question; }
     public void setQuestion(String question) { this.question = question; }
 
+    private Long id;
+    public Long getId() {
+        return id;
+    }
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     @Override
     public String toString() {
         return "AnamnesisQuestionParc{" +
                 "question='" + question + '\'' +
+                ", id=" + id +
                 '}';
     }
 
@@ -29,6 +38,7 @@ public abstract class AnamnesisQuestionParc implements Parcelable {
      * @param anamnesisQuestion
      */
     public AnamnesisQuestionParc(AnamnesisQuestion anamnesisQuestion) {
+        this.id = anamnesisQuestion.getId();
         this.question = anamnesisQuestion.getQuestion();
     }
 
@@ -36,7 +46,7 @@ public abstract class AnamnesisQuestionParc implements Parcelable {
 // parcelable ################################
 
     public AnamnesisQuestionParc(Parcel in) {
-
+        this.id = in.readLong();
         this.question = in.readString();
     }
 
@@ -47,6 +57,7 @@ public abstract class AnamnesisQuestionParc implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
         dest.writeString(question);
     }
 

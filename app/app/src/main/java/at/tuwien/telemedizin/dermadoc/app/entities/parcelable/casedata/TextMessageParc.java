@@ -14,7 +14,7 @@ import at.tuwien.telemedizin.dermadoc.app.general_entities.casedata.TextMessage;
  */
 public class TextMessageParc extends CaseDataParc {
 
-    public TextMessageParc(long id, Calendar created, UserParc author, String message) {
+    public TextMessageParc(Long id, Calendar created, UserParc author, String message) {
         super(id, created, author);
 
         this.message = message;

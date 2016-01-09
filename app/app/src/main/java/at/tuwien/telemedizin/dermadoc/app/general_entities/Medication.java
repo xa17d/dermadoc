@@ -19,6 +19,14 @@ public class Medication {
         this.dosis = dosis;
     }
 
+    private Long medicationId;
+    public Long getMedicationId() {
+        return medicationId;
+    }
+    public void setMedicationId(Long medicationId) {
+        this.medicationId = medicationId;
+    }
+
 
     private String name;
     public String getName() { return name; }
