@@ -1,26 +1,30 @@
 package at.tuwien.telemedizin.dermadoc.server.controllers;
 
+import at.tuwien.telemedizin.dermadoc.entities.Case;
 import at.tuwien.telemedizin.dermadoc.entities.Gender;
 import at.tuwien.telemedizin.dermadoc.entities.GeoLocation;
 import at.tuwien.telemedizin.dermadoc.entities.Patient;
-import at.tuwien.telemedizin.dermadoc.entities.User;
-import at.tuwien.telemedizin.dermadoc.server.exceptions.EntityNotFoundException;
-import at.tuwien.telemedizin.dermadoc.server.persistence.dao.UserDao;
+import at.tuwien.telemedizin.dermadoc.entities.casedata.CaseData;
+import at.tuwien.telemedizin.dermadoc.server.persistence.dao.hibernate.CaseDataRepository;
+import at.tuwien.telemedizin.dermadoc.server.persistence.dao.hibernate.CaseRepository;
+import at.tuwien.telemedizin.dermadoc.server.persistence.dao.hibernate.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 /**
  * Created by daniel on 11.11.2015.
  */
+
 @RestController
 public class TestController {
+
     @RequestMapping(value = "/")
     public String helloWorld() {
-
-        return "<html><h1>Hello Derma Doc</h1></html>";
+        return "<html><h1>Hello Derma Doc</h1><p>JSON + DB</p></html>";
     }
 
     @RequestMapping(value = "/testpatient")
@@ -28,7 +32,7 @@ public class TestController {
 
         Patient p = new Patient();
 
-        p.setId(123);
+        p.setId(new Long(123));
         p.setName("John Doe");
         p.setBirthTime(Calendar.getInstance());
         p.setGender(Gender.Male);
@@ -40,14 +44,4 @@ public class TestController {
         return p;
     }
 
-    @RequestMapping(value = "/testdb")
-    public User testDb() throws EntityNotFoundException {
-
-        throw new EntityNotFoundException("blub");
-        //return userDao.getUserById(0);
-
-    }
-
-    @Autowired
-    private UserDao userDao;
 }

@@ -1,6 +1,6 @@
 package at.tuwien.telemedizin.dermadoc.server.persistence.dao;
 
-import at.tuwien.telemedizin.dermadoc.entities.casedata.*;
+import at.tuwien.telemedizin.dermadoc.entities.casedata.CaseData;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ import java.util.List;
  */
 public interface CaseDataDao {
 
-    List<CaseData> listCaseDataByUserAndCase(long caseId, long userId);
+    Iterable<CaseData> listCaseDataByUserAndCase(long caseId, long userId);
 
-    void insert(long caseId, CaseData caseData);
+    CaseData insert(CaseData caseData);
 }

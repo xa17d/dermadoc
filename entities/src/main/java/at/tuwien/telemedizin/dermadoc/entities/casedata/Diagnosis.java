@@ -5,6 +5,7 @@ import at.tuwien.telemedizin.dermadoc.entities.User;
 
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -26,10 +27,19 @@ public class Diagnosis extends CaseData {
 
     public Diagnosis() { }
 
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
     private String message;
     public String getMessage() { return message; }
 
-    @ElementCollection
+    public void setDiagnosisList(List<Icd10Diagnosis> diagnosisList) {
+        this.diagnosisList = diagnosisList;
+    }
+
+    @ElementCollection(fetch = FetchType.EAGER)
     private List<Icd10Diagnosis> diagnosisList = new ArrayList<>();
     public List<Icd10Diagnosis> getDiagnosisList() { return diagnosisList; }
 }

@@ -59,7 +59,9 @@ public class GCCaseTab extends Tab {
     private void initialize() {
 
         //tab text
-        this.setText(aCase.getPatient().getName() + " - " + aCase.getName());
+        if(aCase != null && aCase.getPatient() != null) {
+            this.setText(aCase.getPatient().getName() + " - " + aCase.getName());
+        }
 
         //patient overview
         GCCaseInfo gcCaseInfo = new GCCaseInfo(aCase);

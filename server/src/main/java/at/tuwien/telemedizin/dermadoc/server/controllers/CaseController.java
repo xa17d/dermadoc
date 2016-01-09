@@ -2,10 +2,10 @@ package at.tuwien.telemedizin.dermadoc.server.controllers;
 
 import at.tuwien.telemedizin.dermadoc.entities.*;
 import at.tuwien.telemedizin.dermadoc.entities.rest.CaseList;
-import at.tuwien.telemedizin.dermadoc.server.exceptions.InvalidCaseStatusException;
-import at.tuwien.telemedizin.dermadoc.server.exceptions.InvalidUserTypeException;
-import at.tuwien.telemedizin.dermadoc.server.persistence.dao.CaseDao;
 import at.tuwien.telemedizin.dermadoc.server.exceptions.EntityNotFoundException;
+import at.tuwien.telemedizin.dermadoc.server.exceptions.InvalidCaseStatusException;
+import at.tuwien.telemedizin.dermadoc.server.exceptions.InvalidSubtypeTypeException;
+import at.tuwien.telemedizin.dermadoc.server.persistence.dao.hibernate.CaseRepository;
 import at.tuwien.telemedizin.dermadoc.server.security.*;
 import at.tuwien.telemedizin.dermadoc.server.services.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +19,9 @@ import java.util.GregorianCalendar;
 @RestController
 public class CaseController {
 
+
     @Autowired
-    private CaseDao caseDao;
+    CaseRepository caseRepository;
 
     @Autowired
     private NotificationService notificationService;
@@ -30,13 +31,14 @@ public class CaseController {
     public CaseList listCases(@CurrentUser User user) {
 
         if (user instanceof Patient) {
-            return new CaseList(caseDao.listByPatient(user.getId()));
+            return new CaseList(caseRepository.findByPatient(user));
+
         }
         else if (user instanceof Physician) {
-            return new CaseList(caseDao.listByPhysician(user.getId()));
+            return new CaseList(caseRepository.findByPhysician(user));
         }
         else {
-            throw new InvalidUserTypeException(user.getClass());
+            throw new InvalidSubtypeTypeException(User.class, user.getClass());
         }
     }
 
@@ -44,14 +46,15 @@ public class CaseController {
     @AccessPhysician
     public CaseList listOpenCases()
     {
-        return new CaseList(caseDao.listOpenCases());
+        return new CaseList(caseRepository.findOpenCases());
     }
 
     @RequestMapping(value = "/cases/{caseId}", method = RequestMethod.GET)
     @AccessUser
     public Case listCases(@CurrentUser User user, @PathVariable long caseId) {
 
-        Case c = caseDao.getCaseById(caseId);
+        Case c = caseRepository.getCaseById(caseId);
+        if (c == null) { throw new EntityNotFoundException("id does not exist"); }
 
         if (Access.canAccess(user, c)) {
             return c;
@@ -65,7 +68,7 @@ public class CaseController {
     @AccessPhysician
     public Case acceptCase(@CurrentUser User user, @PathVariable long caseId) {
 
-        Case c = caseDao.getCaseById(caseId);
+        Case c = caseRepository.getCaseById(caseId);
 
         if (Access.canAccess(user, c)) {
 
@@ -74,7 +77,7 @@ public class CaseController {
                 // update case
                 c.setStatus(CaseStatus.Active);
                 c.setPhysician(physician);
-                caseDao.update(c);
+                c = caseRepository.save(c);
 
                 // send notification
                 notificationService.notifyCase(c, user, user.getName()+" accepted your case");
@@ -98,6 +101,7 @@ public class CaseController {
 
         newCase.setPatient(patient); // just to be sure the user doesn't fake this property
         newCase.setCreated(GregorianCalendar.getInstance()); // set to now
+        newCase.setId(null); // create id automatically
 
         // set correct status
         if (newCase.getPhysician() == null) {
@@ -108,7 +112,9 @@ public class CaseController {
         }
 
         // insert to db and get the id assigned
-        caseDao.insert(newCase);
+
+        newCase = caseRepository.save(newCase);
+        //caseDao.insert(newCase);
 
         // send notification
         notificationService.notifyNewCase(newCase);

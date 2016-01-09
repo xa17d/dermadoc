@@ -3,10 +3,7 @@ package at.tuwien.telemedizin.dermadoc.entities.casedata;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
+import javax.persistence.*;
 
 /**
  * Created by daniel on 24.11.2015.
@@ -23,6 +20,15 @@ public abstract class AnamnesisQuestion {
     public AnamnesisQuestion() { }
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+    public Long getId() {
+        return id;
+    }
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     private String question;
     public String getQuestion() { return question; }
     public void setQuestion(String question) { this.question = question; }

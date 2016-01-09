@@ -1,6 +1,8 @@
 package at.tuwien.telemedizin.dermadoc.entities;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 /**
@@ -19,6 +21,21 @@ public class Icd10Diagnosis {
     }
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    Long id;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+
+
+
+
     private String icd10Code;
     public void setIcd10Code(String icd10Code) { this.icd10Code = icd10Code; }
     public String getIcd10Code() { return icd10Code; }

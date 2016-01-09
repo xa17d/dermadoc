@@ -28,16 +28,22 @@ public class CaseInfo extends CaseData {
     public CaseInfo() {   }
 
 
+    public void setLocalizations(List<BodyLocalization> localizations) {
+        this.localizations = localizations;
+    }
+
+    public void setPain(PainIntensity pain) {
+        this.pain = pain;
+    }
+
+    public void setSize(double size) {
+        this.size = size;
+    }
+
     @ElementCollection
     private List<BodyLocalization> localizations;
     public List<BodyLocalization> getLocalizations() { return localizations; }
 
-    //TODO 'localization' is deprecated, 'localizationS' should be used at backend, for more than one localization
-    @Column(name = "body_location")
-    @Deprecated
-    private BodyLocalization localization;
-    @Deprecated
-    public BodyLocalization getLocalization() { return localization; }
 
     @Column(name = "pain_intensity")
     private PainIntensity pain;
@@ -47,13 +53,4 @@ public class CaseInfo extends CaseData {
     public double getSize() { return size; }
 
 
-    //TODO delete
-    @Deprecated
-    public CaseInfo(long id, Calendar created, User author, BodyLocalization localization, PainIntensity pain, double size) {
-        super(id, created, author);
-
-        this.localization = localization;
-        this.pain = pain;
-        this.size = size;
-    }
 }

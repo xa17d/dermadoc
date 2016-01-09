@@ -40,6 +40,9 @@ public class AuthenticationFilter extends GenericFilterBean {
 
         String resourcePath = new UrlPathHelper().getPathWithinApplication(httpRequest);
 
+        logger.info("___________________________________________________");
+        logger.info("REQUEST: "+httpRequest.getMethod()+" "+resourcePath);
+
         String authorizationHeader = httpRequest.getHeader("Authorization");
 
         if (!StringUtils.isEmpty(authorizationHeader)) {

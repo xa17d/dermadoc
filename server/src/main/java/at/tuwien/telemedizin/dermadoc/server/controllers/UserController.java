@@ -5,13 +5,18 @@ import at.tuwien.telemedizin.dermadoc.entities.rest.AuthenticationData;
 import at.tuwien.telemedizin.dermadoc.entities.rest.AuthenticationToken;
 import at.tuwien.telemedizin.dermadoc.server.exceptions.AuthenticationInvalidException;
 import at.tuwien.telemedizin.dermadoc.server.exceptions.EntityNotFoundException;
-import at.tuwien.telemedizin.dermadoc.server.persistence.dao.UserDao;
+import at.tuwien.telemedizin.dermadoc.server.exceptions.InvalidSubtypeTypeException;
+import at.tuwien.telemedizin.dermadoc.server.persistence.dao.hibernate.UserRepository;
 import at.tuwien.telemedizin.dermadoc.server.security.AccessUser;
 import at.tuwien.telemedizin.dermadoc.server.security.CurrentUser;
 import at.tuwien.telemedizin.dermadoc.server.security.SecurityConfig;
 import at.tuwien.telemedizin.dermadoc.server.security.SecurityToken;
 import at.tuwien.telemedizin.dermadoc.server.services.TokenService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -23,8 +28,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class UserController {
 
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+
     @Autowired
-    private UserDao userDao;
+    UserRepository userRepository;
 
     @Autowired
     private TokenService tokenService;
@@ -33,13 +40,8 @@ public class UserController {
     public AuthenticationToken login(@RequestBody AuthenticationData authenticationData) throws AuthenticationInvalidException {
         User user;
 
-        try {
-            user = userDao.getUserByMail(authenticationData.getMail());
-        }
-        catch (EntityNotFoundException e) {
-            // User not found
-            throw new AuthenticationInvalidException();
-        }
+        user = userRepository.getUserByMail(authenticationData.getMail());
+        if (user == null) { throw new AuthenticationInvalidException(); }
 
         if (user.getPassword().equals(authenticationData.getPassword())) {
             // Login successful
@@ -50,6 +52,19 @@ public class UserController {
         } else {
             // Password invalid
             throw new AuthenticationInvalidException();
+        }
+    }
+
+    @RequestMapping(value = "/logout", method = RequestMethod.POST)
+    @AccessUser
+    public void logout() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication instanceof SecurityToken) {
+            SecurityToken token = (SecurityToken)authentication;
+            tokenService.evict(token.getToken());
+        }
+        else {
+            throw new InvalidSubtypeTypeException(Authentication.class, authentication.getClass());
         }
     }
 

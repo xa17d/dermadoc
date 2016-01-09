@@ -5,7 +5,7 @@ package at.tuwien.telemedizin.dermadoc.app.server_interface;
  */
 public class ServerInterfaceFactory {
 
-    public static boolean testMode = true;
+    public static boolean testMode = false;
 
     private static ServerInterface instance;
 

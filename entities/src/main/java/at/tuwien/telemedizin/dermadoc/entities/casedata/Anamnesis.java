@@ -4,6 +4,7 @@ import at.tuwien.telemedizin.dermadoc.entities.User;
 
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -14,7 +15,7 @@ import java.util.List;
 @Entity
 public class Anamnesis extends CaseData {
 
-    public Anamnesis(long id, Calendar created, User author, String message, List<AnamnesisQuestion> questions) {
+    public Anamnesis(Long id, Calendar created, User author, String message, List<AnamnesisQuestion> questions) {
         super(id, created, author);
 
         this.message = message;
@@ -26,9 +27,18 @@ public class Anamnesis extends CaseData {
     }
 
     private String message;
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public void setQuestions(List<AnamnesisQuestion> questions) {
+        this.questions = questions;
+    }
+
     public String getMessage() { return message; }
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private List<AnamnesisQuestion> questions;
     public List<AnamnesisQuestion> getQuestions() { return questions; }
 }

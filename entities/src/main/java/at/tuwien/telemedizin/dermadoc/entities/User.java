@@ -1,5 +1,6 @@
 package at.tuwien.telemedizin.dermadoc.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
@@ -13,22 +14,25 @@ import javax.persistence.*;
         @JsonSubTypes.Type(value = Patient.class),
         @JsonSubTypes.Type(value = Physician.class)
 })
+
 @Entity
 @Table(name = "person")
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class User {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "person_id")
-    private long id;
-    public long getId() { return id; }
-    public void setId(long id) { this.id = id; }
+    private Long id;
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String mail;
     public String getMail() { return mail; }
     public void setMail(String mail) { this.mail = mail; }
 
+    @JsonIgnore
     @Column(nullable = false)
     private String password;
     public String getPassword() { return password; }
@@ -53,7 +57,8 @@ public abstract class User {
 
     @Override
     public int hashCode() {
-        return (int)this.getId();
+        if (getId() == null) { return 0; }
+        return this.getId().intValue();
     }
 
     @Override
@@ -69,6 +74,6 @@ public abstract class User {
             return false;
 
         User u = (User) o;
-        return this.getId() == u.getId();
+        return this.getId().equals(u.getId());
     }
 }

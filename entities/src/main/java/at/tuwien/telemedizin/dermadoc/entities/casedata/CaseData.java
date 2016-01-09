@@ -2,6 +2,7 @@ package at.tuwien.telemedizin.dermadoc.entities.casedata;
 
 import at.tuwien.telemedizin.dermadoc.entities.Case;
 import at.tuwien.telemedizin.dermadoc.entities.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
@@ -21,6 +22,17 @@ import java.util.Calendar;
         @JsonSubTypes.Type(value = PhotoMessage.class),
         @JsonSubTypes.Type(value = TextMessage.class)
 })
+/*
+ ---> this does not work propertly, because only with the table case_data,
+      hibernate can not determine which subtype of CaseData the item is
+      and throws an cannot be cast exception.
+@NamedNativeQueries({
+        @NamedNativeQuery(
+                name = "CaseData.listCaseDataByUserAndCase",
+                query = "select * from case_data cd where cd.case_id_case_id = ?1  AND (cd.is_private = FALSE or cd.author_id=?2)"
+        )
+})
+*/
 @Entity
 @Table(name = "case_data")
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -36,15 +48,17 @@ public abstract class CaseData {
     public CaseData() { }
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "casedata_id")
-    private long id;
-    public long getId() { return id; }
-    public void setId(long id) { this.id = id; }
+    private Long id;
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-
+    @JsonIgnore
     @OneToOne
     private Case caseId;
 
+    @JsonIgnore
     public Case getCase() {
         return caseId;
     }

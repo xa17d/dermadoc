@@ -6,6 +6,13 @@ import java.util.Calendar;
 /**
  * Created by daniel on 11.11.2015.
  */
+@NamedNativeQueries({
+        @NamedNativeQuery(
+                name = "Case.findOpenCases",
+                query = "select * from issue i where i.status = 0 AND physician_person_id is not null",
+                resultClass = Case.class
+        )
+})
 @Entity
 @Table(name = "issue")
 public class Case {
@@ -18,10 +25,11 @@ public class Case {
     public Case() { }
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "case_id")
-    private long id;
-    public long getId() { return id; }
-    public void setId(long id) { this.id = id; }
+    private Long id;
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
     @OneToOne
     private Patient patient;
@@ -53,7 +61,8 @@ public class Case {
 
     @Override
     public int hashCode() {
-        return (int)this.getId();
+        if (getId() == null) { return 0; }
+        return this.getId().intValue();
     }
 
     @Override
@@ -69,6 +78,6 @@ public class Case {
             return false;
 
         Case c = (Case) o;
-        return this.getId() == c.getId();
+        return this.getId().equals(c.getId());
     }
 }

@@ -23,11 +23,20 @@ apply plugin: 'spring-boot'
 apply plugin: 'io.spring.dependency-management'
 
 
-
 jar {
     baseName = 'server'
     version = '0.0.1-SNAPSHOT'
+
+    //manifest {
+//        attributes 'Implementation-Title': 'dermadoc.desktop',
+//                'Implementation-Version': version,
+//                'MainStage-Class': 'at.tuwien.telemedizin.dermadoc.desktop.gui.DesktopApplication'
+//    }
+
+    // include dependencies (create fat jar). Source: http://www.mkyong.com/gradle/gradle-create-a-jar-file-with-dependencies/
+    //from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
 }
+
 //sourceCompatibility = 1.8
 //targetCompatibility = 1.8
 
@@ -37,36 +46,25 @@ repositories {
 
 
 dependencies {
-    // compile group: 'org.hibernate.javax.persistence', name: 'hibernate-jpa-2.0-api', version: '1.0.0.Final'
 
-    //compile group: 'org.hibernate', name: 'hibernate-core'
-    //compile group: 'org.hibernate', name: 'hibernate-entitymanager'
-    compile 'postgresql:postgresql:9.1-901-1.jdbc4'
-    // compile group: 'javax.persistence', name: 'persistence-api'
     compile('javax.inject:javax.inject:1')
 
-
-    compile('org.springframework.boot:spring-boot-starter-web')
-    compile 'org.springframework.boot:spring-boot-starter-security'
-    compile 'org.springframework.boot:spring-boot-starter-actuator'
-    compile 'org.springframework.boot:spring-boot-starter-aop'
-    //compile('com.fasterxml.jackson.dataformat:jackson-dataformat-xml')
+    compile("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")
+    compile "org.springframework.boot:spring-boot-starter-security:${springBootVersion}"
+    compile "org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}"
+    compile "org.springframework.boot:spring-boot-starter-aop:${springBootVersion}"
     compile('org.slf4j:log4j-over-slf4j:1.7.12')
 
     // Persistence Stuff
-    compile('org.springframework.boot:spring-boot-starter-data-jpa')
-    // compile('org.springframework.boot:spring-boot-starter-jdbc')
-    // runtime('mysql:mysql-connector-java')
-
-    //fix for xml parser
-    //compile('org.codehaus.woodstox:woodstox-core-asl:4.1.4')
+    compile("org.springframework.boot:spring-boot-starter-data-jpa:${springBootVersion}")
+    compile 'postgresql:postgresql:9.1-901-1.jdbc4'
 
     // Test Stuff
     testCompile('org.springframework.boot:spring-boot-starter-test')
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+
     // Other Projects
     compile project(':entities')
-
-
 }
 
 
