@@ -9,14 +9,14 @@ import javax.persistence.PrimaryKeyJoinColumn;
 @Entity
 @PrimaryKeyJoinColumn(name = "question")
 public class AnamnesisQuestionBool extends AnamnesisQuestion {
-    private boolean answer;
-    public boolean getAnswer() { return answer; }
-    public void setAnswer(boolean answer) {
+    private Boolean answer;
+    public Boolean getAnswer() { return answer; }
+    public void setAnswer(Boolean answer) {
         this.answer = answer;
     }
 
     @Override
     public String toString() {
-        return "# " + getQuestion() + "\n   * " + (getAnswer() ? "YES" : "NO");
+        return "# " + getQuestion() + "\n   * " + (getAnswer() == null ? "-"  : (getAnswer() ? "YES" : "NO"));
     }
 }
