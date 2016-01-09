@@ -1,5 +1,6 @@
 package at.tuwien.telemedizin.dermadoc.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
@@ -31,6 +32,7 @@ public abstract class User {
     public String getMail() { return mail; }
     public void setMail(String mail) { this.mail = mail; }
 
+    @JsonIgnore
     @Column(nullable = false)
     private String password;
     public String getPassword() { return password; }

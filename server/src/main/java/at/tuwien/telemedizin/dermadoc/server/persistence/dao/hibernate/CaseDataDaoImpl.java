@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -43,6 +45,13 @@ public class CaseDataDaoImpl implements CaseDataDao {
 				result.add(c);
 			}
 		}
+
+		Collections.sort(result, new Comparator<CaseData>() {
+			@Override
+			public int compare(CaseData o1, CaseData o2) {
+				return o1.getCreated().compareTo(o2.getCreated());
+			}
+		});
 
 		return result;
 	}

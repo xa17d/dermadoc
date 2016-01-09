@@ -2,6 +2,7 @@ package at.tuwien.telemedizin.dermadoc.entities.casedata;
 
 import at.tuwien.telemedizin.dermadoc.entities.Case;
 import at.tuwien.telemedizin.dermadoc.entities.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
@@ -53,10 +54,11 @@ public abstract class CaseData {
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
-
+    @JsonIgnore
     @OneToOne
     private Case caseId;
 
+    @JsonIgnore
     public Case getCase() {
         return caseId;
     }
