@@ -58,9 +58,9 @@ public class PostRequest<Trequest, Tresponse> {
             httpConnection.disconnect();
 
         } catch (MalformedURLException e) {
-            listener.onError(new Error(e));
+            listener.onError(new Error("OOOPS... Something went wrong, please try again"));
         } catch (IOException e) {
-            listener.onError(new Error(e));
+            listener.onError(new Error("OOOPS... Something went wrong, please try again"));
         }
     }
 }

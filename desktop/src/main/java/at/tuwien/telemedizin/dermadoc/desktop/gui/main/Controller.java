@@ -141,9 +141,8 @@ public class Controller {
                 //why is the pane showing, when running in another thread with a short sleep,
                 //but not in the fx thread (also not with a sleep)???
 
-                errorPane.show();
+                //errorPane.show();
 
-                /*
                 Thread t1 = new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -157,7 +156,6 @@ public class Controller {
                     }
                 });
                 t1.start();
-                */
             }
         });
     }
