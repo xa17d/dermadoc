@@ -9,6 +9,17 @@ public enum CaseSortCategory {
     ID,
     STATUS,
     DATE_OF_CREATION,
-    LAST_MODIFIED,
     NOTIFICATIONS;
+
+    public static CaseSortCategory getCategory(int index) {
+        switch (index){
+            case 1: return NAME;
+            case 2: return ID;
+            case 3: return STATUS;
+            case 4: return DATE_OF_CREATION;
+            case 5: return NOTIFICATIONS;
+        }
+        return NAME; // DEFAULT
+    }
+
 }

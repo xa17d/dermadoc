@@ -33,6 +33,7 @@
         <activity
             android:name=".activities_fragments.case_specific.CaseActivity"
             android:label="@string/activity_label_case"
+            android:windowSoftInputMode="stateHidden"
             android:launchMode="singleTop"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
@@ -72,6 +73,13 @@
             android:label="@string/title_activity_help"
             android:parentActivityName=".activities_fragments.MainActivity"
             android:theme="@style/AppTheme.NoActionBar" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="at.tuwien.telemedizin.dermadoc.app.activities_fragments.MainActivity" />
+        </activity>
+        <activity android:name=".activities_fragments.preferences.PreferenceActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label="@string/title_activity_preferences">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="at.tuwien.telemedizin.dermadoc.app.activities_fragments.MainActivity" />

@@ -224,7 +224,7 @@ public class CaseListFragment extends Fragment {
         }
 
         // tell the activity
-        ((OnCaseListEventListener)getActivity()).onSettingNewCaseSortCategory(sortCategory);
+        mListener.onSettingNewCaseSortCategory(sortCategory);
     }
 
     /**

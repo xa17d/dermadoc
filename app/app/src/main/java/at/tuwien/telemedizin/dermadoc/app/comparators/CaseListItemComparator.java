@@ -37,8 +37,6 @@ public class CaseListItemComparator implements Comparator<CaseListItem> {
             compResult = compareStatus(lhs, rhs);
         } else if (activeCategory == CaseSortCategory.DATE_OF_CREATION) {
             compResult = compareDateOfCreation(lhs, rhs);
-        } else if (activeCategory == CaseSortCategory.LAST_MODIFIED) {
-            compResult = compareLastModified(lhs, rhs);
         } else if (activeCategory == CaseSortCategory.NOTIFICATIONS) {
             compResult = notificationComparator.compare(lhsCLI.getNotifications(), rhsCLI.getNotifications());
         }

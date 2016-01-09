@@ -4,10 +4,12 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -34,6 +36,7 @@ import at.tuwien.telemedizin.dermadoc.app.R;
 import at.tuwien.telemedizin.dermadoc.app.activities_fragments.create_case.EditCaseActivity;
 import at.tuwien.telemedizin.dermadoc.app.activities_fragments.create_case.EditLocationFragment;
 import at.tuwien.telemedizin.dermadoc.app.activities_fragments.edit_case.AddPictureActivity;
+import at.tuwien.telemedizin.dermadoc.app.activities_fragments.preferences.PreferenceActivity;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.CaseListItem;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.CaseParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.NotificationParc;
@@ -103,7 +106,7 @@ public class CaseActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               // Edit CaseInfo
+                // Edit CaseInfo
                 Intent editCaseIntent = new Intent(CaseActivity.this, EditCaseActivity.class);
                 editCaseIntent.putExtra(EditCaseActivity.NEW_CASE_FLAG_INTENT_KEY, false);
                 editCaseIntent.putExtra(EditCaseActivity.CASE_FLAG_INTENT_KEY, caseItem);
@@ -123,11 +126,13 @@ public class CaseActivity extends AppCompatActivity
 
         // default content is case-list
         overviewFragment = CaseOverviewFragment.newInstance();
-        String title = getString(R.string.nav_case_overview);
+        caseDataListFragment = CaseDataListFragment.newInstance();
 
-        if (overviewFragment != null) {
+        Fragment selectedDefaultFragment = loadCaseDataCategoryFromPreferences();
+        String title = getFragmentTitle(selectedDefaultFragment);
+        if (selectedDefaultFragment != null) {
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.contentFrame,overviewFragment);
+            fragmentTransaction.replace(R.id.contentFrame, selectedDefaultFragment);
             fragmentTransaction.commit();
             setTitle(title);
         }
@@ -171,7 +176,16 @@ public class CaseActivity extends AppCompatActivity
 
     }
 
+    private String getFragmentTitle(Fragment fragment) {
 
+        if (fragment instanceof CaseDataListFragment) {
+            return getString(R.string.nav_case_conversation);
+        } else if (fragment instanceof CaseOverviewFragment) {
+            return getString(R.string.nav_case_overview);
+        } else {
+            return getString(R.string.nav_case_overview);
+        }
+    }
 
     /**
      * fills the header of the navigation-drawer with data
@@ -202,7 +216,18 @@ public class CaseActivity extends AppCompatActivity
         navHeaderDateOfCreationTextView.setText(dateOfCreationStr);
     }
 
-
+    private Fragment loadCaseDataCategoryFromPreferences() {
+        // initialize sorting category
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        String selectedCategoryStr = sp.getString(getString(R.string.pref_data_category_key), getString(R.string.pref_data_category_default_value));
+        int selectedCategoryInt = Integer.parseInt(selectedCategoryStr);
+        if (selectedCategoryInt == 2) {
+            fab.setVisibility(View.GONE);
+            return caseDataListFragment;
+        } else {
+            return overviewFragment;
+        }
+    }
 
 
     @Override
@@ -235,7 +260,9 @@ public class CaseActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            Toast.makeText(getBaseContext(), "There will be a Settings-activity", Toast.LENGTH_LONG).show(); // TODO replace with real fragment/function
+//            Toast.makeText(getBaseContext(), "/There will be a Settings-activity", Toast.LENGTH_LONG).show(); // TODO replace with real fragment/function
+            Intent intent = new Intent(CaseActivity.this, PreferenceActivity.class);
+            startActivity(intent);
             return true;
         } else if (id == R.id.action_syncronize) {
             syncData();
@@ -355,7 +382,6 @@ public class CaseActivity extends AppCompatActivity
     }
 
 
-
     public void switchToOverview() {
         onNavigationItemSelected(R.id.nav_case_overview);
     }
@@ -379,18 +405,22 @@ public class CaseActivity extends AppCompatActivity
 
 
         if (id == R.id.nav_case_overview) {
-            overviewFragment = CaseOverviewFragment.newInstance(); //
+            if (overviewFragment == null) {
+                overviewFragment = CaseOverviewFragment.newInstance(); //
+            }
             fragment = overviewFragment;
-            title = getString(R.string.nav_case_overview);
+            title = getFragmentTitle(fragment);
             fab.setVisibility(View.VISIBLE);
             fab.setImageResource(R.drawable.ic_action_edit_white_18dp);
 
             attachItem.setVisible(false); // hide
 
         } else if (id == R.id.nav_case_conversation) {
-            caseDataListFragment = CaseDataListFragment.newInstance();
+            if (caseDataListFragment == null) {
+                caseDataListFragment = CaseDataListFragment.newInstance();
+            }
             fragment = caseDataListFragment;
-            title = getString(R.string.nav_case_diagnoses);
+            title = getFragmentTitle(fragment);
             fab.setVisibility(View.GONE);
 //            fab.setImageResource(R.drawable.ic_add_white_24dp);
 
@@ -404,7 +434,7 @@ public class CaseActivity extends AppCompatActivity
         // logout does not return a fragment != null
         if (fragment != null) {
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.contentFrame,fragment);
+            fragmentTransaction.replace(R.id.contentFrame, fragment);
             fragmentTransaction.commit();
         }
 
@@ -414,7 +444,6 @@ public class CaseActivity extends AppCompatActivity
 
         return true;
     }
-
 
 
     @Override
@@ -441,6 +470,7 @@ public class CaseActivity extends AppCompatActivity
 
     /**
      * creates and send the text message
+     *
      * @param text
      */
     public void sendTextMessage(String text) {
@@ -460,6 +490,7 @@ public class CaseActivity extends AppCompatActivity
 
     /**
      * this method supplements the showProgress(boolean, String) method
+     *
      * @param show
      */
     private void showProgress(boolean show) {
@@ -468,7 +499,8 @@ public class CaseActivity extends AppCompatActivity
 
     /**
      * Shows the progress UI and hides the login form.
-     * @param show - should the progress view be visible or not
+     *
+     * @param show     - should the progress view be visible or not
      * @param infoText - the text that should be displayed along with the progress-view
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
@@ -509,6 +541,7 @@ public class CaseActivity extends AppCompatActivity
 
     /**
      * sets the task = null and deactivates showProgess, if all tasks are null
+     *
      * @param task
      */
     private synchronized void asyncTaskFinished(AsyncTask task) {
@@ -523,7 +556,7 @@ public class CaseActivity extends AppCompatActivity
             if (overviewFragment != null) {
                 overviewFragment.updateDataViews();
             }
-        } else if (task instanceof  DeleteNotificationsAsyncTask) {
+        } else if (task instanceof DeleteNotificationsAsyncTask) {
             deleteNotificationsAsyncTask = null;
             if (overviewFragment != null) {
                 overviewFragment.updateDataViews();
@@ -538,6 +571,7 @@ public class CaseActivity extends AppCompatActivity
     /**
      * checks, if internet-connection is possible and returns a boolean value
      * if no connection is available, it shows a info-message to the user
+     *
      * @return
      */
     private boolean checkInternetConnection() {
@@ -595,15 +629,15 @@ public class CaseActivity extends AppCompatActivity
 
         @Override
         protected void onPostExecute(final CaseParc fullCase) {
-            Log.d(LOG_TAG,"onPostExecute() case!=null: " + (fullCase!=null));
+            Log.d(LOG_TAG, "onPostExecute() case!=null: " + (fullCase != null));
 
             if (fullCase == null) {
-                Log.d(LOG_TAG,"fullCase == null -> finish activity");
+                Log.d(LOG_TAG, "fullCase == null -> finish activity");
                 // TODO
 
             } else {
                 caseItem = fullCase;
-                Log.d(LOG_TAG,"caseItem.getDataElements().size(): " + caseItem.getDataElements().size());
+                Log.d(LOG_TAG, "caseItem.getDataElements().size(): " + caseItem.getDataElements().size());
 
                 // update fragments
                 if (overviewFragment != null) {
@@ -673,7 +707,6 @@ public class CaseActivity extends AppCompatActivity
             }
 
 
-
             Log.d(LOG_TAG, "end doInBackground(), caseDataResultList.size()=" + caseDataResultList.size());
             return caseDataResultList;
         }
@@ -682,7 +715,7 @@ public class CaseActivity extends AppCompatActivity
         protected void onPostExecute(List<CaseData> caseDataList) {
             Log.d(LOG_TAG, "onPostExecute() ");
 
-            if (caseDataList!=null) {
+            if (caseDataList != null) {
                 Log.d(LOG_TAG, "caseDataList!= null");
                 // add the new case-datas to the case
                 List<CaseDataParc> caseDataParcList = ParcelableHelper.mapCaseDataListToParc(caseDataList);
@@ -750,7 +783,6 @@ public class CaseActivity extends AppCompatActivity
             }
 
 
-
             Log.d(LOG_TAG, "end doInBackground(), notificationsNotDeleted.size()=" + notificationsNotDeleted.size());
             return notificationsNotDeleted;
         }
@@ -759,7 +791,7 @@ public class CaseActivity extends AppCompatActivity
         protected void onPostExecute(List<Notification> notificationsNotDeleted) {
             Log.d(LOG_TAG, "onPostExecute() ");
 
-            if (notificationsNotDeleted!=null) {
+            if (notificationsNotDeleted != null) {
                 Log.d(LOG_TAG, "notificationsNotDeleted!= null");
 
                 List<NotificationParc> notificationsNotDeletedParc = ParcelableHelper.mapToNotificationParcList(notificationsNotDeleted);

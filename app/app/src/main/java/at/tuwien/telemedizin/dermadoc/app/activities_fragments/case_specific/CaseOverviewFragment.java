@@ -28,7 +28,7 @@ import at.tuwien.telemedizin.dermadoc.app.helper.FormatHelper;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class CaseOverviewFragment extends Fragment {
+public class CaseOverviewFragment extends Fragment{
 
     public static final String LOG_TAG = CaseOverviewFragment.class.getSimpleName();
 

@@ -43,7 +43,7 @@ import at.tuwien.telemedizin.dermadoc.app.helper.CaseDataExtractionHelper;
  * Use the {@link CaseDataListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class CaseDataListFragment extends Fragment {
+public class CaseDataListFragment extends Fragment  {
 
     public static final String LOG_TAG = CaseDataListFragment.class.getSimpleName();
 
@@ -104,8 +104,6 @@ public class CaseDataListFragment extends Fragment {
         }
 
     }
-
-
 
 
     @Override

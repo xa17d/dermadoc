@@ -47,6 +47,7 @@
     <string name="nav_case_overview">Overview</string>
     <string name="nav_case_advice">Advice</string>
     <string name="nav_case_diagnoses">Diganoses</string>
+    <string name="nav_case_conversation">Conversation</string>
 
     <string name="msg_err_item_not_received">There was an error receiving the selected Item</string>
     <string name="msg_err_no_status">no status</string>
@@ -261,6 +262,18 @@
 
     <string name="nav_header_message_1">Facebook plugin coming soon!</string>
     <string name="title_activity_help">Help</string>
+
+    <string name="title_activity_preferences">Preferences</string>
+    <string name="pref_category_title_case_list">Case List</string>
+    <string name="pref_title_sort_category">Default Sort-Category</string>
+    <string name="pref_sort_category_default_value">2</string>
+    <string name="pref_sort_category_key">pref_sort_type</string>
+
+    <string name="pref_category_title_case_view">Case Specific</string>
+    <string name="pref_title_default_data_category">Default Case-Data Section</string>
+    <string name="pref_data_category_default_value">1</string>
+    <string name="pref_data_category_key">pref_case_data_category</string>
+
 
 
 

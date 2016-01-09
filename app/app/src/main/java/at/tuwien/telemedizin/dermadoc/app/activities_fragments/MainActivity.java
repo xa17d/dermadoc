@@ -4,10 +4,12 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -32,6 +34,7 @@ import at.tuwien.telemedizin.dermadoc.app.R;
 import at.tuwien.telemedizin.dermadoc.app.activities_fragments.create_case.EditCaseActivity;
 import at.tuwien.telemedizin.dermadoc.app.activities_fragments.help.HelpActivity;
 import at.tuwien.telemedizin.dermadoc.app.activities_fragments.login.LoginActivity;
+import at.tuwien.telemedizin.dermadoc.app.activities_fragments.preferences.PreferenceActivity;
 import at.tuwien.telemedizin.dermadoc.app.adapters.MyCasesPagerEnum;
 import at.tuwien.telemedizin.dermadoc.app.comparators.CaseSortCategory;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.CaseParc;
@@ -67,6 +70,13 @@ public class MainActivity extends AppCompatActivity
 
     // To hide the sort-menu-item whenever fragments are changed etc.
     private MenuItem sortMenuItem;
+    private MenuItem sortIdMenuItem;
+    private MenuItem sortNameMenuItem;
+    private MenuItem sortDateMenuItem;
+    private MenuItem sortStatusMenuItem;
+    private MenuItem sortNotificationMenuItem;
+
+
 
     private RelativeLayout mainContentLayout;
     private RelativeLayout loadingProgressLayout;
@@ -92,6 +102,10 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main_layout);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        // load sort-category from preferences
+        this.caseListSortCategory =  loadSortCategoryFromPreferences();
+        Log.d(LOG_TAG, "defaultListSortCategory=" + caseListSortCategory);
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -144,6 +158,19 @@ public class MainActivity extends AppCompatActivity
 
 
         currentNotificationList = new ArrayList<>();
+
+
+    }
+
+    private CaseSortCategory loadSortCategoryFromPreferences() {
+        // initialize sorting category
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        String selectedSortCategoryStr = sp.getString(getString(R.string.pref_sort_category_key), "-1");
+        int selectedSortCategoryInt = Integer.parseInt(selectedSortCategoryStr);
+        if (selectedSortCategoryInt != -1) {
+            return CaseSortCategory.getCategory(selectedSortCategoryInt);
+        }
+        return null;
     }
 
     /**
@@ -266,7 +293,27 @@ public class MainActivity extends AppCompatActivity
         getMenuInflater().inflate(R.menu.main_menu, menu);
 
         sortMenuItem = menu.findItem(R.id.action_sort);
+
+        sortIdMenuItem = menu.findItem(R.id.action_sort_id);
+        sortNameMenuItem = menu.findItem(R.id.action_sort_name);
+        sortDateMenuItem = menu.findItem(R.id.action_sort_date_of_creation);
+        sortStatusMenuItem = menu.findItem(R.id.action_sort_status);
+        sortNotificationMenuItem = menu.findItem(R.id.action_sort_notification);
+
+        checkActiveSortMenuItem(this.caseListSortCategory); // default item should be selected -> execute method
         return true;
+    }
+
+    private void checkActiveSortMenuItem(CaseSortCategory category) {
+        switch (category) {
+            case ID: sortIdMenuItem.setChecked(true); break;
+            case STATUS: sortStatusMenuItem.setChecked(true); break;
+            case NAME: sortNameMenuItem.setChecked(true); break;
+            case DATE_OF_CREATION: sortDateMenuItem.setChecked(true); break;
+            case NOTIFICATIONS: sortNotificationMenuItem.setChecked(true); break;
+
+
+        }
     }
 
     @Override
@@ -278,7 +325,9 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            Toast.makeText(getBaseContext(), "There will be a Settings-activity", Toast.LENGTH_LONG).show(); // TODO replace with real fragment/function
+//            Toast.makeText(getBaseContext(), "There will be a Settings-activity", Toast.LENGTH_LONG).show(); // TODO replace with real fragment/function
+            Intent intent = new Intent(MainActivity.this, PreferenceActivity.class);
+            startActivity(intent);
             return true;
         } else if (id == R.id.action_syncronize) {
             syncData();
@@ -379,6 +428,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onSettingNewCaseSortCategory(CaseSortCategory caseSortCategory) {
         this.caseListSortCategory = caseSortCategory;
+
     }
 
     /**
