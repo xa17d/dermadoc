@@ -27,9 +27,6 @@ jar {
                 'Implementation-Version': version,
                 'MainStage-Class': 'at.tuwien.telemedizin.dermadoc.desktop.gui.DesktopApplication'
     }
-
-    // include dependencies (create fat jar). Source: http://www.mkyong.com/gradle/gradle-create-a-jar-file-with-dependencies/
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
 }
 
 repositories {

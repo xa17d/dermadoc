@@ -87,6 +87,7 @@ public class Controller {
         //manage open tabs in main window
         mainTabList = tpMain.getTabs();
 
+        /*
         //register window closing
         Stage s = getStage();
         s.setOnHiding(new EventHandler<WindowEvent>() {
@@ -101,6 +102,7 @@ public class Controller {
                 });
             }
         });
+        */
     }
 
 
