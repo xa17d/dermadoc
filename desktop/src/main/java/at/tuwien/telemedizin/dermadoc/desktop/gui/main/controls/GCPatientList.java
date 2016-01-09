@@ -80,9 +80,14 @@ public class GCPatientList extends VBox {
         patientCaseMap = controller.searchPatientCaseMap(tfSearch.getText());
         ObservableList<Patient> patientList = FXCollections.observableArrayList(patientCaseMap.keySet());
 
-        vbPatientList.getChildren().clear();
-        for(Patient p : patientList) {
-            vbPatientList.getChildren().add(new GCPatientListItem(controller, p, patientCaseMap.get(p)));
-        }
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                vbPatientList.getChildren().clear();
+                for(Patient p : patientList) {
+                    vbPatientList.getChildren().add(new GCPatientListItem(controller, p, patientCaseMap.get(p)));
+                }
+            }
+        });
     }
 }
