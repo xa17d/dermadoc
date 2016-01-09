@@ -59,6 +59,6 @@ public class Notification {
             return false;
 
         Notification n = (Notification) o;
-        return this.getId() == n.getId();
+        return this.getId().equals(n.getId());
     }
 }

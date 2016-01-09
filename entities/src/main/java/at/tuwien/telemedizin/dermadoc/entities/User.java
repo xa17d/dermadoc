@@ -74,6 +74,6 @@ public abstract class User {
             return false;
 
         User u = (User) o;
-        return this.getId() == u.getId();
+        return this.getId().equals(u.getId());
     }
 }
