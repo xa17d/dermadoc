@@ -1,6 +1,7 @@
 package at.tuwien.telemedizin.dermadoc.desktop.service;
 
 import at.tuwien.telemedizin.dermadoc.desktop.gui.main.Controller;
+import at.tuwien.telemedizin.dermadoc.desktop.service.dto.GlobalVariables;
 import at.tuwien.telemedizin.dermadoc.service.exception.DermadocException;
 import at.tuwien.telemedizin.dermadoc.desktop.service.dto.PatientCaseMap;
 import at.tuwien.telemedizin.dermadoc.entities.*;
@@ -89,6 +90,8 @@ public class CaseService implements ICaseService {
 
     @Override
     public void acceptCase(Case aCase) throws DermadocException {
+        //aCase.setPhysician(GlobalVariables.getPhysician());
+        obsPatientCaseMap.putSave(aCase);
         rest.postAcceptCase(acceptCaseListener, aCase);
     }
 
@@ -117,9 +120,7 @@ public class CaseService implements ICaseService {
     private RestListener<CaseList> allCasesListener = new RestListener<CaseList>() {
         @Override
         public void onRequestComplete(CaseList requestResult) {
-
             obsPatientCaseMap.putAll(requestResult);
-            obsPatientCaseMap.sort();
         }
 
         @Override
@@ -132,7 +133,6 @@ public class CaseService implements ICaseService {
         @Override
         public void onRequestComplete(Case requestResult) {
             obsPatientCaseMap.put(requestResult);
-            obsPatientCaseMap.sort();
         }
 
         @Override

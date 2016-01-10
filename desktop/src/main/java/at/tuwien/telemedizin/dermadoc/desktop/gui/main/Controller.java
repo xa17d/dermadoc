@@ -42,6 +42,7 @@ public class Controller {
     private ObservableList<Tab> mainTabList;
     private PatientCaseMap patientCaseMap;
     private ObservableList<Case> openCaseList;
+    private GCPatientList patientList;
 
     public Controller() {
 
@@ -74,7 +75,8 @@ public class Controller {
         } catch (DermadocException e) {
             showErrorMessage(e.getMessage());
         }
-        tabPatients.setContent(new GCPatientList(this, patientCaseMap));
+        patientList = new GCPatientList(this, patientCaseMap);
+        tabPatients.setContent(patientList);
 
         //initialize the case list
         try {
@@ -195,11 +197,14 @@ public class Controller {
     public void acceptCase(Case aCase) {
 
         try {
-            //TODO fix waiting time
             caseService.acceptCase(aCase);
         } catch (DermadocException e) {
             showErrorMessage(e.getMessage());
         }
+    }
+
+    public void updatePatientList() {
+        patientList.updateList();
     }
 
     public Physician getPhysician() {

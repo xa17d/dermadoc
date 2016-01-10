@@ -27,6 +27,11 @@ public class UtilPainIntensity {
     }
 
     public Image getImage(PainIntensity pain) {
-        return new Image(getClass().getResourceAsStream(painMap.get(pain)));
+        if(painMap.containsKey(pain)) {
+            return new Image(getClass().getResourceAsStream(painMap.get(pain)));
+        }
+        else {
+            return new Image(getClass().getResourceAsStream(painMap.get(PainIntensity.NoPain)));
+        }
     }
 }

@@ -26,7 +26,7 @@ public class GCPatientListItem extends TitledPane {
 
     private Controller controller;
     private Patient patient;
-    private List<Case> cases;
+    private ObservableList<Case> cases;
 
     public GCPatientListItem(Controller controller, Patient patient, ObservableList<Case> cases) {
 
