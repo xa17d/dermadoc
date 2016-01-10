@@ -49,6 +49,8 @@ public class AnamnesisParc extends CaseDataParc {
                 ParcelableHelper.mapUserToUserParc(anamnesis.getAuthor()),
                 anamnesis.getMessage(),
                 ParcelableHelper.mapAnamnesisQuestionsToParc(anamnesis.getQuestions()));
+        setObsolete(anamnesis.isObsolete());
+        setPrivate(anamnesis.getPrivate());
     }
 
 

@@ -194,6 +194,7 @@ public class TestContentProvider implements ContentProvider {
         d1_icList.add(new Icd10DiagnosisParc("101010", "Hühnerauge"));
         d1_icList.add(new Icd10DiagnosisParc("02221", "Nase im Gesicht"));
         DiagnosisParc d1 = new DiagnosisParc(startNumberCD+1, timestamp, physician,"test Diagnose 1 ", d1_icList);
+        d1.setObsolete(true);
         testCase1.addDataElement(d1);
 
         timestamp = Calendar.getInstance();

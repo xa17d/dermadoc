@@ -48,6 +48,8 @@ public class TextMessageParc extends CaseDataParc {
                 textMessage.getCreated(),
                 ParcelableHelper.mapUserToUserParc(textMessage.getAuthor()),
                 textMessage.getMessage());
+        setObsolete(textMessage.isObsolete());
+        setPrivate(textMessage.getPrivate());
     }
 
 

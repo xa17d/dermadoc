@@ -27,6 +27,9 @@
     <color name="spinner_background_color">#e4dfde</color>
 
     <color name="msg_red">#e43d40</color>
+    <!-- message is obsolete -->
+    <color name="label_is_obsolete">#e43d40</color>
+    <color name="label_is_obsolete_background">#f2efef</color>
 
     <color name="next_button_text">#ffffff</color>
 

@@ -272,33 +272,36 @@ public class ParcelableHelper {
             return null;
         }
 
+        CaseData export;
+
         if (caseDataParc instanceof TextMessageParc) {
             TextMessageParc cdP = (TextMessageParc) caseDataParc;
-            TextMessage export = new TextMessage(cdP.getId(), cdP.getCreated(), mapToUser(cdP.getAuthor()), cdP.getMessage());
-            return export;
+            export = new TextMessage(cdP.getId(), cdP.getCreated(), mapToUser(cdP.getAuthor()), cdP.getMessage());
         } else if (caseDataParc instanceof PhotoMessageParc) {
             PhotoMessageParc cdP = (PhotoMessageParc) caseDataParc;
-            PhotoMessage export = new PhotoMessage(cdP.getId(), cdP.getCreated(), mapToUser(cdP.getAuthor()), cdP.getMime(), cdP.getPhotoData());
-            return export;
+            export = new PhotoMessage(cdP.getId(), cdP.getCreated(), mapToUser(cdP.getAuthor()), cdP.getMime(), cdP.getPhotoData());
         } else if (caseDataParc instanceof DiagnosisParc) {
             DiagnosisParc cdP = (DiagnosisParc) caseDataParc;
-            Diagnosis export = new Diagnosis(cdP.getId(), cdP.getCreated(), mapToUser(cdP.getAuthor()), cdP.getMessage(), mapToIcd10DiagnosisList(cdP.getDiagnosisList()));
-            return export;
+            export = new Diagnosis(cdP.getId(), cdP.getCreated(), mapToUser(cdP.getAuthor()), cdP.getMessage(), mapToIcd10DiagnosisList(cdP.getDiagnosisList()));
         } else if (caseDataParc instanceof AdviceParc) {
             AdviceParc cdP = (AdviceParc) caseDataParc;
-            Advice export = new Advice(cdP.getId(), cdP.getCreated(), mapToUser(cdP.getAuthor()), cdP.getMessage(), mapToMedicationList(cdP.getMedications()));
-            return export;
+            export = new Advice(cdP.getId(), cdP.getCreated(), mapToUser(cdP.getAuthor()), cdP.getMessage(), mapToMedicationList(cdP.getMedications()));
         } else if (caseDataParc instanceof CaseInfoParc) {
             CaseInfoParc cdP = (CaseInfoParc) caseDataParc;
-            CaseInfo export = new CaseInfo(cdP.getId(), cdP.getCreated(), mapToUser(cdP.getAuthor()), cdP.getLocalizations(), cdP.getPain(), cdP.getSize());
-            return export;
+            export = new CaseInfo(cdP.getId(), cdP.getCreated(), mapToUser(cdP.getAuthor()), cdP.getLocalizations(), cdP.getPain(), cdP.getSize());
         } else if (caseDataParc instanceof AnamnesisParc) {
             AnamnesisParc cdP = (AnamnesisParc) caseDataParc;
-            Anamnesis export = new Anamnesis(cdP.getId(), cdP.getCreated(), mapToUser(cdP.getAuthor()), cdP.getMessage(), mapToQuestionList(cdP.getQuestions()));
-            return export;
+            export = new Anamnesis(cdP.getId(), cdP.getCreated(), mapToUser(cdP.getAuthor()), cdP.getMessage(), mapToQuestionList(cdP.getQuestions()));
         } else {
             return null;
         }
+
+        if (export != null) {
+            export.setObsolete(caseDataParc.isObsolete());
+            export.setPrivate(caseDataParc.getPrivate());
+        }
+
+        return export;
     }
 
     public static List<AnamnesisQuestion> mapToQuestionList(List<AnamnesisQuestionParc> dList) {

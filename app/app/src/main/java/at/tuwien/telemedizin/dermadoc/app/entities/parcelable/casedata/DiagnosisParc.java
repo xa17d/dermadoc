@@ -50,6 +50,8 @@ public class DiagnosisParc extends CaseDataParc {
                 ParcelableHelper.mapUserToUserParc(diagnosis.getAuthor()),
                 diagnosis.getMessage(),
                 ParcelableHelper.mapIcd10DiagnosesToParc(diagnosis.getDiagnosisList()));
+        setObsolete(diagnosis.isObsolete());
+        setPrivate(diagnosis.getPrivate());
     }
 
 

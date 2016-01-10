@@ -62,6 +62,8 @@ public class CaseInfoParc extends CaseDataParc {
                 caseInfo.getLocalizations(),
                 caseInfo.getPain(),
                 caseInfo.getSize());
+        setObsolete(caseInfo.isObsolete());
+        setPrivate(caseInfo.getPrivate());
     }
 
 

@@ -50,6 +50,8 @@ public class AdviceParc extends CaseDataParc {
                 ParcelableHelper.mapUserToUserParc(advice.getAuthor()),
                 advice.getMessage(),
                 ParcelableHelper.mapMedicationToParc(advice.getMedications()));
+        setObsolete(advice.isObsolete());
+        setPrivate(advice.getPrivate());
     }
 
 

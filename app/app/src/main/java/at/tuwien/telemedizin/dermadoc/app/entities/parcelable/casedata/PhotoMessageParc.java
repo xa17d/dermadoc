@@ -47,6 +47,8 @@ public class PhotoMessageParc extends CaseDataParc {
                 ParcelableHelper.mapUserToUserParc(photoMessage.getAuthor()),
                 photoMessage.getMime(),
                 photoMessage.getPhotoData());
+        setObsolete(photoMessage.isObsolete());
+        setPrivate(photoMessage.getPrivate());
     }
 
 
