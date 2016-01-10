@@ -67,6 +67,7 @@ public class CaseActivity extends AppCompatActivity
     public static final int PICTURE_REQUEST_KEY = 1;
     public static final int UPDATE_CASE_REQUEST_KEY = 2;
 
+    private boolean hideAttachMenuItemOnCreate = true;
 
     private CaseParc caseItem;
     private List<NotificationParc> notifications;
@@ -223,8 +224,11 @@ public class CaseActivity extends AppCompatActivity
         int selectedCategoryInt = Integer.parseInt(selectedCategoryStr);
         if (selectedCategoryInt == 2) {
             fab.setVisibility(View.GONE);
+            hideAttachMenuItemOnCreate = false;
             return caseDataListFragment;
         } else {
+            fab.setVisibility(View.VISIBLE);
+            hideAttachMenuItemOnCreate = true;
             return overviewFragment;
         }
     }
@@ -247,7 +251,10 @@ public class CaseActivity extends AppCompatActivity
 
 
         attachItem = menu.findItem(R.id.action_attach);
-        attachItem.setVisible(false); // hide initially
+        if (hideAttachMenuItemOnCreate) {
+            attachItem.setVisible(false); // hide initially - when overview-fragment is visible
+        }
+
         return true;
     }
 
@@ -330,11 +337,14 @@ public class CaseActivity extends AppCompatActivity
     private void getDataFromServer() {
         // load Case Data
 
-        loadCaseData();
+        loadCaseData(false);
     }
 
-    private void loadCaseData() {
-        Log.d(LOG_TAG, "loadCaseData()");
+    /**
+     * @param inBackground
+     */
+    private void loadCaseData(boolean inBackground) {
+        Log.d(LOG_TAG, "loadCaseData() inBackground: " + inBackground);
         // check internet connection
         if (!checkInternetConnection()) {
             return;
@@ -799,7 +809,7 @@ public class CaseActivity extends AppCompatActivity
             }
 
             asyncTaskFinished(DeleteNotificationsAsyncTask.this);
-            Toast.makeText(getBaseContext(), "Notifications were delted from the server", Toast.LENGTH_LONG).show();
+            Toast.makeText(getBaseContext(), "Notifications were deleted from the server", Toast.LENGTH_LONG).show();
 
         }
 

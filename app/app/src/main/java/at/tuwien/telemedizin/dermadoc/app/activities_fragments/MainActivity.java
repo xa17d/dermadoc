@@ -116,6 +116,8 @@ public class MainActivity extends AppCompatActivity
 
                 // launch activity to create a new case
                 Intent intent = new Intent(MainActivity.this, EditCaseActivity.class);
+                intent.putExtra(EditCaseActivity.NEW_CASE_FLAG_INTENT_KEY, true);
+                intent.putExtra(EditCaseActivity.USER_FLAG_INTENT_KEY, currentUser);
                 startActivity(intent);
             }
         });

@@ -49,7 +49,7 @@ public class MedicationParc implements Parcelable {
      */
     public MedicationParc(Medication medication) {
         this(medication.getName(), medication.getDosis());
-        this.dosis = medication.getDosis();
+        this.medicationId = medication.getMedicationId();
     }
 
     // parcelable ################################

@@ -76,7 +76,7 @@ public class CaseParc implements Parcelable {
      */
     public CaseParc(Case caseItem) {
 
-        this(caseItem.getId(), new PatientParc(caseItem.getPatient()), caseItem.getCreated());
+        this(caseItem.getId(), caseItem.getPatient() != null ? new PatientParc(caseItem.getPatient()) : null, caseItem.getCreated());
         this.physician = caseItem.getPhysician() != null ? new PhysicianParc(caseItem.getPhysician()) : null;
         this.status = caseItem.getStatus();
         this.name = caseItem.getName();

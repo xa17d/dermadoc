@@ -10,6 +10,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.CaseParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.PhysicianParc;
 import at.tuwien.telemedizin.dermadoc.app.general_entities.Case;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.CaseStatus;
 import at.tuwien.telemedizin.dermadoc.app.general_entities.Notification;
 import at.tuwien.telemedizin.dermadoc.app.general_entities.Physician;
 import at.tuwien.telemedizin.dermadoc.app.general_entities.User;
@@ -165,10 +166,10 @@ public class TestServerInterface implements ServerInterface {
 
     @Override
     public List<CaseData> getCaseData(long caseId) {
-        List<CaseParc> caseParcs = cP.getCurrentCasesOfUser();
-        for (CaseParc c : caseParcs) {
+        List<Case> cases = caseList;
+        for (Case c : cases) {
             if (c.getId() == caseId) {
-                return ParcelableHelper.mapToCaseDataList(c.getDataElements());
+                return caseDataMap.get(c.getId());
             }
         }
         return null;
@@ -177,6 +178,12 @@ public class TestServerInterface implements ServerInterface {
     @Override
     public Case createCase(Case caseItem) {
         caseItem.setId(getCaseId());
+        if (caseItem.getPhysician() == null) {
+            caseItem.setStatus(CaseStatus.LookingForPhysician);
+        } else{
+            caseItem.setStatus(CaseStatus.WaitingForAccept);
+        }
+
         caseList.add(caseItem);
         return caseItem;
     }
@@ -185,6 +192,9 @@ public class TestServerInterface implements ServerInterface {
     public CaseData addCaseData(CaseData caseData, long caseId) {
         caseData.setId(getCaseDataId());
         List<CaseData> cDList = caseDataMap.get(caseId);
+        if (cDList == null) {
+            cDList = new ArrayList<>();
+        }
         cDList.add(caseData);
         caseDataMap.put(caseId, cDList);
         return caseData;
