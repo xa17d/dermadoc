@@ -91,13 +91,20 @@ public class CaseDataActivity extends AppCompatActivity implements EditLocationF
         RelativeLayout marginHolder = (RelativeLayout) findViewById(R.id.margin_holder_layout);
         locationFragmentContainer = (LinearLayout) findViewById(R.id.location_fragment_container);
 
+        TextView isObsoleteView = (TextView) findViewById(R.id.message_obsolete_text_view);
+        if (data.isObsolete()) {
+            isObsoleteView.setVisibility(View.VISIBLE);
+        }
 
         // set Background according to author
+        // set Background according to author
         if (data.getAuthor() instanceof PatientParc) {
-            backgroundHolder.setBackgroundResource(R.drawable.message_background_shape_2);
+            int backgroundResId = data.isObsolete() ? R.drawable.message_background_shape_obsolete_2 : R.drawable.message_background_shape_2;
+            backgroundHolder.setBackgroundResource(backgroundResId);
 //            setLayoutParamsToMatchSide(marginHolder, true);
         } else {
-            backgroundHolder.setBackgroundResource(R.drawable.message_background_shape_1);
+            int backgroundResId = data.isObsolete() ? R.drawable.message_background_shape_obsolete_1 : R.drawable.message_background_shape_1;
+            backgroundHolder.setBackgroundResource(backgroundResId);
 //            setLayoutParamsToMatchSide(marginHolder, false);
         }
 
@@ -369,7 +376,16 @@ public class CaseDataActivity extends AppCompatActivity implements EditLocationF
                     // add elements to the list
                     if (q instanceof AnamnesisQuestionBoolParc) {
                         AnamnesisQuestionBoolParc qB = (AnamnesisQuestionBoolParc)q;
-                        answerTextView.setText(qB.getAnswer() + "");
+                        Boolean bAnswer = qB.getAnswer();
+                        String bAnswerAsString = "";
+                        if (bAnswer == null) {
+                            bAnswerAsString = getString(R.string.label_question_not_answered);
+                        } else {
+                            bAnswerAsString = (bAnswer ?
+                                    getString(R.string.label_question_positive_answer) :
+                                    getString(R.string.label_question_negative_answer));
+                        }
+                        answerTextView.setText(bAnswerAsString);
                     } else {
                         AnamnesisQuestionTextParc qT = (AnamnesisQuestionTextParc)q;
                         answerTextView.setText(qT.getAnswer());

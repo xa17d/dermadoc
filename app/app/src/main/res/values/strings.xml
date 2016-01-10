@@ -276,6 +276,12 @@
 
     <string name="label_medication_dosis">Dosis:</string>
 
+    <string name="label_question_not_answered">No Answer</string>
+    <string name="label_question_positive_answer">Yes</string>
+    <string name="label_question_negative_answer">No</string>
+
+    <string name="hint_is_obsolete">obsolete</string>
+
 
 
 

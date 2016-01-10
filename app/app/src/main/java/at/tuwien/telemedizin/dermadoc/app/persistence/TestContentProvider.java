@@ -95,7 +95,7 @@ public class TestContentProvider implements ContentProvider {
         qList.add(q3);
         qList.add(q4);
 
-        return new AnamnesisParc(0L, Calendar.getInstance(), new PhysicianParc(), "Please fill out this form - be honest!", qList);
+        return new AnamnesisParc(null, Calendar.getInstance(), null, "Please fill out this form - be honest!", qList);
     }
 
     private AnamnesisParc mockAnamnesis2() {
@@ -132,7 +132,7 @@ public class TestContentProvider implements ContentProvider {
         qList.add(q6);
         qList.add(q7);
 
-        return new AnamnesisParc(1L, Calendar.getInstance(), new PhysicianParc(), "Please fill out this form - be honest!", qList);
+        return new AnamnesisParc(null, Calendar.getInstance(), null, "Please fill out this form - be honest!", qList);
     }
 
     @Override

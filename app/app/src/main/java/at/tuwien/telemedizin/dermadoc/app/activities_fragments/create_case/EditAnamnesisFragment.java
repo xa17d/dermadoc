@@ -180,8 +180,19 @@ public class EditAnamnesisFragment extends Fragment {
             AnamnesisQuestionParc q = questions.get(i);
             View qItemLayout = questionViews.get(i);
             if (q instanceof AnamnesisQuestionBoolParc) {
+                Boolean bAnswer = null;
                 boolean firstOptionChecked = ((RadioButton)qItemLayout.findViewById(R.id.question_answer_1)).isChecked();
-                ((AnamnesisQuestionBoolParc)q).setAnswer(firstOptionChecked);
+                boolean secondOptionChecked = ((RadioButton)qItemLayout.findViewById(R.id.question_answer_2)).isChecked();
+                if (firstOptionChecked) {
+                    bAnswer = true;
+                } else if (secondOptionChecked) {
+                    bAnswer = false;
+                } else {
+                    // no answer is checked
+                    bAnswer = null;
+                }
+
+                ((AnamnesisQuestionBoolParc)q).setAnswer(bAnswer);
                 Log.d(LOG_TAG, "answer " + i + " " + ((AnamnesisQuestionBoolParc) anamnesisItem.getQuestions().get(i)).getAnswer());
             } else {
                 String answerString = ((TextView)qItemLayout.findViewById(R.id.question_answer_text)).getText().toString();

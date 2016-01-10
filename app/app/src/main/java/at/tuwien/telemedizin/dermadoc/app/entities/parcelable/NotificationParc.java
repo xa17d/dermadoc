@@ -71,7 +71,7 @@ public class NotificationParc implements Parcelable {
 
     public  NotificationParc(Parcel in) {
 
-        this.setId(in.readLong());
+        this.setId((Long) in.readValue(null));
         this.setCaseId(in.readLong());
 
 
@@ -90,7 +90,7 @@ public class NotificationParc implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
 
-        dest.writeLong(id);
+        dest.writeValue(id);
         dest.writeLong(caseId);
 
         dest.writeString(getText());

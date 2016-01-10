@@ -71,6 +71,9 @@ public class CaseDataListAdapter extends ArrayAdapter<CaseDataParc> {
             // reset the specific-content
             LinearLayout basicContentLayout = (LinearLayout) v.findViewById(R.id.message_item_body_linlayout1);
             basicContentLayout.removeAllViewsInLayout();
+            // reset isObsolete-Info visibility
+            TextView isObsoleteView = (TextView) v.findViewById(R.id.message_obsolete_text_view);
+            isObsoleteView.setVisibility(View.GONE);
         }
 
         LinearLayout basicContentLayout = (LinearLayout) v.findViewById(R.id.message_item_body_linlayout1);
@@ -81,12 +84,19 @@ public class CaseDataListAdapter extends ArrayAdapter<CaseDataParc> {
 
         CaseDataParc caseData = getItem(position);
 
+        TextView isObsoleteView = (TextView) v.findViewById(R.id.message_obsolete_text_view);
+        if (caseData.isObsolete()) {
+            isObsoleteView.setVisibility(View.VISIBLE);
+        }
+
         // set Background according to author
         if (caseData.getAuthor() instanceof PatientParc) {
-            backgroundHolder.setBackgroundResource(R.drawable.message_background_shape_2);
+            int backgroundResId = caseData.isObsolete() ? R.drawable.message_background_shape_obsolete_2 : R.drawable.message_background_shape_2;
+            backgroundHolder.setBackgroundResource(backgroundResId);
             setLayoutParamsToMatchSide(marginHolder, true);
         } else {
-            backgroundHolder.setBackgroundResource(R.drawable.message_background_shape_1);
+            int backgroundResId = caseData.isObsolete() ? R.drawable.message_background_shape_obsolete_1 : R.drawable.message_background_shape_1;
+            backgroundHolder.setBackgroundResource(backgroundResId);
             setLayoutParamsToMatchSide(marginHolder, false);
         }
 
@@ -130,7 +140,7 @@ public class CaseDataListAdapter extends ArrayAdapter<CaseDataParc> {
             // show as text message with link to overview
 
             specificView = getCaseinfoLayout((CaseInfoParc)caseData);
-            // TODO listener to link to the overview
+            // istener to link to the overview // removed because of listView.itemListener for CaseDataActivity
 //            specificView.setOnClickListener(new View.OnClickListener() {
 //                @Override
 //                public void onClick(View v) {
@@ -367,7 +377,16 @@ public class CaseDataListAdapter extends ArrayAdapter<CaseDataParc> {
                     // add elements to the list
                     if (q instanceof AnamnesisQuestionBoolParc) {
                         AnamnesisQuestionBoolParc qB = (AnamnesisQuestionBoolParc)q;
-                        answerTextView.setText(qB.getAnswer() + "");
+                        Boolean bAnswer = qB.getAnswer();
+                        String bAnswerAsString = "";
+                        if (bAnswer == null) {
+                            bAnswerAsString = context.getString(R.string.label_question_not_answered);
+                        } else {
+                            bAnswerAsString = (bAnswer ?
+                                    context.getString(R.string.label_question_positive_answer) :
+                                    context.getString(R.string.label_question_negative_answer));
+                        }
+                        answerTextView.setText(bAnswerAsString);
                     } else {
                         AnamnesisQuestionTextParc qT = (AnamnesisQuestionTextParc)q;
                         answerTextView.setText(qT.getAnswer());

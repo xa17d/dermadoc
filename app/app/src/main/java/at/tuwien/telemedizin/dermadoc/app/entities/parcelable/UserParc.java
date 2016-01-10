@@ -73,7 +73,7 @@ public abstract class UserParc implements Parcelable {
 
 
     public UserParc(Parcel in) {
-        long id = in.readLong();
+        Long id = (Long) in.readValue(null);
         String mail = in.readString();
         String password = in.readString();
         String name = in.readString();
@@ -93,7 +93,7 @@ public abstract class UserParc implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(getId());
+        dest.writeValue(getId());
         dest.writeString(getMail());
         dest.writeString(getPassword());
         dest.writeString(getName());

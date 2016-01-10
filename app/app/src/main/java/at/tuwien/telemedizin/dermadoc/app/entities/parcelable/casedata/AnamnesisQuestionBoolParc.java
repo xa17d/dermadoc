@@ -9,12 +9,12 @@ import at.tuwien.telemedizin.dermadoc.app.general_entities.casedata.AnamnesisQue
  * Created by daniel on 24.11.2015.
  */
 public class AnamnesisQuestionBoolParc extends AnamnesisQuestionParc {
-    private boolean answer;
+    private Boolean answer;
 
     public AnamnesisQuestionBoolParc() {}
 
-    public boolean getAnswer() { return answer; }
-    public void setAnswer(boolean answer) {
+    public Boolean getAnswer() { return answer; }
+    public void setAnswer(Boolean answer) {
         this.answer = answer;
     }
 
@@ -43,8 +43,12 @@ public class AnamnesisQuestionBoolParc extends AnamnesisQuestionParc {
 
         super(in);
 
+        this.answer = null;
         int answerAsInt = in.readInt();
-        this.answer = (answerAsInt == 1);
+        if (answerAsInt != -1) {
+            this.answer = (answerAsInt == 1);
+        }
+
     }
 
     @Override
@@ -56,7 +60,10 @@ public class AnamnesisQuestionBoolParc extends AnamnesisQuestionParc {
     public void writeToParcel(Parcel dest, int flags) {
 
         super.writeToParcel(dest, flags);
-        int answerAsInt = answer ? 1 : 0;
+        int answerAsInt = -1;
+        if (answer != null) {
+            answerAsInt = answer ? 1 : 0;
+        }
         dest.writeInt(answerAsInt);
     }
 

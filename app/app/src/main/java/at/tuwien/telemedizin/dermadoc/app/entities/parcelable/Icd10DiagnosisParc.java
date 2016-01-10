@@ -49,7 +49,7 @@ public class Icd10DiagnosisParc implements Parcelable {
     // parcelable ################################
 
     public Icd10DiagnosisParc(Parcel in) {
-        this.id = in.readLong();
+        this.id = (Long) in.readValue(null);
         this.icd10Code = in.readString();
         this.icd10Name = in.readString();
     }
@@ -61,7 +61,7 @@ public class Icd10DiagnosisParc implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(id);
+        dest.writeValue(id);
         dest.writeString(icd10Code);
         dest.writeString(icd10Name);
     }

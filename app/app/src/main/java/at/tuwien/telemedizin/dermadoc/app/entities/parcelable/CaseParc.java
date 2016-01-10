@@ -101,7 +101,7 @@ public class CaseParc implements Parcelable {
 
     public CaseParc(Parcel in) {
 
-        this.id = in.readLong();
+        this.id = (Long) in.readValue(null);
         this.name = in.readString();
 
         long createdTimeInMillis = in.readLong();
@@ -127,7 +127,7 @@ public class CaseParc implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
 
-        dest.writeLong(id);
+        dest.writeValue(id);
         dest.writeString(name);
 
         long createdInMillis = -1;

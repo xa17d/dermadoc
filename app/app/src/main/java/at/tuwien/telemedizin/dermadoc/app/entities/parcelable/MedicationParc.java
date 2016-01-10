@@ -55,7 +55,7 @@ public class MedicationParc implements Parcelable {
     // parcelable ################################
 
     public  MedicationParc(Parcel in) {
-        medicationId = in.readLong();
+        medicationId = (Long) in.readValue(null);
         String nameIn = in.readString();
         this.name = nameIn;
         dosis = in.readString();
@@ -69,7 +69,7 @@ public class MedicationParc implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
 
-        dest.writeLong(medicationId);
+        dest.writeValue(medicationId);
         dest.writeString(getName());
         dest.writeString(dosis);
     }

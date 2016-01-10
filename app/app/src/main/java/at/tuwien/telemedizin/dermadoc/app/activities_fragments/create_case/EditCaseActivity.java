@@ -529,13 +529,18 @@ public class EditCaseActivity extends AppCompatActivity implements OnCaseDataReq
         // get data from location-fragment
         List<BodyLocalization> localizations = locationFragment.getSelectedBodyLocalizations();
 
+        Calendar timestamp = Calendar.getInstance();
+
         // anamnesis data
         AnamnesisParc anamnesisForm = null;
         if (newCase) {
-            anamnesisForm = anamnesisFragmen.getFilledAnamnesis();
-        }
+            AnamnesisParc anamnesisFormDummy= anamnesisForm = anamnesisFragmen.getFilledAnamnesis();
+            if (anamnesisFormDummy != null) {
+                anamnesisForm = new AnamnesisParc(null, timestamp, caseItem.getPatient(),
+                        anamnesisFormDummy.getMessage(), anamnesisFormDummy.getQuestions());
+            }
 
-        Calendar timestamp = Calendar.getInstance();
+        }
 
         // CaseInfo
         CaseInfoParc caseInfo = new CaseInfoParc(null, timestamp,
