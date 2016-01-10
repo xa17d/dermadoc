@@ -75,7 +75,7 @@ public class GCPatientList extends VBox {
      * and at every keystroke in search field
      */
     @FXML
-    private void updateList() {
+    public void updateList() {
 
         patientCaseMap = controller.searchPatientCaseMap(tfSearch.getText());
         ObservableList<Patient> patientList = FXCollections.observableArrayList(patientCaseMap.keySet());

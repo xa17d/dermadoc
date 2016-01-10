@@ -27,7 +27,6 @@ public class RestCaseService implements IRestCaseService {
     private AuthenticationToken token;
 
     public RestCaseService(AuthenticationToken token) {
-
         this.token = token;
     }
 
@@ -59,11 +58,15 @@ public class RestCaseService implements IRestCaseService {
 
     @Override
     public void postAcceptCase(RestListener<Void> listener, Case aCase) {
-
+        new Thread(new PostAcceptCase(token, listener, aCase)).start();
     }
 
     @Override
     public void postCaseData(RestListener<CaseData> listener, Case aCase, CaseData caseData) {
+
+        caseData.setId(null);
+        caseData.getAuthor().setId(null);
+
         new Thread(new PostNewCaseData(token, listener, aCase.getId(), caseData)).start();
     }
 
@@ -163,6 +166,23 @@ public class RestCaseService implements IRestCaseService {
     }
 
 
+    private class PostAcceptCase implements Runnable {
+
+        private AuthenticationToken token;
+        private RestListener<Void> listener;
+        private Case aCase;
+        public PostAcceptCase(AuthenticationToken token, RestListener<Void> listener, Case aCase) {
+            this.token = token;
+            this.listener = listener;
+            this.aCase = aCase;
+        }
+
+        @Override
+        public void run() {
+            PostRequest<Void, Void> rest = new PostRequest<>(token, Void.class);
+            rest.post(URL_ + aCase.getId() + _ACCEPT, listener, null);
+        }
+    }
 
     private class PostNewCase implements Runnable {
 

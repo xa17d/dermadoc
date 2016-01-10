@@ -21,4 +21,20 @@ public class Physician extends User {
     public String toString() {
         return "[Physician] "+super.toString();
     }
+
+    @Override
+    public boolean equals(Object o) {
+
+        if(o == null)
+            return false;
+
+        if(this.hashCode() != o.hashCode())
+            return false;
+
+        if(!(o instanceof Physician))
+            return false;
+
+        Physician p = (Physician) o;
+        return this.getId().equals(p.getId());
+    }
 }

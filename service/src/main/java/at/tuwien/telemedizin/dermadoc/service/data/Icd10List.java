@@ -40,8 +40,8 @@ public class Icd10List {
 
     static {
         diagnosisList = new ArrayList<>();
-        diagnosisList.add(new Icd10Diagnosis("L00–L99","Diseases of the skin and subcutaneous tissue"));
-        diagnosisList.add(new Icd10Diagnosis("L00–L08", "Infections of the skin and subcutaneous tissue"));
+        diagnosisList.add(new Icd10Diagnosis("L00-L99","Diseases of the skin and subcutaneous tissue"));
+        diagnosisList.add(new Icd10Diagnosis("L00-L08", "Infections of the skin and subcutaneous tissue"));
         diagnosisList.add(new Icd10Diagnosis("L00","Staphylococcal scalded skin syndrome"));
         diagnosisList.add(new Icd10Diagnosis("L01","Impetigo"));
         diagnosisList.add(new Icd10Diagnosis("L01.0","Impetigo"));
@@ -53,7 +53,7 @@ public class Icd10List {
         diagnosisList.add(new Icd10Diagnosis("L03.3","Cellulitis of trunk"));
         diagnosisList.add(new Icd10Diagnosis("L03.8","Cellulitis of other sites"));
         diagnosisList.add(new Icd10Diagnosis("L03.9","Cellulitis, unspecified"));
-        diagnosisList.add(new Icd10Diagnosis("L10–L14","Bullous disorders"));
+        diagnosisList.add(new Icd10Diagnosis("L10-L14","Bullous disorders"));
         diagnosisList.add(new Icd10Diagnosis("L10","Pemphigus"));
         diagnosisList.add(new Icd10Diagnosis("L10.1","Pemphigus vulgaris"));
         diagnosisList.add(new Icd10Diagnosis("L10.2","Pemphigus vegetans"));
@@ -63,7 +63,7 @@ public class Icd10List {
         diagnosisList.add(new Icd10Diagnosis("L13.0","Dermatitis herpetiformis"));
         diagnosisList.add(new Icd10Diagnosis("L13.1","Subcorneal pustular dermatitis"));
         diagnosisList.add(new Icd10Diagnosis("L14","Bullous disorders in diseases classified elsewhere"));
-        diagnosisList.add(new Icd10Diagnosis("L40–L45","Papulosquamous disorders"));
+        diagnosisList.add(new Icd10Diagnosis("L40-L45","Papulosquamous disorders"));
         diagnosisList.add(new Icd10Diagnosis("L40","Psoriasis"));
         diagnosisList.add(new Icd10Diagnosis("L41","Parapsoriasis"));
         diagnosisList.add(new Icd10Diagnosis("L42","Pityriasis rosea"));

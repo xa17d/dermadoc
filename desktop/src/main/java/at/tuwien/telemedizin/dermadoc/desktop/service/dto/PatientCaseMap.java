@@ -12,14 +12,37 @@ import java.util.Set;
  */
 public class PatientCaseMap {
 
-    private ObservableMap<Patient, ObservableList<Case>> map = FXCollections.observableHashMap();
+    private ObservableMap<Patient, ObservableList<Case>> map;
+
+    public PatientCaseMap() {
+        map = FXCollections.observableHashMap();
+    }
 
     public void put(Case aCase) {
 
         //patient already in map - add case
         if(map.containsKey(aCase.getPatient())) {
             ObservableList<Case> patientCaseList = map.get(aCase.getPatient());
+            if(!patientCaseList.contains(aCase) && aCase.getPhysician() != null && aCase.getPhysician().equals(GlobalVariables.getPhysician())) {
+                patientCaseList.add(aCase);
+            }
+        }
+        //create map entry for patient
+        else {
+            ObservableList<Case> patientCaseList = FXCollections.observableArrayList();
+            map.put(aCase.getPatient(), patientCaseList);
             patientCaseList.add(aCase);
+        }
+    }
+
+    public void putSave(Case aCase) {
+
+        //patient already in map - add case
+        if(map.containsKey(aCase.getPatient())) {
+            ObservableList<Case> patientCaseList = map.get(aCase.getPatient());
+            if(!patientCaseList.contains(aCase)) {
+                patientCaseList.add(aCase);
+            }
         }
         //create map entry for patient
         else {
@@ -53,10 +76,5 @@ public class PatientCaseMap {
         for(Patient p : map.keySet()) {
             map.get(p).addListener(listener);
         }
-    }
-
-
-    public void sort() {
-        //TODO
     }
 }

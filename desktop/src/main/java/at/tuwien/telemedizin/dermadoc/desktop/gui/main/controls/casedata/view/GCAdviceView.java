@@ -83,7 +83,6 @@ public class GCAdviceView extends AGCCaseDataView {
 
     @Override
     public boolean isObsolete() {
-
         return data.isObsolete();
     }
 
