@@ -37,10 +37,10 @@ public class CaseDataDaoImpl implements CaseDataDao {
 		Case parentCase = new Case();
 		parentCase.setId(caseId);
 
-		Iterable<CaseData> cases = caseDataRepository.findByCaseId(parentCase);
+		Iterable<CaseData> caseData = caseDataRepository.findByCaseId(parentCase);
 		ArrayList<CaseData> result = new ArrayList<CaseData>();
 
-		for (CaseData c : cases) {
+		for (CaseData c : caseData) {
 			if (!c.getPrivate() || c.getAuthor().getId() == userId) {
 				result.add(c);
 			}
@@ -59,6 +59,7 @@ public class CaseDataDaoImpl implements CaseDataDao {
 	@Override
 	public CaseData insert(CaseData caseData) {
 
+		// Insert Subitems and CaseData
 		if(caseData instanceof Advice) {
 			List<Medication> m = ((Advice) caseData).getMedications();
 			if(m.size()>0) {
@@ -90,6 +91,24 @@ public class CaseDataDaoImpl implements CaseDataDao {
 		} else {
 			caseData = caseDataRepository.save(caseData);
 		}
+
+		// Set previous CaseData of Diagnosis / Anamnesis obsolete
+		Iterable<CaseData> caseDataOfCase = caseDataRepository.findByCaseId(caseData.getCase());
+
+		for (CaseData c : caseDataOfCase) {
+			if (caseData.getClass().equals(c.getClass())) {
+				// make sure it is a different object, and not yet obsolete
+				if (c.getId() != caseData.getId() && !c.isObsolete())
+					// if creation time of c was before caseData
+					if (c.getCreated().compareTo(caseData.getCreated()) < 0) {
+						// obsolete
+						c.setObsolete(true);
+						// update db
+						caseDataRepository.save(c);
+					}
+			}
+		}
+
 
 		return caseData;
 	}

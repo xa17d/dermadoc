@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface CaseDataRepository extends JpaRepository<CaseData, Long> {
 	Iterable<CaseData> findByCaseId(Case parentCase);
+
 	CaseData getById(long id);
 
 	//Iterable<CaseData> listCaseDataByUserAndCase(long caseId, long authorId);
