@@ -68,6 +68,8 @@ public class CaseDataDaoImpl implements CaseDataDao {
 
 			caseData = caseDataRepository.save(caseData);
 
+			obsoleteOldCaseData(caseData, Advice.class);
+
 		}
 		else if (caseData instanceof Diagnosis) {
 
@@ -78,7 +80,7 @@ public class CaseDataDaoImpl implements CaseDataDao {
 
 			caseData = caseDataRepository.save(caseData);
 
-
+			obsoleteOldCaseData(caseData, Diagnosis.class);
 
 		} else if (caseData instanceof Anamnesis) {
 			List<AnamnesisQuestion> aq = ((Anamnesis) caseData).getQuestions();
@@ -92,15 +94,33 @@ public class CaseDataDaoImpl implements CaseDataDao {
 			caseData = caseDataRepository.save(caseData);
 		}
 
-		// Set previous CaseData of Diagnosis / Anamnesis obsolete
-		Iterable<CaseData> caseDataOfCase = caseDataRepository.findByCaseId(caseData.getCase());
+		return caseData;
+	}
+
+	/**
+	 * Set CaseData of the same type obsolete in the provided case.
+	 * It is important that newestCaseData.getCase is set.
+	 * The Type is needed because some Database APIs may create subclasses that do not
+	 * use the original POJOs.
+	 * @param newestCaseData
+	 * @param type
+     */
+	private void obsoleteOldCaseData(CaseData newestCaseData, Class<?> type) {
+		// check type
+		if (!type.isInstance(newestCaseData)) {
+			throw new IllegalArgumentException("newestCaseData "+newestCaseData+" is not an instance of type "+type.getSimpleName());
+		}
+
+		// Get all CaseData of the case
+		Iterable<CaseData> caseDataOfCase = caseDataRepository.findByCaseId(newestCaseData.getCase());
 
 		for (CaseData c : caseDataOfCase) {
-			if (caseData.getClass().equals(c.getClass())) {
+			// check if type matches, because only items of same type should be set obsolete
+			if (type.isInstance(c)) {
 				// make sure it is a different object, and not yet obsolete
-				if (c.getId() != caseData.getId() && !c.isObsolete())
-					// if creation time of c was before caseData
-					if (c.getCreated().compareTo(caseData.getCreated()) < 0) {
+				if (c.getId() != newestCaseData.getId() && !c.isObsolete())
+					// if creation time of c was before newestCaseData
+					if (c.getCreated().compareTo(newestCaseData.getCreated()) < 0) {
 						// obsolete
 						c.setObsolete(true);
 						// update db
@@ -108,8 +128,5 @@ public class CaseDataDaoImpl implements CaseDataDao {
 					}
 			}
 		}
-
-
-		return caseData;
 	}
 }

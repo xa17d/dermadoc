@@ -5,6 +5,7 @@ import at.tuwien.telemedizin.dermadoc.entities.Icd10Diagnosis;
 import at.tuwien.telemedizin.dermadoc.entities.Medication;
 import at.tuwien.telemedizin.dermadoc.entities.Physician;
 import at.tuwien.telemedizin.dermadoc.entities.casedata.*;
+import at.tuwien.telemedizin.dermadoc.entities.rest.CaseDataList;
 import at.tuwien.telemedizin.dermadoc.server.Application;
 import junit.framework.Assert;
 import org.junit.Test;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 /**
@@ -215,4 +217,120 @@ public class CaseDataDaoImplTest {
 
 	}
 
+	@Test
+	public void TestAdviceObsolete () {
+		Physician author1 = new Physician();
+		author1.setMail("authorMail989");
+		author1.setPassword("qweqwe");
+		author1 = userRepository.save(author1);
+
+		Case testCase = new Case();
+		testCase.setPhysician(author1);
+		testCase.setName("Case TestAdviceObsolete");
+		testCase = caseRepository.save(testCase);
+
+		Advice a1 = new Advice();
+		a1.setCase(testCase);
+		a1.setAuthor(author1);
+		a1.setObsolete(false);
+		a1.setMessage("FIRST ADVICE");
+		Calendar date1 = GregorianCalendar.getInstance();
+		date1.add(GregorianCalendar.SECOND, -30);
+		a1.setCreated(date1);
+
+		Diagnosis d1 = new Diagnosis();
+		d1.setCase(testCase);
+		d1.setAuthor(author1);
+		d1.setObsolete(false);
+		d1.setMessage("FIRST DIAGNOSIS");
+		Calendar date2 = GregorianCalendar.getInstance();
+		date2.add(GregorianCalendar.SECOND, -20);
+		d1.setCreated(date2);
+
+		Advice a2 = new Advice();
+		a2.setCase(testCase);
+		a2.setAuthor(author1);
+		a2.setObsolete(false);
+		a2.setMessage("SECOND ADVICE");
+		Calendar date3 = GregorianCalendar.getInstance();
+		date3.add(GregorianCalendar.SECOND, -10);
+		a2.setCreated(date3);
+
+		Diagnosis d2 = new Diagnosis();
+		d2.setCase(testCase);
+		d2.setAuthor(author1);
+		d2.setObsolete(false);
+		d2.setMessage("SECOND DIAGNOSIS");
+		Calendar date4 = GregorianCalendar.getInstance();
+		date4.add(GregorianCalendar.SECOND, 0);
+		d2.setCreated(date4);
+
+
+		CaseDataList caseData;
+
+		// INSERT ADVICE 1
+		caseDataDao.insert(a1);
+		caseData = new CaseDataList(caseDataDao.listCaseDataByUserAndCase(testCase.getId(), author1.getId()));
+		Assert.assertEquals("Count after 1st insert", 1, caseData.size());
+
+		Assert.assertEquals("item 0 type", true, caseData.get(0) instanceof Advice);
+		Assert.assertEquals("item 0 obsolete", false, caseData.get(0).isObsolete());
+
+		sleep();
+
+		// INSERT DIAGNOSIS 1
+		caseDataDao.insert(d1);
+		caseData = new CaseDataList(caseDataDao.listCaseDataByUserAndCase(testCase.getId(), author1.getId()));
+		Assert.assertEquals("Count after 2st insert", 2, caseData.size());
+
+		Assert.assertEquals("item 0 type", true, caseData.get(0) instanceof Advice);
+		Assert.assertEquals("item 0 obsolete", false, caseData.get(0).isObsolete());
+
+		Assert.assertEquals("item 1 type", true, caseData.get(1) instanceof Diagnosis);
+		Assert.assertEquals("item 1 obsolete", false, caseData.get(1).isObsolete());
+
+		sleep();
+
+		// INSERT ADVICE 2
+		caseDataDao.insert(a2);
+		caseData = new CaseDataList(caseDataDao.listCaseDataByUserAndCase(testCase.getId(), author1.getId()));
+		Assert.assertEquals("Count after 3rd insert", 3, caseData.size());
+
+		Assert.assertEquals("item 0 type", true, caseData.get(0) instanceof Advice);
+		Assert.assertEquals("item 0 obsolete", true, caseData.get(0).isObsolete());
+
+		Assert.assertEquals("item 1 type", true, caseData.get(1) instanceof Diagnosis);
+		Assert.assertEquals("item 1 obsolete", false, caseData.get(1).isObsolete());
+
+		Assert.assertEquals("item 2 type", true, caseData.get(2) instanceof Advice);
+		Assert.assertEquals("item 2 obsolete", false, caseData.get(2).isObsolete());
+
+		sleep();
+
+		// INSERT DIAGNOSIS 2
+		caseDataDao.insert(d2);
+		caseData = new CaseDataList(caseDataDao.listCaseDataByUserAndCase(testCase.getId(), author1.getId()));
+		Assert.assertEquals("Count after 4th insert", 4, caseData.size());
+
+		Assert.assertEquals("item 0 type", true, caseData.get(0) instanceof Advice);
+		Assert.assertEquals("item 0 obsolete", true, caseData.get(0).isObsolete());
+
+		Assert.assertEquals("item 1 type", true, caseData.get(1) instanceof Diagnosis);
+		Assert.assertEquals("item 1 obsolete", true, caseData.get(1).isObsolete());
+
+		Assert.assertEquals("item 2 type", true, caseData.get(2) instanceof Advice);
+		Assert.assertEquals("item 2 obsolete", false, caseData.get(2).isObsolete());
+
+		Assert.assertEquals("item 3 type", true, caseData.get(3) instanceof Diagnosis);
+		Assert.assertEquals("item 3 obsolete", false, caseData.get(3).isObsolete());
 	}
+
+	private void sleep() {
+		Calendar c = Calendar.getInstance();
+		Calendar now = Calendar.getInstance();
+		while (now.equals(c)) {
+			now = Calendar.getInstance();
+		}
+	}
+
+}
