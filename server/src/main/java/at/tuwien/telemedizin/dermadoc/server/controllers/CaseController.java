@@ -74,7 +74,7 @@ public class CaseController {
         if (Access.canAccess(user, c)) {
 
             Physician physician = (Physician)user;
-            if (c.getStatus() == CaseStatus.LookingForPhysician) {
+            if (CaseStatus.LookingForPhysician.equals(c.getStatus()) || CaseStatus.WaitingForAccept.equals(c.getStatus())) {
                 // update case
                 c.setStatus(CaseStatus.Active);
                 c.setPhysician(physician);
