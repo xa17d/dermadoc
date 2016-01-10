@@ -274,6 +274,20 @@
     <string name="pref_data_category_default_value">1</string>
     <string name="pref_data_category_key">pref_case_data_category</string>
 
+    <string name="pref_category_title_notifications">Notifications</string>
+
+    <string name="pref_title_default_auto_delte_notifications">Delete Automatically</string>
+    <string name="pref_auto_delte_notifications_summary">If activated, the user does not have to delete the notifications manually</string>
+    <string name="pref_auto_delte_notifications_key">pref_auto_delte_notifications</string>
+
+    <string name="pref_title_time_of_notification_deletion_case_open">On Case Opened</string>
+    <string name="pref_time_of_notification_deletion_case_open_summary">Case specific notifications are deleted, when you open a case from the case-list.</string>
+    <string name="pref_time_of_notification_deletion_case_open_key">pref_time_of_notification_deletion_case_open</string>
+
+    <string name="pref_title_time_of_notification_deletion_case_close">On Case Closed</string>
+    <string name="pref_time_of_notification_deletion_case_close_summary">Case specific notifications are deleted, when you close a case (going back to the case-list)</string>
+    <string name="pref_time_of_notification_deletion_case_close_key">pref_time_of_notification_deletion_case_close</string>
+
     <string name="label_medication_dosis">Dosis:</string>
 
     <string name="label_question_not_answered">No Answer</string>
@@ -281,6 +295,10 @@
     <string name="label_question_negative_answer">No</string>
 
     <string name="hint_is_obsolete">obsolete</string>
+
+    <string name="msg_notifications_were_deleted">Notifications were deleted from the server</string>
+    <string name="msg_notification_deletion_cancelled">Deleting notifications was cancelled</string>
+
 
 
 

@@ -174,6 +174,11 @@ public class CaseActivity extends AppCompatActivity
         loadingProgressInfoTextView = (TextView) findViewById(R.id.loading_data_info_text);
 
         syncData();
+        // check if notifications hould be deleted on open
+        if (loadNotificationDeletionOnCaseOpenFromPreferences()) {
+            deleteNotifications();
+        }
+
 
     }
 
@@ -233,6 +238,22 @@ public class CaseActivity extends AppCompatActivity
         }
     }
 
+    private boolean loadNotificationDeletionOnCaseOpenFromPreferences() {
+        // initialize sorting category
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean deleteOnOpen = sp.getBoolean(getString(R.string.pref_time_of_notification_deletion_case_open_key), false);
+        Log.d(LOG_TAG, "loadNotificationDeletionOnCaseOpenFromPreferences=" + deleteOnOpen);
+        return deleteOnOpen;
+    }
+
+    private boolean loadNotificationDeletionOnCaseCloseFromPreferences() {
+        // initialize sorting category
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean deleteOnClose = sp.getBoolean(getString(R.string.pref_time_of_notification_deletion_case_close_key), false);
+        Log.d(LOG_TAG, "loadNotificationDeletionOnCaseCloseFromPreferences=" + deleteOnClose);
+        return deleteOnClose;
+    }
+
 
     @Override
     public void onBackPressed() {
@@ -240,6 +261,10 @@ public class CaseActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
+            // check if notifications hould be deleted on close
+            if (loadNotificationDeletionOnCaseCloseFromPreferences()) {
+                deleteNotifications();
+            }
             super.onBackPressed();
         }
     }
@@ -358,6 +383,12 @@ public class CaseActivity extends AppCompatActivity
 
     public void deleteNotifications() {
         Log.d(LOG_TAG, "deleteNotifications()");
+
+        // check, if there are any notitifications to delte
+        if (notifications.size() == 0) {
+            return;
+        }
+
         // check internet connection
         if (!checkInternetConnection()) {
             return;
@@ -410,7 +441,7 @@ public class CaseActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         Fragment fragment = null;
-        String title = "" + caseItem.getId(); // TODO change to name or something
+        String title = "" + caseItem.getName(); // TODO change to name or something
         CharSequence oldTitle = getTitle();
 
 
@@ -438,6 +469,10 @@ public class CaseActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_back_to_main) {
             // finish this activity
+            // check if notifications hould be deleted on close
+            if (loadNotificationDeletionOnCaseCloseFromPreferences()) {
+                deleteNotifications();
+            }
             CaseActivity.this.finish();
             return true;
         }
@@ -746,6 +781,8 @@ public class CaseActivity extends AppCompatActivity
         }
     }
 
+
+
     /**
      * sending the case to the server
      * the user.
@@ -809,14 +846,14 @@ public class CaseActivity extends AppCompatActivity
             }
 
             asyncTaskFinished(DeleteNotificationsAsyncTask.this);
-            Toast.makeText(getBaseContext(), "Notifications were deleted from the server", Toast.LENGTH_LONG).show();
+            Toast.makeText(getBaseContext(), activity.getString(R.string.msg_notifications_were_deleted), Toast.LENGTH_LONG).show();
 
         }
 
         @Override
         protected void onCancelled() {
             asyncTaskFinished(DeleteNotificationsAsyncTask.this);
-            Toast.makeText(getBaseContext(), "Deleting notifications was cancelled", Toast.LENGTH_LONG).show();
+            Toast.makeText(getBaseContext(), activity.getString(R.string.msg_notification_deletion_cancelled), Toast.LENGTH_LONG).show();
         }
     }
 }

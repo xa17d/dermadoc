@@ -23,4 +23,27 @@
             android:title="@string/pref_title_default_data_category" />
 
     </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/pref_category_title_notifications">
+        <CheckBoxPreference
+            android:key="@string/pref_auto_delte_notifications_key"
+            android:title="@string/pref_title_default_auto_delte_notifications"
+            android:summary="@string/pref_auto_delte_notifications_summary"
+            android:defaultValue="false" />
+
+        <CheckBoxPreference
+            android:dependency="@string/pref_auto_delte_notifications_key"
+            android:key="@string/pref_time_of_notification_deletion_case_open_key"
+            android:title="@string/pref_title_time_of_notification_deletion_case_open"
+            android:summary="@string/pref_time_of_notification_deletion_case_open_summary"
+            android:defaultValue="false" />
+
+        <CheckBoxPreference
+            android:dependency="@string/pref_auto_delte_notifications_key"
+            android:key="@string/pref_time_of_notification_deletion_case_close_key"
+            android:title="@string/pref_title_time_of_notification_deletion_case_close"
+            android:summary="@string/pref_time_of_notification_deletion_case_close_summary"
+            android:defaultValue="false" />
+
+    </PreferenceCategory>
 </PreferenceScreen>
