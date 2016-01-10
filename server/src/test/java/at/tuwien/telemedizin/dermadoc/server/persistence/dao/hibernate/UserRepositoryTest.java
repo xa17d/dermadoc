@@ -80,6 +80,11 @@ public class UserRepositoryTest {
 	@Test
 	public void testListPhysicians() throws Exception {
 
+		int countAlreadyInDb = 0;
+		for (Physician ph : userRepository.listPhysicians()) {
+			countAlreadyInDb++;
+		}
+
 		List<Physician> pList = new ArrayList<>();
 		for (int k = 0; k < 5; k++) {
 			Physician p = new Physician();
@@ -97,7 +102,7 @@ public class UserRepositoryTest {
 			i++;
 		}
 
-		Assert.assertEquals(i, pList.size());
+		Assert.assertEquals(i, pList.size() + countAlreadyInDb);
 
 	}
 }

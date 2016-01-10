@@ -59,11 +59,20 @@ public class CaseDataDaoImpl implements CaseDataDao {
 	@Override
 	public CaseData insert(CaseData caseData) {
 
+		caseData.setId(null); // automatically generate id
+
 		// Insert Subitems and CaseData
 		if(caseData instanceof Advice) {
-			List<Medication> m = ((Advice) caseData).getMedications();
-			if(m.size()>0) {
-				medicationRepository.save(m);
+			List<Medication> medications = ((Advice)caseData).getMedications();
+
+			if (medications != null) {
+				for (Medication m : medications) {
+					m.setMedicationId(null); // automatically generate id
+				}
+
+				if(medications.size()>0) {
+					medicationRepository.save(medications);
+				}
 			}
 
 			caseData = caseDataRepository.save(caseData);
@@ -73,9 +82,16 @@ public class CaseDataDaoImpl implements CaseDataDao {
 		}
 		else if (caseData instanceof Diagnosis) {
 
-			List<Icd10Diagnosis> icd = ((Diagnosis) caseData).getDiagnosisList();
-			if(icd.size()>0) {
-				icd10Repository.save(icd);
+			List<Icd10Diagnosis> diagnosises = ((Diagnosis) caseData).getDiagnosisList();
+
+			if (diagnosises != null) {
+				for (Icd10Diagnosis d : diagnosises) {
+					d.setId(null); // automatically generate id
+				}
+
+				if (diagnosises.size() > 0) {
+					icd10Repository.save(diagnosises);
+				}
 			}
 
 			caseData = caseDataRepository.save(caseData);
@@ -83,9 +99,16 @@ public class CaseDataDaoImpl implements CaseDataDao {
 			obsoleteOldCaseData(caseData, Diagnosis.class);
 
 		} else if (caseData instanceof Anamnesis) {
-			List<AnamnesisQuestion> aq = ((Anamnesis) caseData).getQuestions();
-			if(aq.size()>0) {
-				anamnesisQuestionRepository.save(aq);
+			List<AnamnesisQuestion> questions = ((Anamnesis) caseData).getQuestions();
+
+			if (questions != null) {
+				for (AnamnesisQuestion q : questions) {
+					q.setId(null); // automatically generate id
+				}
+
+				if (questions.size() > 0) {
+					anamnesisQuestionRepository.save(questions);
+				}
 			}
 
 			caseData = caseDataRepository.save(caseData);
