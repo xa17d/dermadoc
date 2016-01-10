@@ -1,9 +1,6 @@
 package at.tuwien.telemedizin.dermadoc.server.persistence.dao.hibernate;
 
-import at.tuwien.telemedizin.dermadoc.entities.Case;
-import at.tuwien.telemedizin.dermadoc.entities.Patient;
-import at.tuwien.telemedizin.dermadoc.entities.Physician;
-import at.tuwien.telemedizin.dermadoc.entities.User;
+import at.tuwien.telemedizin.dermadoc.entities.*;
 import at.tuwien.telemedizin.dermadoc.server.Application;
 import org.junit.Assert;
 import org.junit.Test;
@@ -73,7 +70,7 @@ public class CaseRepositoryTest {
 
 	@Test
 	public void findOpenCases() throws Exception {
-		Iterable<Case> c = caseRepository.findOpenCases();
+		Iterable<Case> c = caseRepository.findByStatus(CaseStatus.LookingForPhysician);
 
 	}
 

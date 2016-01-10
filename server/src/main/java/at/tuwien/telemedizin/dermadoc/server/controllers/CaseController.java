@@ -46,7 +46,8 @@ public class CaseController {
     @AccessPhysician
     public CaseList listOpenCases()
     {
-        return new CaseList(caseRepository.findOpenCases());
+        CaseList openCases = new CaseList(caseRepository.findByStatus(CaseStatus.LookingForPhysician));
+        return new CaseList(openCases);
     }
 
     @RequestMapping(value = "/cases/{caseId}", method = RequestMethod.GET)

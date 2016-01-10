@@ -1,6 +1,7 @@
 package at.tuwien.telemedizin.dermadoc.server.persistence.dao.hibernate;
 
 import at.tuwien.telemedizin.dermadoc.entities.Case;
+import at.tuwien.telemedizin.dermadoc.entities.CaseStatus;
 import at.tuwien.telemedizin.dermadoc.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -16,7 +17,7 @@ public interface CaseRepository extends JpaRepository<Case, Long> {
 	Iterable<Case> findByPatient(User p);
 
 	//Case findByUser(User u);
-	Iterable<Case> findOpenCases();
+	Iterable<Case> findByStatus(CaseStatus status);
 
 	Iterable<Case> findByPhysician(User p);
 
