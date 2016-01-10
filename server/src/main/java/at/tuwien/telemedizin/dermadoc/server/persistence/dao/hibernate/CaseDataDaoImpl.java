@@ -37,10 +37,10 @@ public class CaseDataDaoImpl implements CaseDataDao {
 		Case parentCase = new Case();
 		parentCase.setId(caseId);
 
-		Iterable<CaseData> cases = caseDataRepository.findByCaseId(parentCase);
+		Iterable<CaseData> caseData = caseDataRepository.findByCaseId(parentCase);
 		ArrayList<CaseData> result = new ArrayList<CaseData>();
 
-		for (CaseData c : cases) {
+		for (CaseData c : caseData) {
 			if (!c.getPrivate() || c.getAuthor().getId() == userId) {
 				result.add(c);
 			}
@@ -59,30 +59,56 @@ public class CaseDataDaoImpl implements CaseDataDao {
 	@Override
 	public CaseData insert(CaseData caseData) {
 
+		caseData.setId(null); // automatically generate id
+
+		// Insert Subitems and CaseData
 		if(caseData instanceof Advice) {
-			List<Medication> m = ((Advice) caseData).getMedications();
-			if(m.size()>0) {
-				medicationRepository.save(m);
+			List<Medication> medications = ((Advice)caseData).getMedications();
+
+			if (medications != null) {
+				for (Medication m : medications) {
+					m.setMedicationId(null); // automatically generate id
+				}
+
+				if(medications.size()>0) {
+					medicationRepository.save(medications);
+				}
 			}
 
 			caseData = caseDataRepository.save(caseData);
+
+			obsoleteOldCaseData(caseData, Advice.class);
 
 		}
 		else if (caseData instanceof Diagnosis) {
 
-			List<Icd10Diagnosis> icd = ((Diagnosis) caseData).getDiagnosisList();
-			if(icd.size()>0) {
-				icd10Repository.save(icd);
+			List<Icd10Diagnosis> diagnosises = ((Diagnosis) caseData).getDiagnosisList();
+
+			if (diagnosises != null) {
+				for (Icd10Diagnosis d : diagnosises) {
+					d.setId(null); // automatically generate id
+				}
+
+				if (diagnosises.size() > 0) {
+					icd10Repository.save(diagnosises);
+				}
 			}
 
 			caseData = caseDataRepository.save(caseData);
 
-
+			obsoleteOldCaseData(caseData, Diagnosis.class);
 
 		} else if (caseData instanceof Anamnesis) {
-			List<AnamnesisQuestion> aq = ((Anamnesis) caseData).getQuestions();
-			if(aq.size()>0) {
-				anamnesisQuestionRepository.save(aq);
+			List<AnamnesisQuestion> questions = ((Anamnesis) caseData).getQuestions();
+
+			if (questions != null) {
+				for (AnamnesisQuestion q : questions) {
+					q.setId(null); // automatically generate id
+				}
+
+				if (questions.size() > 0) {
+					anamnesisQuestionRepository.save(questions);
+				}
 			}
 
 			caseData = caseDataRepository.save(caseData);
@@ -92,5 +118,38 @@ public class CaseDataDaoImpl implements CaseDataDao {
 		}
 
 		return caseData;
+	}
+
+	/**
+	 * Set CaseData of the same type obsolete in the provided case.
+	 * It is important that newestCaseData.getCase is set.
+	 * The Type is needed because some Database APIs may create subclasses that do not
+	 * use the original POJOs.
+	 * @param newestCaseData
+	 * @param type
+     */
+	private void obsoleteOldCaseData(CaseData newestCaseData, Class<?> type) {
+		// check type
+		if (!type.isInstance(newestCaseData)) {
+			throw new IllegalArgumentException("newestCaseData "+newestCaseData+" is not an instance of type "+type.getSimpleName());
+		}
+
+		// Get all CaseData of the case
+		Iterable<CaseData> caseDataOfCase = caseDataRepository.findByCaseId(newestCaseData.getCase());
+
+		for (CaseData c : caseDataOfCase) {
+			// check if type matches, because only items of same type should be set obsolete
+			if (type.isInstance(c)) {
+				// make sure it is a different object, and not yet obsolete
+				if (c.getId() != newestCaseData.getId() && !c.isObsolete())
+					// if creation time of c was before newestCaseData
+					if (c.getCreated().compareTo(newestCaseData.getCreated()) < 0) {
+						// obsolete
+						c.setObsolete(true);
+						// update db
+						caseDataRepository.save(c);
+					}
+			}
+		}
 	}
 }
