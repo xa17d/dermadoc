@@ -12,6 +12,8 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
+
 /**
  * Created by Lilly on 31.12.2015.
  */
@@ -70,7 +72,7 @@ public class CaseRepositoryTest {
 
 	@Test
 	public void findOpenCases() throws Exception {
-		Iterable<Case> c = caseRepository.findByStatus(CaseStatus.LookingForPhysician);
+		Iterable<Case> c = caseRepository.findByStatusInOrderByCreatedAsc(Arrays.asList(CaseStatus.LookingForPhysician, CaseStatus.WaitingForAccept));
 
 	}
 

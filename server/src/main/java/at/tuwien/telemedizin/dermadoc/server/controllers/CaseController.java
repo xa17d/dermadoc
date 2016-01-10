@@ -11,6 +11,8 @@ import at.tuwien.telemedizin.dermadoc.server.services.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.GregorianCalendar;
 
 /**
@@ -44,10 +46,18 @@ public class CaseController {
 
     @RequestMapping(value = "/cases/open", method = RequestMethod.GET)
     @AccessPhysician
-    public CaseList listOpenCases()
+    public CaseList listOpenCases(@CurrentUser User user)
     {
-        CaseList openCases = new CaseList(caseRepository.findByStatus(CaseStatus.LookingForPhysician));
-        return new CaseList(openCases);
+        Iterable<Case> openCases = caseRepository.findByStatusInOrderByCreatedAsc(Arrays.asList(CaseStatus.LookingForPhysician, CaseStatus.WaitingForAccept));
+        CaseList result = new CaseList();
+        for (Case c : openCases) {
+            if (CaseStatus.LookingForPhysician.equals(c.getStatus()) ||
+                    (CaseStatus.WaitingForAccept.equals(c.getStatus()) && c.getPhysician().getId() == user.getId())) {
+                result.add(c);
+            }
+        }
+
+        return new CaseList(result);
     }
 
     @RequestMapping(value = "/cases/{caseId}", method = RequestMethod.GET)

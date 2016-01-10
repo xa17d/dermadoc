@@ -8,7 +8,7 @@ import at.tuwien.telemedizin.dermadoc.entities.*;
 public class Access {
     public static boolean canAccess(User user, Case forCase) {
         if (forCase.getPatient().getId() == user.getId()) { return true; }
-        if (forCase.getPhysician() == null && forCase.getStatus() == CaseStatus.LookingForPhysician && user instanceof Physician) { return true; }
+        if (forCase.getPhysician() == null && CaseStatus.LookingForPhysician.equals(forCase.getStatus()) && user instanceof Physician) { return true; }
         if (forCase.getPhysician() != null && forCase.getPhysician().getId() == user.getId()) { return true; }
         return false;
     }

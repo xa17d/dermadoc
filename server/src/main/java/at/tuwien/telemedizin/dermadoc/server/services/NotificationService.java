@@ -58,7 +58,7 @@ public class NotificationService {
 
     public void notifyNewCase(Case newCase) {
 
-        if (newCase.getStatus() == CaseStatus.LookingForPhysician) {
+        if (CaseStatus.LookingForPhysician.equals(newCase.getStatus())) {
             for (Physician physician : userRepository.listPhysicians()) {
                 // TODO: only for nearby physicians?
 
