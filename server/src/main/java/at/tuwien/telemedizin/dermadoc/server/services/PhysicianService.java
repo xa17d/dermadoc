@@ -2,6 +2,7 @@ package at.tuwien.telemedizin.dermadoc.server.services;
 
 import at.tuwien.telemedizin.dermadoc.entities.GeoLocation;
 import at.tuwien.telemedizin.dermadoc.entities.Physician;
+import at.tuwien.telemedizin.dermadoc.entities.User;
 import at.tuwien.telemedizin.dermadoc.entities.rest.UserList;
 import at.tuwien.telemedizin.dermadoc.server.persistence.dao.hibernate.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 /**
  * Created by daniel on 10.01.2016.
@@ -27,7 +29,7 @@ public class PhysicianService {
      * @param geoLocation Location to search at
      * @return Ordered list with nearest Physicians. Nearest first.
      */
-    public UserList listNearestPhysicians(GeoLocation geoLocation) {
+    public List<Physician> listNearestPhysicians(GeoLocation geoLocation) {
         Iterable<Physician> physicians = userRepository.listPhysicians();
 
         // Calculate Distances to all Physicians
@@ -62,7 +64,7 @@ public class PhysicianService {
 
         // Generate result list with nearest physicians
 
-        UserList result = new UserList();
+        List<Physician> result = new ArrayList<Physician>();
 
         int resultSize = Math.min(nearestCount, physicianDistances.size());
         for (int i=0; i<resultSize; i++) {

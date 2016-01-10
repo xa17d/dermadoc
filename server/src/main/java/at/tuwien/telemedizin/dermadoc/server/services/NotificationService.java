@@ -12,14 +12,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class NotificationService {
 
-
-
     @Autowired
     NotificationRepository notificationRepository;
 
-
     @Autowired
-    UserRepository userRepository;
+    PhysicianService physicianService;
 
     public void notifyCase(Case theCase, User sender, String message) {
 
@@ -59,8 +56,9 @@ public class NotificationService {
     public void notifyNewCase(Case newCase) {
 
         if (CaseStatus.LookingForPhysician.equals(newCase.getStatus())) {
-            for (Physician physician : userRepository.listPhysicians()) {
-                // TODO: only for nearby physicians?
+            // Do not notify if no physician is selected
+            /*
+            for (Physician physician : physicianService.listNearestPhysicians(newCase.getPatient().getLocation())) {
 
                 Notification notification = new Notification();
                 notification.setCaseId(newCase.getId());
@@ -70,6 +68,7 @@ public class NotificationService {
                 // add to DAO
                 notificationRepository.save(notification);
             }
+            */
         }
         else {
             // if the Patient is not looking for a Physician for the case,

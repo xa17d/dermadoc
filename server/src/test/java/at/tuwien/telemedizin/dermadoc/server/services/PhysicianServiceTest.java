@@ -24,6 +24,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Calendar;
+import java.util.List;
 
 /**
  * Created by daniel on 10.01.2016.
@@ -71,7 +72,7 @@ public class PhysicianServiceTest {
         pWien.setLocation(new GeoLocation("Wien", 48.220778, 16.3100205));
         userRepository.save(pWien);
 
-        UserList list;
+        List<Physician> list;
 
         list = physicianService.listNearestPhysicians(new GeoLocation("Innsbruck", 47.2855502, 11.3087505));
         Assert.assertEquals("Item 0", "Innsbruck", list.get(0).getName());
@@ -86,5 +87,6 @@ public class PhysicianServiceTest {
         //Assert.assertEquals("Item 3", "Bregenz", list.get(3).getName());
 
         list = physicianService.listNearestPhysicians(null);
+        Assert.assertTrue(list.size() > 0);
     }
 }
