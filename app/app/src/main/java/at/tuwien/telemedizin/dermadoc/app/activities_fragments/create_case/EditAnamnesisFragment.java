@@ -74,8 +74,6 @@ public class EditAnamnesisFragment extends Fragment {
     }
 
 
-
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);

@@ -56,6 +56,7 @@ import at.tuwien.telemedizin.dermadoc.app.general_entities.casedata.CaseData;
 import at.tuwien.telemedizin.dermadoc.app.helper.CaseDataExtractionHelper;
 import at.tuwien.telemedizin.dermadoc.app.helper.ConnectionDetector;
 import at.tuwien.telemedizin.dermadoc.app.helper.ParcelableHelper;
+import at.tuwien.telemedizin.dermadoc.app.helper.ToStringHelper;
 import at.tuwien.telemedizin.dermadoc.app.persistence.ContentProvider;
 import at.tuwien.telemedizin.dermadoc.app.persistence.ContentProviderFactory;
 import at.tuwien.telemedizin.dermadoc.app.server_interface.ServerInterface;
@@ -536,7 +537,8 @@ public class EditCaseActivity extends AppCompatActivity implements OnCaseDataReq
         if (newCase) {
             AnamnesisParc anamnesisFormDummy= anamnesisForm = anamnesisFragmen.getFilledAnamnesis();
             if (anamnesisFormDummy != null) {
-                anamnesisForm = new AnamnesisParc(null, timestamp, caseItem.getPatient(),
+                // setting the user null for DB/Server reasons
+                anamnesisForm = new AnamnesisParc(null, timestamp, null,
                         anamnesisFormDummy.getMessage(), anamnesisFormDummy.getQuestions());
             }
 
@@ -585,6 +587,7 @@ public class EditCaseActivity extends AppCompatActivity implements OnCaseDataReq
 
         // add Anamnesis element
         if (newCase && anamnesisForm != null) {
+            Log.d(LOG_TAG, "anamnesisForm: " + ToStringHelper.toString(anamnesisForm));
             newCaseDataElements.add(anamnesisForm);
         }
         return newCaseDataElements;

@@ -14,9 +14,6 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <!-- TODO: Update blank fragment layout -->
-
-
         <!-- relative layout to align the next-button to the bottom -->
         <LinearLayout
             android:orientation="vertical"

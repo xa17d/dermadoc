@@ -37,11 +37,11 @@ public class TestContentProvider implements ContentProvider {
         patient.setId(1l);
         patient.setMail("mail@mail.at");
         patient.setPassword("no");
-        patient.setName("Peter Hans Gruber dings Norbert");
-        patient.setLocation(new GeoLocationParc("hier", 2.0, 2.0));
+        patient.setName("Peter Hans Gruber");
+        patient.setLocation(new GeoLocationParc("Wien", 48.155610, 16.418801));
 
         patient.setSvnr("1212");
-        patient.setGender(Gender.Female);
+        patient.setGender(Gender.Male);
         patient.setBirthTime(Calendar.getInstance());
         return patient;
     }
@@ -106,7 +106,7 @@ public class TestContentProvider implements ContentProvider {
         q1b.setQuestion("Have there ever been or are there similar cases within you family?");
 
         AnamnesisQuestionParc q2 = new AnamnesisQuestionTextParc();
-        q2.setQuestion("If you ever had problems concerning your skin, pleas describe them here:");
+        q2.setQuestion("If you ever had problems concerning your skin, please describe them here:");
 
         AnamnesisQuestionParc q3 = new AnamnesisQuestionBoolParc();
         q3.setQuestion("Are you taking any medication at the moment concerning skin-related problems?");
@@ -147,25 +147,14 @@ public class TestContentProvider implements ContentProvider {
 
         List<CaseParc> currentCaseList;
 
-        PatientParc patient = new PatientParc();
-        patient.setId(1l);
-        patient.setMail("mail@mail.at");
-        patient.setPassword("no");
-        patient.setName("Peter Hans Gruber dings Norbert");
-        patient.setLocation(new GeoLocationParc("hier", 2.0, 2.0));
-
-        patient.setSvnr("1212");
-        patient.setGender(Gender.Female);
-        patient.setBirthTime(Calendar.getInstance());
-
 
         long startNumber = 100000;
         long startNumberCD = 1;
 
         currentCaseList = new ArrayList<CaseParc>();
-        CaseParc testCase1 = new CaseParc(startNumber, patient, new GregorianCalendar());
+        CaseParc testCase1 = new CaseParc(startNumber, getCurrentUser(), new GregorianCalendar());
         testCase1.setStatus(CaseStatus.Active);
-        testCase1.setName("First Case");
+        testCase1.setName("Rote Flecken auf Händen");
 
 
         PhysicianParc physician = new PhysicianParc();
@@ -184,7 +173,7 @@ public class TestContentProvider implements ContentProvider {
         Calendar timestamp = Calendar.getInstance();
         timestamp.add(Calendar.DAY_OF_MONTH, -7);
 
-        CaseInfoParc caseInfo = new CaseInfoParc(startNumberCD, timestamp, patient, localizations, PainIntensity.Mild, 2);
+        CaseInfoParc caseInfo = new CaseInfoParc(startNumberCD, timestamp, getCurrentUser(), localizations, PainIntensity.Mild, 2);
         testCase1.addDataElement(caseInfo);
 
         timestamp = Calendar.getInstance();
@@ -193,7 +182,7 @@ public class TestContentProvider implements ContentProvider {
         List<Icd10DiagnosisParc> d1_icList = new ArrayList<>();
         d1_icList.add(new Icd10DiagnosisParc("101010", "Hühnerauge"));
         d1_icList.add(new Icd10DiagnosisParc("02221", "Nase im Gesicht"));
-        DiagnosisParc d1 = new DiagnosisParc(startNumberCD+1, timestamp, physician,"test Diagnose 1 ", d1_icList);
+        DiagnosisParc d1 = new DiagnosisParc(startNumberCD+1, timestamp, physician,"Vorläufige Diagnose - Ich warte noch auf Testergebnisse", d1_icList);
         d1.setObsolete(true);
         testCase1.addDataElement(d1);
 
@@ -202,7 +191,7 @@ public class TestContentProvider implements ContentProvider {
         timestamp.add(Calendar.HOUR_OF_DAY, -2);
 
         // text msg
-        TextMessageParc textMsg1 = new TextMessageParc(startNumberCD+2, timestamp, physician,"Ich schicke Ihnen gleich ein paar Ratschläge und Medikamenten liste.");
+        TextMessageParc textMsg1 = new TextMessageParc(startNumberCD+2, timestamp, physician,"Ich schicke Ihnen gleich ein paar Ratschläge und eine Medikamentenliste.");
         testCase1.addDataElement(textMsg1);
 
         timestamp = Calendar.getInstance();
@@ -214,7 +203,7 @@ public class TestContentProvider implements ContentProvider {
         MedicationParc med2 = new MedicationParc("Bilill");
         mediacations1.add(med1);
         mediacations1.add(med2);
-        AdviceParc advice1 = new AdviceParc(startNumberCD+3, timestamp, physician,"Bleiben aus der Sonne. Immer nur 60 Hz Strahlung ", mediacations1);
+        AdviceParc advice1 = new AdviceParc(startNumberCD+3, timestamp, physician,"Bleiben Sie aus der Sonne. Immer nur 60 Hz Strahlung. Auf keinen Fall mehr!", mediacations1);
 
         testCase1.addDataElement(advice1);
 
@@ -229,7 +218,7 @@ public class TestContentProvider implements ContentProvider {
         timestamp.add(Calendar.DAY_OF_MONTH, -3);
 
         // text msg
-        TextMessageParc textMsg3 = new TextMessageParc(startNumberCD+5, timestamp, patient,"Danke!.");
+        TextMessageParc textMsg3 = new TextMessageParc(startNumberCD+5, timestamp, getCurrentUser(),"Danke!.");
         testCase1.addDataElement(textMsg3);
 
         // pic
@@ -243,16 +232,17 @@ public class TestContentProvider implements ContentProvider {
 
 
         List<Icd10DiagnosisParc> d2_icList = new ArrayList<>();
-        DiagnosisParc d2 = new DiagnosisParc(startNumberCD+6, timestamp, physician,"Das ist, wie als würden Sie eine Tasse Rohrfrei trinken. Natürlich reinigt das einen - aber mit der Zeit wird man hohl. ", d2_icList);
+        d2_icList.add(new Icd10DiagnosisParc("701080", "Psoriasis"));
+        DiagnosisParc d2 = new DiagnosisParc(startNumberCD+6, timestamp, physician,"Meine erste Diagnose war doch nicht so exakt. Sieht nun eher nach Psoriasis aus. ", d2_icList);
         testCase1.addDataElement(d2);
 
         currentCaseList.add(testCase1);
-        CaseParc testCase2 = new CaseParc(startNumber+1, patient, new GregorianCalendar());
+        CaseParc testCase2 = new CaseParc(startNumber+1, getCurrentUser(), new GregorianCalendar());
         testCase2.setStatus(CaseStatus.Active);
         testCase2.setName("Second Case");
         currentCaseList.add(testCase2);
         for (int i = 0; i < 5; i++) {
-            CaseParc testCaseA = new CaseParc((startNumber+10 + i), patient, new GregorianCalendar());
+            CaseParc testCaseA = new CaseParc((startNumber+10 + i), getCurrentUser(), new GregorianCalendar());
             testCaseA.setStatus(CaseStatus.values()[i%3]); // 3 because 4 would be closed
             testCaseA.setName("My " + i + ". Case");
             currentCaseList.add(testCaseA);

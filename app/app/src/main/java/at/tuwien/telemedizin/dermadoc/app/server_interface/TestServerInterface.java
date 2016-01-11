@@ -95,24 +95,32 @@ public class TestServerInterface implements ServerInterface {
 
         for (Case c : caseList) {
 
-            // add notifications?
-            Random randomN = new Random();
-            int randomNbN = randomN.nextInt(10);
-            if (randomNbN <= 6) {
-                continue;
-            }
+//            // add notifications?
+//            Random randomN = new Random();
+//            int randomNbN = randomN.nextInt(10);
+//            if (randomNbN <= 6) {
+//                continue;
+//            }
             // how many should be added
-            Random random = new Random();
-            int randomNb = random.nextInt(3);
+//            Random random = new Random();
+//            int randomNb = random.nextInt(3);
 
-            for (int i=0; i < randomNb; i++) {
+//            for (int i=0; i < randomNb; i++) {
+            Notification n2 = new Notification();
+
+            n2.setId(getNotificationId());
+            n2.setCaseId(c.getId());
+            n2.setText("Dr. Albert Hofstätter hat Ihren Fall angenommen.");
+            notificationList.add(n2);
+
+
                 Notification n1 = new Notification();
 
                 n1.setId(getNotificationId());
                 n1.setCaseId(c.getId());
-                n1.setText("N Notification: Case " + c.getId() + " nb " + i);
+                n1.setText("Dr. Albert Hofstätter hat Ihnen eine Nachricht geschickt.");
                 notificationList.add(n1);
-            }
+//            }
         }
 
     }
@@ -120,15 +128,15 @@ public class TestServerInterface implements ServerInterface {
     private List<Physician> createPhysicianList() {
         Physician a = new Physician(); // TODO remove
         a.setId(0L);
-        a.setName("ALbert");
+        a.setName("Dr. Albert Hofstätter");
 
         Physician b = new Physician();
         b.setId(1L);
-        b.setName("Berta");
+        b.setName("Dr. Berta Müller");
 
         Physician c = new Physician();
         c.setId(2L);
-        c.setName("Charlie");
+        c.setName("Dr. Charlie Sieber");
 
         List<Physician> list = new ArrayList<Physician>();
         list.add(a);
@@ -211,11 +219,11 @@ public class TestServerInterface implements ServerInterface {
     public List<Notification> getNotifications() {
 
         // randomly more notifications
-        Random random = new Random();
-        int randomNb = random.nextInt(10);
-        if (randomNb > 7) {
-            addToNotificationList();
-        }
+//        Random random = new Random();
+//        int randomNb = random.nextInt(10);
+//        if (randomNb > 7) {
+//            addToNotificationList();
+//        }
 
         return notificationList;
     }

@@ -11,13 +11,5 @@
         android:id="@+id/user_data_list_layout"
         android:padding="16dp">
 
-        <!-- TODO: Update blank fragment layout -->
-
-
-
-
-
-
-
     </LinearLayout>
 </ScrollView>

@@ -69,7 +69,7 @@
     </LinearLayout>
     <!--</android.support.v4.widget.NestedScrollView>-->
 
-<!-- TODO the above used marginTop avoids overlapping errors ... but that should not be necessary -->
+<!-- the above used marginTop avoids overlapping errors ... but that should not be necessary -->
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"

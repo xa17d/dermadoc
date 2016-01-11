@@ -285,6 +285,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onResume() {
+
         super.onResume();
         getDataFromServer();
     }
@@ -407,9 +408,15 @@ public class MainActivity extends AppCompatActivity
     public List<CaseParc> onListRequest(long listKey, CaseListFragment fragment) {
         if (listKey == MyCasesPagerEnum.CURRENT.getKey()) {
             fragmentCurrentCaseList = fragment; // set the fragment for list-change-events
+            if (currentCaseList == null) {
+                currentCaseList = new ArrayList<>();
+            }
             return currentCaseList;
         } else if (listKey == MyCasesPagerEnum.OLD.getKey()) {
             fragmentOldCaseList = fragment; // set the fragment for list-change-events
+            if (closedCaseList == null) {
+                closedCaseList = new ArrayList<>();
+            }
             return closedCaseList;
         } else {
             // nothing matched ...
