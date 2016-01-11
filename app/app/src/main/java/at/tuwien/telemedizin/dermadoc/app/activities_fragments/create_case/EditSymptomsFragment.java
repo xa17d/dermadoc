@@ -22,7 +22,7 @@ import java.util.List;
 
 import at.tuwien.telemedizin.dermadoc.app.R;
 import at.tuwien.telemedizin.dermadoc.app.adapters.PainAssessmentArrayAdapter;
-import at.tuwien.telemedizin.dermadoc.entities.PainIntensity;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.PainIntensity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -257,7 +257,7 @@ public class EditSymptomsFragment extends Fragment {
             currentSelectedSize = symptomsSourceInterface.getSize();
             updateSizeTextView();
 
-            symptomDescriptionEditText.setText(symptomsSourceInterface.getSymptomDescription());
+//            symptomDescriptionEditText.setText(symptomsSourceInterface.getSymptomDescription());
 
             int indexOfPI = spinnerValues.indexOf(symptomsSourceInterface.getPainIntensity());
             if (indexOfPI >= 0) {
@@ -321,8 +321,6 @@ public class EditSymptomsFragment extends Fragment {
 
     public interface SymptomsSourceInterface {
         public double getSize();
-
-        public String getSymptomDescription();
 
         public PainIntensity getPainIntensity();
     }

@@ -9,14 +9,14 @@ import java.util.List;
 
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.UserParc;
 import at.tuwien.telemedizin.dermadoc.app.helper.ParcelableHelper;
-import at.tuwien.telemedizin.dermadoc.entities.casedata.Anamnesis;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.casedata.Anamnesis;
 
 /**
  * Created by daniel on 24.11.2015.
  */
 public class AnamnesisParc extends CaseDataParc {
 
-    public AnamnesisParc(long id, Calendar created, UserParc author, String message, List<AnamnesisQuestionParc> questions) {
+    public AnamnesisParc(Long id, Calendar created, UserParc author, String message, List<AnamnesisQuestionParc> questions) {
         super(id, created, author);
 
         this.message = message;
@@ -49,6 +49,8 @@ public class AnamnesisParc extends CaseDataParc {
                 ParcelableHelper.mapUserToUserParc(anamnesis.getAuthor()),
                 anamnesis.getMessage(),
                 ParcelableHelper.mapAnamnesisQuestionsToParc(anamnesis.getQuestions()));
+        setObsolete(anamnesis.isObsolete());
+        setPrivate(anamnesis.getPrivate());
     }
 
 
@@ -60,7 +62,7 @@ public class AnamnesisParc extends CaseDataParc {
 
         this.message = in.readString();
         this.questions = new ArrayList<>();
-        in.readList(this.questions, null); // does that work?! null for class loader -> default, but is there a default?! TODO
+        in.readList(this.questions, AnamnesisQuestionParc.class.getClassLoader());
     }
 
     @Override

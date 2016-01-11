@@ -115,29 +115,46 @@
 
     <style name="EditCaseTabTextAppearance" parent="TextAppearance.Design.Tab">
         <item name="android:textColor">@color/tab_header_text_color</item>
-        <!-- todo -->
+
     </style>
 
     <style name="UserDataListItemHeaderText" >
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">14sp</item>
-        <!-- todo -->
+
+    </style>
+
+    <style name="IsObsoleteView" >
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:background">@color/label_is_obsolete_background</item>
+    </style>
+
+    <style name="IsObsoleteText" >
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/label_is_obsolete</item>
+    </style>
+
+    <style name="EmptyListText" >
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">18sp</item>
     </style>
 
     <style name="UserDataListItemText" >
         <item name="android:textSize">18sp</item>
-        <!-- todo -->
+
     </style>
 
     <style name="ErrorListItemHeaderText" >
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">14sp</item>
-        <!-- todo -->
+
     </style>
 
     <style name="ErrorListItemInfoText" >
         <item name="android:textSize">18sp</item>
-        <!-- todo -->
+
     </style>
 
     <style name="TimestampTextStyle" parent="TextAppearance.AppCompat.Small">

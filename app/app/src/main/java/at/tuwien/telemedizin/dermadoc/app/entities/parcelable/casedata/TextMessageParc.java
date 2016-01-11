@@ -7,15 +7,14 @@ import java.util.Calendar;
 
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.UserParc;
 import at.tuwien.telemedizin.dermadoc.app.helper.ParcelableHelper;
-import at.tuwien.telemedizin.dermadoc.entities.User;
-import at.tuwien.telemedizin.dermadoc.entities.casedata.TextMessage;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.casedata.TextMessage;
 
 /**
  * Unstructured text message.
  */
 public class TextMessageParc extends CaseDataParc {
 
-    public TextMessageParc(long id, Calendar created, UserParc author, String message) {
+    public TextMessageParc(Long id, Calendar created, UserParc author, String message) {
         super(id, created, author);
 
         this.message = message;
@@ -49,6 +48,8 @@ public class TextMessageParc extends CaseDataParc {
                 textMessage.getCreated(),
                 ParcelableHelper.mapUserToUserParc(textMessage.getAuthor()),
                 textMessage.getMessage());
+        setObsolete(textMessage.isObsolete());
+        setPrivate(textMessage.getPrivate());
     }
 
 

@@ -10,14 +10,14 @@ import java.util.List;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.MedicationParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.UserParc;
 import at.tuwien.telemedizin.dermadoc.app.helper.ParcelableHelper;
-import at.tuwien.telemedizin.dermadoc.entities.casedata.Advice;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.casedata.Advice;
 
 /**
  * Advice from a Physician
  */
 public class AdviceParc extends CaseDataParc {
 
-    public AdviceParc(long id, Calendar created, UserParc author, String message, List<MedicationParc> medications) {
+    public AdviceParc(Long id, Calendar created, UserParc author, String message, List<MedicationParc> medications) {
         super(id, created, author);
 
         this.message = message;
@@ -50,6 +50,8 @@ public class AdviceParc extends CaseDataParc {
                 ParcelableHelper.mapUserToUserParc(advice.getAuthor()),
                 advice.getMessage(),
                 ParcelableHelper.mapMedicationToParc(advice.getMedications()));
+        setObsolete(advice.isObsolete());
+        setPrivate(advice.getPrivate());
     }
 
 

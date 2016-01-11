@@ -2,6 +2,7 @@ package at.tuwien.telemedizin.dermadoc.app.comparators;
 
 import java.util.Comparator;
 
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.CaseListItem;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.CaseParc;
 
 /**
@@ -9,18 +10,22 @@ import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.CaseParc;
  *
  * Comparator for comparing Case-Objects - needed to sort the list
  */
-public class CaseParcComparator implements Comparator<CaseParc> {
+public class CaseListItemComparator implements Comparator<CaseListItem> {
 
 
     // multiple Comparators, because multiple ways to sort case-items
     private CaseStatusComparator statusComparator = new CaseStatusComparator();
-    private CaseDateOfCreationComparator dateOfCreationComparator = new CaseDateOfCreationComparator();
+    private DateOfCreationComparator dateOfCreationComparator = new DateOfCreationComparator(true);
+    private CaseListItemNotificationComparator notificationComparator = new CaseListItemNotificationComparator();
 
     private CaseSortCategory activeCategory = CaseSortCategory.STATUS; // default category
 
 
     @Override
-    public int compare(CaseParc lhs, CaseParc rhs) {
+    public int compare(CaseListItem lhsCLI, CaseListItem rhsCLI) {
+
+        CaseParc lhs = lhsCLI.getCaseItem();
+        CaseParc rhs = rhsCLI.getCaseItem();
 
         int compResult = 0;
 
@@ -32,8 +37,8 @@ public class CaseParcComparator implements Comparator<CaseParc> {
             compResult = compareStatus(lhs, rhs);
         } else if (activeCategory == CaseSortCategory.DATE_OF_CREATION) {
             compResult = compareDateOfCreation(lhs, rhs);
-        } else if (activeCategory == CaseSortCategory.LAST_MODIFIED) {
-            compResult = compareLastModified(lhs, rhs);
+        } else if (activeCategory == CaseSortCategory.NOTIFICATIONS) {
+            compResult = notificationComparator.compare(lhsCLI.getNotifications(), rhsCLI.getNotifications());
         }
 
         // if equal, take ID as secondary parameter

@@ -12,18 +12,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import at.tuwien.telemedizin.dermadoc.app.R;
-import at.tuwien.telemedizin.dermadoc.app.adapters.PainAssessmentArrayAdapter;
 import at.tuwien.telemedizin.dermadoc.app.entities.CaseValidationError;
 import at.tuwien.telemedizin.dermadoc.app.entities.CaseValidationErrorLevel;
-import at.tuwien.telemedizin.dermadoc.entities.PainIntensity;
 
 /**
  * A simple {@link Fragment} subclass.

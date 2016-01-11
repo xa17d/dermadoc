@@ -10,15 +10,14 @@ import java.util.List;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.Icd10DiagnosisParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.UserParc;
 import at.tuwien.telemedizin.dermadoc.app.helper.ParcelableHelper;
-import at.tuwien.telemedizin.dermadoc.entities.User;
-import at.tuwien.telemedizin.dermadoc.entities.casedata.Diagnosis;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.casedata.Diagnosis;
 
 /**
  * Diagnosis by a physician
  */
 public class DiagnosisParc extends CaseDataParc {
 
-    public DiagnosisParc(long id, Calendar created, UserParc author, String message, List<Icd10DiagnosisParc> diagnosisList) {
+    public DiagnosisParc(Long id, Calendar created, UserParc author, String message, List<Icd10DiagnosisParc> diagnosisList) {
         super(id, created, author);
 
         this.message = message;
@@ -51,6 +50,8 @@ public class DiagnosisParc extends CaseDataParc {
                 ParcelableHelper.mapUserToUserParc(diagnosis.getAuthor()),
                 diagnosis.getMessage(),
                 ParcelableHelper.mapIcd10DiagnosesToParc(diagnosis.getDiagnosisList()));
+        setObsolete(diagnosis.isObsolete());
+        setPrivate(diagnosis.getPrivate());
     }
 
 

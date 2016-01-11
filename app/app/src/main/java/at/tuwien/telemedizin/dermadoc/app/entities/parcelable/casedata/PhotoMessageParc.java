@@ -3,20 +3,18 @@ package at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.Arrays;
 import java.util.Calendar;
 
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.UserParc;
 import at.tuwien.telemedizin.dermadoc.app.helper.ParcelableHelper;
-import at.tuwien.telemedizin.dermadoc.entities.User;
-import at.tuwien.telemedizin.dermadoc.entities.casedata.PhotoMessage;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.casedata.PhotoMessage;
 
 /**
  * Created by daniel on 11.11.2015.
  */
 public class PhotoMessageParc extends CaseDataParc {
 
-    public PhotoMessageParc(long id, Calendar created, UserParc author, String mime, byte[] photoData) {
+    public PhotoMessageParc(Long id, Calendar created, UserParc author, String mime, byte[] photoData) {
         super(id, created, author);
 
         this.mime = mime;
@@ -49,6 +47,8 @@ public class PhotoMessageParc extends CaseDataParc {
                 ParcelableHelper.mapUserToUserParc(photoMessage.getAuthor()),
                 photoMessage.getMime(),
                 photoMessage.getPhotoData());
+        setObsolete(photoMessage.isObsolete());
+        setPrivate(photoMessage.getPrivate());
     }
 
 

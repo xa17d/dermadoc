@@ -3,30 +3,37 @@ package at.tuwien.telemedizin.dermadoc.app.entities.parcelable;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import at.tuwien.telemedizin.dermadoc.app.general_entities.Notification;
+
 /**
  * Created by Lucas on 17.11.2015.
  */
 public class NotificationParc implements Parcelable {
 
-    private String text;
-    private long caseId;
-
     public NotificationParc() {
 
     }
 
+    private Long id;
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    private long userId;
+    public long getUserId() { return userId; }
+    public void setUserId(long userId) { this.userId = userId; }
+
+    private String text;
     public String getText() {
         return text;
     }
-
     public void setText(String text) {
         this.text = text;
     }
 
+    private long caseId;
     public long getCaseId() {
         return caseId;
     }
-
     public void setCaseId(long caseId) {
         this.caseId = caseId;
     }
@@ -36,16 +43,43 @@ public class NotificationParc implements Parcelable {
         return text;
     }
 
+    @Override
+    public boolean equals(Object o) {
+
+        if(o == null)
+            return false;
+
+        if(this.hashCode() != o.hashCode())
+            return false;
+
+        if(this.getClass() != o.getClass())
+            return false;
+
+        Notification n = (Notification) o;
+        return this.getId().equals(n.getId());
+    }
+
+    public NotificationParc(Notification notification) {
+        this.setId(notification.getId());
+        this.setCaseId(notification.getCaseId());
+        this.setText(notification.getText());
+        this.setUserId(notification.getUserId());
+    }
+
 
     // parcelable ################################
 
     public  NotificationParc(Parcel in) {
 
+        this.setId((Long) in.readValue(null));
+        this.setCaseId(in.readLong());
+
+
         String textIn = in.readString();
         setText(textIn);
 
-        long caseIdIn = in.readLong();
-        setCaseId(caseIdIn);
+        this.setUserId(in.readLong());
+
     }
 
     @Override
@@ -56,9 +90,12 @@ public class NotificationParc implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
 
+        dest.writeValue(id);
+        dest.writeLong(caseId);
+
         dest.writeString(getText());
 
-        dest.writeLong(getCaseId());
+        dest.writeLong(getUserId());
     }
 
     // this is used to regenerate your object. All Parcelables must have a CREATOR that implements these two methods

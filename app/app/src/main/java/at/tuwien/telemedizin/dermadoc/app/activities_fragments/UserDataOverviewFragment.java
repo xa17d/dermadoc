@@ -10,15 +10,11 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.util.Calendar;
-
 import at.tuwien.telemedizin.dermadoc.app.R;
-import at.tuwien.telemedizin.dermadoc.app.activities_fragments.case_specific.CaseDataCallbackInterface;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.GeoLocationParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.PatientParc;
-import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.PhysicianParc;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.Gender;
 import at.tuwien.telemedizin.dermadoc.app.helper.FormatHelper;
-import at.tuwien.telemedizin.dermadoc.entities.Gender;
 
 /**
  * A simple {@link Fragment} subclass.

@@ -11,14 +11,13 @@ import android.widget.TextView;
 
 import java.util.Calendar;
 import java.util.List;
-import java.util.Random;
 
-import at.tuwien.telemedizin.dermadoc.app.DataGenerator;
 import at.tuwien.telemedizin.dermadoc.app.R;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.CaseListItem;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.CaseParc;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.NotificationParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.PhysicianParc;
-import at.tuwien.telemedizin.dermadoc.entities.CaseStatus;
-import at.tuwien.telemedizin.dermadoc.entities.Physician;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.CaseStatus;
 
 /**
  * Created by FAUser on 18.11.2015.
@@ -26,14 +25,14 @@ import at.tuwien.telemedizin.dermadoc.entities.Physician;
  *
  * following http://www.vogella.com/tutorials/AndroidListView/article.html
  */
-public class CaseListAdapter extends ArrayAdapter<CaseParc> {
+public class CaseListAdapter extends ArrayAdapter<CaseListItem> {
     public static final String LOG_TAG = CaseListAdapter.class.getSimpleName();
 
     private final Context context;
-    private final List<CaseParc> values;
+    private final List<CaseListItem> values;
 
 
-    public CaseListAdapter(Context context, List<CaseParc> values) {
+    public CaseListAdapter(Context context, List<CaseListItem> values) {
         super(context, -1, values);
         this.context = context;
         this.values = values;
@@ -52,7 +51,8 @@ public class CaseListAdapter extends ArrayAdapter<CaseParc> {
 
         }
 
-        CaseParc caseItem = getItem(position);
+        CaseParc caseItem = getItem(position).getCaseItem();
+        List<NotificationParc> caseNotifications = getItem(position).getNotifications();
         // check if the case_item exists
         if (caseItem != null) {
             TextView itemName = (TextView) v.findViewById(R.id.case_item_name);
@@ -60,6 +60,7 @@ public class CaseListAdapter extends ArrayAdapter<CaseParc> {
             TextView itemID = (TextView) v.findViewById(R.id.case_item_id);
             TextView itemPhysician = (TextView) v.findViewById(R.id.case_item_physician);
             TextView itemDateOfCreation = (TextView) v.findViewById(R.id.case_item_date_of_creation);
+            TextView itemNbNotifications = (TextView) v.findViewById(R.id.case_item_nb_notifications);
 
             ImageView itemNotificationIcon = (ImageView) v.findViewById(R.id.case_item_notification_icon);
 
@@ -97,19 +98,21 @@ public class CaseListAdapter extends ArrayAdapter<CaseParc> {
                 itemDateOfCreation.setText(date);
             }
 
-            // TODO datums feld befüllen
+            // Number of notifications
+            itemNbNotifications.setText(caseNotifications.size() + "");
 
 //            itemNotificationIcon.setImageResource(R.drawable.case_item_notification_icon_shape);
 
             if (status == CaseStatus.Closed) {
                 itemNotificationIcon.setImageResource(R.drawable.ic_action_lock_closed_black_18dp);
-            } else if (status == CaseStatus.WaitingForAccept) {
-
-                itemNotificationIcon.setImageResource(R.drawable.ic_action_tick_green_18dp);
+            } else {
+                if (caseNotifications.size() > 0) {
+                    itemNotificationIcon.setImageResource(R.drawable.ic_action_flag_red_light_18dp);
+                } else {
+                    itemNotificationIcon.setImageResource(R.drawable.ic_action_tick_green_18dp);
+                }
             }
-
         }
-
 
         return v;
     }

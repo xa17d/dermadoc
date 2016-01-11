@@ -3,16 +3,15 @@ package at.tuwien.telemedizin.dermadoc.app.entities.parcelable;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import at.tuwien.telemedizin.dermadoc.entities.GeoLocation;
-import at.tuwien.telemedizin.dermadoc.entities.User;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.User;
 
 /**
  * Abstract User
  */
 public abstract class UserParc implements Parcelable {
-    private long id;
-    public long getId() { return id; }
-    public void setId(long id) { this.id = id; }
+    private Long id;
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
     private String mail;
     public String getMail() { return mail; }
@@ -54,7 +53,7 @@ public abstract class UserParc implements Parcelable {
 
     }
 
-    private UserParc(long id, String mail, String password, String name, GeoLocationParc location) {
+    private UserParc(Long id, String mail, String password, String name, GeoLocationParc location) {
         setId(id);
         setMail(mail);
         setPassword(password);
@@ -64,7 +63,8 @@ public abstract class UserParc implements Parcelable {
 
     // map
     public UserParc(User user) {
-        this(user.getId(), user.getMail(), user.getPassword(), user.getName(), new GeoLocationParc(user.getLocation()));
+        this(user.getId(), user.getMail(), user.getPassword(), user.getName(),
+                user.getLocation() != null ? new GeoLocationParc(user.getLocation()) : null);
     }
 
 
@@ -73,7 +73,7 @@ public abstract class UserParc implements Parcelable {
 
 
     public UserParc(Parcel in) {
-        long id = in.readLong();
+        Long id = (Long) in.readValue(null);
         String mail = in.readString();
         String password = in.readString();
         String name = in.readString();
@@ -93,7 +93,7 @@ public abstract class UserParc implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(getId());
+        dest.writeValue(getId());
         dest.writeString(getMail());
         dest.writeString(getPassword());
         dest.writeString(getName());

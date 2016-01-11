@@ -30,15 +30,17 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import at.tuwien.telemedizin.dermadoc.app.R;
 import at.tuwien.telemedizin.dermadoc.app.activities_fragments.MainActivity;
+import at.tuwien.telemedizin.dermadoc.app.helper.ConnectionDetector;
 import at.tuwien.telemedizin.dermadoc.app.server_interface.ServerInterface;
 import at.tuwien.telemedizin.dermadoc.app.server_interface.ServerInterfaceFactory;
-import at.tuwien.telemedizin.dermadoc.entities.rest.AuthenticationData;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.rest.AuthenticationData;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -214,6 +216,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // form field with an error.
             focusView.requestFocus();
         } else {
+
+            // check internet connection
+            if (!checkInternetConnection()) {
+                return;
+            }
+
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
@@ -345,6 +353,21 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
 
     /**
+     * checks, if internet-connection is possible and returns a boolean value
+     * if no connection is available, it shows a info-message to the user
+     * @return
+     */
+    private boolean checkInternetConnection() {
+        boolean connected = ConnectionDetector.isConnectingToInternet(this);
+        Log.d(LOG_TAG, "checkInternetConnection: " + connected);
+        if (!connected) {
+            // show message to user
+            Toast.makeText(this, getString(R.string.msg_no_internet_connection_available), Toast.LENGTH_SHORT).show();
+        }
+        return connected;
+    }
+
+    /**
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
@@ -393,5 +416,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
         }
     }
+
+
 }
 

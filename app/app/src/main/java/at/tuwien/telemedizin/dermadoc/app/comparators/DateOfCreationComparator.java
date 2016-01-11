@@ -3,12 +3,15 @@ package at.tuwien.telemedizin.dermadoc.app.comparators;
 import java.util.Calendar;
 import java.util.Comparator;
 
-import at.tuwien.telemedizin.dermadoc.entities.CaseStatus;
-
 /**
  * Created by FAUser on 18.11.2015.
  */
-public class CaseDateOfCreationComparator implements Comparator<Calendar> {
+public class DateOfCreationComparator implements Comparator<Calendar> {
+
+    boolean newestFirst = false;
+    public DateOfCreationComparator(boolean newestFirst) {
+        this.newestFirst = newestFirst;
+    }
 
 
     @Override
@@ -26,6 +29,11 @@ public class CaseDateOfCreationComparator implements Comparator<Calendar> {
                 compResult = -1;
             } else {
                 compResult = lhs.compareTo(rhs);
+                // if newest first switch
+                if (newestFirst) {
+                    compResult = compResult * (-1);
+                }
+
             }
         }
         return compResult;

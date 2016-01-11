@@ -7,9 +7,8 @@ import java.util.Calendar;
 
 import at.tuwien.telemedizin.dermadoc.app.helper.FormatHelper;
 import at.tuwien.telemedizin.dermadoc.app.helper.ParcelableHelper;
-import at.tuwien.telemedizin.dermadoc.entities.Gender;
-import at.tuwien.telemedizin.dermadoc.entities.Patient;
-import at.tuwien.telemedizin.dermadoc.entities.User;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.Gender;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.Patient;
 
 /**
  * Patient

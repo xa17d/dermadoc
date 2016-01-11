@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <PreferenceCategory android:title="@string/pref_category_title_case_list">
+        <ListPreference
+            android:defaultValue="@string/pref_sort_category_default_value"
+            android:dialogTitle="@string/pref_title_sort_category"
+            android:entries="@array/pref_sort_category_entries"
+            android:entryValues="@array/pref_sort_category_values"
+            android:key="@string/pref_sort_category_key"
+            android:title="@string/pref_title_sort_category" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/pref_category_title_case_view">
+        <ListPreference
+            android:defaultValue="@string/pref_data_category_default_value"
+            android:dialogTitle="@string/pref_title_default_data_category"
+            android:entries="@array/pref_case_data_category_entries"
+            android:entryValues="@array/pref_case_data_category_values"
+            android:key="@string/pref_data_category_key"
+            android:title="@string/pref_title_default_data_category" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/pref_category_title_notifications">
+        <CheckBoxPreference
+            android:key="@string/pref_auto_delte_notifications_key"
+            android:title="@string/pref_title_default_auto_delte_notifications"
+            android:summary="@string/pref_auto_delte_notifications_summary"
+            android:defaultValue="false" />
+
+        <CheckBoxPreference
+            android:dependency="@string/pref_auto_delte_notifications_key"
+            android:key="@string/pref_time_of_notification_deletion_case_open_key"
+            android:title="@string/pref_title_time_of_notification_deletion_case_open"
+            android:summary="@string/pref_time_of_notification_deletion_case_open_summary"
+            android:defaultValue="false" />
+
+        <CheckBoxPreference
+            android:dependency="@string/pref_auto_delte_notifications_key"
+            android:key="@string/pref_time_of_notification_deletion_case_close_key"
+            android:title="@string/pref_title_time_of_notification_deletion_case_close"
+            android:summary="@string/pref_time_of_notification_deletion_case_close_summary"
+            android:defaultValue="false" />
+
+    </PreferenceCategory>
+</PreferenceScreen>

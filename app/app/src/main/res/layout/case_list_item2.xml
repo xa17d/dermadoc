@@ -96,7 +96,7 @@
         android:visibility="gone"/>
 
     <TextView
-        android:id="@+id/case_item_last_modified"
+        android:id="@+id/case_item_nb_notifications"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"

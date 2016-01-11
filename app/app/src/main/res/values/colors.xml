@@ -12,6 +12,8 @@
 
     <color name="back_grey">#c4c4c4</color>
 
+    <color name="list_point">#ababab</color>
+
     <color name="colorPrimaryDarkDeselected">#6391ab</color>
     <!-- for the tabLayout in MyCases -->
     <color name="tab_text">#c7ceff</color>
@@ -25,6 +27,9 @@
     <color name="spinner_background_color">#e4dfde</color>
 
     <color name="msg_red">#e43d40</color>
+    <!-- message is obsolete -->
+    <color name="label_is_obsolete">#e43d40</color>
+    <color name="label_is_obsolete_background">#f2efef</color>
 
     <color name="next_button_text">#ffffff</color>
 
@@ -33,6 +38,8 @@
 
 
     <color name="secondary_light_color">#63d8fc</color>
+
+    <color name="transparent_half">#99e6d6d6</color>
 
 
     <!-- colors for the clickable-areas in location-image-fragment -->

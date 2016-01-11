@@ -2,15 +2,16 @@ package at.tuwien.telemedizin.dermadoc.app.activities_fragments.case_specific;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -19,11 +20,11 @@ import android.widget.RelativeLayout;
 import android.widget.Space;
 import android.widget.TextView;
 
-import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
 import at.tuwien.telemedizin.dermadoc.app.R;
+import at.tuwien.telemedizin.dermadoc.app.activities_fragments.view_case_data_element.CaseDataActivity;
 import at.tuwien.telemedizin.dermadoc.app.adapters.CaseDataListAdapter;
 import at.tuwien.telemedizin.dermadoc.app.comparators.CaseDataDateOfCreationComparator;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.CaseParc;
@@ -42,7 +43,7 @@ import at.tuwien.telemedizin.dermadoc.app.helper.CaseDataExtractionHelper;
  * Use the {@link CaseDataListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class CaseDataListFragment extends Fragment {
+public class CaseDataListFragment extends Fragment  {
 
     public static final String LOG_TAG = CaseDataListFragment.class.getSimpleName();
 
@@ -105,8 +106,6 @@ public class CaseDataListFragment extends Fragment {
     }
 
 
-
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -142,8 +141,18 @@ public class CaseDataListFragment extends Fragment {
         listView.setAdapter(adapter);
 
         // scroll to the bottom
-//        listView.scrollTo(0, listView.getHeight()); //did not work
-        listView.setSelection(adapter.getCount() - 1);
+        scrollToBottomOfList();
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // start the CaseActivity and open the selected case
+
+                Intent intent = new Intent(getContext(), CaseDataActivity.class);
+
+                intent.putExtra(CaseDataActivity.CASE_DATA_INTENT_KEY, adapter.getItem(position));
+                startActivity(intent);
+            }
+        });
 
         filterTextMsg = (TextView) v.findViewById(R.id.message_type_text_icon_view);
         filterPhotoMsg = (TextView) v.findViewById(R.id.message_type_photo_icon_view);
@@ -183,9 +192,9 @@ public class CaseDataListFragment extends Fragment {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 // check if the text is empty
                 if (s.length() > 0) {
-                    adjustHight(true);
+                    adjustHeight(true);
                 } else {
-                    adjustHight(false);
+                    adjustHeight(false);
                 }
             }
 
@@ -212,17 +221,14 @@ public class CaseDataListFragment extends Fragment {
             }
         });
 
-//        attachButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                // open dialog to take picture or add from galery
-//            }
-//        });
-
         return v;
     }
 
-    private void adjustHight(boolean maxHeight) {
+    private void scrollToBottomOfList() {
+        listView.setSelection(adapter.getCount() - 1);
+    }
+
+    private void adjustHeight(boolean maxHeight) {
 
         if (maxHeight) {
             spaceForHeightAdjustment.setVisibility(View.VISIBLE);
@@ -237,56 +243,69 @@ public class CaseDataListFragment extends Fragment {
      * should be called by the activity, when the dataset changes
      */
     public void updateMessageList() {
+        if (caseDataInterface == null || getContext() == null) {
+            return; // prevent exceptions, when this fragment has not been initialized or is not active
+        }
         caseItem = caseDataInterface.getCase();
         applyFilterToList(); // activate the list through activating the filter
         adapter.notifyDataSetChanged();
+        scrollToBottomOfList();
 
     }
 
     /**
-     * switches boolean values
+     * switch boolean values and set background resource of the views
      * @param view
+     * @param longTouch
      */
-    private void handleTouchedFilterElement(View view, boolean disableOther) {
+    private void handleTouchedFilterElement(View view, boolean longTouch) {
 
-        if (disableOther) {
+        boolean allActive = false;
+        // check if all filters are active
+        allActive = showTextMsg && showPhotoMsg && showdiagnosisMsg
+                && showAdviceMsg && showCaseInfoMsg && showAnamnesisMsg;
+
+        // if all are active -> disable all, so that only the selected one is active afterwards
+        // if not all are active -> activate all
+
+        if (longTouch) {
             // all are disabled, only one will be active
-            showTextMsg = false;
-            showPhotoMsg = false;
-            showdiagnosisMsg = false;
-            showAdviceMsg = false;
-            showCaseInfoMsg = false;
-            showAnamnesisMsg = false;
+            showTextMsg = !allActive;
+            showPhotoMsg = !allActive;
+            showdiagnosisMsg = !allActive;
+            showAdviceMsg = !allActive;
+            showCaseInfoMsg = !allActive;
+            showAnamnesisMsg = !allActive;
         }
 
         // switch the boolean values
         if (view.getId() == filterTextMsg.getId()) {
-            showTextMsg = !showTextMsg;
+            showTextMsg = !showTextMsg || (longTouch && !allActive); // activate all, if longTouch and all should be activated
             filterTextMsg.setBackgroundResource(showTextMsg ?
                     R.drawable.message_type_selected_background_shape : R.drawable.message_type_background_shape);
 
         } else if (view.getId() == filterPhotoMsg.getId()) {
-            showPhotoMsg = !showPhotoMsg;
+            showPhotoMsg = !showPhotoMsg || (longTouch && !allActive); // activate all, if longTouch and all should be activated
             filterPhotoMsg.setBackgroundResource(showPhotoMsg ?
                     R.drawable.message_type_selected_background_shape : R.drawable.message_type_background_shape);
 
         } else if (view.getId() == filterDiagnosisMsg.getId()) {
-            showdiagnosisMsg = !showdiagnosisMsg;
+            showdiagnosisMsg = !showdiagnosisMsg || (longTouch && !allActive); // activate all, if longTouch and all should be activated
             filterDiagnosisMsg.setBackgroundResource(showdiagnosisMsg ?
                     R.drawable.message_type_selected_background_shape : R.drawable.message_type_background_shape);
 
         } else if (view.getId() == filterAdviceMsg.getId()) {
-            showAdviceMsg = !showAdviceMsg;
+            showAdviceMsg = !showAdviceMsg || (longTouch && !allActive); // activate all, if longTouch and all should be activated
             filterAdviceMsg.setBackgroundResource(showAdviceMsg ?
                     R.drawable.message_type_selected_background_shape : R.drawable.message_type_background_shape);
 
         } else if (view.getId() == filterCaseInfoMsg.getId()) {
-            showCaseInfoMsg = !showCaseInfoMsg;
+            showCaseInfoMsg = !showCaseInfoMsg || (longTouch && !allActive); // activate all, if longTouch and all should be activated
             filterCaseInfoMsg.setBackgroundResource(showCaseInfoMsg ?
                     R.drawable.message_type_selected_background_shape : R.drawable.message_type_background_shape);
 
         } else if (view.getId() == filterAnamnesisMsg.getId()) {
-            showAnamnesisMsg = !showAnamnesisMsg;
+            showAnamnesisMsg = !showAnamnesisMsg || (longTouch && !allActive); // activate all, if longTouch and all should be activated
             filterAnamnesisMsg.setBackgroundResource(showAnamnesisMsg ?
                     R.drawable.message_type_selected_background_shape : R.drawable.message_type_background_shape);
 

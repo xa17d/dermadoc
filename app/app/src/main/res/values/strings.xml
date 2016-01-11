@@ -26,6 +26,7 @@
     <string name="action_sort">Sort</string>
     <string name="action_sort_name">Name</string>
     <string name="action_sort_date_of_creation">Date of creation</string>
+    <string name="action_sort_notification">Notification</string>
     <string name="action_sort_id">ID-number</string>
     <string name="action_sort_status">Status</string>
     <string name="action_sort_last_modified">Last modified</string>
@@ -34,7 +35,11 @@
     <string name="msg_no_physician_info_found">No physician info found</string>
 
     <string name="label_date_of_creation">Created</string>
+    <string name="label_date_of_author">Author</string>
+    <string name="label_date_of_id">ID</string>
     <string name="label_last_modified">Last modified</string>
+    <string name="label_nb_notifications">Nb of notifications</string>
+
     <string name="label_physician">Physician</string>
     <string name="label_case_status">Status</string>
     <string name="label_patient">Patient</string>
@@ -42,14 +47,19 @@
     <string name="nav_case_overview">Overview</string>
     <string name="nav_case_advice">Advice</string>
     <string name="nav_case_diagnoses">Diganoses</string>
+    <string name="nav_case_conversation">Conversation</string>
 
     <string name="msg_err_item_not_received">There was an error receiving the selected Item</string>
     <string name="msg_err_no_status">no status</string>
     <string name="title_activity_login">Sign in</string>
 
+    <string name="msg_press_back_to_exit">Press BACK again to logout and exit</string>
+    <string name="msg_no_internet_connection_available">No Internet Connection!</string>
+    <string name="label_no_results">No Results</string>
+
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password (optional)</string>
+    <string name="prompt_password">Password</string>
     <string name="action_sign_in">Sign in or register</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="error_invalid_email">This email address is invalid</string>
@@ -60,6 +70,7 @@
         completions."
     </string>
     <string name="title_activity_create_case">Create new Case</string>
+    <string name="title_activity_update_case">Update Case</string>
     <string name="section_format">Hello World from section: %1$d</string>
 
     <string name="tab_header_symptoms">1. Symptoms</string>
@@ -142,7 +153,16 @@
     <string name="label_loading_data_dynamic">Loading %1$s-Data</string> <!-- placeholder string - fill at runtime -->
     <string name="option_loading_user_data_insert">User</string> <!-- content for placeholder string - select this option at runtime -->
     <string name="option_loading_case_list_data_insert">Case-List</string> <!-- content for placeholder string - select this option at runtime -->
+    <string name="option_loading_physician_list_insert">Physician-List</string>
+    <string name="option_loading_case_data_insert">Case-Data</string>
+    <string name="option_delete_notifications">Deleting Notifications</string>
     <string name="option_loading_physician_data_insert">Physician-List</string> <!-- content for placeholder string - select this option at runtime -->
+    <string name="option_loading_notification_list_insert">Notification-List</string>
+
+    <string name="label_symtom_description_text_header">Symptom Description: \n %1$s</string> <!-- placeholder string - fill at runtime -->
+    <string name="symptom_description_validation_helper_text">Symptom Description: </string> <!-- should be the above string without placeholder. For validation purpose -->
+
+    <string name="label_delete_notifications">Delete Notifications</string>
 
     <string name="hint_progress_collecting_data">collecting data</string>
     <string name="hint_progress_checking_data">checking data</string>
@@ -164,6 +184,7 @@
     <!-- // case validation error -->
     <string name="msg_validation_error_description">Insufficient symptom description</string>
     <string name="msg_validation_error_pain">No pain intensity selected</string>
+    <string name="msg_validation_error_size">No size selected</string>
     <string name="msg_validation_error_localizations">No localizations selected</string>
     <string name="msg_validation_error_name">Insufficient case name</string>
     <string name="msg_validation_error_pictures">No pictures added</string>
@@ -173,6 +194,9 @@
     <string name="option_continue">Continue</string>
 
     <string name="header_case_basic_infos">Basic Data</string>
+    <string name="header_case_notification_infos">Notifications</string>
+
+    <string name="hint_no_notifications">no notifications</string>
 
     <string name="label_edit_basic_case_data_button">Edit Basic Data</string>
 
@@ -182,6 +206,15 @@
     <string name="label_size">Size</string>
     <string name="label_size_diameter_hint">(diameter)</string>
 
+    <string name="title_help">Help</string>
+    <string name="header_help">Help</string>
+
+    <string name="hint_no_message">no message from the doctor</string>
+
+    <string name="help_explanation">Please touch the question marks spread across the app for little hints and explanations. If that information is not sufficient, feel free to contact our support team. </string>
+    <string name="help_regards_from_the_team">Kind regards,</string>
+    <string name="help_regards_your_team">Your Derma-Doc Team!</string>
+
     <string name="message_type_diagnosis">D</string>
     <string name="message_type_message">M</string>
     <string name="message_type_photo">P</string>
@@ -190,12 +223,24 @@
     <string name="message_type_advice">A</string>
     <string name="message_type_anamnesis">Q</string>
 
+    <string name="mail_subject">DermaDoc - AndroidApp - Question</string>
+    <string name="mail_intent_chooser_title">Send Mail</string>
+
+    <!-- case data headers -->
+    <string name="header_type_diagnosis">Diagnosis</string>
+    <string name="header_type_message">Message</string>
+    <string name="header_type_photo">Photo Message</string>
+    <string name="header_type_text">Text Message</string>
+    <string name="header_type_case_info">Case Info</string>
+    <string name="header_type_advice">Advice</string>
+    <string name="header_type_anamnesis">Anamnesis</string>
+
     <string name="label_nav_conversation">Conversation</string>
     <string name="hint_new_message">new message</string>
 
     <string name="nav_title_add_pictures">Add Pictures</string>
 
-    <string name="hint_case_info_message">This Case-Info can be accessed in the Overview</string>
+    <string name="hint_case_info_message">The latest Case-Info can be accessed in the Overview</string>
 
     <string name="activity_label_case">Case</string>
     <string name="activity_label_add_pic">AddPicture</string>
@@ -208,7 +253,53 @@
     <string name="header_size">Size</string>
     <string name="size_number_format_hint">xx.xx cm</string>
 
-    <string name="label_physician_selected">This case is taken care of the following doctor:</string>
+    <string name="label_physician_selected">This case is taken care of by the following doctor:</string>
+    <string name="title_activity_case_data">CaseDataActivity</string>
+
+    <string name="list_header_icd10">ICD10 - diagnoses</string>
+    <string name="list_header_medication">medications</string>
+    <string name="list_header_question">questions</string>
+
+    <string name="nav_header_message_1">Facebook plugin coming soon!</string>
+    <string name="title_activity_help">Help</string>
+
+    <string name="title_activity_preferences">Preferences</string>
+    <string name="pref_category_title_case_list">Case List</string>
+    <string name="pref_title_sort_category">Default Sort-Category</string>
+    <string name="pref_sort_category_default_value">2</string>
+    <string name="pref_sort_category_key">pref_sort_type</string>
+
+    <string name="pref_category_title_case_view">Case Specific</string>
+    <string name="pref_title_default_data_category">Default Case-Data Section</string>
+    <string name="pref_data_category_default_value">1</string>
+    <string name="pref_data_category_key">pref_case_data_category</string>
+
+    <string name="pref_category_title_notifications">Notifications</string>
+
+    <string name="pref_title_default_auto_delte_notifications">Delete Automatically</string>
+    <string name="pref_auto_delte_notifications_summary">If activated, the user does not have to delete the notifications manually</string>
+    <string name="pref_auto_delte_notifications_key">pref_auto_delte_notifications</string>
+
+    <string name="pref_title_time_of_notification_deletion_case_open">On Case Opened</string>
+    <string name="pref_time_of_notification_deletion_case_open_summary">Case specific notifications are deleted, when you open a case from the case-list.</string>
+    <string name="pref_time_of_notification_deletion_case_open_key">pref_time_of_notification_deletion_case_open</string>
+
+    <string name="pref_title_time_of_notification_deletion_case_close">On Case Closed</string>
+    <string name="pref_time_of_notification_deletion_case_close_summary">Case specific notifications are deleted, when you close a case (going back to the case-list)</string>
+    <string name="pref_time_of_notification_deletion_case_close_key">pref_time_of_notification_deletion_case_close</string>
+
+    <string name="label_medication_dosis">Dosis:</string>
+
+    <string name="label_question_not_answered">No Answer</string>
+    <string name="label_question_positive_answer">Yes</string>
+    <string name="label_question_negative_answer">No</string>
+
+    <string name="hint_is_obsolete">obsolete</string>
+
+    <string name="msg_notifications_were_deleted">Notifications were deleted from the server</string>
+    <string name="msg_notification_deletion_cancelled">Deleting notifications was cancelled</string>
+
+
 
 
 

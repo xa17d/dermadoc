@@ -9,13 +9,11 @@ import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
-import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.AdviceParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.CaseDataParc;
 import at.tuwien.telemedizin.dermadoc.app.helper.FormatHelper;
 import at.tuwien.telemedizin.dermadoc.app.helper.ParcelableHelper;
-import at.tuwien.telemedizin.dermadoc.entities.Case;
-import at.tuwien.telemedizin.dermadoc.entities.CaseStatus;
-import at.tuwien.telemedizin.dermadoc.entities.Physician;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.Case;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.CaseStatus;
 
 /**
  * Created by daniel on 11.11.2015.
@@ -25,15 +23,15 @@ public class CaseParc implements Parcelable {
     // key for the intent
     public static final String INTENT_KEY = CaseParc.class.getName() + "_INTENT_KEY";
 
-    public CaseParc(long id, PatientParc patient, Calendar created) {
+    public CaseParc(Long id, PatientParc patient, Calendar created) {
         this.id = id;
         this.patient = patient;
         this.created = created;
         this.dataElements = new LinkedList<>();
     }
 
-    private long id;
-    public long getId() { return id; }
+    private Long id;
+    public Long getId() { return id; }
 
     private PatientParc patient;
     public PatientParc getPatient() { return patient; }
@@ -78,8 +76,8 @@ public class CaseParc implements Parcelable {
      */
     public CaseParc(Case caseItem) {
 
-        this(caseItem.getId(), new PatientParc(caseItem.getPatient()), caseItem.getCreated());
-        this.physician = new PhysicianParc(caseItem.getPhysician());
+        this(caseItem.getId(), caseItem.getPatient() != null ? new PatientParc(caseItem.getPatient()) : null, caseItem.getCreated());
+        this.physician = caseItem.getPhysician() != null ? new PhysicianParc(caseItem.getPhysician()) : null;
         this.status = caseItem.getStatus();
         this.name = caseItem.getName();
         // dataElements // TODO!!!!!
@@ -103,7 +101,7 @@ public class CaseParc implements Parcelable {
 
     public CaseParc(Parcel in) {
 
-        this.id = in.readLong();
+        this.id = (Long) in.readValue(null);
         this.name = in.readString();
 
         long createdTimeInMillis = in.readLong();
@@ -129,7 +127,7 @@ public class CaseParc implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
 
-        dest.writeLong(id);
+        dest.writeValue(id);
         dest.writeString(name);
 
         long createdInMillis = -1;

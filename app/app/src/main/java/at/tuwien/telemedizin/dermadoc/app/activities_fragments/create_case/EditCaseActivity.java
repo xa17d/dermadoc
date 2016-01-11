@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Parcelable;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -43,29 +44,41 @@ import at.tuwien.telemedizin.dermadoc.app.entities.PictureHelperEntity;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.CaseParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.PatientParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.PhysicianParc;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.UserParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.AnamnesisParc;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.CaseDataParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.CaseInfoParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.PhotoMessageParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.TextMessageParc;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.Case;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.Physician;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.casedata.CaseData;
 import at.tuwien.telemedizin.dermadoc.app.helper.CaseDataExtractionHelper;
+import at.tuwien.telemedizin.dermadoc.app.helper.ConnectionDetector;
+import at.tuwien.telemedizin.dermadoc.app.helper.ParcelableHelper;
 import at.tuwien.telemedizin.dermadoc.app.helper.ToStringHelper;
 import at.tuwien.telemedizin.dermadoc.app.persistence.ContentProvider;
 import at.tuwien.telemedizin.dermadoc.app.persistence.ContentProviderFactory;
 import at.tuwien.telemedizin.dermadoc.app.server_interface.ServerInterface;
 import at.tuwien.telemedizin.dermadoc.app.server_interface.ServerInterfaceFactory;
-import at.tuwien.telemedizin.dermadoc.entities.BodyLocalization;
-import at.tuwien.telemedizin.dermadoc.entities.PainIntensity;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.BodyLocalization;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.PainIntensity;
 
 
-public class EditCaseActivity extends AppCompatActivity implements OnCaseDataRequestAndUpdateInterface, OnTabChangedInFragmentInterface {
+public class EditCaseActivity extends AppCompatActivity implements OnCaseDataRequestAndUpdateInterface,
+        OnTabChangedInFragmentInterface, EditSymptomsFragment.SymptomsSourceInterface,
+        EditLocationFragment.BodyLocationCallbackInterface {
 
     public static final String LOG_TAG = EditCaseActivity.class.getSimpleName();
+
+    public static final String NEW_CASE_FLAG_INTENT_KEY = EditCaseActivity.class.getSimpleName() + "newCase";
+    public static final String CASE_FLAG_INTENT_KEY = EditCaseActivity.class.getSimpleName() + "case";
+    public static final String USER_FLAG_INTENT_KEY = EditCaseActivity.class.getSimpleName() + "user";
+    public static final String CASE_DATA_LIST_INTENT_KEY = EditCaseActivity.class.getSimpleName() + "caseDataList";
 
     public static final int REQUEST_CAMERA = 1;
     public static final int SELECT_FILE = 102;
 
-
-    private CaseParc caseItem;
     private AnamnesisParc defaultAnamnesis;
     private List<PhysicianParc> nearbyPhysicians;
 
@@ -90,6 +103,8 @@ public class EditCaseActivity extends AppCompatActivity implements OnCaseDataReq
     private FloatingActionButton fab;
     private TabLayout tabLayout;
 
+    private boolean newCase;
+    private CaseParc caseItem; // only != null when newCase = false
 
     private EditAnamnesisFragment anamnesisFragmen;
     private EditSymptomsFragment symptomsFragment;
@@ -110,10 +125,37 @@ public class EditCaseActivity extends AppCompatActivity implements OnCaseDataReq
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        // get the newCase Flag
+        Intent intent = getIntent();
+        newCase = intent.getBooleanExtra(NEW_CASE_FLAG_INTENT_KEY, true);
+        PatientParc cUser = null;
+
+        if (!newCase) {
+            // get Case info
+            Parcelable caseParcel = intent.getParcelableExtra(CASE_FLAG_INTENT_KEY);
+            if (caseParcel != null) {
+                Log.d(LOG_TAG, "caseParcel != null");
+                caseItem = (CaseParc) caseParcel;
+                cUser = caseItem.getPatient();
+            }
+        } else {
+            // get Case info
+            Parcelable userParcel = intent.getParcelableExtra(USER_FLAG_INTENT_KEY);
+            if (userParcel != null) {
+                Log.d(LOG_TAG, "userParcel != null");
+                cUser = (PatientParc) userParcel;
+            }
+        }
+
+
+
+
+
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new NewCasePagerAdapter(this, getSupportFragmentManager());
-        addFragmentsToAdapter(mSectionsPagerAdapter);
+        addFragmentsToAdapter(mSectionsPagerAdapter, newCase);
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
@@ -136,7 +178,8 @@ public class EditCaseActivity extends AppCompatActivity implements OnCaseDataReq
         // set FloatingActionButton Visibility.GONE until sufficient data was entered for the new case
         fab.setVisibility(View.GONE);
 
-        setTitle(R.string.title_activity_create_case);
+        int titleRId = newCase ? R.string.title_activity_create_case : R.string.title_activity_update_case;
+        setTitle(titleRId);
 
         mainContentLayout = (LinearLayout) findViewById(R.id.content_root_container);
 
@@ -147,54 +190,76 @@ public class EditCaseActivity extends AppCompatActivity implements OnCaseDataReq
         currentErrorList = new ArrayList<>(); // empty list
 
         // TODO change to this user
-        setUpData();
+        setUpData(cUser);
     }
 
-    private void addFragmentsToAdapter(NewCasePagerAdapter adapter) {
+    private void addFragmentsToAdapter(NewCasePagerAdapter adapter, boolean bNewCase) {
+        Log.d(LOG_TAG, "addFragmentsToAdapter(newCase= " + bNewCase + ")");
 
         List<Fragment> fragmentList = new ArrayList<>();
         List<String> titleList = new ArrayList<>();
 
         // add fragments according to the NewCasePagerEnum
-        symptomsFragment = EditSymptomsFragment.newInstance(true);
+        symptomsFragment = EditSymptomsFragment.newInstance(bNewCase);
         fragmentList.add(symptomsFragment);
         titleList.add(getString(NewCasePagerEnum.SYMPTOMS.getTitleResId()));
 
-        picturesFragment = EditPicturesFragment.newInstance(true, false);
+        picturesFragment = EditPicturesFragment.newInstance(bNewCase, false);
         fragmentList.add(picturesFragment);
         titleList.add(getString(NewCasePagerEnum.PICTURE.getTitleResId()));
 
-        locationFragment = EditLocationFragment.newInstance(true, false);
+        locationFragment = EditLocationFragment.newInstance(bNewCase, false);
         fragmentList.add(locationFragment);
         titleList.add(getString(NewCasePagerEnum.LOCATION.getTitleResId()));
 
-        anamnesisFragmen = EditAnamnesisFragment.newInstance();
-        fragmentList.add(anamnesisFragmen);
-        titleList.add(getString(NewCasePagerEnum.ANAMNESIS.getTitleResId()));
+        // only add for newCase = true
+        if (newCase) {
+            anamnesisFragmen = EditAnamnesisFragment.newInstance();
+            fragmentList.add(anamnesisFragmen);
+            titleList.add(getString(NewCasePagerEnum.ANAMNESIS.getTitleResId()));
+        }
 
-        physicianSelectionFragment = PhysicianSelectionFragment.newInstance();
+        physicianSelectionFragment = PhysicianSelectionFragment.newInstance(bNewCase);
         fragmentList.add(physicianSelectionFragment);
         titleList.add(getString(NewCasePagerEnum.PHYSICIAN.getTitleResId()));
 
-        finishFragment = FinishEditingFragment.newInstance(true);
+        finishFragment = FinishEditingFragment.newInstance(bNewCase);
         fragmentList.add(finishFragment);
         titleList.add(getString(NewCasePagerEnum.FINISH_EDITING.getTitleResId()));
 
         adapter.addFragments(fragmentList, titleList);
     }
 
-    private void setUpData() {
+    private void setUpData(PatientParc cUser) {
         ContentProvider cP = ContentProviderFactory.getContentProvider();
 
         defaultAnamnesis = cP.getAnamnesisForm(); // TODO get data from server?
-        PatientParc user = cP.getCurrentUser();
         Calendar cal = Calendar.getInstance();
 
-        caseItem = new CaseParc(-1, user, cal);
+        if (newCase) {
+            caseItem = new CaseParc(null, cUser, cal);
+        }
 
         nearbyPhysicians = new ArrayList<>();
-        // TODO get data from server
+        if (newCase) {
+            loadPhysicianList();
+        }
+    }
 
+
+    /**
+     * checks, if internet-connection is possible and returns a boolean value
+     * if no connection is available, it shows a info-message to the user
+     * @return
+     */
+    private boolean checkInternetConnection() {
+        boolean connected = ConnectionDetector.isConnectingToInternet(this);
+        Log.d(LOG_TAG, "checkInternetConnection: " + connected);
+        if (!connected) {
+            // show message to user
+            Toast.makeText(this, getString(R.string.msg_no_internet_connection_available), Toast.LENGTH_SHORT).show();
+        }
+        return connected;
     }
 
     /**
@@ -300,16 +365,27 @@ public class EditCaseActivity extends AppCompatActivity implements OnCaseDataReq
      */
     @Override
     public CaseParc finishEditing() {
+        Log.d(LOG_TAG, "finishEditing() newCase= " + newCase);
         String infoText = getString(R.string.hint_progress_collecting_data);
         // 1) collecting all input data
         // show progress
         showProgress(true, infoText);
-        CaseParc editedCaseItem = collectCaseData();
+        CaseParc editedCaseItem = null;
+        ArrayList<CaseDataParc> updatedCaseData = null;
+
+        if (newCase) {
+            editedCaseItem = createCaseAndCollectData();
+        } else {
+            updatedCaseData = collectCaseData();
+        }
 
         // 2) check if the data is correct
         infoText = getString(R.string.hint_progress_checking_data);
         loadingProgressInfoTextView.setText(infoText);
-        currentErrorList = validateCase(editedCaseItem);
+        if (newCase) {
+            currentErrorList = validateCase(editedCaseItem);
+        }
+
         // get rid of old errorMessages
         finishFragment.resetErrorMessages();
 
@@ -328,14 +404,33 @@ public class EditCaseActivity extends AppCompatActivity implements OnCaseDataReq
                 return editedCaseItem;
             }
         } else {
+
+
             // 3) no errors -> send it to the server
-            infoText = getString(R.string.hint_progress_sending_data);
-            loadingProgressInfoTextView.setText(infoText);
-            sendDataToServer(editedCaseItem);
+            if (newCase) {
+                infoText = getString(R.string.hint_progress_sending_data);
+                loadingProgressInfoTextView.setText(infoText);
+                sendDataToServer(editedCaseItem);
+            } else {
+                finishActivityReturnCaseDataList(updatedCaseData);
+                return null;
+            }
+
+
+
         }
 
         return editedCaseItem;
     }
+
+    private void finishActivityReturnCaseDataList(ArrayList<CaseDataParc> list) {
+        Intent resultData = new Intent();
+        resultData.putParcelableArrayListExtra(CASE_DATA_LIST_INTENT_KEY, list);
+        setResult(RESULT_OK, resultData);
+        finish();
+
+    }
+
 
     @Override
     public List<CaseValidationError> getCaseValidationErrors() {
@@ -384,9 +479,45 @@ public class EditCaseActivity extends AppCompatActivity implements OnCaseDataReq
     }
 
 
-    public CaseParc collectCaseData() {
+    public CaseParc createCaseAndCollectData() {
 
-        Log.d(LOG_TAG, "collectCaseData()");
+        Log.d(LOG_TAG, "createCaseAndCollectData() for " + (newCase ? "newCase" : "updateCase"));
+
+       List<CaseDataParc> newCaseDataList = collectCaseData();
+
+        // physician fragment
+        PhysicianParc physicianSelection = null;
+        if (newCase) {
+            physicianSelection = physicianSelectionFragment.getSelectedPhysician();
+        }
+
+        // finish fragment
+        String caseName = null;
+        if (newCase) {
+            caseName = finishFragment.getCaseName();
+        }
+
+        Calendar timestamp = Calendar.getInstance();
+
+        if (newCase) {
+            caseItem.setName(caseName);
+            caseItem.setPhysician(physicianSelection);
+        }
+
+        for(CaseDataParc cD : newCaseDataList) {
+            caseItem.addDataElement(cD);
+        }
+
+        Log.d(LOG_TAG, "caseItem - dataElements.size()=" + caseItem.getDataElements().size());
+
+        return caseItem;
+    }
+
+
+    private ArrayList<CaseDataParc> collectCaseData() {
+        Log.d(LOG_TAG, "collectCaseData() for " + (newCase ? "newCase" : "updateCase"));
+
+        ArrayList<CaseDataParc> newCaseDataElements = new ArrayList<>();
 
         // get data from symptom-fragment
         String symptomDescription = symptomsFragment.getSymptomDescription();
@@ -399,26 +530,31 @@ public class EditCaseActivity extends AppCompatActivity implements OnCaseDataReq
         // get data from location-fragment
         List<BodyLocalization> localizations = locationFragment.getSelectedBodyLocalizations();
 
-        // anamnesis data
-        AnamnesisParc anamnesisForm = anamnesisFragmen.getFilledAnamnesis();
-
-        // physician fragment
-        PhysicianParc physicianSelection = physicianSelectionFragment.getSelectedPhysician();
-
-        // finish fragment
-        String caseName = finishFragment.getCaseName();
-
-        // TODO size
-
         Calendar timestamp = Calendar.getInstance();
 
-        // CaseInfo
-        CaseInfoParc caseInfo = new CaseInfoParc(-1, timestamp,
-                caseItem.getPatient(), localizations, painIntensity, size, symptomDescription);
+        // anamnesis data
+        AnamnesisParc anamnesisForm = null;
+        if (newCase) {
+            AnamnesisParc anamnesisFormDummy= anamnesisForm = anamnesisFragmen.getFilledAnamnesis();
+            if (anamnesisFormDummy != null) {
+                // setting the user null for DB/Server reasons
+                anamnesisForm = new AnamnesisParc(null, timestamp, null,
+                        anamnesisFormDummy.getMessage(), anamnesisFormDummy.getQuestions());
+            }
 
-        caseItem.setName(caseName);
-        caseItem.setPhysician(physicianSelection);
-        caseItem.addDataElement(caseInfo);
+        }
+
+        // CaseInfo
+        CaseInfoParc caseInfo = new CaseInfoParc(null, timestamp,
+                caseItem.getPatient(), localizations, painIntensity, size);
+
+
+        newCaseDataElements.add(caseInfo);
+
+        // symptom description as TextMessage
+        TextMessageParc symptomMessageParc = new TextMessageParc(null,
+                timestamp, caseItem.getPatient(), getString(R.string.label_symtom_description_text_header, symptomDescription));
+        newCaseDataElements.add(symptomMessageParc);
 
         // add picture elements
         for (PictureHelperEntity p : pictures) {
@@ -432,31 +568,30 @@ public class EditCaseActivity extends AppCompatActivity implements OnCaseDataReq
                 e.printStackTrace();
             }
             // PictureHelperEntity to PhotoMessage
-            PhotoMessageParc photoMessageParc = new PhotoMessageParc(-1,
+            PhotoMessageParc photoMessageParc = new PhotoMessageParc(null,
                     timestamp, caseItem.getPatient(), "JPEG", byteArray);
             // add photoMessage to caseItem
-            caseItem.addDataElement(photoMessageParc);
+            newCaseDataElements.add(photoMessageParc);
 
             // put the description in a following TextMessage
-            TextMessageParc photoRelatedMessageParc = new TextMessageParc(-1,
-                    timestamp, caseItem.getPatient(), p.getDescription());
-            caseItem.addDataElement(photoRelatedMessageParc);
+            String picDescriptionStr = p.getDescription();
+            if (picDescriptionStr.trim().length() > 0) {
+                picDescriptionStr = "Picture: \n" + picDescriptionStr;
+                TextMessageParc photoRelatedMessageParc = new TextMessageParc(null,
+                        timestamp, caseItem.getPatient(), picDescriptionStr);
+                newCaseDataElements.add(photoRelatedMessageParc);
+            }
+
+
         }
 
         // add Anamnesis element
-        if (anamnesisForm != null) {
-            caseItem.addDataElement(anamnesisForm);
+        if (newCase && anamnesisForm != null) {
+            Log.d(LOG_TAG, "anamnesisForm: " + ToStringHelper.toString(anamnesisForm));
+            newCaseDataElements.add(anamnesisForm);
         }
+        return newCaseDataElements;
 
-
-        Log.d(LOG_TAG, caseItem.toString());
-        Log.d(LOG_TAG, anamnesisForm != null ? anamnesisForm.toString() : "anamnesis = null");
-        Log.d(LOG_TAG, "symptoms: " + symptomDescription + ", Pain: " + painIntensity);
-        Log.d(LOG_TAG, ToStringHelper.toStringPics(pictures));
-        Log.d(LOG_TAG, ToStringHelper.toStringLoc(localizations));
-        Log.d(LOG_TAG, "caseItem - dataElements.size()=" + caseItem.getDataElements().size());
-
-        return caseItem;
     }
 
     /**
@@ -472,19 +607,18 @@ public class EditCaseActivity extends AppCompatActivity implements OnCaseDataReq
         if (caseInfos.size() > 0) {
             CaseInfoParc lastCaseInfo = caseInfos.get(0);
 
-            // symptom description?
-            String symptomDescription = lastCaseInfo.getSymptomDescription();
-            int minimalDescriptionLength = 1;
-            if (symptomDescription == null || symptomDescription.trim().length() < minimalDescriptionLength) {
-                validationErrors.add(new CaseValidationError(
-                        getString(R.string.msg_validation_error_description), CaseValidationErrorLevel.ERROR));
-            }
-
             // pain-intensity selected?
             PainIntensity painIntensity = lastCaseInfo.getPain();
             if (painIntensity == null || painIntensity == PainIntensity.Undefined) {
                 validationErrors.add(new CaseValidationError(
                         getString(R.string.msg_validation_error_pain), CaseValidationErrorLevel.WARNING));
+            }
+
+            // size selected?
+            double sizeD = lastCaseInfo.getSize();
+            if (sizeD <= 0) {
+                validationErrors.add(new CaseValidationError(
+                        getString(R.string.msg_validation_error_size), CaseValidationErrorLevel.WARNING));
             }
 
             //  >0 locations selected
@@ -495,11 +629,39 @@ public class EditCaseActivity extends AppCompatActivity implements OnCaseDataReq
             }
         }
 
+        // symptom description?
+        CaseDataExtractionHelper<TextMessageParc> textMessageExtractor = new CaseDataExtractionHelper<>(TextMessageParc.class);
+        List<TextMessageParc> allTextMessages = textMessageExtractor.extractElements(caseItemToValidate.getDataElements());
+
+        boolean symptDfound = false;
+        for(TextMessageParc m : allTextMessages) {
+            // check, if the key-phrase is in one of the messages
+            if (m.getMessage() != null && m.getMessage().contains(getString(R.string.symptom_description_validation_helper_text))) {
+                // the key-phrase was found = there is at least one symptom description - element
+                symptDfound = true;
+                // validate it
+                String symptomDescription = m.getMessage();
+                int minimalDescriptionLength = 5;
+                int minimalLength = minimalDescriptionLength + getString(R.string.symptom_description_validation_helper_text).length();
+                if (symptomDescription == null || symptomDescription.trim().length() < minimalLength) {
+                    validationErrors.add(new CaseValidationError(
+                            getString(R.string.msg_validation_error_description), CaseValidationErrorLevel.ERROR));
+                }
+            }
+        }
+        if (!symptDfound) {
+            // no descripton element -> error
+            validationErrors.add(new CaseValidationError(
+                    getString(R.string.msg_validation_error_description), CaseValidationErrorLevel.ERROR));
+        }
+
+
+
         // case name set?
         String name = caseItemToValidate.getName();
         if (name == null || name.trim().length() == 0) {
-                validationErrors.add(new CaseValidationError(
-                        getString(R.string.msg_validation_error_name), CaseValidationErrorLevel.ERROR));
+            validationErrors.add(new CaseValidationError(
+                    getString(R.string.msg_validation_error_name), CaseValidationErrorLevel.ERROR));
         }
 
         // >0 pictures added?
@@ -529,6 +691,12 @@ public class EditCaseActivity extends AppCompatActivity implements OnCaseDataReq
      * starts a async-task and send the data to the server
      */
     private void sendDataToServer(CaseParc caseItem) {
+
+        // check internet connection
+        if (!checkInternetConnection()) {
+            return;
+        }
+
         sendingEditedCaseAsyncTask = new SendingEditedCaseAsyncTask(this);
         sendingEditedCaseAsyncTask.execute(caseItem);
     }
@@ -586,11 +754,67 @@ public class EditCaseActivity extends AppCompatActivity implements OnCaseDataReq
         }
     }
 
+    @Override
+    public List<BodyLocalization> getBodyLocations() {
+        CaseDataExtractionHelper<CaseInfoParc> infoExtractor = new CaseDataExtractionHelper<>(CaseInfoParc.class);
+        List<CaseInfoParc> infoList = infoExtractor.extractElements(caseItem.getDataElements());
+        if (infoList.size() > 0) {
+            return infoList.get(0).getLocalizations();
+        }
+        return new ArrayList<BodyLocalization>();
+    }
+
+    private void syncData() {
+        // send data TODO
+        // get data
+        getDataFromServer();
+    }
+
+    private void getDataFromServer() {
+        // load Case Data
+
+        if (newCase) {
+            loadPhysicianList();
+        }
+
+    }
+
+    private void loadPhysicianList() {
+        Log.d(LOG_TAG, "loadPhysicianList()");
+
+        // check internet connection
+        if (!checkInternetConnection()) {
+            return;
+        }
+
+        String infoText = getString(R.string.label_loading_data_dynamic, getString(R.string.option_loading_physician_list_insert));
+        showProgress(true, infoText);
+        loadPhysicianListAsyncTask = new LoadPhysicianListAsyncTask(this);
+        loadPhysicianListAsyncTask.execute();
+    }
+
+    /**
+     * sets the task = null and deactivates showProgess, if all tasks are null
+     * @param task
+     */
+    private synchronized void asyncTaskFinished(AsyncTask task) {
+        if (task instanceof LoadPhysicianListAsyncTask) {
+            loadPhysicianListAsyncTask = null;
+            physicianSelectionFragment.updatePhysicianList();
+        } else if (task instanceof SendingEditedCaseAsyncTask) {
+            sendingEditedCaseAsyncTask = null;
+        }
+
+        if (loadPhysicianListAsyncTask == null && sendingEditedCaseAsyncTask == null) {
+            showProgress(false);
+        }
+    }
+
     /**
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
-    public class LoadPhysicianListAsyncTask extends AsyncTask<Void, Void, List<PhysicianParc>> {
+    public class LoadPhysicianListAsyncTask extends AsyncTask<Void, Void, List<Physician>> {
         private EditCaseActivity activity;
 
         private String outp;
@@ -600,38 +824,33 @@ public class EditCaseActivity extends AppCompatActivity implements OnCaseDataReq
         }
 
         @Override
-        protected List<PhysicianParc> doInBackground(Void... params) {
+        protected List<Physician> doInBackground(Void... params) {
             Log.d(LOG_TAG, "doInBackground()");
 
-            List<PhysicianParc> physicianList = new ArrayList<>();
+            List<Physician> physicianList = new ArrayList<>();
 
             ServerInterface sI = ServerInterfaceFactory.getInstance();
-            // TODO
+            physicianList = sI.getPhysicians();
 
-            // TODO remoeve
-            try {
-                Thread.sleep(3000);                 //1000 milliseconds is one second.
-            } catch(InterruptedException ex) {
-                Thread.currentThread().interrupt();
+            if (physicianList != null) {
+                Log.d(LOG_TAG, "retrieved physicians: " + physicianList.size());
+            } else {
+                Log.d(LOG_TAG, "physicianList == null");
             }
-
-            Log.d(LOG_TAG, "retrieved physicians: " + "TODO");
 
             return physicianList;
         }
 
         @Override
-        protected void onPostExecute(final List<PhysicianParc> physicianList) {
+        protected void onPostExecute(final List<Physician> physicianList) {
             Log.d(LOG_TAG,"onPostExecute() physicianList: " + (physicianList != null ? physicianList.size() : null));
-            loadPhysicianListAsyncTask = null;
-            showProgress(false);
-            // TODO check result etc.
+            nearbyPhysicians = ParcelableHelper.mapPhysicianListToParc(physicianList);
+            asyncTaskFinished(LoadPhysicianListAsyncTask.this);
         }
 
         @Override
         protected void onCancelled() {
-            loadPhysicianListAsyncTask = null;
-            showProgress(false);
+            asyncTaskFinished(LoadPhysicianListAsyncTask.this);
         }
     }
 
@@ -652,25 +871,63 @@ public class EditCaseActivity extends AppCompatActivity implements OnCaseDataReq
         protected Boolean doInBackground(CaseParc... params) {
             Log.d(LOG_TAG, "doInBackground()");
 
-            ServerInterface sI = ServerInterfaceFactory.getInstance();
-            // TODO
+            if (params == null || params.length <= 0) {
+                Log.d(LOG_TAG, "Insufficient Parameters! ABORT!");
+                return false;
+            }
+            CaseParc caseParcToSend = params[0];
 
-            // TODO remoeve
-            try {
-                Thread.sleep(3000);                 //1000 milliseconds is one second.
-            } catch(InterruptedException ex) {
-                Thread.currentThread().interrupt();
+            ServerInterface sI = ServerInterfaceFactory.getInstance();
+            // TODO send case, retrieve new case-id
+            Case caseToSend = ParcelableHelper.mapToCase(caseParcToSend);
+            Case caseResultFromServer = null;
+            Long caseId = null;
+            // check if it is a new case that should be created or an old case, which data should be sent
+            if (newCase) {
+                caseResultFromServer = sI.createCase(caseToSend);
+
+                if (caseResultFromServer == null) {
+                    Log.d(LOG_TAG, "null returned from server for case");
+                    return false;
+                } else {
+                    Log.d(LOG_TAG, "case returned from server with Id: " + caseResultFromServer.getId());
+                    caseId = caseResultFromServer.getId();
+                }
+            } else {
+                caseId = caseToSend.getId(); // "old" cases already have IDs
+
             }
 
+            // send case-data elements
+            List<CaseData> caseDataToSend = ParcelableHelper.mapToCaseDataList(caseParcToSend.getDataElements());
+            if (caseDataToSend == null) {
+                Log.d(LOG_TAG, "CaseData - List is nulL! ABORT");
+                return false;
+            }
+
+
+            boolean successfulSentAllCaseData = true;
+            for (CaseData cd : caseDataToSend) {
+                CaseData resultFromServerCaseData = sI.addCaseData(cd, caseId); // TODO check result?
+
+                if (resultFromServerCaseData == null) {
+                    Log.d(LOG_TAG, "null returned from server for caseData");
+                    successfulSentAllCaseData = false;
+                } else {
+                    Log.d(LOG_TAG, "caseData returned from server with Id: " + resultFromServerCaseData.getId());
+                }
+            }
+
+
+
             Log.d(LOG_TAG, "end doInBackground()");
-            return null;
+            return successfulSentAllCaseData;
         }
 
         @Override
         protected void onPostExecute(Boolean success) {
             Log.d(LOG_TAG,"onPostExecute() " + success);
-            sendingEditedCaseAsyncTask = null;
-            showProgress(false);
+            asyncTaskFinished(SendingEditedCaseAsyncTask.this);
             Toast.makeText(getBaseContext(), "Data was sent to the server", Toast.LENGTH_LONG).show();
             finishActivity();
 
@@ -678,9 +935,29 @@ public class EditCaseActivity extends AppCompatActivity implements OnCaseDataReq
 
         @Override
         protected void onCancelled() {
-            sendingEditedCaseAsyncTask = null;
-            showProgress(false);
+            asyncTaskFinished(SendingEditedCaseAsyncTask.this);
             Toast.makeText(getBaseContext(), "Sending data to the server was cancelled", Toast.LENGTH_LONG).show();
         }
+    }
+
+    @Override
+    public double getSize() {
+        CaseDataExtractionHelper<CaseInfoParc> infoExtractor = new CaseDataExtractionHelper<>(CaseInfoParc.class);
+        List<CaseInfoParc> infoList = infoExtractor.extractElements(caseItem.getDataElements());
+        if (infoList.size() > 0) {
+            return infoList.get(0).getSize();
+        }
+
+        return 0.0;
+    }
+
+    @Override
+    public PainIntensity getPainIntensity() {
+        CaseDataExtractionHelper<CaseInfoParc> infoExtractor = new CaseDataExtractionHelper<>(CaseInfoParc.class);
+        List<CaseInfoParc> infoList = infoExtractor.extractElements(caseItem.getDataElements());
+        if (infoList.size() > 0) {
+            return infoList.get(0).getPain();
+        }
+        return PainIntensity.Undefined;
     }
 }

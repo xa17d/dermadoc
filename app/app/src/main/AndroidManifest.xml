@@ -9,7 +9,8 @@
     <!-- to take a picture and store it -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
-
+    <!-- Network State Permissions -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -19,27 +20,35 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name=".activities_fragments.MainActivity"
+            android:screenOrientation="portrait"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
         </activity>
         <activity
             android:name=".activities_fragments.case_specific.CaseActivity"
             android:label="@string/activity_label_case"
+            android:windowSoftInputMode="stateHidden"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTop"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
         <activity
             android:name=".activities_fragments.edit_case.AddPictureActivity"
             android:label="@string/activity_label_add_pic"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
         <activity
             android:name=".activities_fragments.login.LoginActivity"
-            android:label="@string/title_activity_login" >
+            android:screenOrientation="portrait"
+            android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -51,7 +60,36 @@
             android:label="@string/title_activity_create_case"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" >
+
             <!-- use portrait until all issues of rotating are resolved -->
+        </activity>
+        <activity
+            android:name=".activities_fragments.view_case_data_element.CaseDataActivity"
+            android:label="@string/title_activity_case_data"
+            android:parentActivityName=".activities_fragments.case_specific.CaseActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="at.tuwien.telemedizin.dermadoc.app.activities_fragments.case_specific.CaseActivity" />
+        </activity>
+        <activity
+            android:name=".activities_fragments.help.HelpActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/title_activity_help"
+            android:parentActivityName=".activities_fragments.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="at.tuwien.telemedizin.dermadoc.app.activities_fragments.MainActivity" />
+        </activity>
+        <activity android:name=".activities_fragments.preferences.PreferenceActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"
+            android:label="@string/title_activity_preferences">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="at.tuwien.telemedizin.dermadoc.app.activities_fragments.MainActivity" />
         </activity>
     </application>
 

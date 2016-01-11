@@ -1,9 +1,7 @@
 package at.tuwien.telemedizin.dermadoc.app.adapters;
 
-import android.content.Context;
-
 import at.tuwien.telemedizin.dermadoc.app.R;
-import at.tuwien.telemedizin.dermadoc.entities.PainIntensity;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.PainIntensity;
 
 /**
  * Created by FAUser on 22.11.2015.

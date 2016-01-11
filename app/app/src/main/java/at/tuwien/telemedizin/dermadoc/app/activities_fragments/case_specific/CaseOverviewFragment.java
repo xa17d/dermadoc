@@ -1,37 +1,34 @@
 package at.tuwien.telemedizin.dermadoc.app.activities_fragments.case_specific;
 
 
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
 import java.util.List;
 
 import at.tuwien.telemedizin.dermadoc.app.R;
 import at.tuwien.telemedizin.dermadoc.app.activities_fragments.create_case.EditLocationFragment;
 import at.tuwien.telemedizin.dermadoc.app.adapters.PainIntensityMapper;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.CaseParc;
-import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.PatientParc;
+import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.NotificationParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.PhysicianParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.CaseInfoParc;
 import at.tuwien.telemedizin.dermadoc.app.helper.CaseDataExtractionHelper;
 import at.tuwien.telemedizin.dermadoc.app.helper.FormatHelper;
-import at.tuwien.telemedizin.dermadoc.entities.BodyLocalization;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class CaseOverviewFragment extends Fragment {
+public class CaseOverviewFragment extends Fragment{
 
     public static final String LOG_TAG = CaseOverviewFragment.class.getSimpleName();
 
@@ -44,9 +41,15 @@ public class CaseOverviewFragment extends Fragment {
 
     private TextView caseNameTextView;
 
+    private TextView localizationHeaderTextView;
+
     private LinearLayout basicDataListLayout;
+    private LinearLayout notificationListLayout;
 
     private CaseParc caseItem;
+    private List<NotificationParc> notificationList;
+
+    private Button deleteNotificationsButton;
 
     /**
      * Use this factory method to create a new instance of
@@ -81,9 +84,42 @@ public class CaseOverviewFragment extends Fragment {
         physicianNameTextView = (TextView) v.findViewById(R.id.case_overview_physician);
         creationDateTextView = (TextView) v.findViewById(R.id.case_overview_date_of_creation);
         caseStatusTextView = (TextView) v.findViewById(R.id.case_overview_status);
+        localizationHeaderTextView = (TextView) v.findViewById(R.id.element_header_textView);
+        caseNameTextView = (TextView) v.findViewById(R.id.case_name_text_view);
 
-        // load caseData
+        basicDataListLayout = (LinearLayout) v.findViewById(R.id.basic_data_list_layout);
+        notificationListLayout = (LinearLayout) v.findViewById(R.id.notification_list_layout);
+
+        deleteNotificationsButton = (Button) v.findViewById(R.id.notifications_delete_button);
+        deleteNotificationsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                caseDataCallbackInterface.deleteNotifications();
+            }
+        });
+
+        // get Data and fill views
+        updateDataViews();
+
+        return v;
+    }
+
+    public void updateDataViews() {
+
+        if (getContext() == null) {
+            return;
+        }
         caseItem = caseDataCallbackInterface.getCase();
+        setUpBasicData();
+        notificationList = caseDataCallbackInterface.getNotifications();
+        notificationListLayout.removeAllViewsInLayout();
+        setUpNotificationList(LayoutInflater.from(getContext()));
+
+        basicDataListLayout.removeAllViewsInLayout();
+        setUpBasicDataList(LayoutInflater.from(getContext()));
+    }
+
+    private void setUpBasicData() {
         caseIdTextView.setText(caseItem.getId() + "");
         PhysicianParc physician = caseItem.getPhysician();
         physicianNameTextView.setText(physician != null ?
@@ -93,39 +129,72 @@ public class CaseOverviewFragment extends Fragment {
                 FormatHelper.calendarToDateFormatString(caseItem.getCreated(), getContext()));
 
         caseStatusTextView.setText(caseItem.getStatus() + "");
-
-        caseNameTextView = (TextView) v.findViewById(R.id.case_name_text_view);
         caseNameTextView.setText(caseItem.getName());
 
-        basicDataListLayout = (LinearLayout) v.findViewById(R.id.basic_data_list_layout);
-        // add basic-data elements (pain Intensity, localization)
-        setUpBasicDataList(inflater);
+    }
 
-        return v;
+    private void setUpNotificationList(LayoutInflater inflater) {
+        Log.d(LOG_TAG, "setUpNotificationList() with list.size()=" + notificationList.size());
+        // only one label, if empty list
+        if (notificationList.size() == 0) {
+            // hide the delte-button
+            deleteNotificationsButton.setVisibility(View.GONE);
+
+            // add an "is empty" view
+            View simpleNotificationView = inflater.inflate(R.layout.overview_basic_data_item, null, false);
+            TextView nHeaderTextView = (TextView) simpleNotificationView.findViewById(R.id.element_header_textView);
+            ImageView nIconView = (ImageView) simpleNotificationView.findViewById(R.id.icon_view);
+            TextView nInfoTextView = (TextView) simpleNotificationView.findViewById(R.id.element_info_textView);
+
+            nHeaderTextView.setVisibility(View.GONE);
+            nIconView.setVisibility(View.GONE);
+            nInfoTextView.setText(getString(R.string.hint_no_notifications));
+            notificationListLayout.addView(simpleNotificationView);
+        } else {
+
+            // show button
+            // hide the delte-button
+            deleteNotificationsButton.setVisibility(View.VISIBLE);
+
+            for (NotificationParc nP : notificationList) {
+                View simpleNotificationView = inflater.inflate(R.layout.overview_basic_data_item, null, false);
+                TextView nHeaderTextView = (TextView) simpleNotificationView.findViewById(R.id.element_header_textView);
+                ImageView nIconView = (ImageView) simpleNotificationView.findViewById(R.id.icon_view);
+                TextView nInfoTextView = (TextView) simpleNotificationView.findViewById(R.id.element_info_textView);
+
+                nHeaderTextView.setVisibility(View.GONE);
+                nIconView.setImageResource(R.drawable.ic_action_flag_red_light_18dp);
+                nInfoTextView.setText(nP.getText());
+                notificationListLayout.addView(simpleNotificationView);
+            }
+        }
     }
 
     private void setUpBasicDataList(LayoutInflater inflater) {
-
+        // add basic-data elements (pain Intensity, localization)
 
         CaseDataExtractionHelper<CaseInfoParc> caseInfoExtractor = new CaseDataExtractionHelper<>(CaseInfoParc.class);
         // get all caseInfo-objects
         List<CaseInfoParc> caseInfos = caseInfoExtractor.extractElements(caseItem.getDataElements());
         if (caseInfos.size() == 0) {
+            localizationHeaderTextView.setVisibility(View.GONE);
             return;
+        } else {
+            localizationHeaderTextView.setVisibility(View.VISIBLE);
         }
         CaseInfoParc cI = caseInfos.get(0);
 
         // symptom description
-        View basicSymptomDescription = inflater.inflate(R.layout.overview_basic_data_item, null, false);
-        TextView dHeaderTextView = (TextView) basicSymptomDescription.findViewById(R.id.element_header_textView);
-        ImageView dIconView = (ImageView) basicSymptomDescription.findViewById(R.id.icon_view);
-        TextView dInfoTextView = (TextView) basicSymptomDescription.findViewById(R.id.element_info_textView);
-
-        dHeaderTextView.setText(getString(R.string.label_symptoms));
-        dIconView.setVisibility(View.GONE);
-        dInfoTextView.setText(cI.getSymptomDescription());
-
-        basicDataListLayout.addView(basicSymptomDescription);
+//        View basicSymptomDescription = inflater.inflate(R.layout.overview_basic_data_item, null, false);
+//        TextView dHeaderTextView = (TextView) basicSymptomDescription.findViewById(R.id.element_header_textView);
+//        ImageView dIconView = (ImageView) basicSymptomDescription.findViewById(R.id.icon_view);
+//        TextView dInfoTextView = (TextView) basicSymptomDescription.findViewById(R.id.element_info_textView);
+//
+//        dHeaderTextView.setText(getString(R.string.label_symptoms));
+//        dIconView.setVisibility(View.GONE);
+//        dInfoTextView.setText(cI.getSymptomDescription());
+//
+//        basicDataListLayout.addView(basicSymptomDescription);
 
         // Pain intensity
         View basicPainIntensity = inflater.inflate(R.layout.overview_basic_data_item, null, false);

@@ -8,8 +8,8 @@ import java.util.Calendar;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.UserParc;
 import at.tuwien.telemedizin.dermadoc.app.helper.FormatHelper;
 import at.tuwien.telemedizin.dermadoc.app.helper.ParcelableHelper;
-import at.tuwien.telemedizin.dermadoc.entities.User;
-import at.tuwien.telemedizin.dermadoc.entities.casedata.CaseData;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.User;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.casedata.CaseData;
 
 /**
  * Abstract CaseData.
@@ -17,14 +17,15 @@ import at.tuwien.telemedizin.dermadoc.entities.casedata.CaseData;
  */
 public abstract class CaseDataParc implements Parcelable {
 
-    public CaseDataParc(long id, Calendar created, UserParc author) {
+    public CaseDataParc(Long id, Calendar created, UserParc author) {
         this.id = id;
         this.created = created;
         this.author = author;
     }
 
-    private long id;
-    public long getId() { return id; }
+    private Long id;
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
     private Calendar created;
     public Calendar getCreated() { return created; }
@@ -36,11 +37,9 @@ public abstract class CaseDataParc implements Parcelable {
     public boolean getPrivate() { return isPrivate; }
     public void setPrivate(boolean isPrivate) { this.isPrivate = isPrivate; }
 
-    private CaseDataParc nextVersion;
-    public CaseDataParc getNextVersion() { return nextVersion; }
-    public void setNextVersion(CaseDataParc nextVersion) { this.nextVersion = nextVersion; }
-
-    private boolean isObsolete() { return (nextVersion != null); }
+    private boolean obsolete;
+    public boolean isObsolete() { return obsolete; }
+    public void setObsolete(boolean obsolete) { this.obsolete = obsolete; }
 
     @Override
     public String toString() {
@@ -60,6 +59,7 @@ public abstract class CaseDataParc implements Parcelable {
     public CaseDataParc(CaseData caseData) {
         this(caseData.getId(), caseData.getCreated(), ParcelableHelper.mapUserToUserParc(caseData.getAuthor()));
         this.isPrivate = caseData.getPrivate();
+        this.obsolete = caseData.isObsolete();
 
 //        CaseData nextVersionIn = caseData.getNextVersion();
 //        if (nextVersionIn != null) {
@@ -72,7 +72,7 @@ public abstract class CaseDataParc implements Parcelable {
 
     public CaseDataParc(Parcel in) {
 
-        this.id = in.readLong();
+        this.id = (Long) in.readValue(null);
 
         long createdTimeInMillis = in.readLong();
         this.created = ParcelableHelper.longToCalendar(createdTimeInMillis);
@@ -82,7 +82,8 @@ public abstract class CaseDataParc implements Parcelable {
         int isPrivateAsInt = in.readInt();
         this.isPrivate = (isPrivateAsInt == 1);
         //
-        this.nextVersion = in.readParcelable(null); // null -> should use the default classLoader specified in the non-abstract class
+        int isObsoleteAsInt = in.readInt();
+        this.obsolete = (isObsoleteAsInt == 1);
     }
 
     @Override
@@ -93,7 +94,7 @@ public abstract class CaseDataParc implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
 
-        dest.writeLong(id);
+        dest.writeValue(id);
 
         long createdInMillis = -1;
         if (created != null) { // avoid nullpointer exception
@@ -106,7 +107,8 @@ public abstract class CaseDataParc implements Parcelable {
         int isPrivateAsInt = isPrivate ? 1 : 0;
         dest.writeInt(isPrivateAsInt);
 
-        dest.writeParcelable(nextVersion, flags);
+        int isObsoleteAsInt = obsolete ? 1 : 0;
+        dest.writeInt(isObsoleteAsInt);
 
     }
 

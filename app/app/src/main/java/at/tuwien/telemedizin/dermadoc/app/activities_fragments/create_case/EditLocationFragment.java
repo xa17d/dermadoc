@@ -29,8 +29,8 @@ import java.util.Map;
 import at.tuwien.telemedizin.dermadoc.app.R;
 import at.tuwien.telemedizin.dermadoc.app.adapters.BodyLocalizationMapper;
 import at.tuwien.telemedizin.dermadoc.app.entities.BodyLocalizationZoomHelper;
+import at.tuwien.telemedizin.dermadoc.app.general_entities.BodyLocalization;
 import at.tuwien.telemedizin.dermadoc.app.helper.ColorTool;
-import at.tuwien.telemedizin.dermadoc.entities.BodyLocalization;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -163,8 +163,12 @@ public class EditLocationFragment extends Fragment {
         // if embedded, hide header and next-button
         RelativeLayout headerL = (RelativeLayout) v.findViewById(R.id.header_relative_layout);
         RelativeLayout buttonL = (RelativeLayout) v.findViewById(R.id.button_relative_layout);
-        headerL.setVisibility(View.GONE);
-        buttonL.setVisibility(View.GONE);
+
+        if (embeddedMode) {
+            headerL.setVisibility(View.GONE);
+            buttonL.setVisibility(View.GONE);
+        }
+
 
         return v;
     }

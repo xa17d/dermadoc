@@ -1,61 +1,34 @@
 package at.tuwien.telemedizin.dermadoc.app.activities_fragments.edit_case;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.LinkedList;
 import java.util.List;
 
 import at.tuwien.telemedizin.dermadoc.app.R;
 import at.tuwien.telemedizin.dermadoc.app.activities_fragments.case_specific.CaseActivity;
-import at.tuwien.telemedizin.dermadoc.app.activities_fragments.case_specific.CaseDataCallbackInterface;
-import at.tuwien.telemedizin.dermadoc.app.activities_fragments.case_specific.CaseDataListFragment;
-import at.tuwien.telemedizin.dermadoc.app.activities_fragments.case_specific.CaseOverviewFragment;
-import at.tuwien.telemedizin.dermadoc.app.activities_fragments.create_case.EditLocationFragment;
 import at.tuwien.telemedizin.dermadoc.app.activities_fragments.create_case.EditPicturesFragment;
 import at.tuwien.telemedizin.dermadoc.app.entities.PictureHelperEntity;
-import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.CaseParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.PatientParc;
-import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.PhysicianParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.CaseDataParc;
-import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.CaseInfoParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.PhotoMessageParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.TextMessageParc;
-import at.tuwien.telemedizin.dermadoc.app.helper.CaseDataExtractionHelper;
-import at.tuwien.telemedizin.dermadoc.app.helper.FormatHelper;
-import at.tuwien.telemedizin.dermadoc.app.server_interface.ServerInterface;
-import at.tuwien.telemedizin.dermadoc.app.server_interface.ServerInterfaceFactory;
-import at.tuwien.telemedizin.dermadoc.entities.BodyLocalization;
-import at.tuwien.telemedizin.dermadoc.entities.casedata.PhotoMessage;
 
 
 public class AddPictureActivity extends AppCompatActivity {
@@ -159,11 +132,19 @@ public class AddPictureActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            PhotoMessageParc pM = new PhotoMessageParc(-1, Calendar.getInstance(), currentUser, "JPEG", byteArray);
-            TextMessageParc pDescription = new TextMessageParc(-1, Calendar.getInstance(), currentUser, pH.getDescription());
-
+            PhotoMessageParc pM = new PhotoMessageParc(null, Calendar.getInstance(), currentUser, "JPEG", byteArray);
             photoRelatedMessages.add(pM);
-            photoRelatedMessages.add(pDescription);
+
+            String picDescriptionStr = pH.getDescription();
+            if (picDescriptionStr.trim().length() > 0) {
+                picDescriptionStr = "Picture: \n" + picDescriptionStr;
+                TextMessageParc pDescription = new TextMessageParc(null, Calendar.getInstance(), currentUser,picDescriptionStr);
+                photoRelatedMessages.add(pDescription);
+            }
+
+
+
+
         }
 
         Intent resultData = new Intent();

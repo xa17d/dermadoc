@@ -38,28 +38,28 @@ public class NewCasePagerAdapter extends FragmentPagerAdapter {
         this.categoryToIndexMap = new HashMap<>();
     }
 
-    public PictureReceiver addStandardFragments() {
-        // add fragments according to the NewCasePagerEnum
-        fragmentList.add(EditSymptomsFragment.newInstance(true));
-        titleList.add(context.getString(NewCasePagerEnum.SYMPTOMS.getTitleResId()));
-
-        EditPicturesFragment pictureReceiver = EditPicturesFragment.newInstance(true, false);
-        fragmentList.add(pictureReceiver);
-        titleList.add(context.getString(NewCasePagerEnum.PICTURE.getTitleResId()));
-
-        fragmentList.add(EditLocationFragment.newInstance(true, false));
-        titleList.add(context.getString(NewCasePagerEnum.LOCATION.getTitleResId()));
-
-        fragmentList.add(EditAnamnesisFragment.newInstance());
-        titleList.add(context.getString(NewCasePagerEnum.ANAMNESIS.getTitleResId()));
-
-        fragmentList.add(PhysicianSelectionFragment.newInstance());
-        titleList.add(context.getString(NewCasePagerEnum.PHYSICIAN.getTitleResId()));
-
-        fragmentList.add(FinishEditingFragment.newInstance(true));
-        titleList.add(context.getString(NewCasePagerEnum.FINISH_EDITING.getTitleResId()));
-        return pictureReceiver;
-    }
+//    public PictureReceiver addStandardFragments() {
+//        // add fragments according to the NewCasePagerEnum
+//        fragmentList.add(EditSymptomsFragment.newInstance(true));
+//        titleList.add(context.getString(NewCasePagerEnum.SYMPTOMS.getTitleResId()));
+//
+//        EditPicturesFragment pictureReceiver = EditPicturesFragment.newInstance(true, false);
+//        fragmentList.add(pictureReceiver);
+//        titleList.add(context.getString(NewCasePagerEnum.PICTURE.getTitleResId()));
+//
+//        fragmentList.add(EditLocationFragment.newInstance(true, false));
+//        titleList.add(context.getString(NewCasePagerEnum.LOCATION.getTitleResId()));
+//
+//        fragmentList.add(EditAnamnesisFragment.newInstance());
+//        titleList.add(context.getString(NewCasePagerEnum.ANAMNESIS.getTitleResId()));
+//
+//        fragmentList.add(PhysicianSelectionFragment.newInstance());
+//        titleList.add(context.getString(NewCasePagerEnum.PHYSICIAN.getTitleResId()));
+//
+//        fragmentList.add(FinishEditingFragment.newInstance(true));
+//        titleList.add(context.getString(NewCasePagerEnum.FINISH_EDITING.getTitleResId()));
+//        return pictureReceiver;
+//    }
 
     public void addFragments(List<Fragment> fragmentList, List<String> titleList) {
         this.fragmentList = fragmentList;

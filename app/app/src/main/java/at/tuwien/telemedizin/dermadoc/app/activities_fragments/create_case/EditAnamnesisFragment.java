@@ -9,15 +9,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import at.tuwien.telemedizin.dermadoc.app.R;
@@ -25,11 +22,6 @@ import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.Anamnesis
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.AnamnesisQuestionBoolParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.AnamnesisQuestionParc;
 import at.tuwien.telemedizin.dermadoc.app.entities.parcelable.casedata.AnamnesisQuestionTextParc;
-import at.tuwien.telemedizin.dermadoc.entities.Physician;
-import at.tuwien.telemedizin.dermadoc.entities.casedata.Anamnesis;
-import at.tuwien.telemedizin.dermadoc.entities.casedata.AnamnesisQuestion;
-import at.tuwien.telemedizin.dermadoc.entities.casedata.AnamnesisQuestionBool;
-import at.tuwien.telemedizin.dermadoc.entities.casedata.AnamnesisQuestionText;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -82,8 +74,6 @@ public class EditAnamnesisFragment extends Fragment {
     }
 
 
-
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -106,6 +96,8 @@ public class EditAnamnesisFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_edit_anamnesis_layout, container, false);
+
+        TextView messageTextView = (TextView) v.findViewById(R.id.message_text_view);
 
         anamnesisHelpIcon = (ImageView) v.findViewById(R.id.anamnesis_help_icon_view);
         anamnesisHelpText = (TextView) v.findViewById(R.id.anamnesis_help_hint_text_view);
@@ -138,6 +130,8 @@ public class EditAnamnesisFragment extends Fragment {
                 tabChangeInterface.switchToTheNextTab();
             }
         });
+
+        messageTextView.setText(anamnesisItem.getMessage());
 
         anamnesisQuestionListLayout = (LinearLayout) v.findViewById(R.id.anamnesis_question_list_linlayout);
         setUpQuestionList(inflater, anamnesisQuestionListLayout);
@@ -184,8 +178,19 @@ public class EditAnamnesisFragment extends Fragment {
             AnamnesisQuestionParc q = questions.get(i);
             View qItemLayout = questionViews.get(i);
             if (q instanceof AnamnesisQuestionBoolParc) {
+                Boolean bAnswer = null;
                 boolean firstOptionChecked = ((RadioButton)qItemLayout.findViewById(R.id.question_answer_1)).isChecked();
-                ((AnamnesisQuestionBoolParc)q).setAnswer(firstOptionChecked);
+                boolean secondOptionChecked = ((RadioButton)qItemLayout.findViewById(R.id.question_answer_2)).isChecked();
+                if (firstOptionChecked) {
+                    bAnswer = true;
+                } else if (secondOptionChecked) {
+                    bAnswer = false;
+                } else {
+                    // no answer is checked
+                    bAnswer = null;
+                }
+
+                ((AnamnesisQuestionBoolParc)q).setAnswer(bAnswer);
                 Log.d(LOG_TAG, "answer " + i + " " + ((AnamnesisQuestionBoolParc) anamnesisItem.getQuestions().get(i)).getAnswer());
             } else {
                 String answerString = ((TextView)qItemLayout.findViewById(R.id.question_answer_text)).getText().toString();
