@@ -26,7 +26,7 @@
             <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
          </GridPane.margin>
       </Label>
-      <TextField fx:id="tfMail" text="a" GridPane.columnIndex="1">
+      <TextField fx:id="tfMail" text="dr@acula.com" GridPane.columnIndex="1">
          <GridPane.margin>
             <Insets bottom="10.0" left="30.0" right="60.0" top="10.0" />
          </GridPane.margin>

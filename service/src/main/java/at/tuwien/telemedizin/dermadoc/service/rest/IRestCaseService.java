@@ -34,7 +34,7 @@ public interface IRestCaseService {
      * POST
      */
 
-    void postAcceptCase(RestListener<Void> listener, Case aCase);
+    void postAcceptCase(RestListener<Case> listener, Case aCase);
 
     void postCaseData(RestListener<CaseData> listener, Case aCase, CaseData caseData);
 

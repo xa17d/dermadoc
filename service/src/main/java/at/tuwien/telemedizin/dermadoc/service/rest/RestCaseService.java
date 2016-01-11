@@ -57,7 +57,7 @@ public class RestCaseService implements IRestCaseService {
     }
 
     @Override
-    public void postAcceptCase(RestListener<Void> listener, Case aCase) {
+    public void postAcceptCase(RestListener<Case> listener, Case aCase) {
         new Thread(new PostAcceptCase(token, listener, aCase)).start();
     }
 
@@ -169,9 +169,9 @@ public class RestCaseService implements IRestCaseService {
     private class PostAcceptCase implements Runnable {
 
         private AuthenticationToken token;
-        private RestListener<Void> listener;
+        private RestListener<Case> listener;
         private Case aCase;
-        public PostAcceptCase(AuthenticationToken token, RestListener<Void> listener, Case aCase) {
+        public PostAcceptCase(AuthenticationToken token, RestListener<Case> listener, Case aCase) {
             this.token = token;
             this.listener = listener;
             this.aCase = aCase;
@@ -179,8 +179,8 @@ public class RestCaseService implements IRestCaseService {
 
         @Override
         public void run() {
-            PostRequest<Void, Void> rest = new PostRequest<>(token, Void.class);
-            rest.post(URL_ + aCase.getId() + _ACCEPT, listener, null);
+            PostRequest<Void, Case> rest = new PostRequest<>(token, Case.class);
+            rest.post(URL_ + CASES_ + aCase.getId() + _ACCEPT, listener, null);
         }
     }
 

@@ -141,9 +141,9 @@ public class CaseService implements ICaseService {
         }
     };
 
-    private RestListener<Void> acceptCaseListener = new RestListener<Void>() {
+    private RestListener<Case> acceptCaseListener = new RestListener<Case>() {
         @Override
-        public void onRequestComplete(Void requestResult) {
+        public void onRequestComplete(Case requestResult) {
             //do nothing
         }
 
@@ -241,7 +241,7 @@ public class CaseService implements ICaseService {
                 rest.getNotifications(notificationListener);
 
                 try {
-                    Thread.sleep(10000);
+                    Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

@@ -52,8 +52,6 @@ public class GCPhysician extends GridPane {
         gcNotification = new GCNotification(controller, notificationList);
         popOverNotification = new PopOver(gcNotification);
         popOverNotification.setArrowLocation(PopOver.ArrowLocation.TOP_CENTER);
-        popOverNotification.getRoot().setPrefWidth(400);
-        popOverNotification.setPrefWidth(400);
         gcNotification.setPopOver(popOverNotification);
 
         btNotification.setText(String.valueOf(notificationList.size()));
